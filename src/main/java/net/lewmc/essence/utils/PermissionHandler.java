@@ -1,4 +1,4 @@
-package net.lewmc.essence.events;
+package net.lewmc.essence.utils;
 
 import net.lewmc.essence.MessageHandler;
 import org.bukkit.entity.Player;

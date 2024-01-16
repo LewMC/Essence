@@ -2,9 +2,8 @@ package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.MessageHandler;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.events.PermissionHandler;
+import net.lewmc.essence.utils.PermissionHandler;
 import net.lewmc.essence.utils.ConfigUtil;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

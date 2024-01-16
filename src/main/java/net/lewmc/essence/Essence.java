@@ -6,7 +6,9 @@ import net.lewmc.essence.commands.GamemodeCommands;
 import net.lewmc.essence.commands.stats.HealCommand;
 import net.lewmc.essence.commands.stats.FeedCommand;
 import net.lewmc.essence.commands.teleportation.*;
+import net.lewmc.essence.events.JoinEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Essence extends JavaPlugin {
@@ -89,7 +91,7 @@ public class Essence extends JavaPlugin {
      */
     private void loadEventHandlers() {
         Bukkit.getLogger().info("[Essence] Loading event handlers...");
-        //Bukkit.getServer().getPluginManager().registerEvents(EntityPickupItemClass, this);
+        Bukkit.getServer().getPluginManager().registerEvents(new JoinEvent(this), this);
         Bukkit.getLogger().info("[Essence] Event handlers loaded.");
     }
 }

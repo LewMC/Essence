@@ -2,7 +2,7 @@ package net.lewmc.essence.commands.stats;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.MessageHandler;
-import net.lewmc.essence.events.PermissionHandler;
+import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
