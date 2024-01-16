@@ -9,8 +9,6 @@ import net.lewmc.essence.commands.teleportation.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-
 public class Essence extends JavaPlugin {
 
     @Override
@@ -20,7 +18,8 @@ public class Essence extends JavaPlugin {
         saveDefaultConfig();
 
         saveResource("config.yml", false);
-        saveResource("warp.yml", false);
+        saveResource("warps.yml", false);
+        saveResource("homes.yml", false);
 
         loadClasses();
         loadCommands();

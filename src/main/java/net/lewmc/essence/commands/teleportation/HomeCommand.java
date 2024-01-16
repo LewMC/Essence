@@ -3,9 +3,14 @@ package net.lewmc.essence.commands.teleportation;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.MessageHandler;
 import net.lewmc.essence.events.PermissionHandler;
+import net.lewmc.essence.utils.ConfigUtil;
+import net.lewmc.essence.utils.HomeUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 public class HomeCommand implements CommandExecutor {
@@ -39,7 +44,37 @@ public class HomeCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("home")) {
             if (args.length > 0) {
                 if (permission.has("essence.home.use")) {
-                    message.PrivateMessage("This command is temporarily unavailable due to technical issues.", true);
+                    ConfigUtil config = new ConfigUtil(this.plugin, message);
+                    config.load("homes.yml");
+
+                    HomeUtil homeUtil = new HomeUtil();
+
+                    if (config.getSection(homeUtil.HomeName(player.getUniqueId(), args[0].toLowerCase())) == null) {
+                        message.PrivateMessage("Home " + args[0].toLowerCase() + " does not exist. Use /home for a list of homes.", true);
+                        return true;
+                    }
+
+                    ConfigurationSection cs = config.getSection(homeUtil.HomeName(player.getUniqueId(), args[0].toLowerCase()));
+
+                    if (cs.getString("world") == null) {
+                        message.PrivateMessage("Unable to teleport home due to an unexpected error, please see console for details.", true);
+                        plugin.getLogger().warning("[Essence] Player "+player+" attempted to teleport home to "+args[0].toLowerCase()+" but couldn't due to an error.");
+                        plugin.getLogger().warning("[Essence] Error: world is null, please check configuration file.");
+                        return true;
+                    }
+
+                    Location loc = new Location(
+                            Bukkit.getServer().getWorld(cs.getString("world")),
+                            cs.getDouble("X"),
+                            cs.getDouble("Y"),
+                            cs.getDouble("Z")
+                    );
+
+                    player.teleport(loc);
+
+                    message.PrivateMessage("Teleporting to home "+args[0].toLowerCase()+"...", false);
+
+                    return true;
                 } else {
                     permission.not();
                 }

@@ -4,10 +4,12 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.MessageHandler;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Set;
 
 public class ConfigUtil {
     private Essence plugin;
@@ -71,5 +73,9 @@ public class ConfigUtil {
             this.plugin.getLogger().warning("[Essence] Error saving configuration: " + e);
             message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
         }
+    }
+
+    public Set<String> getKeys(boolean deep) {
+        return this.plugin.getConfig().getKeys(deep);
     }
 }

@@ -9,12 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class SetwarpCommand implements CommandExecutor {
     private Essence plugin;
@@ -53,7 +48,7 @@ public class SetwarpCommand implements CommandExecutor {
                 }
                 Location loc = player.getLocation();
                 ConfigUtil config = new ConfigUtil(this.plugin, message);
-                config.load("warp.yml");
+                config.load("warps.yml");
 
                 String warpName = args[0].toLowerCase();
 
