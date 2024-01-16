@@ -32,7 +32,7 @@ public class GrindstoneCommand implements CommandExecutor {
             plugin.getLogger().warning("[Essence] Sorry, you need to be an in-game player to use this command.");
             return true;
         }
-        MessageHandler message = new MessageHandler(commandSender);
+        MessageHandler message = new MessageHandler(commandSender, plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(player, message);
 

@@ -36,11 +36,10 @@ public class GamemodeCommands implements CommandExecutor {
             plugin.getLogger().warning("[Essence] Sorry, you need to be an in-game player to use this command.");
             return true;
         }
-        MessageHandler message = new MessageHandler(commandSender);
         Player player = (Player) commandSender;
 
         this.permission = new PermissionHandler(player, message);
-        this.message = new MessageHandler(commandSender);
+        this.message = new MessageHandler(commandSender, plugin);
         this.player = player;
 
         if (command.getName().equalsIgnoreCase("gamemode") || command.getName().equalsIgnoreCase("gm")) {
