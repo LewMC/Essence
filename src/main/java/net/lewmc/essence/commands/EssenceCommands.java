@@ -18,7 +18,6 @@ public class EssenceCommands implements CommandExecutor {
      */
     public EssenceCommands(Essence plugin) {
         this.plugin = plugin;
-        Bukkit.getLogger().info("[Essence][EssenceCommands] Command handler loaded.");
     }
 
     /**

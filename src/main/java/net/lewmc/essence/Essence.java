@@ -9,12 +9,18 @@ import net.lewmc.essence.commands.teleportation.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+
 public class Essence extends JavaPlugin {
 
     @Override
     public void onEnable() {
         Bukkit.getLogger().info("[Essence] Beginning startup sequence.");
+
         saveDefaultConfig();
+
+        saveResource("config.yml", false);
+        saveResource("warp.yml", false);
 
         loadClasses();
         loadCommands();
