@@ -83,7 +83,8 @@ public class GamemodeCommands implements CommandExecutor {
             this.message.PrivateMessage("Switched to survival mode.", false);
             return true;
         } else {
-            return this.permission.not();
+            this.permission.not();
+            return true;
         }
     }
 
@@ -93,7 +94,8 @@ public class GamemodeCommands implements CommandExecutor {
             this.message.PrivateMessage("Switched to creative mode.", false);
             return true;
         } else {
-            return this.permission.not();
+            this.permission.not();
+            return true;
         }
     }
 
@@ -103,7 +105,8 @@ public class GamemodeCommands implements CommandExecutor {
             this.message.PrivateMessage("Switched to spectator mode.", false);
             return true;
         } else {
-            return this.permission.not();
+            this.permission.not();
+            return true;
         }
     }
 
@@ -113,7 +116,8 @@ public class GamemodeCommands implements CommandExecutor {
             this.message.PrivateMessage("Switched to adventure mode.", false);
             return true;
         } else {
-            return this.permission.not();
+            this.permission.not();
+            return true;
         }
     }
 
