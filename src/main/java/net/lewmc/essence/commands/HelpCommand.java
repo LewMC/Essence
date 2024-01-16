@@ -43,7 +43,7 @@ public class HelpCommand {
                 this.message.PrivateMessage("/tp <name/coordomate> - Teleport.", false);
                 this.message.PrivateMessage("/warp - List warps.", true);
                 this.message.PrivateMessage("/warp <name> - Teleport to a warp.", true);
-                this.message.PrivateMessage("/setwarp <name> - Create a warp where you are.", true);
+                this.message.PrivateMessage("/setwarp <name> - Create a warp where you are.", false);
                 this.message.PrivateMessage("/delwarp <name> - Delete a warp.", true);
                 this.message.PrivateMessage("/home <name> - Teleport to a home", true);
                 this.message.PrivateMessage("/sethome <name> - Create a home where you are.", true);

@@ -46,7 +46,6 @@ public class SetwarpCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("setwarp")) {
             if (permission.has("essence.warp.create")) {
-                message.PrivateMessage("This command is temporarily unavailable due to technical issues.", true);
                 if (args.length == 0) {
                     message.PrivateMessage("Usage: /setwarp <name>", true);
                     return true;
