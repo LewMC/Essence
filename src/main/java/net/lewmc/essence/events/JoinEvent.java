@@ -20,14 +20,9 @@ public class JoinEvent implements Listener {
     }
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Bukkit.getLogger().info("PlayerJoinEvent triggered.");
         plugin.reloadConfig();
         if (plugin.getConfig().getBoolean("motd.enabled")) {
-            Bukkit.getLogger().warning("MOTD ENABLED.");
             event.getPlayer().sendMessage(plugin.getConfig().getString("motd.message"));
-        } else {
-
-            Bukkit.getLogger().warning("MOTD DISABLED.");
         }
     }
 }
