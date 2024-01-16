@@ -13,6 +13,11 @@ public class Essence extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if (!Bukkit.getOnlineMode()) {
+            Bukkit.getLogger().warning("[Essence] Your server is running in offline mode.");
+            Bukkit.getLogger().warning("[Essence] Homes set in offline mode may not save properly if you switch back to online mode.");
+            Bukkit.getLogger().warning("[Essence] Homes set in online mode may not work properly in offline mode.");
+        }
         Bukkit.getLogger().info("[Essence] Beginning startup sequence.");
 
         saveDefaultConfig();

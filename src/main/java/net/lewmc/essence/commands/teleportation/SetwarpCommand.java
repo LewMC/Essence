@@ -52,9 +52,9 @@ public class SetwarpCommand implements CommandExecutor {
 
                 String warpName = args[0].toLowerCase();
 
-                config.createSection(warpName);
+                config.createSection("warps." + warpName);
 
-                ConfigurationSection cs = config.getSection(warpName);
+                ConfigurationSection cs = config.getSection("warps." + warpName);
                 cs.set("X", loc.getX());
                 cs.set("Y", loc.getY());
                 cs.set("Z", loc.getZ());
@@ -63,7 +63,7 @@ public class SetwarpCommand implements CommandExecutor {
                 // Save the configuration to the file
                 config.save();
 
-                message.PrivateMessage("Created warp: " + args[0] + " at your location", false);
+                message.PrivateMessage("Created warp '" + args[0] + "'.", false);
             } else {
                 permission.not();
             }

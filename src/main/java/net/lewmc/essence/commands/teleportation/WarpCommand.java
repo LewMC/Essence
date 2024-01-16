@@ -12,6 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.Set;
+
 public class WarpCommand implements CommandExecutor {
     private Essence plugin;
 
@@ -46,12 +48,12 @@ public class WarpCommand implements CommandExecutor {
                     ConfigUtil config = new ConfigUtil(this.plugin, message);
                     config.load("warps.yml");
 
-                    if (config.getSection(args[0].toLowerCase()) == null) {
+                    if (config.getSection("warps." + args[0].toLowerCase()) == null) {
                         message.PrivateMessage("Warp " + args[0].toLowerCase() + " does not exist. Use /warp for a list of warps.", true);
                         return true;
                     }
 
-                    ConfigurationSection cs = config.getSection(args[0].toLowerCase());
+                    ConfigurationSection cs = config.getSection("warps." + args[0].toLowerCase());
 
                     if (cs.getString("world") == null) {
                         message.PrivateMessage("Unable to warp due to an unexpected error, please see console for details.", true);
@@ -69,7 +71,7 @@ public class WarpCommand implements CommandExecutor {
 
                     player.teleport(loc);
 
-                    message.PrivateMessage("Warping to "+args[0].toLowerCase()+"...", false);
+                    message.PrivateMessage("Warping to '"+args[0].toLowerCase()+"'...", false);
 
                     return true;
                 } else {
@@ -77,7 +79,28 @@ public class WarpCommand implements CommandExecutor {
                 }
             } else {
                 if (permission.has("essence.warp.list")) {
-                    message.PrivateMessage("This command is temporarily unavailable due to technical issues.", true);
+                    ConfigUtil configUtil = new ConfigUtil(this.plugin, message);
+                    configUtil.load("warps.yml");
+
+                    Set<String> keys = configUtil.getKeys("warps");
+
+                    if (keys == null) {
+                        message.PrivateMessage("There are no warps set.", false);
+                        return true;
+                    }
+
+                    String setWarps = "Warps: ";
+                    int i = 0;
+
+                    for (String key : keys) {
+                        if (i == 0) {
+                            setWarps = setWarps + key;
+                        } else {
+                            setWarps = setWarps + ", "+key;
+                        }
+                        i++;
+                    }
+                    message.PrivateMessage(setWarps, false);
                 } else {
                     permission.not();
                 }

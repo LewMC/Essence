@@ -13,6 +13,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.Set;
+
 public class HomeCommand implements CommandExecutor {
     private Essence plugin;
 
@@ -49,12 +51,12 @@ public class HomeCommand implements CommandExecutor {
 
                     HomeUtil homeUtil = new HomeUtil();
 
-                    if (config.getSection(homeUtil.HomeName(player.getUniqueId(), args[0].toLowerCase())) == null) {
+                    if (config.getSection(homeUtil.HomeWrapper(player.getUniqueId(), args[0].toLowerCase())) == null) {
                         message.PrivateMessage("Home " + args[0].toLowerCase() + " does not exist. Use /home for a list of homes.", true);
                         return true;
                     }
 
-                    ConfigurationSection cs = config.getSection(homeUtil.HomeName(player.getUniqueId(), args[0].toLowerCase()));
+                    ConfigurationSection cs = config.getSection(homeUtil.HomeWrapper(player.getUniqueId(), args[0].toLowerCase()));
 
                     if (cs.getString("world") == null) {
                         message.PrivateMessage("Unable to teleport home due to an unexpected error, please see console for details.", true);
@@ -72,7 +74,7 @@ public class HomeCommand implements CommandExecutor {
 
                     player.teleport(loc);
 
-                    message.PrivateMessage("Teleporting to home "+args[0].toLowerCase()+"...", false);
+                    message.PrivateMessage("Teleporting to home '"+args[0].toLowerCase()+"'...", false);
 
                     return true;
                 } else {
@@ -80,7 +82,28 @@ public class HomeCommand implements CommandExecutor {
                 }
             } else {
                 if (permission.has("essence.home.list")) {
-                    message.PrivateMessage("This command is temporarily unavailable due to technical issues.", true);
+                    ConfigUtil configUtil = new ConfigUtil(this.plugin, message);
+                    configUtil.load("homes.yml");
+
+                    Set<String> keys = configUtil.getKeys("homes."+player.getUniqueId());
+
+                    if (keys == null) {
+                        message.PrivateMessage("You haven't set any homes.", false);
+                        return true;
+                    }
+
+                    String setHomes = "Homes: ";
+                    int i = 0;
+
+                    for (String key : keys) {
+                        if (i == 0) {
+                            setHomes = setHomes + key;
+                        } else {
+                            setHomes = setHomes + ", "+key;
+                        }
+                        i++;
+                    }
+                    message.PrivateMessage(setHomes, false);
                 } else {
                     permission.not();
                 }

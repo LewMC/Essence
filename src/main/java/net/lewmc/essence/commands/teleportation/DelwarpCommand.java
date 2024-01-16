@@ -3,9 +3,12 @@ package net.lewmc.essence.commands.teleportation;
 import net.lewmc.essence.MessageHandler;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.events.PermissionHandler;
+import net.lewmc.essence.utils.ConfigUtil;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 public class DelwarpCommand implements CommandExecutor {
@@ -39,7 +42,23 @@ public class DelwarpCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("delwarp")) {
             if (permission.has("essence.warp.delete")) {
-                message.PrivateMessage("This command is temporarily unavailable due to technical issues.", true);
+                if (args.length == 0) {
+                    message.PrivateMessage("Usage: /delwarp <name>", true);
+                    return true;
+                }
+                ConfigUtil config = new ConfigUtil(this.plugin, message);
+                config.load("warps.yml");
+
+                String warpName = args[0].toLowerCase();
+
+                ConfigurationSection cs = config.getSection("warps");
+
+                cs.set(warpName, null);
+
+                // Save the configuration to the file
+                config.save();
+
+                message.PrivateMessage("Deleted warp '" + args[0] + "'.", false);
             } else {
                 permission.not();
             }

@@ -52,7 +52,7 @@ public class SethomeCommand implements CommandExecutor {
                 config.load("homes.yml");
 
                 HomeUtil homeUtil = new HomeUtil();
-                String homeName = homeUtil.HomeName(player.getUniqueId(), args[0].toLowerCase());
+                String homeName = homeUtil.HomeWrapper(player.getUniqueId(), args[0].toLowerCase());
 
                 config.createSection(homeName);
 
@@ -65,7 +65,7 @@ public class SethomeCommand implements CommandExecutor {
                 // Save the configuration to the file
                 config.save();
 
-                message.PrivateMessage("Created home: " + args[0] + " at your location", false);
+                message.PrivateMessage("Created home '" + args[0] + "'.", false);
             } else {
                 permission.not();
             }

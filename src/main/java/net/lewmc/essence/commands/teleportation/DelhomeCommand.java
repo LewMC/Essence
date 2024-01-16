@@ -3,9 +3,12 @@ package net.lewmc.essence.commands.teleportation;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.MessageHandler;
 import net.lewmc.essence.events.PermissionHandler;
+import net.lewmc.essence.utils.ConfigUtil;
+import net.lewmc.essence.utils.HomeUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 public class DelhomeCommand implements CommandExecutor {
@@ -39,7 +42,24 @@ public class DelhomeCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("delhome")) {
             if (permission.has("essence.home.delete")) {
-                message.PrivateMessage("This command is temporarily unavailable due to technical issues.", true);
+                if (args.length == 0) {
+                    message.PrivateMessage("Usage: /delhome <name>", true);
+                    return true;
+                }
+                ConfigUtil config = new ConfigUtil(this.plugin, message);
+                config.load("homes.yml");
+
+                String homeName = args[0].toLowerCase();
+
+                ConfigurationSection cs = config.getSection("homes");
+
+                HomeUtil homeUtil = new HomeUtil();
+                cs.set(homeUtil.HomeName(player.getUniqueId(), homeName), null);
+
+                // Save the configuration to the file
+                config.save();
+
+                message.PrivateMessage("Deleted home '" + args[0] + "'.", false);
             } else {
                 permission.not();
             }

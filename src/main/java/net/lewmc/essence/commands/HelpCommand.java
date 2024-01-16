@@ -41,13 +41,13 @@ public class HelpCommand {
                 this.message.PrivateMessage("----------------- Gamemode -----------------", false);
             } else if ("teleport".equalsIgnoreCase(args[1])) {
                 this.message.PrivateMessage("/tp <name/coordomate> - Teleport.", false);
-                this.message.PrivateMessage("/warp - List warps.", true);
-                this.message.PrivateMessage("/warp <name> - Teleport to a warp.", false);
+                this.message.PrivateMessage("/warp [name] - Warp (leave name blank for list).", false);
                 this.message.PrivateMessage("/setwarp <name> - Create a warp where you are.", false);
-                this.message.PrivateMessage("/delwarp <name> - Delete a warp.", true);
-                this.message.PrivateMessage("/home <name> - Teleport to a home", true);
-                this.message.PrivateMessage("/sethome <name> - Create a home where you are.", true);
-                this.message.PrivateMessage("/delhome <name> - Delete a home.", true);
+                this.message.PrivateMessage("/delwarp <name> - Delete a warp.", false);
+                this.message.PrivateMessage("/home [name] - Go home (leave name blank for list)", false);
+                this.message.PrivateMessage("/sethome <name> - Create a home where you are.", false);
+                this.message.PrivateMessage("/delhome <name> - Delete a home.", false);
+                this.message.PrivateMessage("", false);
                 this.message.PrivateMessage("----------------- Teleport -----------------", false);
             } else if ("stats".equalsIgnoreCase(args[1])) {
                 this.message.PrivateMessage("/feed [user] - Feed yourself or another.", false);
@@ -70,8 +70,8 @@ public class HelpCommand {
             this.message.PrivateMessage("/es help teleport - Teleport commands.", false);
             this.message.PrivateMessage("/es help stats - Manage your stats.", false);
             this.message.PrivateMessage("", false);
-            this.message.PrivateMessage("Commands that appear in red are temporarily", true);
-            this.message.PrivateMessage("unavailable due to technical issues.", true);
+            this.message.PrivateMessage("", false);
+            this.message.PrivateMessage("", false);
             this.message.PrivateMessage("", false);
             this.message.PrivateMessage("--------------- Essence Help ---------------", false);
         }

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Set;
 
 public class ConfigUtil {
@@ -75,7 +76,22 @@ public class ConfigUtil {
         }
     }
 
-    public Set<String> getKeys(boolean deep) {
-        return this.plugin.getConfig().getKeys(deep);
+    /**
+     * Get the keys from a specific section.
+     * @param section The section to search, pass "" if you'd like to search the root.
+     * @return
+     */
+    public Set<String> getKeys(String section) {
+        if (section.equals("")) {
+            return this.plugin.getConfig().getKeys(false);
+        } else {
+            ConfigurationSection cs = this.plugin.getConfig().getConfigurationSection(section);
+            if (cs == null) {
+                return null;
+            } else {
+                return cs.getKeys(false);
+            }
+        }
     }
 }
+
