@@ -1,5 +1,5 @@
 name: Essence
-version: BETA-1.0
+version: 1.0
 main: net.lewmc.essence.Essence
 api-version: 1.20
 authors: [ LewMC ]
