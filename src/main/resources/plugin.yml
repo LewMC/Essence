@@ -1,0 +1,216 @@
+name: Essence
+version: BETA-1.0
+main: net.lewmc.essence.Essence
+api-version: 1.20
+authors: [ LewMC ]
+description: An Essentials alternative for LewMC servers.
+website: https://lewmc.net
+load: STARTUP
+commands:
+  essence:
+    description: Main command
+    usage: /<command>
+    aliases: ['es','ess']
+  gamemode:
+    description: Change your gamemode.
+    usage: /<command> <mode>
+    aliases: ['gm']
+  gms:
+    description: Switch to survival mode.
+    usage: /<command>
+    aliases: []
+  gmc:
+    description: Switch to creative mode.
+    usage: /<command>
+    aliases: []
+  gma:
+    description: Switch to adventure mode.
+    usage: /<command>
+    aliases: []
+  gmsp:
+    description: Switch to spectator mode.
+    usage: /<command>
+    aliases: []
+  anvil:
+    description: Open an anvil.
+    usage: /<command>
+    aliases: []
+  cartography:
+    description: Open a cartography table.
+    usage: /<command>
+    aliases: []
+  craft:
+    description: Open a crafting table.
+    usage: /<command>
+    aliases: ['workbench']
+  enderchest:
+    description: Open your ender chest.
+    usage: /<command>
+    aliases: ['echest']
+  grindstone:
+    description: Open a grindstone.
+    usage: /<command>
+    aliases: []
+  loom:
+    description: Open a loom.
+    usage: /<command>
+    aliases: []
+  smithing:
+    description: Open a smithing table.
+    usage: /<command>
+    aliases: []
+  stonecutter:
+    description: Open a stonecutter.
+    usage: /<command>
+    aliases: []
+  tp:
+    description: Teleport to a player or coordinates.
+    usage: /<command>
+    aliases: ['teleport']
+  warp:
+    description: Teleport to a preset warp.
+    usage: /<command>
+    aliases: []
+  setwarp:
+    description: Create a warp.
+    usage: /<command>
+    aliases: []
+  delwarp:
+    description: Delete a warp.
+    usage: /<command>
+    aliases: []
+  home:
+    description: Teleport to a preset home.
+    usage: /<command>
+    aliases: []
+  sethome:
+    description: Create a home.
+    usage: /<command>
+    aliases: []
+  delhome:
+    description: Delete a home.
+    usage: /<command>
+    aliases: []
+  heal:
+    description: Heal yourself or someone else.
+    usage: /<command> [user]
+    aliases: []
+  feed:
+    description: Feed yourself or someone else.
+    usage: /<command> [user]
+    aliases: []
+permissions:
+  essence.*:
+    description: Access to all essence commands.
+    default: op
+    children:
+      essence.gamemode.*: true
+      essence.inventory.*: true
+      essence.teleport.*: true
+      essence.warp.*: true
+      essence.stats.*: true
+      essence.stats.other.*: true
+      essence.home.*: true
+  essence.gamemode.*:
+    description: Allows players to switch to any gamemode.
+    default: op
+    children:
+      essence.gamemode.creative: true
+      essence.gamemode.survival: true
+      essence.gamemode.adventure: true
+      essence.gamemode.spectator: true
+  essence.gamemode.creative:
+    description: Allows players to switch to creative gamemode.
+  essence.gamemode.survival:
+    description: Allows players to switch to survival gamemode.
+  essence.gamemode.adventure:
+    description: Allows players to switch to adventure gamemode.
+  essence.gamemode.spectator:
+    description: Allows players to switch to spectator gamemode.
+  essence.inventory.*:
+    description: Allows players to access inventory commands.
+    default: op
+    children:
+      essence.inventory.anvil: true
+      essence.inventory.cartography: true
+      essence.inventory.craft: true
+      essence.inventory.enderchest: true
+      essence.inventory.grindstone: true
+      essence.inventory.loom: true
+      essence.inventory.smithing: true
+      essence.inventory.stonecutter: true
+  essence.inventory.anvil:
+    description: Allows players to open an anvil when no anvil is present.
+  essence.inventory.cartography:
+    description: Allows players to open a cartography table when no cartography table is present.
+  essence.inventory.craft:
+    description: Allows players to open a crafting table when no crafting table is present.
+  essence.inventory.enderchest:
+    description: Allows players to open their ender chest.
+  essence.inventory.grindstone:
+    description: Allows players to open a grindstone when no grindstone is present.
+  essence.inventory.loom:
+    description: Allows players to open a loom when no loom is present.
+  essence.inventory.smithing:
+    description: Allows players to open a smithing table when no smithing table is present.
+  essence.inventory.stonecutter:
+    description: Allows players to open a stonecutter when no stonecutter is present.
+  essence.teleport.*:
+    description: Allows players to teleport and warp.
+    default: op
+    children:
+      essence.teleport.coord: true
+      essence.teleport.player: true
+  essence.teleport.coord:
+    description: Allows players to teleport to coordinates.
+  essence.teleport.player:
+    description: Allows players to teleport to a player.
+  essence.warp.*:
+    description: Allows players to use and manage warps.
+    default: op
+    children:
+      essence.warp.use: true
+      essence.warp.list: true
+      essence.warp.create: true
+      essence.warp.delete: true
+  essence.warp.use:
+    description: Allows players to warp.
+  essence.warp.list:
+    description: Allows players view warps.
+  essence.warp.create:
+    description: Allows players to create warps.
+  essence.warp.delete:
+    description: Allows players to delete warps.
+  essence.stats.*:
+    description: Allows players to manage their stats such as health and hunger.
+    default: op
+    children:
+      essence.stats.heal: true
+      essence.stats.feed: true
+  essence.stats.heal:
+    description: Allows you to heal yourself.
+  essence.stats.feed:
+    description: Allows you to feed yourself.
+  essence.stats.other.*:
+    description: Allows players to manage other player's stats such as health and hunger.
+    default: op
+    children:
+      essence.stats.heal.other: true
+      essence.stats.feed.other: true
+  essence.stats.heal.other:
+    description: Allows you to heal other players.
+  essence.stats.feed.other:
+    description: Allows you to feed other players.
+  essence.home.*:
+    description: Allows players to use the home system.
+    default: op
+    children:
+      essence.home.use: true
+      essence.home.set: true
+      essence.home.delete: true
+  essence.home.use:
+    description: Allows players to teleport to your homes.
+  essence.home.set:
+    description: Allows players to set homes
+  essence.home.delete:
+    description: Allows players to delete homes
