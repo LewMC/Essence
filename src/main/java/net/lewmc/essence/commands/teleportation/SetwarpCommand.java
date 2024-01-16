@@ -3,6 +3,7 @@ package net.lewmc.essence.commands.teleportation;
 import net.lewmc.essence.MessageHandler;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.events.PermissionHandler;
+import net.lewmc.essence.utils.ConfigUtil;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -51,41 +52,21 @@ public class SetwarpCommand implements CommandExecutor {
                     return true;
                 }
                 Location loc = player.getLocation();
-                File configFile;
-                try {
-                    configFile = new File(this.plugin.getDataFolder(), "warp.yml");
-                    this.plugin.getConfig().load(configFile);
-                } catch (InvalidConfigurationException e) {
-                    this.plugin.getLogger().warning("[Essence] InvalidConfigurationException loading configuration: " + e);
-                    message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
-                    return true;
-                } catch (FileNotFoundException e) {
-                    this.plugin.getLogger().warning("[Essence] FileNotFoundException loading configuration: " + e);
-                    message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
-                    return true;
-                } catch (IOException e) {
-                    this.plugin.getLogger().warning("[Essence] IOException loading configuration: " + e);
-                    message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
-                    return true;
-                }
+                ConfigUtil config = new ConfigUtil(this.plugin, message);
+                config.load("warp.yml");
 
                 String warpName = args[0].toLowerCase();
-                this.plugin.getConfig().createSection(warpName);
 
-                ConfigurationSection cs = this.plugin.getConfig().getConfigurationSection(warpName);
+                config.createSection(warpName);
+
+                ConfigurationSection cs = config.getSection(warpName);
                 cs.set("X", loc.getX());
                 cs.set("Y", loc.getY());
                 cs.set("Z", loc.getZ());
                 cs.set("world", loc.getWorld().getName());
 
                 // Save the configuration to the file
-                try {
-                    this.plugin.getConfig().save(configFile);
-                } catch (IOException e) {
-                    this.plugin.getLogger().warning("[Essence] Error saving configuration: " + e);
-                    message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
-                    return true;
-                }
+                config.save();
 
                 message.PrivateMessage("Created warp: " + args[0] + " at your location", false);
             } else {
