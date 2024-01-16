@@ -3,7 +3,7 @@ package net.lewmc.essence;
 import net.lewmc.essence.commands.inventories.*;
 import net.lewmc.essence.commands.EssenceCommands;
 import net.lewmc.essence.commands.GamemodeCommands;
-import net.lewmc.essence.commands.inventories.HealCommand;
+import net.lewmc.essence.commands.stats.HealCommand;
 import net.lewmc.essence.commands.stats.FeedCommand;
 import net.lewmc.essence.commands.teleportation.*;
 import org.bukkit.Bukkit;
