@@ -46,14 +46,13 @@ public class DelhomeCommand implements CommandExecutor {
                     return true;
                 }
                 DataUtil config = new DataUtil(this.plugin, message);
-                config.load("homes.yml");
+                config.load(config.playerDataFile(player));
 
                 String homeName = args[0].toLowerCase();
 
                 ConfigurationSection cs = config.getSection("homes");
 
-                HomeUtil homeUtil = new HomeUtil();
-                cs.set(homeUtil.HomeName(player.getUniqueId(), homeName), null);
+                cs.set(homeName, null);
 
                 // Save the configuration to the file
                 config.save();

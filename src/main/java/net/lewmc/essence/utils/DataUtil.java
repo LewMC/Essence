@@ -72,7 +72,7 @@ public class DataUtil {
             this.plugin.getConfig().save(configFile);
         } catch (IOException e) {
             this.log.warn("Error saving configuration: " + e);
-            message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
+            message.PrivateMessage("The server was unable to process configuration data, see the console for more information.", true);
         }
     }
 
@@ -94,13 +94,34 @@ public class DataUtil {
         }
     }
 
+    public boolean createFile(String file) {
+        File fsFile = new File(plugin.getDataFolder(), file);
+
+        if (!fsFile.exists()) {
+            try {
+                return fsFile.createNewFile();
+            } catch (IOException e) {
+                this.log.severe("IOException whilst creating data file '"+file+"': "+e);
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public boolean fileExists(String file) {
+        File fsFile = new File(plugin.getDataFolder(), file);
+
+        return fsFile.exists();
+    }
+
     /**
      * Return the location of the player's data file.
      * @param player The player.
      * @return The data file URI inside the /plugin/essence folder.
      */
     public String playerDataFile(Player player) {
-        return "/data/player/"+player.getUniqueId()+".yml";
+        return "/data/players/" +player.getUniqueId()+".yml";
     }
 }
 

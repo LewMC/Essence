@@ -11,6 +11,8 @@ import net.lewmc.essence.utils.LogUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+
 public class Essence extends JavaPlugin {
     private LogUtil log = new LogUtil(this);
 
@@ -23,11 +25,7 @@ public class Essence extends JavaPlugin {
             this.log.warn("Homes set in online mode may not work properly in offline mode.");
         }
 
-        saveDefaultConfig();
-
-        saveResource("config.yml", false);
-        saveResource("data/warps.yml", false);
-        saveResource("homes.yml", false);
+        this.initFileSystem();
 
         loadClasses();
         loadCommands();
@@ -38,6 +36,21 @@ public class Essence extends JavaPlugin {
 
     @Override
     public void onDisable() {}
+
+    /**
+     * Initialise the file system.
+     */
+    private void initFileSystem() {
+        saveDefaultConfig();
+
+        saveResource("config.yml", false);
+        saveResource("data/warps.yml", false);
+
+        File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
+        if (!statsFolder.exists()) {
+            statsFolder.mkdirs();
+        }
+    }
 
     /**
      * Loads any classes that can't be loaded by initializers.
@@ -70,6 +83,7 @@ public class Essence extends JavaPlugin {
             this.getCommand("loom").setExecutor(new LoomCommand(this));
             this.getCommand("smithing").setExecutor(new SmithingCommand(this));
             this.getCommand("stonecutter").setExecutor(new StonecutterCommand(this));
+            this.getCommand("trash").setExecutor(new TrashCommand(this));
 
             this.getCommand("feed").setExecutor(new FeedCommand(this));
             this.getCommand("heal").setExecutor(new HealCommand(this));

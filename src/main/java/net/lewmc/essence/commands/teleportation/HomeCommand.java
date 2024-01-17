@@ -50,12 +50,12 @@ public class HomeCommand implements CommandExecutor {
 
                     HomeUtil homeUtil = new HomeUtil();
 
-                    if (config.getSection(homeUtil.HomeWrapper(player.getUniqueId(), args[0].toLowerCase())) == null) {
+                    if (config.getSection(homeUtil.HomeWrapper(args[0].toLowerCase())) == null) {
                         message.PrivateMessage("Home " + args[0].toLowerCase() + " does not exist. Use /home for a list of homes.", true);
                         return true;
                     }
 
-                    ConfigurationSection cs = config.getSection(homeUtil.HomeWrapper(player.getUniqueId(), args[0].toLowerCase()));
+                    ConfigurationSection cs = config.getSection(homeUtil.HomeWrapper(args[0].toLowerCase()));
 
                     if (cs.getString("world") == null) {
                         message.PrivateMessage("Unable to teleport home due to an unexpected error, please see console for details.", true);
@@ -82,9 +82,9 @@ public class HomeCommand implements CommandExecutor {
             } else {
                 if (permission.has("essence.home.list")) {
                     DataUtil dataUtil = new DataUtil(this.plugin, message);
-                    dataUtil.load("homes.yml");
+                    dataUtil.load(dataUtil.playerDataFile(player));
 
-                    Set<String> keys = dataUtil.getKeys("homes."+player.getUniqueId());
+                    Set<String> keys = dataUtil.getKeys("homes");
 
                     if (keys == null) {
                         message.PrivateMessage("You haven't set any homes.", false);

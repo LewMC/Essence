@@ -48,10 +48,10 @@ public class SethomeCommand implements CommandExecutor {
                 }
                 Location loc = player.getLocation();
                 DataUtil config = new DataUtil(this.plugin, message);
-                config.load("homes.yml");
+                config.load(config.playerDataFile(player));
 
                 HomeUtil homeUtil = new HomeUtil();
-                String homeName = homeUtil.HomeWrapper(player.getUniqueId(), args[0].toLowerCase());
+                String homeName = homeUtil.HomeWrapper(args[0].toLowerCase());
 
                 config.createSection(homeName);
 
