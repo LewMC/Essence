@@ -15,6 +15,7 @@ import java.io.File;
 
 public class Essence extends JavaPlugin {
     private LogUtil log = new LogUtil(this);
+    private boolean isDisabled = false;
 
     @Override
     public void onEnable() {
@@ -25,13 +26,34 @@ public class Essence extends JavaPlugin {
             this.log.warn("Homes set in online mode may not work properly in offline mode.");
         }
 
-        this.initFileSystem();
+        checkForEssentials();
 
-        loadClasses();
-        loadCommands();
-        loadEventHandlers();
+        if (!isDisabled) {
+            loadClasses();
+            loadCommands();
+            loadEventHandlers();
 
-        this.log.info("Startup completed.");
+            this.log.info("Startup completed.");
+        }
+    }
+
+    /**
+     * Checks if Essentials or EssentialsX is installed and disables the plugin if it is.
+     */
+    private void checkForEssentials() {
+        if (
+            getServer().getPluginManager().getPlugin("Essentials") != null ||
+            getServer().getPluginManager().getPlugin("EssentialsX") != null
+        ) {
+            this.isDisabled = true;
+            this.log.severe("Essentials is installed alongside Essence.");
+            this.log.severe("Essence's commands clash with Essentials, to prevent issues with data Essence is now disabled.");
+            this.log.severe("If you require commands that are in Essentials but not in Essence, please remove Essence from the server.");
+            this.log.severe("All Essence commands are implemented in Essentials in a similar way.");
+            getServer().getPluginManager().disablePlugin(this);
+        } else {
+            initFileSystem();
+        }
     }
 
     @Override
@@ -43,7 +65,6 @@ public class Essence extends JavaPlugin {
     private void initFileSystem() {
         saveDefaultConfig();
 
-        saveResource("config.yml", false);
         saveResource("data/warps.yml", false);
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");

@@ -2,10 +2,10 @@ name: Essence
 version: 1.0
 main: net.lewmc.essence.Essence
 api-version: 1.20
-authors: [ LewMC ]
+author: LewMC
 description: An Essentials alternative for LewMC servers.
 website: https://lewmc.net
-load: STARTUP
+load: POSTWORLD
 commands:
   essence:
     description: Main command
