@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation;
 
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
+import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.PermissionHandler;
-import net.lewmc.essence.utils.DataUtil;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -54,6 +51,12 @@ public class SetwarpCommand implements CommandExecutor {
                 config.load("data/warps.yml");
 
                 String warpName = args[0].toLowerCase();
+
+                SecurityUtil securityUtil = new SecurityUtil();
+                if (securityUtil.hasSpecialCharacters(warpName)) {
+                    message.PrivateMessage("Warps cannot contain special characters!", true);
+                    return true;
+                }
 
                 config.createSection("warps." + warpName);
 

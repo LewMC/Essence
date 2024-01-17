@@ -50,6 +50,12 @@ public class SethomeCommand implements CommandExecutor {
                 DataUtil config = new DataUtil(this.plugin, message);
                 config.load(config.playerDataFile(player));
 
+                SecurityUtil securityUtil = new SecurityUtil();
+                if (securityUtil.hasSpecialCharacters(args[0].toLowerCase())) {
+                    message.PrivateMessage("Homes cannot contain special characters!", true);
+                    return true;
+                }
+
                 HomeUtil homeUtil = new HomeUtil();
                 String homeName = homeUtil.HomeWrapper(args[0].toLowerCase());
 
