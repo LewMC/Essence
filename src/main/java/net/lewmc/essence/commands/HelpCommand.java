@@ -14,7 +14,7 @@ public class HelpCommand {
     public boolean runHelpCommand() {
         if (args.length > 1) {
             if ("inventory".equalsIgnoreCase(args[1])) {
-                if (args[2] == null || args[2].equals("1")) {
+                if (args.length < 3 || args[2].equals("1")) {
                     this.message.PrivateMessage("--------- Essence Help - Inventory ---------", false);
                     this.message.PrivateMessage("/anvil - Open an anvil.", false);
                     this.message.PrivateMessage("/cartography - Open a cartography table.", false);
