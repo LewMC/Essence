@@ -8,10 +8,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class SethomeCommand implements CommandExecutor {
-    private Essence plugin;
-    private LogUtil log;
+    private final Essence plugin;
+    private final LogUtil log;
 
     /**
      * Constructor for the SethomeCommand class.
@@ -31,7 +32,12 @@ public class SethomeCommand implements CommandExecutor {
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+    public boolean onCommand(
+        @NotNull CommandSender commandSender,
+        @NotNull Command command,
+        @NotNull String s,
+        String[] args
+    ) {
         if (!(commandSender instanceof Player)) {
             this.log.noConsole();
             return true;
@@ -42,22 +48,26 @@ public class SethomeCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("sethome")) {
             if (permission.has("essence.home.create")) {
+
+                String name;
                 if (args.length == 0) {
-                    message.PrivateMessage("Usage: /sethome <name>", true);
-                    return true;
+                    name = "home";
+                } else {
+                    name = args[0];
                 }
+
                 Location loc = player.getLocation();
                 DataUtil config = new DataUtil(this.plugin, message);
                 config.load(config.playerDataFile(player));
 
                 SecurityUtil securityUtil = new SecurityUtil();
-                if (securityUtil.hasSpecialCharacters(args[0].toLowerCase())) {
+                if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {
                     message.PrivateMessage("Homes cannot contain special characters!", true);
                     return true;
                 }
 
                 HomeUtil homeUtil = new HomeUtil();
-                String homeName = homeUtil.HomeWrapper(args[0].toLowerCase());
+                String homeName = homeUtil.HomeWrapper(name.toLowerCase());
 
                 config.createSection(homeName);
 
@@ -70,7 +80,7 @@ public class SethomeCommand implements CommandExecutor {
                 // Save the configuration to the file
                 config.save();
 
-                message.PrivateMessage("Created home '" + args[0] + "'.", false);
+                message.PrivateMessage("Created home '" + name + "'.", false);
             } else {
                 permission.not();
             }

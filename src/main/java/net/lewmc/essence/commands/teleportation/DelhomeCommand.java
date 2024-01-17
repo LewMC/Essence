@@ -7,10 +7,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class DelhomeCommand implements CommandExecutor {
     private final LogUtil log;
-    private Essence plugin;
+    private final Essence plugin;
 
     /**
      * Constructor for the DelhomeCommand class.
@@ -30,7 +31,12 @@ public class DelhomeCommand implements CommandExecutor {
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+    public boolean onCommand(
+        @NotNull CommandSender commandSender,
+        @NotNull Command command,
+        @NotNull String s,
+        String[] args
+    ) {
         if (!(commandSender instanceof Player)) {
             this.log.noConsole();
             return true;
@@ -41,14 +47,17 @@ public class DelhomeCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("delhome")) {
             if (permission.has("essence.home.delete")) {
+                String name;
                 if (args.length == 0) {
-                    message.PrivateMessage("Usage: /delhome <name>", true);
-                    return true;
+                    name = "home";
+                } else {
+                    name = args[0];
                 }
+
                 DataUtil config = new DataUtil(this.plugin, message);
                 config.load(config.playerDataFile(player));
 
-                String homeName = args[0].toLowerCase();
+                String homeName = name.toLowerCase();
 
                 ConfigurationSection cs = config.getSection("homes");
 
@@ -57,7 +66,7 @@ public class DelhomeCommand implements CommandExecutor {
                 // Save the configuration to the file
                 config.save();
 
-                message.PrivateMessage("Deleted home '" + args[0] + "'.", false);
+                message.PrivateMessage("Deleted home '" + name + "'.", false);
             } else {
                 permission.not();
             }

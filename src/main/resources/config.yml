@@ -1,7 +1,7 @@
 chat-prefix: "Essence"
 console-prefix: "Essence"
 motd:
-  - enabled: true
-  - message: "Welcome to the server!"
+  enabled: true
+  message: "Welcome to the server!"
 economy:
   start-money: 100.0

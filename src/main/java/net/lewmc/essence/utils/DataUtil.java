@@ -11,10 +11,10 @@ import java.io.IOException;
 import java.util.Set;
 
 public class DataUtil {
-    private Essence plugin;
-    private MessageUtil message;
+    private final Essence plugin;
+    private final MessageUtil message;
     private File configFile;
-    private LogUtil log;
+    private final LogUtil log;
 
     /**
      * Starts a configuration instance.
@@ -29,21 +29,21 @@ public class DataUtil {
 
     /**
      * Loads a configuration file into the instance's memory.
-     * @param config The file to load
+     * @param data The file to load
      */
-    public void load(String config) {
+    public void load(String data) {
         try {
-            this.configFile = new File(this.plugin.getDataFolder(), config);
+            this.configFile = new File(this.plugin.getDataFolder(), data);
             this.plugin.getConfig().load(configFile);
         } catch (InvalidConfigurationException e) {
-            this.log.warn("InvalidConfigurationException loading configuration: " + e);
-            this.message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
+            this.log.warn("InvalidConfigurationException loading configuration: " + e + " (File requested: '"+data+"')");
+            this.message.PrivateMessage("Unable to load data due to an error, see server console for more information.", true);
         } catch (FileNotFoundException e) {
-            this.log.warn("FileNotFoundException loading configuration: " + e);
-            this.message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
+            this.log.warn("FileNotFoundException loading configuration: " + e + " (File requested: '"+data+"')");
+            this.message.PrivateMessage("Unable to load data due to an error, see server console for more information.", true);
         } catch (IOException e) {
-            this.log.warn("IOException loading configuration: " + e);
-            this.message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
+            this.log.warn("IOException loading configuration: " + e + " (File requested: '"+data+"')");
+            this.message.PrivateMessage("Unable to load data due to an error, see server console for more information.", true);
         }
     }
 
@@ -79,10 +79,10 @@ public class DataUtil {
     /**
      * Get the keys from a specific section.
      * @param section The section to search, pass "" if you'd like to search the root.
-     * @return
+     * @return null or the keys.
      */
     public Set<String> getKeys(String section) {
-        if (section.equals("")) {
+        if (section.isEmpty()) {
             return this.plugin.getConfig().getKeys(false);
         } else {
             ConfigurationSection cs = this.plugin.getConfig().getConfigurationSection(section);

@@ -7,6 +7,8 @@ import net.lewmc.essence.commands.stats.HealCommand;
 import net.lewmc.essence.commands.stats.FeedCommand;
 import net.lewmc.essence.commands.teleportation.*;
 import net.lewmc.essence.events.JoinEvent;
+import net.lewmc.essence.tabcompleter.HomeTabCompleter;
+import net.lewmc.essence.tabcompleter.WarpTabCompleter;
 import net.lewmc.essence.utils.LogUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,12 +16,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 
 public class Essence extends JavaPlugin {
-    private LogUtil log = new LogUtil(this);
+    private final LogUtil log = new LogUtil(this);
     private boolean isDisabled = false;
 
     @Override
     public void onEnable() {
-        this.log.info("Beginning startup.");
+        this.log.info("Beginning startup...");
         if (!Bukkit.getOnlineMode()) {
             this.log.severe("Your server is running in offline mode.");
             this.log.warn("Homes set in offline mode may not save properly if you switch back to online mode.");
@@ -29,9 +31,9 @@ public class Essence extends JavaPlugin {
         checkForEssentials();
 
         if (!isDisabled) {
-            loadClasses();
             loadCommands();
             loadEventHandlers();
+            loadTabCompleters();
 
             this.log.info("Startup completed.");
         }
@@ -69,24 +71,21 @@ public class Essence extends JavaPlugin {
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
         if (!statsFolder.exists()) {
-            statsFolder.mkdirs();
+            if (!statsFolder.mkdirs()) {
+                log.severe("Unable to make data folder.");
+                log.warn("The plugin is being disabled, most of the plugin's features will not work without the data folder.");
+                log.warn("Please create a folder called 'data' in the 'Essence' folder.");
+                log.warn("Please create a folder called 'players' in the 'data' folder.");
+                log.warn("Once this is complete, restart the server and Essence will re-enable.");
+                getServer().getPluginManager().disablePlugin(this);
+            }
         }
-    }
-
-    /**
-     * Loads any classes that can't be loaded by initializers.
-     */
-    private void loadClasses() {
-        this.log.info("LoadClasses: Loading...");
-        //EntityPickupItemClass = new EntityPickupItem(this);
-        this.log.info("LoadClasses: Done");
     }
 
     /**
      * Loads and registers the plugin's command handlers.
      */
     private void loadCommands() {
-        this.log.info("LoadCommands: Loading...");
         try {
             this.getCommand("essence").setExecutor(new EssenceCommands(this));
 
@@ -112,23 +111,32 @@ public class Essence extends JavaPlugin {
             this.getCommand("delhome").setExecutor(new DelhomeCommand(this));
             this.getCommand("delwarp").setExecutor(new DelwarpCommand(this));
             this.getCommand("home").setExecutor(new HomeCommand(this));
+            this.getCommand("homes").setExecutor(new HomesCommand(this));
             this.getCommand("sethome").setExecutor(new SethomeCommand(this));
             this.getCommand("setwarp").setExecutor(new SetwarpCommand(this));
             this.getCommand("tp").setExecutor(new TeleportCommand(this));
             this.getCommand("warp").setExecutor(new WarpCommand(this));
+            this.getCommand("warps").setExecutor(new WarpsCommand(this));
         } catch (NullPointerException e) {
             this.log.severe("LoadCommands: Unable to load Essence commands.");
         }
-        this.log.info("LoadCommands: Done.");
+    }
+
+    /**
+     * Loads and registers all tab completers.
+     */
+    private void loadTabCompleters() {
+        getCommand("warp").setTabCompleter(new WarpTabCompleter(this));
+        getCommand("delwarp").setTabCompleter(new WarpTabCompleter(this));
+
+        getCommand("home").setTabCompleter(new HomeTabCompleter(this));
+        getCommand("delhome").setTabCompleter(new HomeTabCompleter(this));
     }
 
     /**
      * Loads and registers all the plugin's event handlers.
      */
     private void loadEventHandlers() {
-        this.log.info("LoadEventHandlers: Loading event handlers...");
-        Bukkit.getLogger().info("[Essence] Loading event handlers...");
         Bukkit.getServer().getPluginManager().registerEvents(new JoinEvent(this), this);
-        this.log.info("LoadEventHandlers: Done.");
     }
 }

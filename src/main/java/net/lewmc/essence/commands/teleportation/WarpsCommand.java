@@ -1,6 +1,7 @@
-package net.lewmc.essence.commands.inventories;
+package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.DataUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
@@ -10,15 +11,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class SmithingCommand implements CommandExecutor {
+import java.util.Set;
+
+public class WarpsCommand implements CommandExecutor {
     private final Essence plugin;
     private final LogUtil log;
 
     /**
-     * Constructor for the SmithingCommand class.
+     * Constructor for the WarpsCommand class.
      * @param plugin References to the main plugin class.
      */
-    public SmithingCommand(Essence plugin) {
+    public WarpsCommand(Essence plugin) {
         this.plugin = plugin;
         this.log = new LogUtil(plugin);
     }
@@ -45,13 +48,34 @@ public class SmithingCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(player, message);
 
-        if (command.getName().equalsIgnoreCase("smithing")) {
-            if (permission.has("essence.inventory.smithing")) {
-                player.openSmithingTable(null, true);
-                return true;
+        if (command.getName().equalsIgnoreCase("warps")) {
+            if (permission.has("essence.warp.list")) {
+                DataUtil dataUtil = new DataUtil(this.plugin, message);
+                dataUtil.load("data/warps.yml");
+
+                Set<String> keys = dataUtil.getKeys("warps");
+
+                if (keys == null) {
+                    message.PrivateMessage("There are no warps set.", false);
+                    return true;
+                }
+
+                StringBuilder setWarps = new StringBuilder("Warps: ");
+                int i = 0;
+
+                for (String key : keys) {
+                    if (i == 0) {
+                        setWarps.append(key);
+                    } else {
+                        setWarps.append(", ").append(key);
+                    }
+                    i++;
+                }
+                message.PrivateMessage(setWarps.toString(), false);
             } else {
-                return permission.not();
+                permission.not();
             }
+            return true;
         }
 
         return false;

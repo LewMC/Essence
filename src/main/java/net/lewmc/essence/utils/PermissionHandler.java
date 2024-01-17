@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 public class PermissionHandler {
 
     private final Player player;
-    private MessageUtil message;
+    private final MessageUtil message;
 
     public PermissionHandler(Player player, MessageUtil message) {
         this.player = player;

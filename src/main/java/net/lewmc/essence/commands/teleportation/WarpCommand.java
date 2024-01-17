@@ -12,12 +12,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-
-import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
 public class WarpCommand implements CommandExecutor {
-    private Essence plugin;
-    private LogUtil log;
+    private final Essence plugin;
+    private final LogUtil log;
 
     /**
      * Constructor for the WarpCommand class.
@@ -36,7 +35,12 @@ public class WarpCommand implements CommandExecutor {
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+    public boolean onCommand(
+        @NotNull CommandSender commandSender,
+        @NotNull Command command,
+        @NotNull String s,
+        String[] args
+    ) {
         if (!(commandSender instanceof Player)) {
             this.log.noConsole();
             return true;
@@ -52,7 +56,7 @@ public class WarpCommand implements CommandExecutor {
                     config.load("data/warps.yml");
 
                     if (config.getSection("warps." + args[0].toLowerCase()) == null) {
-                        message.PrivateMessage("Warp " + args[0].toLowerCase() + " does not exist. Use /warp for a list of warps.", true);
+                        message.PrivateMessage("Warp " + args[0].toLowerCase() + " does not exist. Use /warps for a list of warps.", true);
                         return true;
                     }
 
@@ -81,32 +85,7 @@ public class WarpCommand implements CommandExecutor {
                     permission.not();
                 }
             } else {
-                if (permission.has("essence.warp.list")) {
-                    DataUtil dataUtil = new DataUtil(this.plugin, message);
-                    dataUtil.load("data/warps.yml");
-
-                    Set<String> keys = dataUtil.getKeys("warps");
-
-                    if (keys == null) {
-                        message.PrivateMessage("There are no warps set.", false);
-                        return true;
-                    }
-
-                    String setWarps = "Warps: ";
-                    int i = 0;
-
-                    for (String key : keys) {
-                        if (i == 0) {
-                            setWarps = setWarps + key;
-                        } else {
-                            setWarps = setWarps + ", "+key;
-                        }
-                        i++;
-                    }
-                    message.PrivateMessage(setWarps, false);
-                } else {
-                    permission.not();
-                }
+                message.PrivateMessage("Usage: /warp <name> - use /warps for a list.", false);
             }
             return true;
         }

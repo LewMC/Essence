@@ -7,8 +7,8 @@ import org.bukkit.command.CommandSender;
 
 public class MessageUtil {
 
-    private CommandSender cs;
-    private Essence plugin;
+    private final CommandSender cs;
+    private final Essence plugin;
 
     public MessageUtil(CommandSender cs, Essence plugin) {
         this.cs = cs;

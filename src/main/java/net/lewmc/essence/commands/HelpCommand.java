@@ -3,8 +3,8 @@ package net.lewmc.essence.commands;
 import net.lewmc.essence.utils.MessageUtil;
 
 public class HelpCommand {
-    private MessageUtil message;
-    private String[] args;
+    private final MessageUtil message;
+    private final String[] args;
 
     public HelpCommand(MessageUtil message, String[] args) {
         this.message = message;
@@ -28,13 +28,7 @@ public class HelpCommand {
                 } else if (args[2].equals("2")) {
                     this.message.PrivateMessage("--------- Essence Help - Inventory ---------", false);
                     this.message.PrivateMessage("/trash - Open a disposal menu.", false);
-                    this.message.PrivateMessage("", false);
-                    this.message.PrivateMessage("", false);
-                    this.message.PrivateMessage("", false);
-                    this.message.PrivateMessage("", false);
-                    this.message.PrivateMessage("", false);
-                    this.message.PrivateMessage("", false);
-                    this.message.PrivateMessage("", false);
+                    this.blank(7);
                     this.message.PrivateMessage("----------------- Page 2/2 -----------------", false);
                 }
             } else if ("gamemode".equalsIgnoreCase(args[1])) {
@@ -43,32 +37,31 @@ public class HelpCommand {
                 this.message.PrivateMessage("/gms - Switch to survival mode.", false);
                 this.message.PrivateMessage("/gma - Switch to adventure mode.", false);
                 this.message.PrivateMessage("/gmsp - Switch to spectator mode.", false);
-                this.message.PrivateMessage("", false);
-                this.message.PrivateMessage("", false);
-                this.message.PrivateMessage("", false);
-                this.message.PrivateMessage("", false);
+                this.blank(4);
                 this.message.PrivateMessage("----------------- Page 1/1 -----------------", false);
             } else if ("teleport".equalsIgnoreCase(args[1])) {
-                this.message.PrivateMessage("---------- Essence Help - Teleport ---------", false);
-                this.message.PrivateMessage("/tp <name/coordomate> - Teleport.", false);
-                this.message.PrivateMessage("/warp [name] - Warp (leave name blank for list).", false);
-                this.message.PrivateMessage("/setwarp <name> - Create a warp where you are.", false);
-                this.message.PrivateMessage("/delwarp <name> - Delete a warp.", false);
-                this.message.PrivateMessage("/home [name] - Go home (leave name blank for list)", false);
-                this.message.PrivateMessage("/sethome <name> - Create a home where you are.", false);
-                this.message.PrivateMessage("/delhome <name> - Delete a home.", false);
-                this.message.PrivateMessage("", false);
-                this.message.PrivateMessage("----------------- Page 1/1 -----------------", false);
+                if (args.length < 3 || args[2].equals("1")) {
+                    this.message.PrivateMessage("---------- Essence Help - Teleport ---------", false);
+                    this.message.PrivateMessage("/tp <name/coordomate> - Teleport.", false);
+                    this.message.PrivateMessage("/warp <name> - Go to a warp.", false);
+                    this.message.PrivateMessage("/warps - View warp list.", false);
+                    this.message.PrivateMessage("/setwarp <name> - Create a warp where you are.", false);
+                    this.message.PrivateMessage("/delwarp <name> - Delete a warp.", false);
+                    this.message.PrivateMessage("/home [name] - Go home.", false);
+                    this.message.PrivateMessage("/homes - View home list.", false);
+                    this.message.PrivateMessage("/sethome [name] - Create a home where you are.", false);
+                    this.message.PrivateMessage("----------------- Page 1/2 -----------------", false);
+                } else if (args[2].equals("2")) {
+                    this.message.PrivateMessage("--------- Essence Help - Inventory ---------", false);
+                    this.message.PrivateMessage("/delhome [name] - Delete a home.", false);
+                    this.blank(7);
+                    this.message.PrivateMessage("----------------- Page 2/2 -----------------", false);
+                }
             } else if ("stats".equalsIgnoreCase(args[1])) {
                 this.message.PrivateMessage("----------- Essence Help - Stats -----------", false);
                 this.message.PrivateMessage("/feed [user] - Feed yourself or another.", false);
                 this.message.PrivateMessage("/heal [user] - Feed yourself or another.", false);
-                this.message.PrivateMessage("", false);
-                this.message.PrivateMessage("", false);
-                this.message.PrivateMessage("", false);
-                this.message.PrivateMessage("", false);
-                this.message.PrivateMessage("", false);
-                this.message.PrivateMessage("", false);
+                this.blank(6);
                 this.message.PrivateMessage("----------------- Page 1/1 -----------------", false);
             }
             else {
@@ -80,12 +73,15 @@ public class HelpCommand {
             this.message.PrivateMessage("/es help gamemode - Gamemode commands.", false);
             this.message.PrivateMessage("/es help teleport - Teleport commands.", false);
             this.message.PrivateMessage("/es help stats - Manage your stats.", false);
-            this.message.PrivateMessage("", false);
-            this.message.PrivateMessage("", false);
-            this.message.PrivateMessage("", false);
-            this.message.PrivateMessage("", false);
+            this.blank(4);
             this.message.PrivateMessage("----------------- Page 1/1 -----------------", false);
         }
         return true;
+    }
+
+    private void blank(int number) {
+        for (int i = 0; i < number; i++) {
+            this.message.PrivateMessage("", false);
+        }
     }
 }

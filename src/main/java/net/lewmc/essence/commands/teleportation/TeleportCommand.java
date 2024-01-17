@@ -10,10 +10,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class TeleportCommand implements CommandExecutor {
-    private Essence plugin;
-    private LogUtil log;
+    private final Essence plugin;
+    private final LogUtil log;
 
     /**
      * Constructor for the TeleportCommand class.
@@ -32,7 +33,12 @@ public class TeleportCommand implements CommandExecutor {
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+    public boolean onCommand(
+        @NotNull CommandSender commandSender,
+        @NotNull Command command,
+        @NotNull String s,
+        String[] args
+    ) {
         if (!(commandSender instanceof Player)) {
             this.log.noConsole();
             return true;

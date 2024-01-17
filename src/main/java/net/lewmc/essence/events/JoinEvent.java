@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class JoinEvent implements Listener {
-    private Essence plugin;
+    private final Essence plugin;
 
     public JoinEvent(Essence plugin) {
         this.plugin = plugin;
@@ -19,7 +19,9 @@ public class JoinEvent implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         plugin.reloadConfig();
         if (plugin.getConfig().getBoolean("motd.enabled")) {
-            event.getPlayer().sendMessage(plugin.getConfig().getString("motd.message"));
+            if (plugin.getConfig().getString("motd.message") != null) {
+                event.getPlayer().sendMessage(plugin.getConfig().getString("motd.message"));
+            }
         }
 
         LogUtil log = new LogUtil(this.plugin);
@@ -29,8 +31,11 @@ public class JoinEvent implements Listener {
 
         if (!data.fileExists(playerDataFile)) {
             log.info("Player data does not exist, creating file...");
-            data.createFile(playerDataFile);
-            log.info("Created player data!");
+            if (data.createFile(playerDataFile)) {
+                log.info("Created player data!");
+            } else {
+                log.warn("Unable to create player data!");
+            }
 
             data.load(playerDataFile);
             data.createSection("economy");

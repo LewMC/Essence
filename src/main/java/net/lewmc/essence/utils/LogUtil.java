@@ -4,7 +4,7 @@ import net.lewmc.essence.Essence;
 import org.bukkit.Bukkit;
 
 public class LogUtil {
-    private Essence plugin;
+    private final Essence plugin;
     public LogUtil(Essence plugin) {
         this.plugin = plugin;
     }

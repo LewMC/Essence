@@ -8,9 +8,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class GamemodeCommands implements CommandExecutor {
-    private Essence plugin;
+    private final Essence plugin;
     private PermissionHandler permission;
     private MessageUtil message;
     private Player player;
@@ -31,7 +32,12 @@ public class GamemodeCommands implements CommandExecutor {
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+    public boolean onCommand(
+        @NotNull CommandSender commandSender,
+        @NotNull Command command,
+        @NotNull String s,
+        String[] args
+    ) {
         if (!(commandSender instanceof Player)) {
             plugin.getLogger().warning("[Essence] Sorry, you need to be an in-game player to use this command.");
             return true;
@@ -81,44 +87,40 @@ public class GamemodeCommands implements CommandExecutor {
         if (this.permission.has("essence.gamemode.survival")) {
             this.player.setGameMode(GameMode.SURVIVAL);
             this.message.PrivateMessage("Switched to survival mode.", false);
-            return true;
         } else {
             this.permission.not();
-            return true;
         }
+        return true;
     }
 
     public boolean gamemodeCreative () {
         if (this.permission.has("essence.gamemode.creative")) {
             this.player.setGameMode(GameMode.CREATIVE);
             this.message.PrivateMessage("Switched to creative mode.", false);
-            return true;
         } else {
             this.permission.not();
-            return true;
         }
+        return true;
     }
 
     public boolean gamemodeSpectator () {
         if (this.permission.has("essence.gamemode.spectator")) {
             this.player.setGameMode(GameMode.SPECTATOR);
             this.message.PrivateMessage("Switched to spectator mode.", false);
-            return true;
         } else {
             this.permission.not();
-            return true;
         }
+        return true;
     }
 
     public boolean gamemodeAdventure () {
         if (this.permission.has("essence.gamemode.adventure")) {
             this.player.setGameMode(GameMode.ADVENTURE);
             this.message.PrivateMessage("Switched to adventure mode.", false);
-            return true;
         } else {
             this.permission.not();
-            return true;
         }
+        return true;
     }
 
     public boolean noModeSet () {
