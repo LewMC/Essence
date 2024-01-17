@@ -111,6 +111,10 @@ commands:
     description: Feed yourself or someone else.
     usage: /<command> [user]
     aliases: []
+  broadcast:
+    description: Broadcast a message to all online players.
+    usage: /<command> <message>
+    aliases: []
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -229,3 +233,10 @@ permissions:
     description: Allows players to set homes
   essence.home.delete:
     description: Allows players to delete homes
+  essence.chat.*:
+    description: Allows players to use all chat commands.
+    default: op
+    children:
+      essence.chat.broadcast: true
+  essence.chat.broadcast:
+    description: Allows players to broadcast a message to chat.

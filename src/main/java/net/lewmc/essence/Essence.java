@@ -1,14 +1,13 @@
 package net.lewmc.essence;
 
+import net.lewmc.essence.commands.chat.*;
 import net.lewmc.essence.commands.inventories.*;
 import net.lewmc.essence.commands.EssenceCommands;
 import net.lewmc.essence.commands.GamemodeCommands;
-import net.lewmc.essence.commands.stats.HealCommand;
-import net.lewmc.essence.commands.stats.FeedCommand;
+import net.lewmc.essence.commands.stats.*;
 import net.lewmc.essence.commands.teleportation.*;
 import net.lewmc.essence.events.JoinEvent;
-import net.lewmc.essence.tabcompleter.HomeTabCompleter;
-import net.lewmc.essence.tabcompleter.WarpTabCompleter;
+import net.lewmc.essence.tabcompleter.*;
 import net.lewmc.essence.utils.LogUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -117,6 +116,8 @@ public class Essence extends JavaPlugin {
             this.getCommand("tp").setExecutor(new TeleportCommand(this));
             this.getCommand("warp").setExecutor(new WarpCommand(this));
             this.getCommand("warps").setExecutor(new WarpsCommand(this));
+
+            this.getCommand("broadcast").setExecutor(new BroadcastCommand(this));
         } catch (NullPointerException e) {
             this.log.severe("LoadCommands: Unable to load Essence commands.");
         }
