@@ -1,9 +1,10 @@
 package net.lewmc.essence.commands.teleportation;
 
-import net.lewmc.essence.MessageHandler;
+import net.lewmc.essence.utils.LogUtil;
+import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.PermissionHandler;
-import net.lewmc.essence.utils.ConfigUtil;
+import net.lewmc.essence.utils.DataUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -16,13 +17,15 @@ import java.util.Set;
 
 public class WarpCommand implements CommandExecutor {
     private Essence plugin;
+    private LogUtil log;
 
     /**
-     * Constructor for the GamemodeCommands class.
+     * Constructor for the WarpCommand class.
      * @param plugin References to the main plugin class.
      */
     public WarpCommand(Essence plugin) {
         this.plugin = plugin;
+        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -35,18 +38,18 @@ public class WarpCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!(commandSender instanceof Player)) {
-            plugin.getLogger().warning("[Essence] Sorry, you need to be an in-game player to use this command.");
+            this.log.noConsole();
             return true;
         }
-        MessageHandler message = new MessageHandler(commandSender, plugin);
+        MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(player, message);
 
         if (command.getName().equalsIgnoreCase("warp")) {
             if (args.length > 0) {
                 if (permission.has("essence.warp.use")) {
-                    ConfigUtil config = new ConfigUtil(this.plugin, message);
-                    config.load("warps.yml");
+                    DataUtil config = new DataUtil(this.plugin, message);
+                    config.load("data/warps.yml");
 
                     if (config.getSection("warps." + args[0].toLowerCase()) == null) {
                         message.PrivateMessage("Warp " + args[0].toLowerCase() + " does not exist. Use /warp for a list of warps.", true);
@@ -57,8 +60,8 @@ public class WarpCommand implements CommandExecutor {
 
                     if (cs.getString("world") == null) {
                         message.PrivateMessage("Unable to warp due to an unexpected error, please see console for details.", true);
-                        plugin.getLogger().warning("[Essence] Player "+player+" attempted to warp to "+args[0].toLowerCase()+" but couldn't due to an error.");
-                        plugin.getLogger().warning("[Essence] Error: world is null, please check configuration file.");
+                        this.log.warn("Player "+player+" attempted to warp to "+args[0].toLowerCase()+" but couldn't due to an error.");
+                        this.log.warn("Error: world is null, please check configuration file.");
                         return true;
                     }
 
@@ -79,10 +82,10 @@ public class WarpCommand implements CommandExecutor {
                 }
             } else {
                 if (permission.has("essence.warp.list")) {
-                    ConfigUtil configUtil = new ConfigUtil(this.plugin, message);
-                    configUtil.load("warps.yml");
+                    DataUtil dataUtil = new DataUtil(this.plugin, message);
+                    dataUtil.load("data/warps.yml");
 
-                    Set<String> keys = configUtil.getKeys("warps");
+                    Set<String> keys = dataUtil.getKeys("warps");
 
                     if (keys == null) {
                         message.PrivateMessage("There are no warps set.", false);

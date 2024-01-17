@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.MessageHandler;
-import net.lewmc.essence.utils.PermissionHandler;
-import net.lewmc.essence.utils.ConfigUtil;
-import net.lewmc.essence.utils.HomeUtil;
+import net.lewmc.essence.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -17,13 +14,15 @@ import java.util.Set;
 
 public class HomeCommand implements CommandExecutor {
     private Essence plugin;
+    private LogUtil log;
 
     /**
-     * Constructor for the GamemodeCommands class.
+     * Constructor for the HomeCommand class.
      * @param plugin References to the main plugin class.
      */
     public HomeCommand(Essence plugin) {
         this.plugin = plugin;
+        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -36,18 +35,18 @@ public class HomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!(commandSender instanceof Player)) {
-            plugin.getLogger().warning("[Essence] Sorry, you need to be an in-game player to use this command.");
+            this.log.noConsole();
             return true;
         }
-        MessageHandler message = new MessageHandler(commandSender, plugin);
+        MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(player, message);
 
         if (command.getName().equalsIgnoreCase("home")) {
             if (args.length > 0) {
                 if (permission.has("essence.home.use")) {
-                    ConfigUtil config = new ConfigUtil(this.plugin, message);
-                    config.load("homes.yml");
+                    DataUtil config = new DataUtil(this.plugin, message);
+                    config.load(config.playerDataFile(player));
 
                     HomeUtil homeUtil = new HomeUtil();
 
@@ -60,8 +59,8 @@ public class HomeCommand implements CommandExecutor {
 
                     if (cs.getString("world") == null) {
                         message.PrivateMessage("Unable to teleport home due to an unexpected error, please see console for details.", true);
-                        plugin.getLogger().warning("[Essence] Player "+player+" attempted to teleport home to "+args[0].toLowerCase()+" but couldn't due to an error.");
-                        plugin.getLogger().warning("[Essence] Error: world is null, please check configuration file.");
+                        this.log.warn("Player "+player+" attempted to teleport home to "+args[0].toLowerCase()+" but couldn't due to an error.");
+                        this.log.warn("Error: world is null, please check configuration file.");
                         return true;
                     }
 
@@ -82,10 +81,10 @@ public class HomeCommand implements CommandExecutor {
                 }
             } else {
                 if (permission.has("essence.home.list")) {
-                    ConfigUtil configUtil = new ConfigUtil(this.plugin, message);
-                    configUtil.load("homes.yml");
+                    DataUtil dataUtil = new DataUtil(this.plugin, message);
+                    dataUtil.load("homes.yml");
 
-                    Set<String> keys = configUtil.getKeys("homes."+player.getUniqueId());
+                    Set<String> keys = dataUtil.getKeys("homes."+player.getUniqueId());
 
                     if (keys == null) {
                         message.PrivateMessage("You haven't set any homes.", false);

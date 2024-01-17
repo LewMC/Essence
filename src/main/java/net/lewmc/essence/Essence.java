@@ -7,32 +7,33 @@ import net.lewmc.essence.commands.stats.HealCommand;
 import net.lewmc.essence.commands.stats.FeedCommand;
 import net.lewmc.essence.commands.teleportation.*;
 import net.lewmc.essence.events.JoinEvent;
+import net.lewmc.essence.utils.LogUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Essence extends JavaPlugin {
+    private LogUtil log = new LogUtil(this);
 
     @Override
     public void onEnable() {
+        this.log.info("Beginning startup.");
         if (!Bukkit.getOnlineMode()) {
-            Bukkit.getLogger().warning("[Essence] Your server is running in offline mode.");
-            Bukkit.getLogger().warning("[Essence] Homes set in offline mode may not save properly if you switch back to online mode.");
-            Bukkit.getLogger().warning("[Essence] Homes set in online mode may not work properly in offline mode.");
+            this.log.severe("Your server is running in offline mode.");
+            this.log.warn("Homes set in offline mode may not save properly if you switch back to online mode.");
+            this.log.warn("Homes set in online mode may not work properly in offline mode.");
         }
-        Bukkit.getLogger().info("[Essence] Beginning startup sequence.");
 
         saveDefaultConfig();
 
         saveResource("config.yml", false);
-        saveResource("warps.yml", false);
+        saveResource("data/warps.yml", false);
         saveResource("homes.yml", false);
 
         loadClasses();
         loadCommands();
         loadEventHandlers();
 
-        Bukkit.getLogger().info("[Essence] Startup completed.");
+        this.log.info("Startup completed.");
     }
 
     @Override
@@ -42,16 +43,16 @@ public class Essence extends JavaPlugin {
      * Loads any classes that can't be loaded by initializers.
      */
     private void loadClasses() {
-        Bukkit.getLogger().info("[Essence] Loading classes...");
+        this.log.info("LoadClasses: Loading...");
         //EntityPickupItemClass = new EntityPickupItem(this);
-        Bukkit.getLogger().info("[Essence] Classes loaded...");
+        this.log.info("LoadClasses: Done");
     }
 
     /**
      * Loads and registers the plugin's command handlers.
      */
     private void loadCommands() {
-        Bukkit.getLogger().info("[Essence] Loading commands...");
+        this.log.info("LoadCommands: Loading...");
         try {
             this.getCommand("essence").setExecutor(new EssenceCommands(this));
 
@@ -81,17 +82,18 @@ public class Essence extends JavaPlugin {
             this.getCommand("tp").setExecutor(new TeleportCommand(this));
             this.getCommand("warp").setExecutor(new WarpCommand(this));
         } catch (NullPointerException e) {
-            Bukkit.getLogger().severe("[Essence] ERROR: Couldn't enable essence commands.");
+            this.log.severe("LoadCommands: Unable to load Essence commands.");
         }
-        Bukkit.getLogger().info("[Essence] Commands loaded.");
+        this.log.info("LoadCommands: Done.");
     }
 
     /**
      * Loads and registers all the plugin's event handlers.
      */
     private void loadEventHandlers() {
+        this.log.info("LoadEventHandlers: Loading event handlers...");
         Bukkit.getLogger().info("[Essence] Loading event handlers...");
         Bukkit.getServer().getPluginManager().registerEvents(new JoinEvent(this), this);
-        Bukkit.getLogger().info("[Essence] Event handlers loaded.");
+        this.log.info("LoadEventHandlers: Done.");
     }
 }

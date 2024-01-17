@@ -1,30 +1,30 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.MessageHandler;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.Set;
 
-public class ConfigUtil {
+public class DataUtil {
     private Essence plugin;
-    private MessageHandler message;
+    private MessageUtil message;
     private File configFile;
+    private LogUtil log;
 
     /**
      * Starts a configuration instance.
      * @param plugin Essence instance.
-     * @param message MessageHandler instance.
+     * @param message MessageUtil instance.
      */
-    public ConfigUtil(Essence plugin, MessageHandler message) {
+    public DataUtil(Essence plugin, MessageUtil message) {
         this.plugin = plugin;
         this.message = message;
+        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -36,13 +36,13 @@ public class ConfigUtil {
             this.configFile = new File(this.plugin.getDataFolder(), config);
             this.plugin.getConfig().load(configFile);
         } catch (InvalidConfigurationException e) {
-            this.plugin.getLogger().warning("[Essence] InvalidConfigurationException loading configuration: " + e);
+            this.log.warn("InvalidConfigurationException loading configuration: " + e);
             this.message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
         } catch (FileNotFoundException e) {
-            this.plugin.getLogger().warning("[Essence] FileNotFoundException loading configuration: " + e);
+            this.log.warn("FileNotFoundException loading configuration: " + e);
             this.message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
         } catch (IOException e) {
-            this.plugin.getLogger().warning("[Essence] IOException loading configuration: " + e);
+            this.log.warn("IOException loading configuration: " + e);
             this.message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
         }
     }
@@ -71,7 +71,7 @@ public class ConfigUtil {
         try {
             this.plugin.getConfig().save(configFile);
         } catch (IOException e) {
-            this.plugin.getLogger().warning("[Essence] Error saving configuration: " + e);
+            this.log.warn("Error saving configuration: " + e);
             message.PrivateMessage("Unable to create warp due to an error, see server console for more information.", true);
         }
     }
@@ -92,6 +92,15 @@ public class ConfigUtil {
                 return cs.getKeys(false);
             }
         }
+    }
+
+    /**
+     * Return the location of the player's data file.
+     * @param player The player.
+     * @return The data file URI inside the /plugin/essence folder.
+     */
+    public String playerDataFile(Player player) {
+        return "/data/player/"+player.getUniqueId()+".yml";
     }
 }
 

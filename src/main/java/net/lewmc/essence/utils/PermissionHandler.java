@@ -1,14 +1,13 @@
 package net.lewmc.essence.utils;
 
-import net.lewmc.essence.MessageHandler;
 import org.bukkit.entity.Player;
 
 public class PermissionHandler {
 
     private final Player player;
-    private MessageHandler message;
+    private MessageUtil message;
 
-    public PermissionHandler(Player player, MessageHandler message) {
+    public PermissionHandler(Player player, MessageUtil message) {
         this.player = player;
         this.message = message;
     }

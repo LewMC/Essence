@@ -1,6 +1,6 @@
 package net.lewmc.essence.commands;
 
-import net.lewmc.essence.MessageHandler;
+import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.GameMode;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class GamemodeCommands implements CommandExecutor {
     private Essence plugin;
     private PermissionHandler permission;
-    private MessageHandler message;
+    private MessageUtil message;
     private Player player;
 
     /**
@@ -39,7 +39,7 @@ public class GamemodeCommands implements CommandExecutor {
         Player player = (Player) commandSender;
 
         this.permission = new PermissionHandler(player, message);
-        this.message = new MessageHandler(commandSender, plugin);
+        this.message = new MessageUtil(commandSender, plugin);
         this.player = player;
 
         if (command.getName().equalsIgnoreCase("gamemode") || command.getName().equalsIgnoreCase("gm")) {

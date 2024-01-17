@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.MessageHandler;
-import net.lewmc.essence.utils.PermissionHandler;
-import net.lewmc.essence.utils.ConfigUtil;
-import net.lewmc.essence.utils.HomeUtil;
+import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,15 +9,17 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 public class DelhomeCommand implements CommandExecutor {
+    private final LogUtil log;
     private Essence plugin;
 
     /**
-     * Constructor for the GamemodeCommands class.
+     * Constructor for the DelhomeCommand class.
      *
      * @param plugin References to the main plugin class.
      */
     public DelhomeCommand(Essence plugin) {
         this.plugin = plugin;
+        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -33,10 +32,10 @@ public class DelhomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!(commandSender instanceof Player)) {
-            plugin.getLogger().warning("[Essence] Sorry, you need to be an in-game player to use this command.");
+            this.log.noConsole();
             return true;
         }
-        MessageHandler message = new MessageHandler(commandSender,plugin);
+        MessageUtil message = new MessageUtil(commandSender,plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(player, message);
 
@@ -46,7 +45,7 @@ public class DelhomeCommand implements CommandExecutor {
                     message.PrivateMessage("Usage: /delhome <name>", true);
                     return true;
                 }
-                ConfigUtil config = new ConfigUtil(this.plugin, message);
+                DataUtil config = new DataUtil(this.plugin, message);
                 config.load("homes.yml");
 
                 String homeName = args[0].toLowerCase();

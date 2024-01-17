@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.MessageHandler;
-import net.lewmc.essence.utils.PermissionHandler;
-import net.lewmc.essence.utils.ConfigUtil;
-import net.lewmc.essence.utils.HomeUtil;
+import net.lewmc.essence.utils.*;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,14 +11,16 @@ import org.bukkit.entity.Player;
 
 public class SethomeCommand implements CommandExecutor {
     private Essence plugin;
+    private LogUtil log;
 
     /**
-     * Constructor for the GamemodeCommands class.
+     * Constructor for the SethomeCommand class.
      *
      * @param plugin References to the main plugin class.
      */
     public SethomeCommand(Essence plugin) {
         this.plugin = plugin;
+        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -34,10 +33,10 @@ public class SethomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!(commandSender instanceof Player)) {
-            this.plugin.getLogger().warning("[Essence] Sorry, you need to be an in-game player to use this command.");
+            this.log.noConsole();
             return true;
         }
-        MessageHandler message = new MessageHandler(commandSender, this.plugin);
+        MessageUtil message = new MessageUtil(commandSender, this.plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(player, message);
 
@@ -48,7 +47,7 @@ public class SethomeCommand implements CommandExecutor {
                     return true;
                 }
                 Location loc = player.getLocation();
-                ConfigUtil config = new ConfigUtil(this.plugin, message);
+                DataUtil config = new DataUtil(this.plugin, message);
                 config.load("homes.yml");
 
                 HomeUtil homeUtil = new HomeUtil();

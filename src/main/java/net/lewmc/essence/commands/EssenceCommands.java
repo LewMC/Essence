@@ -1,16 +1,16 @@
 package net.lewmc.essence.commands;
 
-import net.lewmc.essence.MessageHandler;
+import net.lewmc.essence.utils.LogUtil;
+import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class EssenceCommands implements CommandExecutor {
-    public Essence plugin;
+    private Essence plugin;
+    private LogUtil log;
 
     /**
      * Constructor for the EssenceCommands class.
@@ -18,6 +18,7 @@ public class EssenceCommands implements CommandExecutor {
      */
     public EssenceCommands(Essence plugin) {
         this.plugin = plugin;
+        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -31,10 +32,10 @@ public class EssenceCommands implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!(commandSender instanceof Player)) {
-            plugin.getLogger().warning("[Essence] Sorry, you need to be an in-game player to use this command.");
+            this.log.noConsole();
             return true;
         }
-        MessageHandler message = new MessageHandler(commandSender, plugin);
+        MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
 
         /*
@@ -48,7 +49,8 @@ public class EssenceCommands implements CommandExecutor {
                 }
             } else {
                 message.PrivateMessage("Running Essence "+plugin.getDescription().getVersion()+" for Minecraft "+plugin.getDescription().getAPIVersion(), false);
-                message.PrivateMessage("Essence is a plugin that adds a number of basic commands created by Lewis Milburn.", false);
+                message.PrivateMessage("Essence is a lightweight and customisable plugin that adds warps, homes, and more.", false);
+                message.PrivateMessage("Created by LewMC.", false);
                 message.PrivateMessage("Use /es help for more commands", false);
 
                 return true;

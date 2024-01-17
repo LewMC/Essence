@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.teleportation;
 
-import net.lewmc.essence.MessageHandler;
+import net.lewmc.essence.utils.LogUtil;
+import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.Bukkit;
@@ -12,13 +13,15 @@ import org.bukkit.entity.Player;
 
 public class TeleportCommand implements CommandExecutor {
     private Essence plugin;
+    private LogUtil log;
 
     /**
-     * Constructor for the GamemodeCommands class.
+     * Constructor for the TeleportCommand class.
      * @param plugin References to the main plugin class.
      */
     public TeleportCommand(Essence plugin) {
         this.plugin = plugin;
+        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -31,10 +34,10 @@ public class TeleportCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!(commandSender instanceof Player)) {
-            plugin.getLogger().warning("[Essence] Sorry, you need to be an in-game player to use this command.");
+            this.log.noConsole();
             return true;
         }
-        MessageHandler message = new MessageHandler(commandSender, plugin);
+        MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(player, message);
 

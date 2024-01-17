@@ -1,23 +1,24 @@
-package net.lewmc.essence;
+package net.lewmc.essence.utils;
 
+import net.lewmc.essence.Essence;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public class MessageHandler {
+public class MessageUtil {
 
     private CommandSender cs;
     private Essence plugin;
 
-    public MessageHandler(CommandSender cs, Essence plugin) {
+    public MessageUtil(CommandSender cs, Essence plugin) {
         this.cs = cs;
         this.plugin = plugin;
     }
     public void PrivateMessage(String Message, boolean Error) {
         if (Error) {
-            this.cs.sendMessage(ChatColor.DARK_RED + "[" + plugin.getConfig().get("prefix") + "] " + ChatColor.RED + Message);
+            this.cs.sendMessage(ChatColor.DARK_RED + "[" + plugin.getConfig().get("chat-prefix") + "] " + ChatColor.RED + Message);
         } else {
-            this.cs.sendMessage(ChatColor.GOLD + "[" + plugin.getConfig().get("prefix") + "] " + ChatColor.YELLOW + Message);
+            this.cs.sendMessage(ChatColor.GOLD + "[" + plugin.getConfig().get("chat-prefix") + "] " + ChatColor.YELLOW + Message);
         }
     }
 
