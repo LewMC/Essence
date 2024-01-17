@@ -1,5 +1,5 @@
 name: Essence
-version: 1.0
+version: 1.1.0-SNAPSHOT
 main: net.lewmc.essence.Essence
 api-version: 1.20
 author: LewMC
@@ -9,7 +9,7 @@ load: POSTWORLD
 commands:
   essence:
     description: Main command
-    usage: /<command>
+    usage: /<command> [help] [topic] [chapter]
     aliases: ['es','ess']
   gamemode:
     description: Change your gamemode.
@@ -69,31 +69,39 @@ commands:
     aliases: ['disposal']
   tp:
     description: Teleport to a player or coordinates.
-    usage: /<command>
+    usage: /<command> <player> OR /<command> <x> <y> <z>
     aliases: ['teleport']
   warp:
     description: Teleport to a preset warp.
+    usage: /<command> <name>
+    aliases: []
+  warps:
+    description: View a list of warps.
     usage: /<command>
     aliases: []
   setwarp:
     description: Create a warp.
-    usage: /<command>
+    usage: /<command> <name>
     aliases: []
   delwarp:
     description: Delete a warp.
-    usage: /<command>
+    usage: /<command> <name>
     aliases: []
   home:
     description: Teleport to a preset home.
+    usage: /<command> [name]
+    aliases: []
+  homes:
+    description: View a list of homes.
     usage: /<command>
     aliases: []
   sethome:
     description: Create a home.
-    usage: /<command>
+    usage: /<command> <name>
     aliases: []
   delhome:
     description: Delete a home.
-    usage: /<command>
+    usage: /<command> <name>
     aliases: []
   heal:
     description: Heal yourself or someone else.
