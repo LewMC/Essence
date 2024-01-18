@@ -9,6 +9,7 @@ import net.lewmc.essence.commands.teleportation.*;
 import net.lewmc.essence.events.JoinEvent;
 import net.lewmc.essence.tabcompleter.*;
 import net.lewmc.essence.utils.LogUtil;
+import net.lewmc.essence.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +22,9 @@ public class Essence extends JavaPlugin {
     @Override
     public void onEnable() {
         this.log.info("Beginning startup...");
+        int pluginId = 20768; // <-- Replace with the id of your plugin!
+        Metrics metrics = new Metrics(this, pluginId);
+
         if (!Bukkit.getOnlineMode()) {
             this.log.severe("Your server is running in offline mode.");
             this.log.warn("Homes set in offline mode may not save properly if you switch back to online mode.");
