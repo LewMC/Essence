@@ -12,10 +12,12 @@ console-prefix: "Essence"
 
 # MOTD
 # This is displayed to users in chat when they join the server.
-# You can use § colour codes and \n to create a new line.
+# You can use § colour codes here!
 motd:
   enabled: true
-  message: "Welcome to the server!\nChange this message in Essence config.yml"
+  message: |-
+    §2§lWelcome to the server!
+    §aYou can change this message in Essence's config.yml
 
 # ECONOMY
 economy:
