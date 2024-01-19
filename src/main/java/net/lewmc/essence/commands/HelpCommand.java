@@ -64,6 +64,12 @@ public class HelpCommand {
                 this.message.PrivateMessage("/heal [user] - Feed yourself or another.", false);
                 this.blank(6);
                 this.message.PrivateMessage("----------------- Page 1/1 -----------------", false);
+            } else if ("economy".equalsIgnoreCase(args[1])) {
+                this.message.PrivateMessage("---------- Essence Help - Economy ----------", false);
+                this.message.PrivateMessage("/pay <user> <amount> - Pay someone!", false);
+                this.message.PrivateMessage("/bal - View your balance.", false);
+                this.blank(6);
+                this.message.PrivateMessage("----------------- Page 1/1 -----------------", false);
             }
             else {
                 this.message.PrivateMessage("Unable to find help chapter.", true);
@@ -74,7 +80,8 @@ public class HelpCommand {
             this.message.PrivateMessage("/es help gamemode - Gamemode commands.", false);
             this.message.PrivateMessage("/es help teleport - Teleport commands.", false);
             this.message.PrivateMessage("/es help stats - Manage your stats.", false);
-            this.blank(4);
+            this.message.PrivateMessage("/es help economy - Economy commands.", false);
+            this.blank(3);
             this.message.PrivateMessage("----------------- Page 1/1 -----------------", false);
         }
         return true;
