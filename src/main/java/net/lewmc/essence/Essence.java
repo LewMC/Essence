@@ -82,9 +82,6 @@ public class Essence extends JavaPlugin {
         }
     }
 
-    @Override
-    public void onDisable() {}
-
     /**
      * Initialise the file system.
      */
