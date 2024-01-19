@@ -58,6 +58,7 @@ public class DelhomeCommand implements CommandExecutor {
                 config.load(config.playerDataFile(player));
 
                 if (!config.sectionExists("homes."+name)) {
+                    config.close();
                     message.PrivateMessage("Home '"+name+"' does not exist.", true);
                     return true;
                 }

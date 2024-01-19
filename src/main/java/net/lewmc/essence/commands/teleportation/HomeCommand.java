@@ -61,6 +61,7 @@ public class HomeCommand implements CommandExecutor {
                     homeName = homeUtil.HomeWrapper(args[0].toLowerCase());
                     chatHomeName = args[0].toLowerCase();
                     if (config.getSection(homeName) == null) {
+                        config.close();
                         message.PrivateMessage("Home " + chatHomeName + " does not exist. Use /homes for a list of homes.", true);
                         return true;
                     }
@@ -68,6 +69,7 @@ public class HomeCommand implements CommandExecutor {
                     homeName = homeUtil.HomeWrapper("home");
                     chatHomeName = "home";
                     if (config.getSection(homeName) == null) {
+                        config.close();
                         message.PrivateMessage("Home does not exist. Use /homes for a list of homes.", true);
                         return true;
                     }
@@ -76,6 +78,7 @@ public class HomeCommand implements CommandExecutor {
                 ConfigurationSection cs = config.getSection(homeName);
 
                 if (cs == null) {
+                    config.close();
                     message.PrivateMessage("Unable to teleport home due to an unexpected error, please see console for details.", true);
                     this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: Unable to load from configuration file, please check configuration file.");
@@ -83,6 +86,7 @@ public class HomeCommand implements CommandExecutor {
                 }
 
                 if (cs.getString("world") == null) {
+                    config.close();
                     message.PrivateMessage("Unable to teleport home due to an unexpected error, please see console for details.", true);
                     this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: world is null, please check configuration file.");
@@ -103,6 +107,7 @@ public class HomeCommand implements CommandExecutor {
                 );
 
                 player.teleport(loc);
+                config.close();
 
                 message.PrivateMessage("Teleporting to home '" + chatHomeName + "'...", false);
 

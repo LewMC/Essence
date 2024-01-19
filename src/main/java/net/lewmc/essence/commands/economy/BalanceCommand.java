@@ -40,17 +40,18 @@ public class BalanceCommand implements CommandExecutor {
             this.log.noConsole();
             return true;
         }
-        MessageUtil message = new MessageUtil(commandSender, plugin);
+        MessageUtil message = new MessageUtil(commandSender, this.plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (command.getName().equalsIgnoreCase("balance") || command.getName().equalsIgnoreCase("bal")) {
+        if (command.getName().equalsIgnoreCase("balance")) {
             if (permission.has("essence.economy.balance")) {
                 DataUtil data = new DataUtil(this.plugin, message);
                 data.load(data.playerDataFile(player));
 
                 ConfigurationSection cs = data.getSection("economy");
                 double balance = cs.getDouble("balance");
+                data.close();
 
                 message.PrivateMessage("Your balance: " + plugin.getConfig().getString("economy.symbol") + balance, false);
                 return true;

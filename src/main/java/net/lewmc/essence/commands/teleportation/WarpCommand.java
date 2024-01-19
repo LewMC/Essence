@@ -60,6 +60,7 @@ public class WarpCommand implements CommandExecutor {
                     ConfigurationSection cs = config.getSection("warps." + args[0].toLowerCase());
 
                     if (cs.getString("world") == null) {
+                        config.close();
                         message.PrivateMessage("Unable to warp due to an unexpected error, please see console for details.", true);
                         this.log.warn("Player "+player+" attempted to warp to "+args[0].toLowerCase()+" but couldn't due to an error.");
                         this.log.warn("Error: world is null, please check configuration file.");
@@ -79,6 +80,7 @@ public class WarpCommand implements CommandExecutor {
                     );
 
                     player.teleport(loc);
+                    config.close();
 
                     message.PrivateMessage("Warping to '"+args[0].toLowerCase()+"'...", false);
 

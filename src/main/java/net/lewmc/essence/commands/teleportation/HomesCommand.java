@@ -53,6 +53,7 @@ public class HomesCommand implements CommandExecutor {
                 Set<String> keys = dataUtil.getKeys("homes");
 
                 if (keys == null) {
+                    dataUtil.close();
                     message.PrivateMessage("You haven't set any homes.", false);
                     return true;
                 }
@@ -68,6 +69,7 @@ public class HomesCommand implements CommandExecutor {
                     }
                     i++;
                 }
+                dataUtil.close();
                 message.PrivateMessage(setHomes.toString(), false);
             } else {
                 permission.not();

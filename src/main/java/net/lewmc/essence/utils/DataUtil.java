@@ -15,6 +15,7 @@ public class DataUtil {
     private final MessageUtil message;
     private File configFile;
     private final LogUtil log;
+    private final String defaultConfig;
 
     /**
      * Starts a configuration instance.
@@ -25,6 +26,7 @@ public class DataUtil {
         this.plugin = plugin;
         this.message = message;
         this.log = new LogUtil(plugin);
+        this.defaultConfig = this.plugin.getDataFolder()+"/config.yml";
     }
 
     /**
@@ -76,6 +78,25 @@ public class DataUtil {
             this.plugin.getConfig().save(configFile);
         } catch (IOException e) {
             this.log.warn("Error saving configuration: " + e);
+            message.PrivateMessage("The server was unable to process configuration data, see the console for more information.", true);
+        }
+
+        try {
+            this.plugin.getConfig().load(this.defaultConfig);
+        } catch (IOException | InvalidConfigurationException e) {
+            this.log.warn("Error loading configuration: " + e);
+            message.PrivateMessage("The server was unable to process configuration data, see the console for more information.", true);
+        }
+    }
+
+    /**
+     * Closes the custom config file.
+     */
+    public void close() {
+        try {
+            this.plugin.getConfig().load(this.defaultConfig);
+        } catch (IOException | InvalidConfigurationException e) {
+            this.log.warn("Error loading configuration: " + e);
             message.PrivateMessage("The server was unable to process configuration data, see the console for more information.", true);
         }
     }

@@ -67,6 +67,7 @@ public class BackCommand implements CommandExecutor {
                 );
 
                 player.teleport(loc);
+                config.close();
 
                 message.PrivateMessage("Going back...", false);
 

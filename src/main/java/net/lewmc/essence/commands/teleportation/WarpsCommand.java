@@ -55,6 +55,7 @@ public class WarpsCommand implements CommandExecutor {
                 Set<String> keys = dataUtil.getKeys("warps");
 
                 if (keys == null) {
+                    dataUtil.close();
                     message.PrivateMessage("There are no warps set.", false);
                     return true;
                 }
@@ -70,6 +71,7 @@ public class WarpsCommand implements CommandExecutor {
                     }
                     i++;
                 }
+                dataUtil.close();
                 message.PrivateMessage(setWarps.toString(), false);
             } else {
                 permission.not();

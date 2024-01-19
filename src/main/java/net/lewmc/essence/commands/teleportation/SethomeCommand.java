@@ -62,6 +62,7 @@ public class SethomeCommand implements CommandExecutor {
 
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {
+                    config.close();
                     message.PrivateMessage("Homes cannot contain special characters!", true);
                     return true;
                 }
@@ -70,6 +71,7 @@ public class SethomeCommand implements CommandExecutor {
                 String homeName = homeUtil.HomeWrapper(name.toLowerCase());
 
                 if (config.sectionExists(homeName)) {
+                    config.close();
                     message.PrivateMessage("A home with this name already exists.", true);
                     return true;
                 }

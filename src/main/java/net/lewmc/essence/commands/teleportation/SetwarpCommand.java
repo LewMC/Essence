@@ -60,11 +60,13 @@ public class SetwarpCommand implements CommandExecutor {
 
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(warpName)) {
+                    config.close();
                     message.PrivateMessage("Warps cannot contain special characters!", true);
                     return true;
                 }
 
                 if (config.sectionExists("warps." + warpName)) {
+                    config.close();
                     message.PrivateMessage("A warp with this name already exists.", true);
                     return true;
                 }
