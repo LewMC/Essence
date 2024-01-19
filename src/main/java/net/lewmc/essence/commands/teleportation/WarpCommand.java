@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation;
 
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
+import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.PermissionHandler;
-import net.lewmc.essence.utils.DataUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -68,6 +65,9 @@ public class WarpCommand implements CommandExecutor {
                         this.log.warn("Error: world is null, please check configuration file.");
                         return true;
                     }
+
+                    LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                    locationUtil.UpdateLastLocation(player);
 
                     Location loc = new Location(
                         Bukkit.getServer().getWorld(cs.getString("world")),

@@ -64,6 +64,10 @@ public class DataUtil {
         return this.plugin.getConfig().getConfigurationSection(section);
     }
 
+    public boolean sectionExists(String section) {
+        return this.plugin.getConfig().isConfigurationSection(section);
+    }
+
     /**
      * Saves the configuration to disk.
      */

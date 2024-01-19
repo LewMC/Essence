@@ -89,6 +89,10 @@ public class HomeCommand implements CommandExecutor {
                     return true;
                 }
 
+                LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                locationUtil.UpdateLastLocation(player);
+
+
                 Location loc = new Location(
                         Bukkit.getServer().getWorld(cs.getString("world")),
                         cs.getDouble("X"),

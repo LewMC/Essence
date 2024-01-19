@@ -1,5 +1,6 @@
 package net.lewmc.essence.commands.teleportation;
 
+import net.lewmc.essence.utils.LocationUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
@@ -50,6 +51,9 @@ public class TeleportCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("tp") || command.getName().equalsIgnoreCase("teleport")) {
             if (args.length == 3) {
                 if (permission.has("essence.teleport.coord")) {
+                    LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                    locationUtil.UpdateLastLocation(player);
+
                     double x = Double.parseDouble(args[0]);
                     double y = Double.parseDouble(args[1]);
                     double z = Double.parseDouble(args[2]);
@@ -63,6 +67,9 @@ public class TeleportCommand implements CommandExecutor {
                 if (permission.has("essence.teleport.player")) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
+                            LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                            locationUtil.UpdateLastLocation(player);
+
                             message.PrivateMessage("Teleporting to " + p.getName(), false);
                             player.teleport(p);
                             return true;

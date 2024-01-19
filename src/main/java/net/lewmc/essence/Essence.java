@@ -23,7 +23,7 @@ public class Essence extends JavaPlugin {
     public void onEnable() {
         this.log.info("Beginning startup...");
         int pluginId = 20768; // <-- Replace with the id of your plugin!
-        Metrics metrics = new Metrics(this, pluginId);
+        new Metrics(this, pluginId);
 
         if (!Bukkit.getOnlineMode()) {
             this.log.severe("Your server is running in offline mode.");
@@ -120,6 +120,7 @@ public class Essence extends JavaPlugin {
             this.getCommand("tp").setExecutor(new TeleportCommand(this));
             this.getCommand("warp").setExecutor(new WarpCommand(this));
             this.getCommand("warps").setExecutor(new WarpsCommand(this));
+            this.getCommand("back").setExecutor(new BackCommand(this));
 
             this.getCommand("broadcast").setExecutor(new BroadcastCommand(this));
         } catch (NullPointerException e) {

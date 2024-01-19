@@ -115,6 +115,10 @@ commands:
     description: Broadcast a message to all online players.
     usage: /<command> <message>
     aliases: []
+  back:
+    description: Go back to your last location before teleporting.
+    usage: /<command>
+    aliases: []
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -180,10 +184,13 @@ permissions:
     children:
       essence.teleport.coord: true
       essence.teleport.player: true
+      essence.teleport.back: true
   essence.teleport.coord:
     description: Allows players to teleport to coordinates.
   essence.teleport.player:
     description: Allows players to teleport to a player.
+  essence.teleport.back:
+    description: Go back to your last location before teleporting.
   essence.warp.*:
     description: Allows players to use and manage warps.
     default: op
