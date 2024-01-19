@@ -5,3 +5,4 @@ motd:
   message: "Welcome to the server!"
 economy:
   start-money: 100.0
+  symbol: $

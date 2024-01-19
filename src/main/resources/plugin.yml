@@ -119,6 +119,14 @@ commands:
     description: Go back to your last location before teleporting.
     usage: /<command>
     aliases: []
+  pay:
+    description: Pay someone.
+    usage: /<command> <user> <amount>
+    aliases: []
+  balance:
+    description: See your current balance.
+    usage: /<command>
+    aliases: ['bal']
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -247,3 +255,13 @@ permissions:
       essence.chat.broadcast: true
   essence.chat.broadcast:
     description: Allows players to broadcast a message to chat.
+  essence.economy.*:
+    description: Allows players to access all economy commands.
+    default: op
+    children:
+      essence.economy.pay: true
+      essence.economy.balance: true
+  essence.economy.pay:
+    description: Use /pay command.
+  essence.economy.balance:
+    description: Use /balance command.

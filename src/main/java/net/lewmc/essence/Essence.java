@@ -1,6 +1,8 @@
 package net.lewmc.essence;
 
 import net.lewmc.essence.commands.chat.*;
+import net.lewmc.essence.commands.economy.BalanceCommand;
+import net.lewmc.essence.commands.economy.PayCommand;
 import net.lewmc.essence.commands.inventories.*;
 import net.lewmc.essence.commands.EssenceCommands;
 import net.lewmc.essence.commands.GamemodeCommands;
@@ -8,6 +10,7 @@ import net.lewmc.essence.commands.stats.*;
 import net.lewmc.essence.commands.teleportation.*;
 import net.lewmc.essence.events.JoinEvent;
 import net.lewmc.essence.tabcompleter.*;
+import net.lewmc.essence.utils.ConfigUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.Metrics;
 import org.bukkit.Bukkit;
@@ -34,9 +37,13 @@ public class Essence extends JavaPlugin {
         checkForEssentials();
 
         if (!isDisabled) {
+            initFileSystem();
             loadCommands();
             loadEventHandlers();
             loadTabCompleters();
+
+            ConfigUtil cu = new ConfigUtil(this);
+            cu.UpdateConfig();
 
             this.log.info("Startup completed.");
         }
@@ -56,8 +63,6 @@ public class Essence extends JavaPlugin {
             this.log.severe("If you require commands that are in Essentials but not in Essence, please remove Essence from the server.");
             this.log.severe("All Essence commands are implemented in Essentials in a similar way.");
             getServer().getPluginManager().disablePlugin(this);
-        } else {
-            initFileSystem();
         }
     }
 
@@ -123,6 +128,9 @@ public class Essence extends JavaPlugin {
             this.getCommand("back").setExecutor(new BackCommand(this));
 
             this.getCommand("broadcast").setExecutor(new BroadcastCommand(this));
+
+            this.getCommand("pay").setExecutor(new PayCommand(this));
+            this.getCommand("balance").setExecutor(new BalanceCommand(this));
         } catch (NullPointerException e) {
             this.log.severe("LoadCommands: Unable to load Essence commands.");
         }
