@@ -76,7 +76,10 @@ public class Essence extends JavaPlugin {
     private void initFileSystem() {
         saveDefaultConfig();
 
-        saveResource("data/warps.yml", false);
+        File warpsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "warps.yml");
+        if (!warpsFile.exists()) {
+            saveResource("data/warps.yml", false);
+        }
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
         if (!statsFolder.exists()) {
