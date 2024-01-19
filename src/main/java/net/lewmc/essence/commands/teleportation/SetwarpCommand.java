@@ -64,6 +64,11 @@ public class SetwarpCommand implements CommandExecutor {
                     return true;
                 }
 
+                if (config.sectionExists("warps." + warpName)) {
+                    message.PrivateMessage("A warp with this name already exists.", true);
+                    return true;
+                }
+
                 config.createSection("warps." + warpName);
 
                 ConfigurationSection cs = config.getSection("warps." + warpName);

@@ -1,5 +1,6 @@
 package net.lewmc.essence.commands.teleportation;
 
+import com.google.common.util.concurrent.FutureCallback;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import org.bukkit.Location;
@@ -9,6 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class SethomeCommand implements CommandExecutor {
     private final Essence plugin;
@@ -68,6 +71,11 @@ public class SethomeCommand implements CommandExecutor {
 
                 HomeUtil homeUtil = new HomeUtil();
                 String homeName = homeUtil.HomeWrapper(name.toLowerCase());
+
+                if (config.sectionExists(homeName)) {
+                    message.PrivateMessage("A home with this name already exists.", true);
+                    return true;
+                }
 
                 config.createSection(homeName);
 
