@@ -3,6 +3,7 @@ package net.lewmc.essence.commands;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.PermissionHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,6 +16,8 @@ public class GamemodeCommands implements CommandExecutor {
     private PermissionHandler permission;
     private MessageUtil message;
     private Player player;
+    private boolean isPlayer;
+    private String toPlayer;
 
     /**
      * Constructor for the GamemodeCommands class.
@@ -38,18 +41,22 @@ public class GamemodeCommands implements CommandExecutor {
         @NotNull String s,
         String[] args
     ) {
+
         if (!(commandSender instanceof Player)) {
-            plugin.getLogger().warning("[Essence] Sorry, you need to be an in-game player to use this command.");
-            return true;
+            this.isPlayer = false;
+        } else {
+            this.player = (Player) commandSender;
+            this.isPlayer = true;
         }
-        Player player = (Player) commandSender;
 
         this.message = new MessageUtil(commandSender, plugin);
         this.permission = new PermissionHandler(commandSender, this.message);
-        this.player = player;
 
-        if (command.getName().equalsIgnoreCase("gamemode") || command.getName().equalsIgnoreCase("gm")) {
-            if (args.length > 0) {
+        if (command.getName().equalsIgnoreCase("gamemode")) {
+            if (args.length == 2) {
+                this.toPlayer = args[1];
+            }
+            if (args.length == 0 || args.length == 2) {
                 if (args[0].equalsIgnoreCase("survival")) {
                     gamemodeSurvival();
                 } else if (args[0].equalsIgnoreCase("creative")) {
@@ -58,6 +65,8 @@ public class GamemodeCommands implements CommandExecutor {
                     gamemodeAdventure();
                 } else if (args[0].equalsIgnoreCase("spectator")) {
                     gamemodeSpectator();
+                } else {
+                    message.PrivateMessage("Usage: /gamemode <mode> [player]", true);
                 }
             } else {
                 return noModeSet();
@@ -65,18 +74,30 @@ public class GamemodeCommands implements CommandExecutor {
         }
 
         if (command.getName().equalsIgnoreCase("gmc")) {
+            if (args.length == 1) {
+                this.toPlayer = args[0];
+            }
             return gamemodeCreative();
         }
 
         if (command.getName().equalsIgnoreCase("gms")) {
+            if (args.length == 1) {
+                this.toPlayer = args[0];
+            }
             return gamemodeSurvival();
         }
 
         if (command.getName().equalsIgnoreCase("gma")) {
+            if (args.length == 1) {
+                this.toPlayer = args[0];
+            }
             return gamemodeAdventure();
         }
 
         if (command.getName().equalsIgnoreCase("gmsp")) {
+            if (args.length == 1) {
+                this.toPlayer = args[0];
+            }
             return gamemodeSpectator();
         }
 
@@ -85,8 +106,16 @@ public class GamemodeCommands implements CommandExecutor {
 
     public boolean gamemodeSurvival () {
         if (this.permission.has("essence.gamemode.survival")) {
-            this.player.setGameMode(GameMode.SURVIVAL);
-            this.message.PrivateMessage("Switched to survival mode.", false);
+            if (isPlayer) {
+                this.player.setGameMode(GameMode.SURVIVAL);
+                this.message.PrivateMessage("Switched to survival mode.", false);
+            } else {
+                Player player = Bukkit.getPlayer(this.toPlayer);
+                if (player != null) {
+                    player.setGameMode(GameMode.SURVIVAL);
+                    this.message.SendTo(player, "Switched to survival mode.", false);
+                }
+            }
         } else {
             this.permission.not();
         }
@@ -95,8 +124,16 @@ public class GamemodeCommands implements CommandExecutor {
 
     public boolean gamemodeCreative () {
         if (this.permission.has("essence.gamemode.creative")) {
-            this.player.setGameMode(GameMode.CREATIVE);
-            this.message.PrivateMessage("Switched to creative mode.", false);
+            if (isPlayer) {
+                this.player.setGameMode(GameMode.CREATIVE);
+                this.message.PrivateMessage("Switched to creative mode.", false);
+            } else {
+                Player player = Bukkit.getPlayer(this.toPlayer);
+                if (player != null) {
+                    player.setGameMode(GameMode.CREATIVE);
+                    this.message.SendTo(player, "Switched to creative mode.", false);
+                }
+            }
         } else {
             this.permission.not();
         }
@@ -105,8 +142,16 @@ public class GamemodeCommands implements CommandExecutor {
 
     public boolean gamemodeSpectator () {
         if (this.permission.has("essence.gamemode.spectator")) {
-            this.player.setGameMode(GameMode.SPECTATOR);
-            this.message.PrivateMessage("Switched to spectator mode.", false);
+            if (isPlayer) {
+                this.player.setGameMode(GameMode.SPECTATOR);
+                this.message.PrivateMessage("Switched to spectator mode.", false);
+            } else {
+                Player player = Bukkit.getPlayer(this.toPlayer);
+                if (player != null) {
+                    player.setGameMode(GameMode.SPECTATOR);
+                    this.message.SendTo(player, "Switched to spectator mode.", false);
+                }
+            }
         } else {
             this.permission.not();
         }
@@ -115,8 +160,16 @@ public class GamemodeCommands implements CommandExecutor {
 
     public boolean gamemodeAdventure () {
         if (this.permission.has("essence.gamemode.adventure")) {
-            this.player.setGameMode(GameMode.ADVENTURE);
-            this.message.PrivateMessage("Switched to adventure mode.", false);
+            if (isPlayer) {
+                this.player.setGameMode(GameMode.ADVENTURE);
+                this.message.PrivateMessage("Switched to adventure mode.", false);
+            } else {
+                Player player = Bukkit.getPlayer(this.toPlayer);
+                if (player != null) {
+                    player.setGameMode(GameMode.ADVENTURE);
+                    this.message.SendTo(player, "Switched to adventure mode.", false);
+                }
+            }
         } else {
             this.permission.not();
         }
