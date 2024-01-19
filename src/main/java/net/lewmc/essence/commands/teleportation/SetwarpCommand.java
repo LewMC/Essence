@@ -67,10 +67,12 @@ public class SetwarpCommand implements CommandExecutor {
                 config.createSection("warps." + warpName);
 
                 ConfigurationSection cs = config.getSection("warps." + warpName);
+                cs.set("world", loc.getWorld().getName());
                 cs.set("X", loc.getX());
                 cs.set("Y", loc.getY());
                 cs.set("Z", loc.getZ());
-                cs.set("world", loc.getWorld().getName());
+                cs.set("yaw", loc.getYaw());
+                cs.set("pitch", loc.getPitch());
 
                 // Save the configuration to the file
                 config.save();

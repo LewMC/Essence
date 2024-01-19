@@ -94,10 +94,12 @@ public class HomeCommand implements CommandExecutor {
 
 
                 Location loc = new Location(
-                        Bukkit.getServer().getWorld(cs.getString("world")),
-                        cs.getDouble("X"),
-                        cs.getDouble("Y"),
-                        cs.getDouble("Z")
+                    Bukkit.getServer().getWorld(cs.getString("world")),
+                    cs.getDouble("X"),
+                    cs.getDouble("Y"),
+                    cs.getDouble("Z"),
+                    (float) cs.getDouble("yaw"),
+                    (float) cs.getDouble("pitch")
                 );
 
                 player.teleport(loc);
