@@ -59,6 +59,11 @@ public class DelwarpCommand implements CommandExecutor {
 
                 String warpName = args[0].toLowerCase();
 
+                if (!config.sectionExists("warps."+warpName)) {
+                    message.PrivateMessage("Warp '"+warpName+"' does not exist.", true);
+                    return true;
+                }
+
                 ConfigurationSection cs = config.getSection("warps");
 
                 cs.set(warpName, null);
