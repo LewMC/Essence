@@ -31,17 +31,15 @@ public class EssenceCommands implements CommandExecutor {
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] args) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
+    public boolean onCommand(
+        @NotNull CommandSender commandSender,
+        @NotNull Command command,
+        @NotNull String s,
+        String[] args
+    ) {
         MessageUtil message = new MessageUtil(commandSender, plugin);
 
-        /*
-         *  CMD HELP
-         */
-        if (command.getName().equalsIgnoreCase("es") || command.getName().equalsIgnoreCase("essence")) {
+        if (command.getName().equalsIgnoreCase("essence")) {
             if (args.length > 0) {
                 if ("help".equals(args[0])) {
                     HelpCommand helpCommand = new HelpCommand(message, args);
