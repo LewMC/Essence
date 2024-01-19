@@ -15,7 +15,7 @@ console-prefix: "Essence"
 # You can use § colour codes and \n to create a new line.
 motd:
   enabled: true
-  message: "Welcome to the server!"
+  message: "Welcome to the server!\nChange this message in Essence config.yml"
 
 # ECONOMY
 economy:
