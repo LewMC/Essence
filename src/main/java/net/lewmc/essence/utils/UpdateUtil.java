@@ -23,9 +23,10 @@ public class UpdateUtil {
             try {
                 URL url;
                 if (this.plugin.getDescription().getVersion().contains("SNAPSHOT")) {
-                    log.warn("You are running a snapshot build of Essence.");
-                    log.warn("This build may include bugs and is not recommended on production servers.");
-                    log.warn("If you find any issues please report them to github.com/lewmilburn/essence.");
+                    log.warn("SNAPSHOT > You are running a snapshot build of Essence.");
+                    log.warn("SNAPSHOT > This build may include bugs and is not recommended on production servers.");
+                    log.warn("SNAPSHOT > If you find any issues please report them to github.com/lewmilburn/essence.");
+                    this.log.info("");
                     url = new URL("https://service.lewmc.net/latest-version/?resource=essence-snapshot&format=simpleversion");
                 } else {
                     url = new URL("https://service.lewmc.net/latest-version/?resource=essence&format=simpleversion");
@@ -35,22 +36,29 @@ public class UpdateUtil {
                     String response = s.nextLine();
                     if (response.equals("")) {
                         log.severe("Unable to perform update check: There was no response from the server.");
+                        this.log.info("");
                     } else if (response.equals(this.plugin.getDescription().getVersion())) {
                         log.info("You are running the latest version of Essence.");
+                        this.log.info("");
                     } else {
-                        log.severe("There's a new version of Essence available.");
-                        log.severe("Your version: "+this.plugin.getDescription().getVersion()+" - latest version: "+response);
+                        log.warn("UPDATE > There's a new version of Essence available.");
+                        log.warn("UPDATE > Your version: "+this.plugin.getDescription().getVersion()+" - latest version: "+response);
+                        this.log.info("");
                     }
                 } else {
                     log.severe("Unable to perform update check: There was no response from the server.");
+                    this.log.info("");
                 }
             } catch (MalformedURLException e) {
                 log.severe("Unable to perform update check: MalformedURLException - "+e);
+                this.log.info("");
             } catch (IOException e) {
                 log.warn("Unable to perform update check: IOException - "+e);
+                this.log.info("");
             }
         } else {
             log.warn("Unable to perform update check: Update checking is disabled.");
+            this.log.info("");
         }
     }
 

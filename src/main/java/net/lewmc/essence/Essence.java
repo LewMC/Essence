@@ -11,8 +11,8 @@ import net.lewmc.essence.commands.teleportation.*;
 import net.lewmc.essence.events.JoinEvent;
 import net.lewmc.essence.tabcompleter.*;
 import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.Metrics;
 import net.lewmc.essence.utils.UpdateUtil;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,14 +24,28 @@ public class Essence extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        this.log.info("");
+        this.log.info("███████╗░██████╗░██████╗███████╗███╗░░██╗░█████╗░███████╗");
+        this.log.info("██╔════╝██╔════╝██╔════╝██╔════╝████╗░██║██╔══██╗██╔════╝");
+        this.log.info("█████╗░░╚█████╗░╚█████╗░█████╗░░██╔██╗██║██║░░╚═╝█████╗░░");
+        this.log.info("██╔══╝░░░╚═══██╗░╚═══██╗██╔══╝░░██║╚████║██║░░██╗██╔══╝░░");
+        this.log.info("███████╗██████╔╝██████╔╝███████╗██║░╚███║╚█████╔╝███████╗");
+        this.log.info("╚══════╝╚═════╝░╚═════╝░╚══════╝╚═╝░░╚══╝░╚════╝░╚══════╝");
+        this.log.info("");
+        this.log.info("Running Essence version "+this.getDescription().getVersion()+ " for Minecraft 1.18 - 1.20");
+        this.log.info("Please report any issues with Essence to our GitHub repository: https://github.com/lewmilburn/essence/issues");
+        this.log.info("");
         this.log.info("Beginning startup...");
+        this.log.info("");
         int pluginId = 20768; // <-- Replace with the id of your plugin!
         new Metrics(this, pluginId);
 
         if (!Bukkit.getOnlineMode()) {
-            this.log.severe("Your server is running in offline mode.");
-            this.log.warn("Homes set in offline mode may not save properly if you switch back to online mode.");
-            this.log.warn("Homes set in online mode may not work properly in offline mode.");
+            this.log.severe(">> Your server is running in offline mode.");
+            this.log.warn(">> Homes set in offline mode may not save properly if you switch back to online mode.");
+            this.log.warn(">> Homes set in online mode may not work properly in offline mode.");
+            this.log.info("");
         }
 
         checkForEssentials();
@@ -63,6 +77,7 @@ public class Essence extends JavaPlugin {
             this.log.severe("Essence's commands clash with Essentials, to prevent issues with data Essence is now disabled.");
             this.log.severe("If you require commands that are in Essentials but not in Essence, please remove Essence from the server.");
             this.log.severe("All Essence commands are implemented in Essentials in a similar way.");
+            this.log.info("");
             getServer().getPluginManager().disablePlugin(this);
         }
     }
@@ -89,6 +104,7 @@ public class Essence extends JavaPlugin {
                 log.warn("Please create a folder called 'data' in the 'Essence' folder.");
                 log.warn("Please create a folder called 'players' in the 'data' folder.");
                 log.warn("Once this is complete, restart the server and Essence will re-enable.");
+                this.log.info("");
                 getServer().getPluginManager().disablePlugin(this);
             }
         }
@@ -137,6 +153,7 @@ public class Essence extends JavaPlugin {
             this.getCommand("balance").setExecutor(new BalanceCommand(this));
         } catch (NullPointerException e) {
             this.log.severe("LoadCommands: Unable to load Essence commands.");
+            this.log.info("");
         }
     }
 
