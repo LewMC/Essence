@@ -1,17 +1,14 @@
 package net.lewmc.essence.commands;
 
-import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class EssenceCommands implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the EssenceCommands class.
@@ -19,7 +16,6 @@ public class EssenceCommands implements CommandExecutor {
      */
     public EssenceCommands(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
