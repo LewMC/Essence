@@ -47,8 +47,8 @@ public class WarpCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(player, message);
 
         if (command.getName().equalsIgnoreCase("warp")) {
-            if (args.length > 0) {
-                if (permission.has("essence.warp.use")) {
+            if (permission.has("essence.warp.use")) {
+                if (args.length > 0) {
                     DataUtil config = new DataUtil(this.plugin, message);
                     config.load("data/warps.yml");
 
@@ -84,10 +84,10 @@ public class WarpCommand implements CommandExecutor {
 
                     return true;
                 } else {
-                    permission.not();
+                    message.PrivateMessage("Usage: /warp <name> - use /warps for a list.", false);
                 }
             } else {
-                message.PrivateMessage("Usage: /warp <name> - use /warps for a list.", false);
+                permission.not();
             }
             return true;
         }
