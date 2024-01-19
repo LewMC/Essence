@@ -6,7 +6,6 @@ import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class BroadcastCommand implements CommandExecutor {
@@ -37,12 +36,10 @@ public class BroadcastCommand implements CommandExecutor {
     ) {
         if (command.getName().equalsIgnoreCase("broadcast")) {
             MessageUtil message = new MessageUtil(commandSender, plugin);
-            if ((commandSender instanceof Player)) {
-                PermissionHandler permission = new PermissionHandler((Player) commandSender, message);
-                if (!permission.has("essence.chat.broadcast")) {
-                    permission.not();
-                    return true;
-                }
+            PermissionHandler permission = new PermissionHandler(commandSender, message);
+            if (!permission.has("essence.chat.broadcast")) {
+                permission.not();
+                return true;
             }
 
             if (args.length > 0) {

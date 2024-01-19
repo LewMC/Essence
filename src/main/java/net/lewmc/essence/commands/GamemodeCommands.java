@@ -45,7 +45,7 @@ public class GamemodeCommands implements CommandExecutor {
         Player player = (Player) commandSender;
 
         this.message = new MessageUtil(commandSender, plugin);
-        this.permission = new PermissionHandler(player, this.message);
+        this.permission = new PermissionHandler(commandSender, this.message);
         this.player = player;
 
         if (command.getName().equalsIgnoreCase("gamemode") || command.getName().equalsIgnoreCase("gm")) {

@@ -44,7 +44,7 @@ public class WarpCommand implements CommandExecutor {
         }
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(player, message);
+        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("warp")) {
             if (permission.has("essence.warp.use")) {

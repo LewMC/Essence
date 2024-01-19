@@ -2,7 +2,6 @@ package net.lewmc.essence.commands.economy;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -43,7 +42,7 @@ public class BalanceCommand implements CommandExecutor {
         }
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(player, message);
+        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("balance") || command.getName().equalsIgnoreCase("bal")) {
             if (permission.has("essence.economy.balance")) {

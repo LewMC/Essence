@@ -1,7 +1,6 @@
 package net.lewmc.essence.commands.stats;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.command.Command;
@@ -13,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class FeedCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the FeedCommand class.
@@ -21,7 +19,6 @@ public class FeedCommand implements CommandExecutor {
      */
     public FeedCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -37,13 +34,12 @@ public class FeedCommand implements CommandExecutor {
         @NotNull Command command,
         @NotNull String s, String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
+        MessageUtil message = new MessageUtil(commandSender, this.plugin);
+        if (!(commandSender instanceof Player) && args.length == 0) {
+            message.PrivateMessage("Usage: /feed <player>",true);
             return true;
         }
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(player, message);
+        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("feed")) {
             if (args.length > 0) {
@@ -52,6 +48,11 @@ public class FeedCommand implements CommandExecutor {
                     Player p = Bukkit.getPlayer(pName);
                     if (p != null) {
                         message.PrivateMessage("You fed "+p.getName(), false);
+                        if (!(commandSender instanceof Player)) {
+                            message.SendTo(p, "You've been fed by a magical force.", false);
+                        } else {
+                            message.SendTo(p, "You've been fed by "+commandSender.getName(), false);
+                        }
                         p.setFoodLevel(20);
                     } else {
                         message.PrivateMessage("Player not found.", true);
@@ -62,6 +63,7 @@ public class FeedCommand implements CommandExecutor {
                 }
             } else {
                 if (permission.has("essence.stats.feed")) {
+                    Player player = (Player) commandSender;
                     player.setFoodLevel(20);
                     message.PrivateMessage("You've been fed!", false);
                     return true;

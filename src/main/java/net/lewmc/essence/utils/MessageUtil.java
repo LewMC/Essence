@@ -25,4 +25,12 @@ public class MessageUtil {
     public void BroadcastMessage(String Message) {
         Bukkit.broadcastMessage(ChatColor.GOLD + "Broadcast > " + ChatColor.YELLOW + Message);
     }
+
+    public void SendTo(CommandSender cs, String Message, boolean Error) {
+        if (Error) {
+            cs.sendMessage(ChatColor.DARK_RED + "[" + plugin.getConfig().get("chat-prefix") + "] " + ChatColor.RED + Message);
+        } else {
+            cs.sendMessage(ChatColor.GOLD + "[" + plugin.getConfig().get("chat-prefix") + "] " + ChatColor.YELLOW + Message);
+        }
+    }
 }

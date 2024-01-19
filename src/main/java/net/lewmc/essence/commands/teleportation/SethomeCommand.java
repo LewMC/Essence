@@ -1,6 +1,5 @@
 package net.lewmc.essence.commands.teleportation;
 
-import com.google.common.util.concurrent.FutureCallback;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import org.bukkit.Location;
@@ -10,8 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 public class SethomeCommand implements CommandExecutor {
     private final Essence plugin;
@@ -47,7 +44,7 @@ public class SethomeCommand implements CommandExecutor {
         }
         MessageUtil message = new MessageUtil(commandSender, this.plugin);
         Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(player, message);
+        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("sethome")) {
             if (permission.has("essence.home.create")) {

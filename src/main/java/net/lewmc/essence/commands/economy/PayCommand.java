@@ -10,8 +10,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import javax.xml.crypto.Data;
-
 public class PayCommand implements CommandExecutor {
     private final Essence plugin;
     private final LogUtil log;
@@ -45,7 +43,7 @@ public class PayCommand implements CommandExecutor {
         }
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(player, message);
+        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("pay")) {
             if (permission.has("essence.economy.pay")) {
@@ -77,9 +75,7 @@ public class PayCommand implements CommandExecutor {
                                 data.save();
 
                                 message.PrivateMessage("Sent " + plugin.getConfig().getString("economy.symbol") + amount + " to " +p.getName(), false);
-
-                                MessageUtil toMsg = new MessageUtil((CommandSender) p, this.plugin);
-                                toMsg.PrivateMessage("You recieved " + plugin.getConfig().getString("economy.symbol") + amount + " from " +player.getName(), false);
+                                message.SendTo(p, "You received " + plugin.getConfig().getString("economy.symbol") + amount + " from " +player.getName(), false);
                                 return true;
                             }
                         }

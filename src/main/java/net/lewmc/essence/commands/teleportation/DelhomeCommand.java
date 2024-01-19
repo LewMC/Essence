@@ -43,7 +43,7 @@ public class DelhomeCommand implements CommandExecutor {
         }
         MessageUtil message = new MessageUtil(commandSender,plugin);
         Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(player, message);
+        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("delhome")) {
             if (permission.has("essence.home.delete")) {

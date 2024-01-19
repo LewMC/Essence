@@ -1,7 +1,6 @@
 package net.lewmc.essence.commands.stats;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.Bukkit;
@@ -13,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class HealCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the HealCommand class.
@@ -21,7 +19,6 @@ public class HealCommand implements CommandExecutor {
      */
     public HealCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -38,13 +35,12 @@ public class HealCommand implements CommandExecutor {
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
+        MessageUtil message = new MessageUtil(commandSender, plugin);
+        if (!(commandSender instanceof Player) && args.length == 0) {
+            message.PrivateMessage("Usage: /heal <player>",true);
             return true;
         }
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(player, message);
+        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("heal")) {
             if (args.length > 0) {
@@ -53,6 +49,11 @@ public class HealCommand implements CommandExecutor {
                     Player p = Bukkit.getPlayer(pName);
                     if (p != null) {
                         message.PrivateMessage("You healed "+p.getName(), false);
+                        if (!(commandSender instanceof Player)) {
+                            message.SendTo(p, "You've been healed by a magical force.", false);
+                        } else {
+                            message.SendTo(p, "You've been healed by "+commandSender.getName(), false);
+                        }
                         p.setHealth(20.0);
                     } else {
                         message.PrivateMessage("Player not found.", true);
@@ -63,6 +64,7 @@ public class HealCommand implements CommandExecutor {
                 }
             } else {
                 if (permission.has("essence.stats.heal")) {
+                    Player player = (Player) commandSender;
                     player.setHealth(20.0);
                     message.PrivateMessage("You've been healed!", false);
                     return true;

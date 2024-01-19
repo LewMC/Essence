@@ -31,14 +31,19 @@ public class CartographyCommand implements CommandExecutor {
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] args) {
+    public boolean onCommand(
+        @NotNull CommandSender commandSender,
+        @NotNull Command command,
+        @NotNull String s,
+        String[] args
+    ) {
         if (!(commandSender instanceof Player)) {
             this.log.noConsole();
             return true;
         }
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(player, message);
+        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("cartography")) {
             if (permission.has("essence.inventory.cartography")) {

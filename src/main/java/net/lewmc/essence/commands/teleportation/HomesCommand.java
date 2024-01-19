@@ -43,7 +43,7 @@ public class HomesCommand implements CommandExecutor {
         }
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(player, message);
+        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("homes")) {
             if (permission.has("essence.home.list")) {

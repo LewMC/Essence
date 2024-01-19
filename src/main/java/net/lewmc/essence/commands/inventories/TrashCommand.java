@@ -45,7 +45,7 @@ public class TrashCommand implements CommandExecutor {
         }
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(player, message);
+        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("trash") || command.getName().equalsIgnoreCase("disposal")) {
             if (permission.has("essence.inventory.trash")) {
