@@ -10,9 +10,9 @@ import net.lewmc.essence.commands.stats.*;
 import net.lewmc.essence.commands.teleportation.*;
 import net.lewmc.essence.events.JoinEvent;
 import net.lewmc.essence.tabcompleter.*;
-import net.lewmc.essence.utils.ConfigUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.Metrics;
+import net.lewmc.essence.utils.UpdateUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -42,8 +42,9 @@ public class Essence extends JavaPlugin {
             loadEventHandlers();
             loadTabCompleters();
 
-            ConfigUtil cu = new ConfigUtil(this);
-            cu.UpdateConfig();
+            UpdateUtil update = new UpdateUtil(this);
+            update.VersionCheck();
+            update.UpdateConfig();
 
             this.log.info("Startup completed.");
         }
