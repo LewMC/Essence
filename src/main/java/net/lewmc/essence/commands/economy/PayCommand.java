@@ -56,10 +56,6 @@ public class PayCommand implements CommandExecutor {
 
                     double amount = Double.parseDouble(args[1]);
 
-                    this.log.info("Balance: "+balance);
-                    this.log.info("Amount: "+amount);
-                    this.log.info("Final: "+(balance - amount));
-
                     if ((balance - amount) >= 0) {
                         cs.set("balance", (balance - amount));
                         data.save();
@@ -86,6 +82,7 @@ public class PayCommand implements CommandExecutor {
                     return true;
                 } else {
                     message.PrivateMessage("Usage: /pay <player> <amount>", true);
+                    return true;
                 }
             } else {
                 return permission.not();
