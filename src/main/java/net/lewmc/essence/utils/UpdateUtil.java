@@ -34,7 +34,7 @@ public class UpdateUtil {
                 Scanner s = new Scanner(url.openStream());
                 if (s.hasNextLine()) {
                     String response = s.nextLine();
-                    if (response.equals("")) {
+                    if (response.isEmpty()) {
                         log.severe("Unable to perform update check: There was no response from the server.");
                         this.log.info("");
                     } else if (response.equals(this.plugin.getDescription().getVersion())) {
