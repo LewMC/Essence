@@ -40,16 +40,27 @@ public class LocationUtil {
 
     public Location GetRandomLocation(Player player, WorldBorder wb) {
         World world = player.getWorld();
-        double maxCoords = (wb.getSize() / 2) - 1;
+        double maxWb = (wb.getSize() / 2) - 1;
+        double maxConfig = this.plugin.getConfig().getDouble("random-tp-radius");
+
+        double maxCoords;
+        if (maxConfig < maxWb) {
+            maxCoords = maxConfig;
+        } else {
+            maxCoords = (wb.getSize() / 2) - 1;
+        }
 
         Random rand = new Random();
         int x = rand.nextInt((int) maxCoords);
         int z = rand.nextInt((int) maxCoords);
-        int y = GetRandomY(world, x, z);
+        int y = GetRandomY(world, x, z, 1);
         return new Location(world, (float) x, (float) y, (float) z);
     }
 
-    private int GetRandomY(World world, int x, int z) {
+    private int GetRandomY(World world, int x, int z, int attempt) {
+        if (attempt == 3) {
+            return -64;
+        }
         int y = 319;
 
         Material block = world.getBlockAt(x, y, z).getType();
@@ -59,7 +70,7 @@ public class LocationUtil {
             if (y == -64) { break; }
         }
 
-        if (!LocationIsSafe(block) || y == -64) { y = GetRandomY(world, x, z); }
+        if (!LocationIsSafe(block) || y == -64) { y = GetRandomY(world, x, z, attempt + 1); }
 
         return y + 1;
     }

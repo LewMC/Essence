@@ -5,9 +5,7 @@ import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.PermissionHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.WorldBorder;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -53,21 +51,34 @@ public class TprandomCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("tprandom")) {
             if (permission.has("essence.teleport.random")) {
-                WorldBorder wb;
-                try {
-                    wb = Objects.requireNonNull(Bukkit.getWorld(player.getWorld().getUID())).getWorldBorder();
-                } catch (NullPointerException e) {
-                    this.log.warn("NullPointerException randomly teleporting: " + e);
-                    message.PrivateMessage("Unable to teleport due to an error, please see the console for more information.", true);
-                    return true;
-                }
+                if (args.length == 1 && args[0].equalsIgnoreCase("confirm")) {
+                    message.PrivateMessage("Finding somewhere to go...", false);
+                    WorldBorder wb;
+                    try {
+                        wb = Objects.requireNonNull(Bukkit.getWorld(player.getWorld().getUID())).getWorldBorder();
+                    } catch (NullPointerException e) {
+                        this.log.warn("NullPointerException randomly teleporting: " + e);
+                        message.PrivateMessage("Unable to teleport due to an error, please see the console for more information.", true);
+                        return true;
+                    }
 
-                LocationUtil loc = new LocationUtil(this.plugin, message);
-                Location teleportLocation = loc.GetRandomLocation(player, wb);
-                if (teleportLocation.getY() != -65) {
-                    player.teleport(teleportLocation);
+                    LocationUtil loc = new LocationUtil(this.plugin, message);
+                    Location teleportLocation = loc.GetRandomLocation(player, wb);
+                    if (teleportLocation.getY() != -64) {
+                        message.PrivateMessage("Teleporting...", false);
+
+                        World world = player.getWorld();
+                        Chunk chunk = world.getChunkAt(teleportLocation.getBlockX(), teleportLocation.getBlockY());
+                        if (!chunk.isLoaded()) {
+                            chunk.load(true);
+                        }
+
+                        player.teleport(teleportLocation);
+                    } else {
+                        message.PrivateMessage("Couldn't find suitable location, please try again.", true);
+                    }
                 } else {
-                    message.PrivateMessage("Couldn't find suitable location, please try again.", true);
+                    message.PrivateMessage("This is an experimental command that DOES cause server lag. To confirm type /tpr confirm", true);
                 }
             } else {
                 permission.not();
