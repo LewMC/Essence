@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -51,35 +52,40 @@ public class TprandomCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("tprandom")) {
             if (permission.has("essence.teleport.random")) {
-                if (args.length == 1 && args[0].equalsIgnoreCase("confirm")) {
-                    message.PrivateMessage("Finding somewhere to go...", false);
-                    WorldBorder wb;
-                    try {
-                        wb = Objects.requireNonNull(Bukkit.getWorld(player.getWorld().getUID())).getWorldBorder();
-                    } catch (NullPointerException e) {
-                        this.log.warn("NullPointerException randomly teleporting: " + e);
-                        message.PrivateMessage("Unable to teleport due to an error, please see the console for more information.", true);
-                        return true;
-                    }
-
-                    LocationUtil loc = new LocationUtil(this.plugin, message);
-                    Location teleportLocation = loc.GetRandomLocation(player, wb);
-                    if (teleportLocation.getY() != -64) {
-                        message.PrivateMessage("Teleporting...", false);
-
-                        World world = player.getWorld();
-                        Chunk chunk = world.getChunkAt(teleportLocation.getBlockX(), teleportLocation.getBlockY());
-                        if (!chunk.isLoaded()) {
-                            chunk.load(true);
-                        }
-
-                        player.teleport(teleportLocation);
-                    } else {
-                        message.PrivateMessage("Couldn't find suitable location, please try again.", true);
-                    }
-                } else {
-                    message.PrivateMessage("This is an experimental command that DOES cause server lag. To confirm type /tpr confirm", true);
+                message.PrivateMessage("Finding somewhere to go...", false);
+                WorldBorder wb;
+                try {
+                    wb = Objects.requireNonNull(Bukkit.getWorld(player.getWorld().getUID())).getWorldBorder();
+                } catch (NullPointerException e) {
+                    this.log.warn("NullPointerException randomly teleporting: " + e);
+                    message.PrivateMessage("Unable to teleport due to an error, please see the console for more information.", true);
+                    return true;
                 }
+
+                LocationUtil loc = new LocationUtil(this.plugin, message);
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Location teleportLocation = loc.GetRandomLocation(player, wb);
+                        if (teleportLocation.getY() != -64) {
+                            message.PrivateMessage("Teleporting...", false);
+
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    Chunk chunk = teleportLocation.getChunk();
+                                    if (!chunk.isLoaded()) {
+                                        chunk.load(true);
+                                    }
+                                    teleportPlayer(player, teleportLocation);
+                                }
+                            }.runTask(plugin);
+                        } else {
+                            message.PrivateMessage("Couldn't find suitable location, please try again.", true);
+                        }
+                    }
+                }.runTaskAsynchronously(this.plugin);
             } else {
                 permission.not();
             }
@@ -87,5 +93,9 @@ public class TprandomCommand implements CommandExecutor {
         }
 
         return false;
+    }
+
+    public void teleportPlayer(Player player, Location loc) {
+        player.teleport(loc);
     }
 }
