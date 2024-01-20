@@ -48,7 +48,7 @@ public class TeleportCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (command.getName().equalsIgnoreCase("tp") || command.getName().equalsIgnoreCase("teleport")) {
+        if (command.getName().equalsIgnoreCase("tp")) {
             if (args.length == 3) {
                 if (permission.has("essence.teleport.coord")) {
                     LocationUtil locationUtil = new LocationUtil(this.plugin, message);
