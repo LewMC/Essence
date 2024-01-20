@@ -1,5 +1,5 @@
 name: Essence
-version: 1.1.0
+version: 1.2.0-SNAPSHOT
 main: net.lewmc.essence.Essence
 api-version: 1.20
 author: LewMC
@@ -72,7 +72,7 @@ commands:
     usage: /<command> <player> OR /<command> <x> <y> <z>
     aliases: ['teleport']
   warp:
-    description: Teleport to a preset WarpTabCompleter.
+    description: Teleport to a preset warp.
     usage: /<command> <name>
     aliases: []
   warps:
@@ -80,11 +80,11 @@ commands:
     usage: /<command>
     aliases: []
   setwarp:
-    description: Create a WarpTabCompleter.
+    description: Create a warp.
     usage: /<command> <name>
     aliases: []
   delwarp:
-    description: Delete a WarpTabCompleter.
+    description: Delete a warp.
     usage: /<command> <name>
     aliases: []
   home:
@@ -187,7 +187,7 @@ permissions:
   essence.inventory.trash:
     description: Allows players to open the disposal menu.
   essence.teleport.*:
-    description: Allows players to teleport and WarpTabCompleter.
+    description: Allows players to teleport and warp.
     default: op
     children:
       essence.teleport.coord: true
@@ -208,7 +208,7 @@ permissions:
       essence.warp.create: true
       essence.warp.delete: true
   essence.warp.use:
-    description: Allows players to WarpTabCompleter.
+    description: Allows players to warp.
   essence.warp.list:
     description: Allows players view warps.
   essence.warp.create:
