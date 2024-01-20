@@ -1,6 +1,9 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -30,5 +33,10 @@ public class LocationUtil {
         cs.set("pitch", player.getLocation().getPitch());
 
         data.save();
+    }
+
+    public Location GetRandomLocation(Player player, WorldBorder wb) {
+        World world = player.getWorld();
+        return new Location(world, (float) 0.0, (float) 0.0, (float) 0.0);
     }
 }

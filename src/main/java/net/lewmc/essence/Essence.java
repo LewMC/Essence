@@ -140,6 +140,7 @@ public class Essence extends JavaPlugin {
             this.getCommand("sethome").setExecutor(new SethomeCommand(this));
             this.getCommand("setwarp").setExecutor(new SetwarpCommand(this));
             this.getCommand("tp").setExecutor(new TeleportCommand(this));
+            this.getCommand("tprandom").setExecutor(new TprandomCommand(this));
             this.getCommand("warp").setExecutor(new WarpCommand(this));
             this.getCommand("warps").setExecutor(new WarpsCommand(this));
             this.getCommand("back").setExecutor(new BackCommand(this));

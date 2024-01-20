@@ -55,7 +55,8 @@ public class HelpCommand {
                     this.message.PrivateMessage("--------- Essence Help - Inventory ---------", false);
                     this.message.PrivateMessage("/delhome [name] - Delete a home.", false);
                     this.message.PrivateMessage("/back - Go back to your last location.", false);
-                    this.blank(6);
+                    this.message.PrivateMessage("/tpr - Teleport to a random location.", false);
+                    this.blank(5);
                     this.message.PrivateMessage("----------------- Page 2/2 -----------------", false);
                 }
             } else if ("stats".equalsIgnoreCase(args[1])) {
