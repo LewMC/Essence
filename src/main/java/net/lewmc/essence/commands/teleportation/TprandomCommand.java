@@ -78,7 +78,7 @@ public class TprandomCommand implements CommandExecutor {
                         message.PrivateMessage("Couldn't find suitable location, please try again.", true);
                     }
                 } else {
-                    message.PrivateMessage("This is an experimental command that DOES cause server lag. To confirm type /tpr confirm", true);
+                    message.PrivateMessage("This is an experimental command that DOES cause server lag and may occasionally teleport you into the void. To confirm type /tpr confirm", true);
                 }
             } else {
                 permission.not();

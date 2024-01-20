@@ -53,14 +53,16 @@ public class LocationUtil {
         Random rand = new Random();
         int x = rand.nextInt((int) maxCoords);
         int z = rand.nextInt((int) maxCoords);
-        int y = GetRandomY(world, x, z, 1);
+        int attempt = 1;
+        int y = GetRandomY(world, x, z);
+        while (y == -64 && attempt != 3) {
+            y = GetRandomY(world, x, z);
+            attempt++;
+        }
         return new Location(world, (float) x, (float) y, (float) z);
     }
 
-    private int GetRandomY(World world, int x, int z, int attempt) {
-        if (attempt == 3) {
-            return -64;
-        }
+    private int GetRandomY(World world, int x, int z) {
         int y = 319;
 
         Material block = world.getBlockAt(x, y, z).getType();
@@ -70,7 +72,7 @@ public class LocationUtil {
             if (y == -64) { break; }
         }
 
-        if (!LocationIsSafe(block) || y == -64) { y = GetRandomY(world, x, z, attempt + 1); }
+        if (!LocationIsSafe(block) || y == -64) { return -64; }
 
         return y + 1;
     }
