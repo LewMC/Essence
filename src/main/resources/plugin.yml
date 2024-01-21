@@ -130,7 +130,7 @@ commands:
   tprandom:
     description: Teleport to a random location.
     usage: /<command>
-    aliases: ['tpr']
+    aliases: ['tpr', 'rtp']
 permissions:
   essence.*:
     description: Access to all essence commands.
