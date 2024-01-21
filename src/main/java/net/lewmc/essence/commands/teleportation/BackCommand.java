@@ -54,6 +54,11 @@ public class BackCommand implements CommandExecutor {
 
                 ConfigurationSection cs = config.getSection("last-location");
 
+                if (cs == null) {
+                    message.PrivateMessage("You've not teleported anywhere before, so there's nowhere to go back to!", true);
+                    return true;
+                }
+
                 LocationUtil locationUtil = new LocationUtil(this.plugin, message);
                 locationUtil.UpdateLastLocation(player);
 
