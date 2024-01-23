@@ -23,6 +23,3 @@ motd:
 economy:
   start-money: 100.0
   symbol: $
-
-# TELEPORTATION
-random-tp-radius: 1000

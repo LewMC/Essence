@@ -40,29 +40,27 @@ public class LocationUtil {
 
     public Location GetRandomLocation(Player player, WorldBorder wb) {
         World world = player.getWorld();
-        double maxWb = (wb.getSize() / 2) - 1;
-        double maxConfig = this.plugin.getConfig().getDouble("random-tp-radius");
-
-        double maxCoords;
-        if (maxConfig < maxWb) {
-            maxCoords = maxConfig;
-        } else {
-            maxCoords = (wb.getSize() / 2) - 1;
-        }
 
         Random rand = new Random();
-        int x = rand.nextInt((int) maxCoords);
-        int z = rand.nextInt((int) maxCoords);
+        Location center = wb.getCenter();
+        double maxX = (center.getBlockX() + (wb.getSize()/2));
+        double minX = (center.getBlockX() - (wb.getSize()/2));
+        double maxZ = (center.getBlockZ() + (wb.getSize()/2));
+        double minZ = (center.getBlockZ() - (wb.getSize()/2));
+
+        int x = (int) (minX + (maxX - minX) * rand.nextDouble());
+        int z = (int) (minZ + (maxZ - minZ) * rand.nextDouble());
+
         int attempt = 1;
-        int y = GetRandomY(world, x, z);
+        int y = GetGroundY(world, x, z);
         while (y == -64 && attempt != 3) {
-            y = GetRandomY(world, x, z);
+            y = GetGroundY(world, x, z);
             attempt++;
         }
         return new Location(world, (float) x, (float) y, (float) z);
     }
 
-    private int GetRandomY(World world, int x, int z) {
+    private int GetGroundY(World world, int x, int z) {
         int y = 319;
 
         Material block = world.getBlockAt(x, y, z).getType();
