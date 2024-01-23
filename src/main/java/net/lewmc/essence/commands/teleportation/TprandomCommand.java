@@ -76,6 +76,7 @@ public class TprandomCommand implements CommandExecutor {
                                 public void run() {
                                     Chunk chunk = teleportLocation.getChunk();
                                     if (!chunk.isLoaded()) {
+                                        message.PrivateMessage("Generating chunk... (this may take some time)", false);
                                         chunk.load(true);
                                     }
 
