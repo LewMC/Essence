@@ -17,6 +17,7 @@ generic:
   playernotfound: "§4[Essence] §cPlayer could not be found."
   exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this command, please see console for details."
   configexception: "§4[Essence] §cEssence encountered an issue whilst trying to process a configuration file, please see console for details."
+  missingpermission: "§4[Essence] §cYou don't have the required permission to run this command."
 help:
   page: "§6[Essence] ----------------- Page {{1}}/{{2}} -----------------"
   inventory: "§6[Essence] --------- Essence Help - Inventory ---------"
@@ -103,3 +104,10 @@ heal:
   healedby: "§2[Essence] §aYou've been healed by {{1}}."
   beenhealed: "§2[Essence] §aYou've been healed!"
   usage: "§4[Essence] §cUsage: /heal <player>"
+gamemode:
+  usage: "§4[Essence] §cUsage: /gamemode <mode> [player]."
+  specify: "§4[Essence] §cPlease specify a gamemode (example: /gamemode creative)."
+  survival: "§2[Essence] §aSwitched to survival mode."
+  creative: "§2[Essence] §aSwitched to creative mode."
+  adventure: "§2[Essence] §aSwitched to adventure mode."
+  spectator: "§2[Essence] §aSwitched to spectator mode."
