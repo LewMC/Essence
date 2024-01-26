@@ -15,14 +15,24 @@ public class MessageUtil {
         this.cs = cs;
         this.plugin = plugin;
     }
-    public void PrivateMessage(String Message, String Group) {
-        Message = this.GetMessage(Message, Group);
-        if (Message != null) {
-            this.cs.sendMessage(Message);
+    public void PrivateMessage(String message, String group) {
+        message = this.GetMessage(message, group);
+        if (message != null) {
+            this.cs.sendMessage(message);
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+Message+"' to player, could not find key in messages.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
+        }
+    }
+    public void PrivateMessage(String message, String group, String extras) {
+        message = this.GetMessage(message, group);
+        if (message != null) {
+            this.cs.sendMessage(message + " " + extras);
+        } else {
+            this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
+            LogUtil log = new LogUtil(this.plugin);
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
         }
     }
 
