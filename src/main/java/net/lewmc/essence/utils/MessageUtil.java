@@ -71,8 +71,11 @@ public class MessageUtil {
         data.load("messages.yml");
         ConfigurationSection msg = data.getSection(group);
         if (msg.get(code) != null) {
-            return String.valueOf(msg.get(code));
+            String toSend = String.valueOf(msg.get(code));
+            data.close();
+            return toSend;
         } else {
+            data.close();
             return null;
         }
     }
