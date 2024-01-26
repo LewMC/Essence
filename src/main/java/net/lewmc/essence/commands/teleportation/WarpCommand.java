@@ -53,7 +53,7 @@ public class WarpCommand implements CommandExecutor {
                     config.load("data/warps.yml");
 
                     if (config.getSection("warps." + args[0].toLowerCase()) == null) {
-                        message.PrivateMessage("Warp " + args[0].toLowerCase() + " does not exist. Use /warps for a list of warps.", true);
+                        message.PrivateMessage("warp", "notfound", args[0].toLowerCase());
                         return true;
                     }
 
@@ -61,7 +61,7 @@ public class WarpCommand implements CommandExecutor {
 
                     if (cs.getString("world") == null) {
                         config.close();
-                        message.PrivateMessage("Unable to warp due to an unexpected error, please see console for details.", true);
+                        message.PrivateMessage("generic", "exception");
                         this.log.warn("Player "+player+" attempted to warp to "+args[0].toLowerCase()+" but couldn't due to an error.");
                         this.log.warn("Error: world is null, please check configuration file.");
                         return true;
@@ -82,11 +82,11 @@ public class WarpCommand implements CommandExecutor {
                     player.teleport(loc);
                     config.close();
 
-                    message.PrivateMessage("Warping to '"+args[0].toLowerCase()+"'...", false);
+                    message.PrivateMessage("warp", "teleporting", args[0].toLowerCase());
 
                     return true;
                 } else {
-                    message.PrivateMessage("Usage: /warp <name> - use /warps for a list.", false);
+                    message.PrivateMessage("warp", "usage");
                 }
             } else {
                 permission.not();

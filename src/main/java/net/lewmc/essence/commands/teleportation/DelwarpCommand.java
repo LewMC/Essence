@@ -50,7 +50,7 @@ public class DelwarpCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("delwarp")) {
             if (permission.has("essence.warp.delete")) {
                 if (args.length == 0) {
-                    message.PrivateMessage("Usage: /delwarp <name>", true);
+                    message.PrivateMessage("warp", "delusage");
                     return true;
                 }
                 DataUtil config = new DataUtil(this.plugin, message);
@@ -60,7 +60,7 @@ public class DelwarpCommand implements CommandExecutor {
 
                 if (!config.sectionExists("warps."+warpName)) {
                     config.close();
-                    message.PrivateMessage("Warp '"+warpName+"' does not exist.", true);
+                    message.PrivateMessage("warp", "notfound", warpName);
                     return true;
                 }
 
@@ -71,7 +71,7 @@ public class DelwarpCommand implements CommandExecutor {
                 // Save the configuration to the file
                 config.save();
 
-                message.PrivateMessage("Deleted warp '" + args[0] + "'.", false);
+                message.PrivateMessage("warp", "deleted", warpName);
             } else {
                 permission.not();
             }

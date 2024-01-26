@@ -56,7 +56,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 2) {
                 this.toPlayer = args[1];
             }
-            if (args.length == 0 || args.length == 2) {
+            if (args.length == 1 || args.length == 2) {
                 if (args[0].equalsIgnoreCase("survival")) {
                     gamemodeSurvival();
                 } else if (args[0].equalsIgnoreCase("creative")) {
@@ -66,8 +66,9 @@ public class GamemodeCommands implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("spectator")) {
                     gamemodeSpectator();
                 } else {
-                    message.PrivateMessage("Usage: /gamemode <mode> [player]", true);
+                    message.PrivateMessage("gamemode", "usage");
                 }
+                return true;
             } else {
                 return noModeSet();
             }
@@ -108,12 +109,12 @@ public class GamemodeCommands implements CommandExecutor {
         if (this.permission.has("essence.gamemode.survival")) {
             if (isPlayer) {
                 this.player.setGameMode(GameMode.SURVIVAL);
-                this.message.PrivateMessage("Switched to survival mode.", false);
+                this.message.PrivateMessage("gamemode", "survival");
             } else {
                 Player player = Bukkit.getPlayer(this.toPlayer);
                 if (player != null) {
                     player.setGameMode(GameMode.SURVIVAL);
-                    this.message.SendTo(player, "Switched to survival mode.", false);
+                    this.message.SendTo(player, "gamemode", "survival");
                 }
             }
         } else {
@@ -126,12 +127,12 @@ public class GamemodeCommands implements CommandExecutor {
         if (this.permission.has("essence.gamemode.creative")) {
             if (isPlayer) {
                 this.player.setGameMode(GameMode.CREATIVE);
-                this.message.PrivateMessage("Switched to creative mode.", false);
+                this.message.PrivateMessage("gamemode", "creative");
             } else {
                 Player player = Bukkit.getPlayer(this.toPlayer);
                 if (player != null) {
                     player.setGameMode(GameMode.CREATIVE);
-                    this.message.SendTo(player, "Switched to creative mode.", false);
+                    this.message.SendTo(player, "gamemode", "creative");
                 }
             }
         } else {
@@ -144,12 +145,12 @@ public class GamemodeCommands implements CommandExecutor {
         if (this.permission.has("essence.gamemode.spectator")) {
             if (isPlayer) {
                 this.player.setGameMode(GameMode.SPECTATOR);
-                this.message.PrivateMessage("Switched to spectator mode.", false);
+                this.message.PrivateMessage("gamemode", "spectator");
             } else {
                 Player player = Bukkit.getPlayer(this.toPlayer);
                 if (player != null) {
                     player.setGameMode(GameMode.SPECTATOR);
-                    this.message.SendTo(player, "Switched to spectator mode.", false);
+                    this.message.SendTo(player, "gamemode", "spectator");
                 }
             }
         } else {
@@ -162,12 +163,12 @@ public class GamemodeCommands implements CommandExecutor {
         if (this.permission.has("essence.gamemode.adventure")) {
             if (isPlayer) {
                 this.player.setGameMode(GameMode.ADVENTURE);
-                this.message.PrivateMessage("Switched to adventure mode.", false);
+                this.message.PrivateMessage("gamemode", "adventure");
             } else {
                 Player player = Bukkit.getPlayer(this.toPlayer);
                 if (player != null) {
                     player.setGameMode(GameMode.ADVENTURE);
-                    this.message.SendTo(player, "Switched to adventure mode.", false);
+                    this.message.SendTo(player, "gamemode", "adventure");
                 }
             }
         } else {
@@ -177,7 +178,7 @@ public class GamemodeCommands implements CommandExecutor {
     }
 
     public boolean noModeSet () {
-        this.message.PrivateMessage("Please specify a gamemode (example: /gamemode creative)", true);
+        this.message.PrivateMessage("gamemode", "specify");
         return true;
     }
 }

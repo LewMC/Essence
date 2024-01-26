@@ -49,7 +49,7 @@ public class SetwarpCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("setwarp")) {
             if (permission.has("essence.warp.create")) {
                 if (args.length == 0) {
-                    message.PrivateMessage("Usage: /setwarp <name>", true);
+                    message.PrivateMessage("warp", "setusage");
                     return true;
                 }
                 Location loc = player.getLocation();
@@ -61,13 +61,13 @@ public class SetwarpCommand implements CommandExecutor {
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(warpName)) {
                     config.close();
-                    message.PrivateMessage("Warps cannot contain special characters!", true);
+                    message.PrivateMessage("warp", "specialchars");
                     return true;
                 }
 
                 if (config.sectionExists("warps." + warpName)) {
                     config.close();
-                    message.PrivateMessage("A warp with this name already exists.", true);
+                    message.PrivateMessage("warp", "alreadyexists");
                     return true;
                 }
 
@@ -84,7 +84,7 @@ public class SetwarpCommand implements CommandExecutor {
                 // Save the configuration to the file
                 config.save();
 
-                message.PrivateMessage("Created warp '" + args[0] + "'.", false);
+                message.PrivateMessage("warp", "created", args[0]);
             } else {
                 permission.not();
             }

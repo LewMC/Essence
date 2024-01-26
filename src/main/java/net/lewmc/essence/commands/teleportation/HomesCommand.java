@@ -54,11 +54,11 @@ public class HomesCommand implements CommandExecutor {
 
                 if (keys == null) {
                     dataUtil.close();
-                    message.PrivateMessage("You haven't set any homes.", false);
+                    message.PrivateMessage("home", "noneset");
                     return true;
                 }
 
-                StringBuilder setHomes = new StringBuilder("Homes: ");
+                StringBuilder setHomes = new StringBuilder();
                 int i = 0;
 
                 for (String key : keys) {
@@ -70,7 +70,7 @@ public class HomesCommand implements CommandExecutor {
                     i++;
                 }
                 dataUtil.close();
-                message.PrivateMessage(setHomes.toString(), false);
+                message.PrivateMessage("home", "list", setHomes.toString());
             } else {
                 permission.not();
             }

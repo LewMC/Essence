@@ -36,7 +36,7 @@ public class FeedCommand implements CommandExecutor {
     ) {
         MessageUtil message = new MessageUtil(commandSender, this.plugin);
         if (!(commandSender instanceof Player) && args.length == 0) {
-            message.PrivateMessage("Usage: /feed <player>",true);
+            message.PrivateMessage("feed","usage");
             return true;
         }
         PermissionHandler permission = new PermissionHandler(commandSender, message);
@@ -47,15 +47,15 @@ public class FeedCommand implements CommandExecutor {
                     String pName = args[0];
                     Player p = Bukkit.getPlayer(pName);
                     if (p != null) {
-                        message.PrivateMessage("You fed "+p.getName(), false);
+                        message.PrivateMessage("feed", "fed", p.getName());
                         if (!(commandSender instanceof Player)) {
-                            message.SendTo(p, "You've been fed by a magical force.", false);
+                            message.SendTo(p, "feed", "serverfed");
                         } else {
-                            message.SendTo(p, "You've been fed by "+commandSender.getName(), false);
+                            message.SendTo(p, "feed", "fedby", commandSender.getName());
                         }
                         p.setFoodLevel(20);
                     } else {
-                        message.PrivateMessage("Player not found.", true);
+                        message.PrivateMessage("generic", "playernotfound");
                     }
                     return true;
                 } else {
@@ -65,7 +65,7 @@ public class FeedCommand implements CommandExecutor {
                 if (permission.has("essence.stats.feed")) {
                     Player player = (Player) commandSender;
                     player.setFoodLevel(20);
-                    message.PrivateMessage("You've been fed!", false);
+                    message.PrivateMessage("feed", "beenfed");
                     return true;
                 } else {
                     return permission.not();

@@ -94,6 +94,11 @@ public class Essence extends JavaPlugin {
             saveResource("data/warps.yml", false);
         }
 
+        File languageFile = new File(getDataFolder() + File.separator + "language" + File.separator + "en-gb.yml");
+        if (!languageFile.exists()) {
+            saveResource("language/en-gb.yml", false);
+        }
+
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
         if (!statsFolder.exists()) {
             if (!statsFolder.mkdirs()) {
@@ -165,6 +170,9 @@ public class Essence extends JavaPlugin {
 
         getCommand("home").setTabCompleter(new HomeTabCompleter(this));
         getCommand("delhome").setTabCompleter(new HomeTabCompleter(this));
+
+        getCommand("gamemode").setTabCompleter(new GamemodeTabCompleter());
+        getCommand("gm").setTabCompleter(new GamemodeTabCompleter());
     }
 
     /**

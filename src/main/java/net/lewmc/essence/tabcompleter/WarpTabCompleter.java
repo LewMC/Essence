@@ -32,6 +32,8 @@ public class WarpTabCompleter implements TabCompleter {
         data.load("data/warps.yml");
         Set<String> keys = data.getKeys("warps");
 
+        data.close();
+
         return new ArrayList<>(keys);
     }
 }

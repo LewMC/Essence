@@ -37,7 +37,7 @@ public class HealCommand implements CommandExecutor {
     ) {
         MessageUtil message = new MessageUtil(commandSender, plugin);
         if (!(commandSender instanceof Player) && args.length == 0) {
-            message.PrivateMessage("Usage: /heal <player>",true);
+            message.PrivateMessage("heal","usage");
             return true;
         }
         PermissionHandler permission = new PermissionHandler(commandSender, message);
@@ -48,15 +48,15 @@ public class HealCommand implements CommandExecutor {
                     String pName = args[0];
                     Player p = Bukkit.getPlayer(pName);
                     if (p != null) {
-                        message.PrivateMessage("You healed "+p.getName(), false);
+                        message.PrivateMessage("heal", "healed", p.getName());
                         if (!(commandSender instanceof Player)) {
-                            message.SendTo(p, "You've been healed by a magical force.", false);
+                            message.SendTo(p, "heal", "serverhealed");
                         } else {
-                            message.SendTo(p, "You've been healed by "+commandSender.getName(), false);
+                            message.SendTo(p, "heal", "healedby", commandSender.getName());
                         }
                         p.setHealth(20.0);
                     } else {
-                        message.PrivateMessage("Player not found.", true);
+                        message.PrivateMessage("generic", "playernotfound");
                     }
                     return true;
                 } else {
@@ -66,7 +66,7 @@ public class HealCommand implements CommandExecutor {
                 if (permission.has("essence.stats.heal")) {
                     Player player = (Player) commandSender;
                     player.setHealth(20.0);
-                    message.PrivateMessage("You've been healed!", false);
+                    message.PrivateMessage("heal", "beenhealed");
                     return true;
                 } else {
                     return permission.not();

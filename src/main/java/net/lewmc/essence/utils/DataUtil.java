@@ -39,13 +39,13 @@ public class DataUtil {
             this.plugin.getConfig().load(configFile);
         } catch (InvalidConfigurationException e) {
             this.log.warn("InvalidConfigurationException loading configuration: " + e + " (File requested: '"+data+"')");
-            this.message.PrivateMessage("Unable to load data due to an error, see server console for more information.", true);
+            this.message.PrivateMessage("generic", "configexception");
         } catch (FileNotFoundException e) {
             this.log.warn("FileNotFoundException loading configuration: " + e + " (File requested: '"+data+"')");
-            this.message.PrivateMessage("Unable to load data due to an error, see server console for more information.", true);
+            this.message.PrivateMessage("generic", "configexception");
         } catch (IOException e) {
             this.log.warn("IOException loading configuration: " + e + " (File requested: '"+data+"')");
-            this.message.PrivateMessage("Unable to load data due to an error, see server console for more information.", true);
+            this.message.PrivateMessage("generic", "configexception");
         }
     }
 
@@ -78,14 +78,14 @@ public class DataUtil {
             this.plugin.getConfig().save(configFile);
         } catch (IOException e) {
             this.log.warn("Error saving configuration: " + e);
-            message.PrivateMessage("The server was unable to process configuration data, see the console for more information.", true);
+            this.message.PrivateMessage("generic", "configexception");
         }
 
         try {
             this.plugin.getConfig().load(this.defaultConfig);
         } catch (IOException | InvalidConfigurationException e) {
             this.log.warn("Error loading configuration: " + e);
-            message.PrivateMessage("The server was unable to process configuration data, see the console for more information.", true);
+            this.message.PrivateMessage("generic", "configexception");
         }
     }
 
@@ -97,7 +97,7 @@ public class DataUtil {
             this.plugin.getConfig().load(this.defaultConfig);
         } catch (IOException | InvalidConfigurationException e) {
             this.log.warn("Error loading configuration: " + e);
-            message.PrivateMessage("The server was unable to process configuration data, see the console for more information.", true);
+            this.message.PrivateMessage("generic", "configexception");
         }
     }
 

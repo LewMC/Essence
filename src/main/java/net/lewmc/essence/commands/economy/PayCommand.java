@@ -70,20 +70,19 @@ public class PayCommand implements CommandExecutor {
                                 cs.set("balance", newBalance);
                                 data.save();
 
-                                message.PrivateMessage("Sent " + plugin.getConfig().getString("economy.symbol") + amount + " to " +p.getName(), false);
-                                message.SendTo(p, "You received " + plugin.getConfig().getString("economy.symbol") + amount + " from " +player.getName(), false);
+                                message.PrivateMessage("economy", "sent", plugin.getConfig().getString("economy.symbol") + amount, p.getName());
+                                message.SendTo(p, "economy", "received", (plugin.getConfig().getString("economy.symbol") + amount), player.getName());
                                 return true;
                             }
                         }
-                        message.PrivateMessage("Player not found.", true);
+                        message.PrivateMessage("generic", "playernotfound");
                     } else {
-                        message.PrivateMessage("Insufficient funds.", true);
+                        message.PrivateMessage("economy", "insufficientfunds");
                     }
-                    return true;
                 } else {
-                    message.PrivateMessage("Usage: /pay <player> <amount>", true);
-                    return true;
+                    message.PrivateMessage("economy", "payusage");
                 }
+                return true;
             } else {
                 return permission.not();
             }
