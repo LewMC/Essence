@@ -7,7 +7,6 @@
 update-check: true
 
 # PREFIXES
-chat-prefix: "Essence"
 console-prefix: "Essence"
 
 # MOTD
