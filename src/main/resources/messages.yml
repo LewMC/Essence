@@ -1,1 +1,10 @@
-messages:
+generic:
+  playernotfound: "§4[Essence] §cPlayer could not be found."
+broadcast:
+  usage: "§4[Essence] §cUsage: /broadcast <message>"
+economy:
+  balance: "§6[Essence] §cYour balance is: {{1}}"
+  insufficientfunds: "§4[Essence] §cInsufficient funds."
+  payusage: "§4[Essence] §cUsage: /pay <player> <amount>"
+  sent: "§6[Essence] §eYou sent {{1}} to {{2}}"
+  received: "§6[Essence] §eYou received {{1}} from {{2}}"

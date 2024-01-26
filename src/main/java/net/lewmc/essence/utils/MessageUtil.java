@@ -28,7 +28,20 @@ public class MessageUtil {
     public void PrivateMessage(String group, String message, String extras) {
         message = this.GetMessage(message, group);
         if (message != null) {
-            this.cs.sendMessage(message + " " + extras);
+            message = message.replace("{{1}}", extras);
+            this.cs.sendMessage(message);
+        } else {
+            this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
+            LogUtil log = new LogUtil(this.plugin);
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
+        }
+    }
+    public void PrivateMessage(String group, String message, String extra1, String extra2) {
+        message = this.GetMessage(message, group);
+        if (message != null) {
+            message = message.replace("{{1}}", extra1);
+            message = message.replace("{{2}}", extra2);
+            this.cs.sendMessage(message);
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
@@ -40,11 +53,16 @@ public class MessageUtil {
         Bukkit.broadcastMessage(ChatColor.GOLD + "Broadcast > " + ChatColor.YELLOW + Message);
     }
 
-    public void SendTo(CommandSender cs, String Message, boolean Error) {
-        if (Error) {
-            cs.sendMessage(ChatColor.DARK_RED + "[" + plugin.getConfig().get("chat-prefix") + "] " + ChatColor.RED + Message);
+    public void SendTo(CommandSender cs, String group, String message, String extra1, String extra2) {
+        message = this.GetMessage(message, group);
+        if (message != null) {
+            message = message.replace("{{1}}", extra1);
+            message = message.replace("{{2}}", extra2);
+            cs.sendMessage(message);
         } else {
-            cs.sendMessage(ChatColor.GOLD + "[" + plugin.getConfig().get("chat-prefix") + "] " + ChatColor.YELLOW + Message);
+            this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
+            LogUtil log = new LogUtil(this.plugin);
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
         }
     }
 

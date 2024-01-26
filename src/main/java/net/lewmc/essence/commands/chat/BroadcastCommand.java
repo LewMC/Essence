@@ -49,7 +49,7 @@ public class BroadcastCommand implements CommandExecutor {
                 }
                 message.BroadcastMessage(broadcastMessage.toString());
             } else {
-                message.PrivateMessage("Usage: /broadcast <message>", true);
+                message.PrivateMessage("broadcast","usage");
             }
 
             return true;
