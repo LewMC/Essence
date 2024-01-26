@@ -25,5 +25,6 @@ economy:
   symbol: $
 
 # LANGUAGE
-# The file that will be used to display messages, please ensure the file exists in the 'resources/language' subfolder before chaning this value.
+# The file that will be used to display messages.
+# Please ensure the file exists in the 'language' sub-folder before changing this value.
 language: en-gb
