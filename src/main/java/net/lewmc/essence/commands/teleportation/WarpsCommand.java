@@ -56,11 +56,11 @@ public class WarpsCommand implements CommandExecutor {
 
                 if (keys == null) {
                     dataUtil.close();
-                    message.PrivateMessage("There are no warps set.", false);
+                    message.PrivateMessage("warp", "noneset");
                     return true;
                 }
 
-                StringBuilder setWarps = new StringBuilder("Warps: ");
+                StringBuilder setWarps = new StringBuilder();
                 int i = 0;
 
                 for (String key : keys) {
@@ -72,7 +72,7 @@ public class WarpsCommand implements CommandExecutor {
                     i++;
                 }
                 dataUtil.close();
-                message.PrivateMessage(setWarps.toString(), false);
+                message.PrivateMessage("warp", "list", setWarps.toString());
             } else {
                 permission.not();
             }

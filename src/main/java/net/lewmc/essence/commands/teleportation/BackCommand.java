@@ -55,7 +55,7 @@ public class BackCommand implements CommandExecutor {
                 ConfigurationSection cs = config.getSection("last-location");
 
                 if (cs == null) {
-                    message.PrivateMessage("You've not teleported anywhere before, so there's nowhere to go back to!", true);
+                    message.PrivateMessage("back", "cant");
                     return true;
                 }
 
@@ -74,7 +74,7 @@ public class BackCommand implements CommandExecutor {
                 player.teleport(loc);
                 config.close();
 
-                message.PrivateMessage("Going back...", false);
+                message.PrivateMessage("back", "going");
 
             } else {
                 permission.not();

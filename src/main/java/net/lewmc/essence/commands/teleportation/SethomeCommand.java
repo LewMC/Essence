@@ -63,7 +63,7 @@ public class SethomeCommand implements CommandExecutor {
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {
                     config.close();
-                    message.PrivateMessage("Homes cannot contain special characters!", true);
+                    message.PrivateMessage("home", "specialchars");
                     return true;
                 }
 
@@ -72,7 +72,7 @@ public class SethomeCommand implements CommandExecutor {
 
                 if (config.sectionExists(homeName)) {
                     config.close();
-                    message.PrivateMessage("A home with this name already exists.", true);
+                    message.PrivateMessage("home", "alreadyexists");
                     return true;
                 }
 
@@ -89,7 +89,7 @@ public class SethomeCommand implements CommandExecutor {
                 // Save the configuration to the file
                 config.save();
 
-                message.PrivateMessage("Created home '" + name + "'.", false);
+                message.PrivateMessage("home", "created", name);
             } else {
                 permission.not();
             }

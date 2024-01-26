@@ -42,10 +42,11 @@ public class EssenceCommands implements CommandExecutor {
                     return helpCommand.runHelpCommand();
                 }
             } else {
-                message.PrivateMessage("Running Essence "+plugin.getDescription().getVersion()+" for Minecraft "+plugin.getDescription().getAPIVersion(), false);
-                message.PrivateMessage("Essence is a lightweight and customisable plugin that adds warps, homes, and more.", false);
-                message.PrivateMessage("Created by LewMC.", false);
-                message.PrivateMessage("Use /es help for more commands", false);
+                message.PrivateMessage("about", "version", plugin.getDescription().getVersion(), plugin.getDescription().getAPIVersion());
+                message.PrivateMessage("about", "description");
+                message.PrivateMessage("about", "author");
+                message.PrivateMessage("about", "issues");
+                message.PrivateMessage("about", "more");
 
                 return true;
             }

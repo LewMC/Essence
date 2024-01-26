@@ -1,14 +1,22 @@
-generic:
-  blankmessage: "§e[Essence]"
-  playernotfound: "§4[Essence] §cPlayer could not be found."
+about:
+  version: "§6[Essence] §eRunning Essence {{1}} for Minecraft {{2}}."
+  description: "§6[Essence] §eEssence is a lightweight and customisable plugin that adds warps, homes, and more."
+  author: "§6[Essence] §eCreated by LewMC"
+  issues: "§4[Essence] §cPlease report any bugs or issues to github.com/lewmilburn/essence"
+  more: "§6[Essence] §eUse /es help for more commands."
 broadcast:
   usage: "§4[Essence] §cUsage: /broadcast <message>"
 economy:
   balance: "§6[Essence] §cYour balance is: {{1}}"
   insufficientfunds: "§4[Essence] §cInsufficient funds."
   payusage: "§4[Essence] §cUsage: /pay <player> <amount>"
-  sent: "§6[Essence] §eYou sent {{1}} to {{2}}"
-  received: "§6[Essence] §eYou received {{1}} from {{2}}"
+  sent: "§2[Essence] §aYou sent {{1}} to {{2}}"
+  received: "§2[Essence] §aYou received {{1}} from {{2}}"
+generic:
+  blankmessage: "§e[Essence]"
+  playernotfound: "§4[Essence] §cPlayer could not be found."
+  exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this command, please see console for details."
+  configexception: "§4[Essence] §cEssence encountered an issue whilst trying to process a configuration file, please see console for details."
 help:
   page: "§6[Essence] ----------------- Page {{1}}/{{2}} -----------------"
   inventory: "§6[Essence] --------- Essence Help - Inventory ---------"
@@ -51,3 +59,47 @@ help:
   helpteleport: "§6[Essence] §e/es help teleport - Teleport commands."
   helpstats: "§6[Essence] §e/es help stats - Manage your stats."
   helpeconomy: "§6[Essence] §e/es help economy - Economy commands."
+back:
+  cant: "§4[Essence] §cYou've not teleported anywhere before, so there's nowhere to go back to!"
+  going: "§2[Essence] §aGoing back..."
+home:
+  notfound: "§4[Essence] §cHome {{1}} does not exist. Use /homes for a list of homes."
+  deleted: "§2[Essence] §aHome {{1}} has been deleted."
+  teleporting: "§2[Essence] §aTeleporting to home {{1}}..."
+  none: "§4[Essence] §cYou haven't set any homes."
+  list: "§6[Essence] §eHomes: {{1}}"
+  specialchars: "§4[Essence] §cHomes cannot contain special characters!"
+  alreadyexists: "§4[Essence] §cA home with this name already exists."
+  created: "§2[Essence] §aCreated home '{{1}}'."
+warp:
+  notfound: "§4[Essence] §cWarp {{1}} does not exist. Use /warps for a list of warps."
+  deleted: "§2[Essence] §aWarp {{1}} has been deleted."
+  usage: "§4[Essence] §cUsage: /warp <name> - use /warps for a list."
+  delusage: "§4[Essence] §cUsage: /delwarp <name>"
+  setusage: "§4[Essence] §cUsage: /setwarp <name>"
+  specialchars: "§4[Essence] §cWarps cannot contain special characters!"
+  alreadyexists: "§4[Essence] §cA warp with this name already exists."
+  created: "§2[Essence] §aCreated warp '{{1}}'."
+  teleporting: "§2[Essence] §aWarping to '{{1}}'..."
+  noneset: "§4[Essence] §cThere are no warps set."
+  list: "§6[Essence] §eWarps: "
+teleport:
+  to: "§2[Essence] §aTeleporting to {{1}}..."
+  usage: "§4[Essence] §cUsage: /tp <player> OR /tp <x> <y> <z>"
+tprandom:
+  searching: "§6[Essence] §eFinding somewhere to go..."
+  teleporting: "§2[Essence] §aTeleporting..."
+  generating: "§6[Essence] §eGenerating chunk... (this may take some time)"
+  nosafe: "§4[Essence] §cCouldn't find suitable location, please try again."
+feed:
+  fed: "§2[Essence] §aYou fed {{1}}."
+  serverfed: "§2[Essence] §aYou've been fed by a magical force."
+  fedby: "§2[Essence] §aYou've been fed by {{1}}."
+  beenfed: "§2[Essence] §aYou've been fed!"
+  usage: "§4[Essence] §cUsage: /feed <player>"
+heal:
+  healed: "§2[Essence] §aYou healed {{1}}."
+  serverhealed: "§2[Essence] §aYou've been healed by a magical force."
+  healedby: "§2[Essence] §aYou've been healed by {{1}}."
+  beenhealed: "§2[Essence] §aYou've been healed!"
+  usage: "§4[Essence] §cUsage: /heal <player>"

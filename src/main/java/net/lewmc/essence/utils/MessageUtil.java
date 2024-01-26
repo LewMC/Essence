@@ -53,6 +53,29 @@ public class MessageUtil {
         Bukkit.broadcastMessage(ChatColor.GOLD + "Broadcast > " + ChatColor.YELLOW + Message);
     }
 
+    public void SendTo(CommandSender cs, String group, String message) {
+        message = this.GetMessage(message, group);
+        if (message != null) {
+            cs.sendMessage(message);
+        } else {
+            this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
+            LogUtil log = new LogUtil(this.plugin);
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
+        }
+    }
+
+    public void SendTo(CommandSender cs, String group, String message, String extra1) {
+        message = this.GetMessage(message, group);
+        if (message != null) {
+            message = message.replace("{{1}}", extra1);
+            cs.sendMessage(message);
+        } else {
+            this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
+            LogUtil log = new LogUtil(this.plugin);
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
+        }
+    }
+
     public void SendTo(CommandSender cs, String group, String message, String extra1, String extra2) {
         message = this.GetMessage(message, group);
         if (message != null) {

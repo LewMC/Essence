@@ -52,13 +52,13 @@ public class TprandomCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("tprandom")) {
             if (permission.has("essence.teleport.random")) {
-                message.PrivateMessage("Finding somewhere to go...", false);
+                message.PrivateMessage("tprandom", "searching");
                 WorldBorder wb;
                 try {
                     wb = Objects.requireNonNull(Bukkit.getWorld(player.getWorld().getUID())).getWorldBorder();
                 } catch (NullPointerException e) {
                     this.log.warn("NullPointerException randomly teleporting: " + e);
-                    message.PrivateMessage("Unable to teleport due to an error, please see the console for more information.", true);
+                    message.PrivateMessage("generic", "exception");
                     return true;
                 }
 
@@ -69,14 +69,14 @@ public class TprandomCommand implements CommandExecutor {
                     public void run() {
                         Location teleportLocation = loc.GetRandomLocation(player, wb);
                         if (teleportLocation.getY() != -64) {
-                            message.PrivateMessage("Teleporting...", false);
+                            message.PrivateMessage("tprandom", "teleporting");
 
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
                                     Chunk chunk = teleportLocation.getChunk();
                                     if (!chunk.isLoaded()) {
-                                        message.PrivateMessage("Generating chunk... (this may take some time)", false);
+                                        message.PrivateMessage("tprandom", "generating");
                                         chunk.load(true);
                                     }
 
@@ -86,7 +86,7 @@ public class TprandomCommand implements CommandExecutor {
                                 }
                             }.runTask(plugin);
                         } else {
-                            message.PrivateMessage("Couldn't find suitable location, please try again.", true);
+                            message.PrivateMessage("tprandom", "nosafe");
                         }
                     }
                 }.runTaskAsynchronously(this.plugin);

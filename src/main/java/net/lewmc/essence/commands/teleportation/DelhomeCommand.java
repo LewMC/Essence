@@ -59,7 +59,7 @@ public class DelhomeCommand implements CommandExecutor {
 
                 if (!config.sectionExists("homes."+name)) {
                     config.close();
-                    message.PrivateMessage("Home '"+name+"' does not exist.", true);
+                    message.PrivateMessage("home", "notfound", name);
                     return true;
                 }
 
@@ -72,7 +72,7 @@ public class DelhomeCommand implements CommandExecutor {
                 // Save the configuration to the file
                 config.save();
 
-                message.PrivateMessage("Deleted home '" + name + "'.", false);
+                message.PrivateMessage("home", "deleted", "");
             } else {
                 permission.not();
             }

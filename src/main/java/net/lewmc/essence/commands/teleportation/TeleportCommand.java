@@ -70,7 +70,7 @@ public class TeleportCommand implements CommandExecutor {
                             LocationUtil locationUtil = new LocationUtil(this.plugin, message);
                             locationUtil.UpdateLastLocation(player);
 
-                            message.PrivateMessage("Teleporting to " + p.getName(), false);
+                            message.PrivateMessage("teleport", "to", p.getName());
                             player.teleport(p);
                             return true;
                         }
@@ -78,10 +78,10 @@ public class TeleportCommand implements CommandExecutor {
                 } else {
                     permission.not();
                 }
-                message.PrivateMessage("Player not found.", true);
+                message.PrivateMessage("generic", "playernotfound");
                 return true;
             } else {
-                message.PrivateMessage("Please enter coordinates or a player's name.", true);
+                message.PrivateMessage("teleport", "usage");
             }
             return true;
         }
