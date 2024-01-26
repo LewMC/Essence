@@ -15,8 +15,8 @@ public class MessageUtil {
         this.cs = cs;
         this.plugin = plugin;
     }
-    public void PrivateMessage(String Message) {
-        Message = this.GetMessage(Message);
+    public void PrivateMessage(String Message, String Group) {
+        Message = this.GetMessage(Message, Group);
         if (Message != null) {
             this.cs.sendMessage(Message);
         } else {
@@ -38,10 +38,10 @@ public class MessageUtil {
         }
     }
 
-    private String GetMessage(String code) {
+    private String GetMessage(String code, String group) {
         DataUtil data = new DataUtil(this.plugin, this);
         data.load("messages.yml");
-        ConfigurationSection msg = data.getSection("messages");
+        ConfigurationSection msg = data.getSection(group);
         if (msg.get(code) != null) {
             return String.valueOf(msg.get(code));
         } else {
