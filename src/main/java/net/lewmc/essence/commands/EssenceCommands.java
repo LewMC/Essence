@@ -42,7 +42,7 @@ public class EssenceCommands implements CommandExecutor {
                     return helpCommand.runHelpCommand();
                 }
             } else {
-                message.PrivateMessage("about", "version", plugin.getDescription().getVersion(), plugin.getDescription().getAPIVersion());
+                message.PrivateMessage("about", "version", plugin.getDescription().getVersion());
                 message.PrivateMessage("about", "description");
                 message.PrivateMessage("about", "author");
                 message.PrivateMessage("about", "issues");

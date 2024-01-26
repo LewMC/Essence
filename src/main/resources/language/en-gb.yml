@@ -6,7 +6,7 @@
 # If you've translated to a language we don't already support, and you'd like to contribute
 # please consider opening an issue at github.com/lewmilburn/essence so we can add it!
 about:
-  version: "§6[Essence] §eRunning Essence {{1}} for Minecraft {{2}}."
+  version: "§6[Essence] §eRunning Essence version {{1}}."
   description: "§6[Essence] §eEssence is a lightweight and customisable plugin that adds warps, homes, and more."
   author: "§6[Essence] §eCreated by LewMC"
   issues: "§4[Essence] §cPlease report any bugs or issues to github.com/lewmilburn/essence"
