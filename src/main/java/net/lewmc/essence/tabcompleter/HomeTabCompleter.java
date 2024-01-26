@@ -34,6 +34,8 @@ public class HomeTabCompleter implements TabCompleter {
         data.load(data.playerDataFile((Player) sender));
         Set<String> keys = data.getKeys("homes");
 
+        data.close();
+
         return new ArrayList<>(keys);
     }
 }

@@ -72,7 +72,7 @@ public class DelhomeCommand implements CommandExecutor {
                 // Save the configuration to the file
                 config.save();
 
-                message.PrivateMessage("home", "deleted", "");
+                message.PrivateMessage("home", "deleted", homeName);
             } else {
                 permission.not();
             }

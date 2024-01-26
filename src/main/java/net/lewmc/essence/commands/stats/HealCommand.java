@@ -50,7 +50,7 @@ public class HealCommand implements CommandExecutor {
                     if (p != null) {
                         message.PrivateMessage("heal", "healed", p.getName());
                         if (!(commandSender instanceof Player)) {
-                            message.SendTo(p, "heal", "serverheal");
+                            message.SendTo(p, "heal", "serverhealed");
                         } else {
                             message.SendTo(p, "heal", "healedby", commandSender.getName());
                         }

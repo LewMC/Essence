@@ -23,3 +23,7 @@ motd:
 economy:
   start-money: 100.0
   symbol: $
+
+# LANGUAGE
+# The file that will be used to display messages, please ensure the file exists in the 'resources/language' subfolder before chaning this value.
+language: en-gb

@@ -1,3 +1,10 @@
+# This file contains British English translations for messages in Essence.
+# You can change which file is used for messages in config.yml
+#
+# If you've translated to a language we don't already support, and you'd like to contribute
+# please consider opening an issue at github.com/lewmilburn/essence so we can add it!
+#
+# Note: If you change this file you do not need to restart/reload the server for it to take effect.
 about:
   version: "§6[Essence] §eRunning Essence {{1}} for Minecraft {{2}}."
   description: "§6[Essence] §eEssence is a lightweight and customisable plugin that adds warps, homes, and more."
@@ -7,13 +14,13 @@ about:
 broadcast:
   usage: "§4[Essence] §cUsage: /broadcast <message>"
 economy:
-  balance: "§6[Essence] §cYour balance is: {{1}}"
+  balance: "§6[Essence] §eYour balance is: {{1}}"
   insufficientfunds: "§4[Essence] §cInsufficient funds."
   payusage: "§4[Essence] §cUsage: /pay <player> <amount>"
   sent: "§2[Essence] §aYou sent {{1}} to {{2}}"
   received: "§2[Essence] §aYou received {{1}} from {{2}}"
 generic:
-  blankmessage: "§e[Essence]"
+  blankmessage: "§6[Essence]"
   playernotfound: "§4[Essence] §cPlayer could not be found."
   exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this command, please see console for details."
   configexception: "§4[Essence] §cEssence encountered an issue whilst trying to process a configuration file, please see console for details."
@@ -33,7 +40,7 @@ help:
   gamemode: "§6[Essence] ---------- Essence Help - Gamemode ---------"
   gmc: "§6[Essence] §e/gmc - Switch to creative mode."
   gms: "§6[Essence] §e/gms - Switch to survival mode."
-  gmsa: "§6[Essence] §e/gma - Switch to adventure mode."
+  gma: "§6[Essence] §e/gma - Switch to adventure mode."
   gmsp: "§6[Essence] §e/gmsp - Switch to spectator mode."
   teleport: "§6[Essence] ---------- Essence Help - Teleport ---------"
   tp: "§6[Essence] §e/tp <name/coordomate> - Teleport."
@@ -67,7 +74,7 @@ home:
   notfound: "§4[Essence] §cHome {{1}} does not exist. Use /homes for a list of homes."
   deleted: "§2[Essence] §aHome {{1}} has been deleted."
   teleporting: "§2[Essence] §aTeleporting to home {{1}}..."
-  none: "§4[Essence] §cYou haven't set any homes."
+  noneset: "§4[Essence] §cYou haven't set any homes."
   list: "§6[Essence] §eHomes: {{1}}"
   specialchars: "§4[Essence] §cHomes cannot contain special characters!"
   alreadyexists: "§4[Essence] §cA home with this name already exists."

@@ -54,7 +54,7 @@ public class HomesCommand implements CommandExecutor {
 
                 if (keys == null) {
                     dataUtil.close();
-                    message.PrivateMessage("homes", "none");
+                    message.PrivateMessage("home", "noneset");
                     return true;
                 }
 
@@ -70,7 +70,7 @@ public class HomesCommand implements CommandExecutor {
                     i++;
                 }
                 dataUtil.close();
-                message.PrivateMessage("homes", "list", setHomes.toString());
+                message.PrivateMessage("home", "list", setHomes.toString());
             } else {
                 permission.not();
             }

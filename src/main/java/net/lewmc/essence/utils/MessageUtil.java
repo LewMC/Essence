@@ -22,7 +22,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
         }
     }
     public void PrivateMessage(String group, String message, String extras) {
@@ -33,7 +33,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
         }
     }
     public void PrivateMessage(String group, String message, String extra1, String extra2) {
@@ -45,7 +45,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
         }
     }
 
@@ -60,7 +60,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
         }
     }
 
@@ -72,7 +72,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
         }
     }
 
@@ -85,15 +85,16 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
         }
     }
 
     private String GetMessage(String code, String group) {
+        String language = this.plugin.getConfig().getString("language");
         DataUtil data = new DataUtil(this.plugin, this);
-        data.load("messages.yml");
+        data.load("language/"+language+".yml");
         ConfigurationSection msg = data.getSection(group);
-        if (msg.get(code) != null) {
+        if (msg != null) {
             String toSend = String.valueOf(msg.get(code));
             data.close();
             return toSend;

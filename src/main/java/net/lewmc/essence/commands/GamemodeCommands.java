@@ -56,7 +56,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 2) {
                 this.toPlayer = args[1];
             }
-            if (args.length == 0 || args.length == 2) {
+            if (args.length == 1 || args.length == 2) {
                 if (args[0].equalsIgnoreCase("survival")) {
                     gamemodeSurvival();
                 } else if (args[0].equalsIgnoreCase("creative")) {
@@ -68,6 +68,7 @@ public class GamemodeCommands implements CommandExecutor {
                 } else {
                     message.PrivateMessage("gamemode", "usage");
                 }
+                return true;
             } else {
                 return noModeSet();
             }
