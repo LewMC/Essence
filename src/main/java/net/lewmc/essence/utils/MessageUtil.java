@@ -15,7 +15,7 @@ public class MessageUtil {
         this.cs = cs;
         this.plugin = plugin;
     }
-    public void PrivateMessage(String message, String group) {
+    public void PrivateMessage(String group, String message) {
         message = this.GetMessage(message, group);
         if (message != null) {
             this.cs.sendMessage(message);
@@ -25,7 +25,7 @@ public class MessageUtil {
             log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in messages.yml");
         }
     }
-    public void PrivateMessage(String message, String group, String extras) {
+    public void PrivateMessage(String group, String message, String extras) {
         message = this.GetMessage(message, group);
         if (message != null) {
             this.cs.sendMessage(message + " " + extras);
