@@ -118,3 +118,6 @@ gamemode:
   creative: "§2[Essence] §aSwitched to creative mode."
   adventure: "§2[Essence] §aSwitched to adventure mode."
   spectator: "§2[Essence] §aSwitched to spectator mode."
+team:
+  exists: "§4[Essence] §cA team with this name already exists."
+  specialchars: "§4[Essence] §cTeam names can't contain special characters."
