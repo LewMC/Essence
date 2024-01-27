@@ -3,8 +3,6 @@ package net.lewmc.essence.commands;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.PermissionHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
