@@ -1,5 +1,6 @@
 package net.lewmc.essence;
 
+import net.lewmc.essence.commands.TeamCommands;
 import net.lewmc.essence.commands.chat.*;
 import net.lewmc.essence.commands.economy.BalanceCommand;
 import net.lewmc.essence.commands.economy.PayCommand;
