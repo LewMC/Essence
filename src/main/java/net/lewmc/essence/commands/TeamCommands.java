@@ -11,11 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class TeamCommands implements CommandExecutor {
     private final Essence plugin;
-    private PermissionHandler permission;
-    private MessageUtil message;
-    private Player player;
-    private boolean isPlayer;
-    private String toPlayer;
 
     /**
      * Constructor for the GamemodeCommands class.
