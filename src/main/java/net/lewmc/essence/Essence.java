@@ -176,6 +176,8 @@ public class Essence extends JavaPlugin {
 
         getCommand("gamemode").setTabCompleter(new GamemodeTabCompleter());
         getCommand("gm").setTabCompleter(new GamemodeTabCompleter());
+
+        getCommand("es").setTabCompleter(new EssenceTabCompleter());
     }
 
     /**
