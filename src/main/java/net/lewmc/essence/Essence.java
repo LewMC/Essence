@@ -155,6 +155,8 @@ public class Essence extends JavaPlugin {
 
             this.getCommand("pay").setExecutor(new PayCommand(this));
             this.getCommand("balance").setExecutor(new BalanceCommand(this));
+
+            this.getCommand("team").setExecutor(new TeamCommands(this));
         } catch (NullPointerException e) {
             this.log.severe("LoadCommands: Unable to load Essence commands.");
             this.log.info("");
