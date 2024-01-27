@@ -131,6 +131,10 @@ commands:
     description: Teleport to a random location.
     usage: /<command>
     aliases: ['tpr', 'rtp']
+  team:
+    description: Manage teams.
+    usage: /<command>
+    aliases: ['group']
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -272,3 +276,13 @@ permissions:
     description: Use /pay command.
   essence.economy.balance:
     description: Use /balance command.
+  essence.team.*:
+    description: Allows players to access all teams commands.
+    default: op
+    children:
+      essence.team.join: true
+      essence.team.create: true
+  essence.team.join:
+    description: Join a team.
+  essence.team.create:
+    description: Create a team.
