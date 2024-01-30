@@ -29,6 +29,7 @@ language: en-gb
 
 # DISABLED COMMANDS
 # See https://wiki.lewmc.net/index.php/Disabling_Commands for help.
+# PLEASE NOTE: This does not currently remove the command from /es help
 disabled-commands:
   - example
 
