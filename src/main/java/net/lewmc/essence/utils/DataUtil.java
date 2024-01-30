@@ -82,6 +82,8 @@ public class DataUtil {
             this.message.PrivateMessage("generic", "configexception");
         }
 
+        this.configFile = null;
+
         try {
             this.plugin.getConfig().load(this.defaultConfig);
         } catch (IOException | InvalidConfigurationException e) {
@@ -94,6 +96,7 @@ public class DataUtil {
      * Closes the custom config file.
      */
     public void close() {
+        this.configFile = null;
         try {
             this.plugin.getConfig().load(this.defaultConfig);
         } catch (IOException | InvalidConfigurationException e) {
@@ -125,16 +128,14 @@ public class DataUtil {
 
         if (!fsFile.exists()) {
             try {
-                if (fsFile.getParentFile().mkdirs()) {
-                    return fsFile.createNewFile();
-                } else {
-                    return false;
-                }
+                fsFile.getParentFile().mkdirs();
+                return fsFile.createNewFile();
             } catch (IOException e) {
                 this.log.severe("IOException whilst creating data file '"+file+"': "+e);
                 return false;
             }
         } else {
+            this.log.warn("Attempted to create file that already exists.");
             return false;
         }
     }
