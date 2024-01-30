@@ -71,4 +71,14 @@ public class UpdateUtil {
             this.log.warn("Unable to update configuration: "+e);
         }
     }
+
+    public void UpdateLanguage() {
+        File languageFile = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "en-gb.yml");
+
+        try {
+            ConfigUpdater.update(plugin, "language/en-gb.yml", languageFile);
+        } catch (IOException e) {
+            this.log.warn("Unable to update language file: "+e);
+        }
+    }
 }

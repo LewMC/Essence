@@ -61,6 +61,7 @@ public class Essence extends JavaPlugin {
             UpdateUtil update = new UpdateUtil(this);
             update.VersionCheck();
             update.UpdateConfig();
+            update.UpdateLanguage();
 
             this.log.info("Startup completed.");
         }
