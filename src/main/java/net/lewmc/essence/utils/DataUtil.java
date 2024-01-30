@@ -8,6 +8,10 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.util.Set;
 import java.util.UUID;
 
@@ -165,8 +169,24 @@ public class DataUtil {
     }
 
     public boolean deleteFile(String filePath) {
-        File file = new File(filePath);
-        return file.delete();
+        this.close();
+
+        Path path = Path.of(this.plugin.getDataFolder() + filePath);
+
+        try {
+            Files.delete(path);
+        } catch (NoSuchFileException e) {
+            this.log.warn("Attempted to delete a file that does not exist. File: "+path+" Exception: "+e);
+            return false;
+        } catch (DirectoryNotEmptyException e) {
+            this.log.warn("Attempted to delete a directory that isn't empty. File: "+path+" Exception: "+e);
+            return false;
+        } catch (IOException e) {
+            this.log.warn("Attempted to delete a file with IOException. File: "+path+" Exception: "+e);
+            return false;
+        }
+
+        return true;
     }
 }
 
