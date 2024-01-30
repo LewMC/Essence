@@ -50,7 +50,7 @@ public class WarpsCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("warps")) {
             if (permission.has("essence.warp.list")) {
                 DataUtil dataUtil = new DataUtil(this.plugin, message);
-                dataUtil.load("data/warps.yml");
+                dataUtil.load("/data/warps.yml");
 
                 Set<String> keys = dataUtil.getKeys("warps");
 
@@ -60,19 +60,20 @@ public class WarpsCommand implements CommandExecutor {
                     return true;
                 }
 
-                StringBuilder setWarps = new StringBuilder();
+                StringBuilder warps = new StringBuilder();
                 int i = 0;
 
                 for (String key : keys) {
+                    this.log.info(key);
                     if (i == 0) {
-                        setWarps.append(key);
+                        warps.append(key);
                     } else {
-                        setWarps.append(", ").append(key);
+                        warps.append(", ").append(key);
                     }
                     i++;
                 }
                 dataUtil.close();
-                message.PrivateMessage("warp", "list", setWarps.toString());
+                message.PrivateMessage("warp", "list", warps.toString());
             } else {
                 permission.not();
             }
