@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation;
 
-import net.lewmc.essence.utils.LocationUtil;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
+import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -49,9 +46,14 @@ public class TprandomCommand implements CommandExecutor {
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
+        TeleportUtil teleUtil = new TeleportUtil(this.plugin);
 
         if (command.getName().equalsIgnoreCase("tprandom")) {
             if (permission.has("essence.teleport.random")) {
+                if (!teleUtil.cooldownSurpassed(player, "randomtp")) {
+                    message.PrivateMessage("teleport", "tryagain", String.valueOf(teleUtil.cooldownRemaining(player, "randomtp")));
+                    return true;
+                }
                 message.PrivateMessage("tprandom", "searching");
                 WorldBorder wb;
                 try {
@@ -83,6 +85,8 @@ public class TprandomCommand implements CommandExecutor {
                                     LocationUtil locationUtil = new LocationUtil(plugin, message);
                                     locationUtil.UpdateLastLocation(player);
                                     teleportPlayer(player, teleportLocation);
+
+                                    teleUtil.setCooldown(player, "randomtp");
                                 }
                             }.runTask(plugin);
                         } else {

@@ -47,10 +47,15 @@ public class HomeCommand implements CommandExecutor {
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
+        TeleportUtil teleUtil = new TeleportUtil(this.plugin);
 
         if (command.getName().equalsIgnoreCase("home")) {
             if (permission.has("essence.home.use")) {
-                Integer waitTime = plugin.getConfig().getInt("teleportation.home.wait");
+                int waitTime = plugin.getConfig().getInt("teleportation.home.wait");
+                if (!teleUtil.cooldownSurpassed(player, "home")) {
+                    message.PrivateMessage("teleport", "tryagain", String.valueOf(teleUtil.cooldownRemaining(player, "home")));
+                    return true;
+                }
 
                 DataUtil config = new DataUtil(this.plugin, message);
                 config.load(config.playerDataFile(player));
@@ -118,9 +123,11 @@ public class HomeCommand implements CommandExecutor {
                         player.teleport(loc);
                         config.close();
 
+                        teleUtil.setCooldown(player, "home");
+
                         message.PrivateMessage("home", "teleporting", chatHomeName);
                     }
-                }.runTaskLater(plugin, waitTime * 20);
+                }.runTaskLater(plugin, waitTime * 20L);
             }
         } else {
             permission.not();

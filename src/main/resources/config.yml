@@ -26,8 +26,12 @@ economy:
 teleportation:
   home:
     wait: 3
+    cooldown: 10
   warp:
     wait: 3
+    cooldown: 10
+  randomtp:
+    cooldown: 60
 
 # LANGUAGE
 # The file that will be used to display messages.
