@@ -37,7 +37,7 @@ public class Essence extends JavaPlugin {
         this.log.info("███████╗██████╔╝██████╔╝███████╗██║░╚███║╚█████╔╝███████╗");
         this.log.info("╚══════╝╚═════╝░╚═════╝░╚══════╝╚═╝░░╚══╝░╚════╝░╚══════╝");
         this.log.info("");
-        this.log.info("Running Essence version "+this.getDescription().getVersion()+ " for Minecraft 1.19 - 1.20");
+        this.log.info("Running Essence version "+this.getDescription().getVersion()+ ".");
         this.log.info("Please report any issues with Essence to our GitHub repository: https://github.com/lewmilburn/essence/issues");
         this.log.info("");
         this.log.info("Beginning startup...");
