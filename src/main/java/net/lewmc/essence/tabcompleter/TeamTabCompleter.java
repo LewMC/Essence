@@ -19,7 +19,7 @@ public class TeamTabCompleter implements TabCompleter {
     ) {
         String[] keys;
         if (args.length == 1) {
-            keys = new String[]{"create", "join", "requests"};
+            keys = new String[]{"create", "join", "requests", "accept", "decline", "leave", "changeleader", "kick", "disband"};
         } else {
             keys = new String[]{};
         }

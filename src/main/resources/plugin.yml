@@ -289,3 +289,5 @@ permissions:
     description: Create a team.
   essence.team.manage:
     description: Manage any teams they are the leader of.
+  essence.team.list:
+    description: View team information.

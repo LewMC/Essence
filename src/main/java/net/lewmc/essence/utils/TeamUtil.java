@@ -1,6 +1,8 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,12 +35,12 @@ public class TeamUtil {
                 this.data.save();
 
                 this.data.load(data.playerDataFile(leader));
-                ConfigurationSection cs2 = this.data.getSection("team");
+                ConfigurationSection cs2 = this.data.getSection("user");
                 if (cs2 == null) {
-                    this.data.createSection("team");
-                    cs2 = this.data.getSection("team");
+                    this.data.createSection("user");
+                    cs2 = this.data.getSection("user");
                 }
-                cs2.set("name", name);
+                cs2.set("team", name);
                 this.data.save();
 
                 message.PrivateMessage("team", "created", name);
@@ -109,17 +111,195 @@ public class TeamUtil {
 
     public @Nullable String getPlayerTeam(UUID player) {
         this.data.load(data.playerDataFile(player));
-        ConfigurationSection cs = this.data.getSection("team");
+        ConfigurationSection cs = this.data.getSection("user");
         if (cs == null) {
             return null;
         } else {
-            String team = cs.getString("name");
+            String team = cs.getString("team");
             this.data.close();
             return team;
         }
     }
 
     public void loadData(String team) {
-        data.load("/data/teams/" + team + ".yml");
+        this.data.load("/data/teams/" + team + ".yml");
+    }
+
+    public boolean acceptRequest(String team, String player) {
+        OfflinePlayer op = Bukkit.getOfflinePlayer(player);
+
+        this.data.load(this.data.playerDataFile(op.getUniqueId()));
+        ConfigurationSection requestedUser = this.data.getSection("user");
+        if (requestedUser == null) {
+            this.data.createSection("user");
+            requestedUser = this.data.getSection("user");
+        }
+        requestedUser.set("team", team);
+        this.data.save();
+
+        this.loadData(team);
+        ConfigurationSection teamData = this.data.getSection("members");
+        if (teamData == null) {
+            this.data.createSection("members");
+            teamData = this.data.getSection("members");
+        }
+
+        List<String> defaultMembers = teamData.getStringList("default");
+        defaultMembers.add(String.valueOf(op.getUniqueId()));
+        teamData.set("default", defaultMembers);
+
+        List<String> requestedMembers = teamData.getStringList("requests");
+        requestedMembers.remove(String.valueOf(op.getUniqueId()));
+        teamData.set("requests", requestedMembers);
+
+        this.data.save();
+        return true;
+    }
+
+    public boolean declineRequest(String team, String player) {
+        OfflinePlayer op = Bukkit.getOfflinePlayer(player);
+
+        this.loadData(team);
+        ConfigurationSection teamData = this.data.getSection("members");
+        if (teamData == null) {
+            this.data.createSection("members");
+            teamData = this.data.getSection("members");
+        }
+
+        List<String> requestedMembers = teamData.getStringList("requests");
+        requestedMembers.remove(String.valueOf(op.getUniqueId()));
+        teamData.set("requests", requestedMembers);
+
+        this.data.save();
+        return true;
+    }
+
+    public boolean leave(String playerTeam, UUID uuid) {
+        this.data.load(this.data.playerDataFile(uuid));
+
+        ConfigurationSection leavingUser = this.data.getSection("user");
+        if (leavingUser != null) {
+            leavingUser.set("team", null);
+        }
+
+        this.data.save();
+
+        this.loadData(playerTeam);
+
+        ConfigurationSection teamData = this.data.getSection("members");
+        if (teamData != null) {
+            List<String> defaultMembers = teamData.getStringList("default");
+            defaultMembers.remove(String.valueOf(uuid));
+            teamData.set("default", defaultMembers);
+        }
+
+        this.data.save();
+
+        return true;
+    }
+
+    public boolean changeLeader(String playerTeam, String newLeader, String oldLeader) {
+        OfflinePlayer op = Bukkit.getOfflinePlayer(newLeader);
+
+        this.loadData(playerTeam);
+        ConfigurationSection cs = this.data.getSection("members");
+
+        if (cs == null) {
+            return false;
+        }
+
+        cs.set("leader", String.valueOf(op.getUniqueId()));
+
+        List<String> defaultMembers = cs.getStringList("default");
+        defaultMembers.add(oldLeader);
+        defaultMembers.remove(String.valueOf(op.getUniqueId()));
+        cs.set("default", defaultMembers);
+
+        this.data.save();
+
+        return true;
+    }
+
+    public boolean exists(String team) {
+        return this.data.fileExists("/data/teams/" + team + ".yml");
+    }
+
+    public String getTeamLeader(String team) {
+        this.loadData(team);
+        ConfigurationSection cs = this.data.getSection("members");
+        String leader = cs.getString("leader");
+        this.data.close();
+
+        this.data.load(data.playerDataFile(UUID.fromString(leader)));
+        ConfigurationSection user = this.data.getSection("user");
+        leader = user.getString("last-known-name");
+        this.data.close();
+
+        return leader;
+    }
+
+    public String getTeamMembers(String team) {
+        this.loadData(team);
+        ConfigurationSection cs = data.getSection("members");
+        List<String> requests = cs.getStringList("default");
+        this.data.close();
+
+        StringBuilder membersList = new StringBuilder();
+        int i = 0;
+
+        for (String key : requests) {
+            this.data.load(data.playerDataFile(UUID.fromString(key)));
+            ConfigurationSection user = this.data.getSection("user");
+            if (i == 0) {
+                membersList.append(user.getString("last-known-name"));
+            } else {
+                membersList.append(", ").append(user.getString("last-known-name"));
+            }
+            this.data.close();
+            i++;
+        }
+
+        return membersList.toString();
+    }
+
+    public boolean kick(String playerTeam, String playerToKick) {
+        OfflinePlayer op = Bukkit.getOfflinePlayer(playerToKick);
+        return this.leave(playerTeam, op.getUniqueId());
+    }
+
+    public boolean isMember(String team, String username) {
+        OfflinePlayer op = Bukkit.getOfflinePlayer(username);
+        String uuid = op.getUniqueId().toString();
+
+        this.loadData(team);
+        ConfigurationSection cs = data.getSection("members");
+        List<String> members = cs.getStringList("default");
+        this.data.close();
+
+        for (String key : members) {
+            if (Objects.equals(key, uuid)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean hasRequested(String team, String username) {
+        OfflinePlayer op = Bukkit.getOfflinePlayer(username);
+        String uuid = op.getUniqueId().toString();
+
+        this.loadData(team);
+        ConfigurationSection cs = data.getSection("members");
+        List<String> members = cs.getStringList("requests");
+        this.data.close();
+
+        for (String key : members) {
+            if (Objects.equals(key, uuid)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

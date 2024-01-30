@@ -89,8 +89,141 @@ public class TeamCommands implements CommandExecutor {
                     } else {
                         permission.not();
                     }
+                } else if (args[0].equalsIgnoreCase("accept")) {
+                    if (permission.has("essence.team.manage")) {
+                        if (args.length > 1) {
+                            String playerTeam = team.getPlayerTeam(player.getUniqueId());
+                            if (!team.hasRequested(playerTeam, args[1])) {
+                                message.PrivateMessage("team", "usernotrequested", args[1], playerTeam);
+                                return true;
+                            }
+                            if (team.isLeader(playerTeam, player.getUniqueId())) {
+                                if (team.acceptRequest(playerTeam, args[1])) {
+                                    message.PrivateMessage("team", "accepted", args[1]);
+                                } else {
+                                    message.PrivateMessage("generic", "exception");
+                                }
+                            } else {
+                                message.PrivateMessage("team", "leaderrequired");
+                            }
+                        } else {
+                            message.PrivateMessage("team", "usernamerequired");
+                        }
+                    } else {
+                        permission.not();
+                    }
+                } else if (args[0].equalsIgnoreCase("decline")) {
+                    if (permission.has("essence.team.manage")) {
+                        if (args.length > 1) {
+                            String playerTeam = team.getPlayerTeam(player.getUniqueId());
+                            if (!team.hasRequested(playerTeam, args[1])) {
+                                message.PrivateMessage("team", "usernotrequested", args[1], playerTeam);
+                                return true;
+                            }
+                            if (team.isLeader(playerTeam, player.getUniqueId())) {
+                                if (team.declineRequest(playerTeam, args[1])) {
+                                    message.PrivateMessage("team", "declined", args[1]);
+                                } else {
+                                    message.PrivateMessage("generic", "exception");
+                                }
+                            } else {
+                                message.PrivateMessage("team", "leaderrequired");
+                            }
+                        } else {
+                            message.PrivateMessage("team", "usernamerequired");
+                        }
+                    } else {
+                        permission.not();
+                    }
+                } else if (args[0].equalsIgnoreCase("leave")) {
+                    if (permission.has("essence.team.join")) {
+                        String playerTeam = team.getPlayerTeam(player.getUniqueId());
+                        if (playerTeam != null) {
+                            if (team.isLeader(playerTeam, player.getUniqueId())) {
+                                message.PrivateMessage("team", "requiresdisband", playerTeam);
+                                return true;
+                            }
+
+                            if (team.leave(playerTeam, player.getUniqueId())) {
+                                message.PrivateMessage("team", "left", playerTeam);
+                            } else {
+                                message.PrivateMessage("generic", "exception");
+                            }
+                        } else {
+                            message.PrivateMessage("team", "noteam");
+                        }
+                    } else {
+                        permission.not();
+                    }
+                } else if (args[0].equalsIgnoreCase("changeleader")) {
+                    if (permission.has("essence.team.manage")) {
+                        String playerTeam = team.getPlayerTeam(player.getUniqueId());
+                        if (args.length <= 1) {
+                            message.PrivateMessage("team", "leadernamerequired");
+                            return true;
+                        }
+                        if (playerTeam != null) {
+                            if (!team.isMember(playerTeam, args[1])) {
+                                message.PrivateMessage("team", "usernotmember", args[1], playerTeam);
+                                return true;
+                            }
+
+                            if (team.isLeader(playerTeam, player.getUniqueId())) {
+                                if (team.changeLeader(playerTeam, args[1], String.valueOf(player.getUniqueId()))) {
+                                    message.PrivateMessage("team", "leadertransfer", args[1], playerTeam);
+                                } else {
+                                    message.PrivateMessage("general", "exception");
+                                }
+                            } else {
+                                message.PrivateMessage("team", "leaderrequired");
+                                return true;
+                            }
+                        } else {
+                            message.PrivateMessage("team", "noteam");
+                        }
+                    } else {
+                        permission.not();
+                    }
+                } else if (args[0].equalsIgnoreCase("kick")) {
+                    if (permission.has("essence.team.manage")) {
+                        String playerTeam = team.getPlayerTeam(player.getUniqueId());
+                        if (args.length <= 1) {
+                            message.PrivateMessage("team", "usernamerequired");
+                            return true;
+                        }
+                        if (playerTeam != null) {
+                            if (team.isLeader(playerTeam, player.getUniqueId())) {
+                                if (!team.isMember(playerTeam, args[1])) {
+                                    message.PrivateMessage("team", "usernotmember", args[1], playerTeam);
+                                    return true;
+                                }
+                                if (team.kick(playerTeam, args[1])) {
+                                    message.PrivateMessage("team", "kicked", args[1], playerTeam);
+                                } else {
+                                    message.PrivateMessage("generic", "exception");
+                                }
+                            } else {
+                                message.PrivateMessage("team", "leaderrequired");
+                                return true;
+                            }
+                        } else {
+                            message.PrivateMessage("team", "noteam");
+                        }
+                    } else {
+                        permission.not();
+                    }
                 } else {
-                    message.PrivateMessage("team", "malformed");
+                    if (permission.has("essence.team.list")) {
+                        if (team.exists(args[0])) {
+                            message.PrivateMessage("team", "name", args[0]);
+                            message.PrivateMessage("team", "leader", team.getTeamLeader(args[0]));
+                            message.PrivateMessage("team", "members", team.getTeamMembers(args[0]));
+                        } else {
+                            message.PrivateMessage("team", "malformed");
+                        }
+                    } else {
+                        message.PrivateMessage("team", "malformed");
+                    }
                 }
             } else {
                 message.PrivateMessage("team", "malformed");

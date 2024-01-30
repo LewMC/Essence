@@ -72,11 +72,23 @@ public class HelpCommand {
                 this.blank(6);
                 this.message.PrivateMessage("help", "page", "1", "1");
             } else if ("team".equalsIgnoreCase(args[1])) {
-                this.message.PrivateMessage("help", "team");
-                this.message.PrivateMessage("help", "teamcreate");
-                this.message.PrivateMessage("help", "teamjoin");
-                this.blank(6);
-                this.message.PrivateMessage("help", "page", "1", "1");
+                if (args.length < 3 || args[2].equals("1")) {
+                    this.message.PrivateMessage("help", "team");
+                    this.message.PrivateMessage("help", "teamcreate");
+                    this.message.PrivateMessage("help", "teamjoin");
+                    this.message.PrivateMessage("help", "teamleave");
+                    this.message.PrivateMessage("help", "teamrequests");
+                    this.message.PrivateMessage("help", "teamaccept");
+                    this.message.PrivateMessage("help", "teamdecline");
+                    this.message.PrivateMessage("help", "teamtransfer");
+                    this.message.PrivateMessage("help", "teamkick");
+                    this.message.PrivateMessage("help", "page", "1", "2");
+                } else if (args[2].equals("2")) {
+                    this.message.PrivateMessage("help", "team");
+                    this.message.PrivateMessage("help", "teamdisband");
+                    this.blank(7);
+                    this.message.PrivateMessage("help", "page", "2", "2");
+                }
             }
             else {
                 this.message.PrivateMessage("help", "nochapter");
