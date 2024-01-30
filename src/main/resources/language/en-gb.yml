@@ -125,10 +125,9 @@ heal:
 gamemode:
   usage: "§4[Essence] §cUsage: /gamemode <mode> [player]."
   specify: "§4[Essence] §cPlease specify a gamemode (example: /gamemode creative)."
-  survival: "§2[Essence] §aSwitched to survival mode."
-  creative: "§2[Essence] §aSwitched to creative mode."
-  adventure: "§2[Essence] §aSwitched to adventure mode."
-  spectator: "§2[Essence] §aSwitched to spectator mode."
+  done: "§2[Essence] §aSwitched to {{1}} mode."
+  doneby: "§2[Essence] §aYou have been switched to {{1}} mode by {{2}}."
+  doneother: "§2[Essence] §aYou have switched {{1}} to {{2}} mode."
 team:
   exists: "§4[Essence] §cA team with this name already exists."
   notfound: "§4[Essence] §cCouldn't find a team with that name."

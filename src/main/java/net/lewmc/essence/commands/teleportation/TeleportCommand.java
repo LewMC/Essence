@@ -40,12 +40,17 @@ public class TeleportCommand implements CommandExecutor {
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
+        Player player = null;
+
+        if (console(commandSender) && args.length != 4) {
             this.log.noConsole();
             return true;
         }
+
+        if (!console(commandSender)) {
+            player = (Player) commandSender;
+        }
         MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("tp")) {
@@ -119,5 +124,9 @@ public class TeleportCommand implements CommandExecutor {
         }
 
         return false;
+    }
+
+    public boolean console(CommandSender commandSender) {
+        return !(commandSender instanceof Player);
     }
 }

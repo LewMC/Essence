@@ -155,6 +155,7 @@ permissions:
       essence.gamemode.survival: true
       essence.gamemode.adventure: true
       essence.gamemode.spectator: true
+      essence.gamemode.other: true
   essence.gamemode.creative:
     description: Allows players to switch to creative gamemode.
   essence.gamemode.survival:
@@ -163,6 +164,8 @@ permissions:
     description: Allows players to switch to adventure gamemode.
   essence.gamemode.spectator:
     description: Allows players to switch to spectator gamemode.
+  essence.gamemode.other:
+    description: Allows you to change other player's gamemodes. You must also have the specific gamemode permission.
   essence.inventory.*:
     description: Allows players to access inventory commands.
     default: op
