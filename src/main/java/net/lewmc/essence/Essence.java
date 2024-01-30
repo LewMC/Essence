@@ -13,6 +13,7 @@ import net.lewmc.essence.events.DeathEvent;
 import net.lewmc.essence.events.JoinEvent;
 import net.lewmc.essence.events.PlayerDamageEvent;
 import net.lewmc.essence.tabcompleter.*;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.UpdateUtil;
 import org.bstats.bukkit.Metrics;
@@ -121,45 +122,47 @@ public class Essence extends JavaPlugin {
      */
     private void loadCommands() {
         try {
-            this.getCommand("essence").setExecutor(new EssenceCommands(this));
+            CommandUtil command = new CommandUtil(this);
+            
+            if (command.isEnabled("essence")) { this.getCommand("essence").setExecutor(new EssenceCommands(this)); }
 
-            this.getCommand("gamemode").setExecutor(new GamemodeCommands(this));
-            this.getCommand("gmc").setExecutor(new GamemodeCommands(this));
-            this.getCommand("gms").setExecutor(new GamemodeCommands(this));
-            this.getCommand("gma").setExecutor(new GamemodeCommands(this));
-            this.getCommand("gmsp").setExecutor(new GamemodeCommands(this));
+            if (command.isEnabled("gamemode")) { this.getCommand("gamemode").setExecutor(new GamemodeCommands(this)); }
+            if (command.isEnabled("gmc")) { this.getCommand("gmc").setExecutor(new GamemodeCommands(this)); }
+            if (command.isEnabled("gms")) { this.getCommand("gms").setExecutor(new GamemodeCommands(this)); }
+            if (command.isEnabled("gma")) { this.getCommand("gma").setExecutor(new GamemodeCommands(this)); }
+            if (command.isEnabled("gmsp")) { this.getCommand("gmsp").setExecutor(new GamemodeCommands(this)); }
 
-            this.getCommand("anvil").setExecutor(new AnvilCommand(this));
-            this.getCommand("cartography").setExecutor(new CartographyCommand(this));
-            this.getCommand("craft").setExecutor(new CraftCommand(this));
-            this.getCommand("enderchest").setExecutor(new EnderchestCommand(this));
-            this.getCommand("grindstone").setExecutor(new GrindstoneCommand(this));
-            this.getCommand("loom").setExecutor(new LoomCommand(this));
-            this.getCommand("smithing").setExecutor(new SmithingCommand(this));
-            this.getCommand("stonecutter").setExecutor(new StonecutterCommand(this));
-            this.getCommand("trash").setExecutor(new TrashCommand(this));
+            if (command.isEnabled("anvil")) { this.getCommand("anvil").setExecutor(new AnvilCommand(this)); }
+            if (command.isEnabled("cartography")) { this.getCommand("cartography").setExecutor(new CartographyCommand(this)); }
+            if (command.isEnabled("craft")) { this.getCommand("craft").setExecutor(new CraftCommand(this)); }
+            if (command.isEnabled("enderchest")) { this.getCommand("enderchest").setExecutor(new EnderchestCommand(this)); }
+            if (command.isEnabled("grindstone")) { this.getCommand("grindstone").setExecutor(new GrindstoneCommand(this)); }
+            if (command.isEnabled("loom")) { this.getCommand("loom").setExecutor(new LoomCommand(this)); }
+            if (command.isEnabled("smithing")) { this.getCommand("smithing").setExecutor(new SmithingCommand(this)); }
+            if (command.isEnabled("stonecutter")) { this.getCommand("stonecutter").setExecutor(new StonecutterCommand(this)); }
+            if (command.isEnabled("trash")) { this.getCommand("trash").setExecutor(new TrashCommand(this)); }
 
-            this.getCommand("feed").setExecutor(new FeedCommand(this));
-            this.getCommand("heal").setExecutor(new HealCommand(this));
+            if (command.isEnabled("feed")) { this.getCommand("feed").setExecutor(new FeedCommand(this)); }
+            if (command.isEnabled("heal")) { this.getCommand("heal").setExecutor(new HealCommand(this)); }
 
-            this.getCommand("delhome").setExecutor(new DelhomeCommand(this));
-            this.getCommand("delwarp").setExecutor(new DelwarpCommand(this));
-            this.getCommand("home").setExecutor(new HomeCommand(this));
-            this.getCommand("homes").setExecutor(new HomesCommand(this));
-            this.getCommand("sethome").setExecutor(new SethomeCommand(this));
-            this.getCommand("setwarp").setExecutor(new SetwarpCommand(this));
-            this.getCommand("tp").setExecutor(new TeleportCommand(this));
-            this.getCommand("tprandom").setExecutor(new TprandomCommand(this));
-            this.getCommand("warp").setExecutor(new WarpCommand(this));
-            this.getCommand("warps").setExecutor(new WarpsCommand(this));
-            this.getCommand("back").setExecutor(new BackCommand(this));
+            if (command.isEnabled("delhome")) { this.getCommand("delhome").setExecutor(new DelhomeCommand(this)); }
+            if (command.isEnabled("delwarp")) { this.getCommand("delwarp").setExecutor(new DelwarpCommand(this)); }
+            if (command.isEnabled("home")) { this.getCommand("home").setExecutor(new HomeCommand(this)); }
+            if (command.isEnabled("homes")) { this.getCommand("homes").setExecutor(new HomesCommand(this)); }
+            if (command.isEnabled("sethome")) { this.getCommand("sethome").setExecutor(new SethomeCommand(this)); }
+            if (command.isEnabled("setwarp")) { this.getCommand("setwarp").setExecutor(new SetwarpCommand(this)); }
+            if (command.isEnabled("tp")) { this.getCommand("tp").setExecutor(new TeleportCommand(this)); }
+            if (command.isEnabled("tprandom")) { this.getCommand("tprandom").setExecutor(new TprandomCommand(this)); }
+            if (command.isEnabled("warp")) { this.getCommand("warp").setExecutor(new WarpCommand(this)); }
+            if (command.isEnabled("warps")) { this.getCommand("warps").setExecutor(new WarpsCommand(this)); }
+            if (command.isEnabled("back")) { this.getCommand("back").setExecutor(new BackCommand(this)); }
 
-            this.getCommand("broadcast").setExecutor(new BroadcastCommand(this));
+            if (command.isEnabled("broadcast")) { this.getCommand("broadcast").setExecutor(new BroadcastCommand(this)); }
 
-            this.getCommand("pay").setExecutor(new PayCommand(this));
-            this.getCommand("balance").setExecutor(new BalanceCommand(this));
+            if (command.isEnabled("pay")) { this.getCommand("pay").setExecutor(new PayCommand(this)); }
+            if (command.isEnabled("balance")) { this.getCommand("balance").setExecutor(new BalanceCommand(this)); }
 
-            this.getCommand("team").setExecutor(new TeamCommands(this));
+            if (command.isEnabled("team")) { this.getCommand("team").setExecutor(new TeamCommands(this)); }
         } catch (NullPointerException e) {
             this.log.severe("LoadCommands: Unable to load Essence commands.");
             this.log.info("");
