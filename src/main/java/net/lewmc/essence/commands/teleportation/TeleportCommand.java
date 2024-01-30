@@ -63,6 +63,38 @@ public class TeleportCommand implements CommandExecutor {
                     permission.not();
                 }
                 return true;
+            } else if (args.length == 4) {
+                if (permission.has("essence.teleport.other") && permission.has("essence.teleport.coord")) {
+                    String p = args[0];
+                    if (p.equalsIgnoreCase("@s")) {
+                        LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                        locationUtil.UpdateLastLocation(player);
+
+                        double x = Double.parseDouble(args[1]);
+                        double y = Double.parseDouble(args[2]);
+                        double z = Double.parseDouble(args[3]);
+                        Location location = new Location(player.getWorld(), x, y, z);
+                        player.teleport(location);
+                    } else {
+                        Player playerToTeleport = this.plugin.getServer().getPlayer(args[0]);
+                        if (playerToTeleport == null) {
+                            message.PrivateMessage("generic", "playernotfound");
+                            return true;
+                        }
+
+                        LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                        locationUtil.UpdateLastLocation(playerToTeleport);
+
+                        double x = Double.parseDouble(args[1]);
+                        double y = Double.parseDouble(args[2]);
+                        double z = Double.parseDouble(args[3]);
+                        Location location = new Location(playerToTeleport.getWorld(), x, y, z);
+                        playerToTeleport.teleport(location);
+                    }
+                } else {
+                    permission.not();
+                }
+                return true;
             } else if (args.length == 1) {
                 if (permission.has("essence.teleport.player")) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
