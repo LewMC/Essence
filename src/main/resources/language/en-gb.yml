@@ -105,6 +105,7 @@ warp:
 teleport:
   to: "§2[Essence] §aTeleporting to {{1}}..."
   usage: "§4[Essence] §cUsage: /tp <player> OR /tp <x> <y> <z>"
+  wait: "§6[Essence] §eTeleporting in {{1}} seconds..."
 tprandom:
   searching: "§6[Essence] §eFinding somewhere to go..."
   teleporting: "§2[Essence] §aTeleporting..."
