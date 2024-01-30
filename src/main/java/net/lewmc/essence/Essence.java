@@ -1,5 +1,6 @@
 package net.lewmc.essence;
 
+import net.lewmc.essence.commands.TeamCommands;
 import net.lewmc.essence.commands.chat.*;
 import net.lewmc.essence.commands.economy.BalanceCommand;
 import net.lewmc.essence.commands.economy.PayCommand;
@@ -10,6 +11,7 @@ import net.lewmc.essence.commands.stats.*;
 import net.lewmc.essence.commands.teleportation.*;
 import net.lewmc.essence.events.DeathEvent;
 import net.lewmc.essence.events.JoinEvent;
+import net.lewmc.essence.events.PlayerDamageEvent;
 import net.lewmc.essence.tabcompleter.*;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.UpdateUtil;
@@ -60,6 +62,7 @@ public class Essence extends JavaPlugin {
             UpdateUtil update = new UpdateUtil(this);
             update.VersionCheck();
             update.UpdateConfig();
+            update.UpdateLanguage();
 
             this.log.info("Startup completed.");
         }
@@ -155,6 +158,8 @@ public class Essence extends JavaPlugin {
 
             this.getCommand("pay").setExecutor(new PayCommand(this));
             this.getCommand("balance").setExecutor(new BalanceCommand(this));
+
+            this.getCommand("team").setExecutor(new TeamCommands(this));
         } catch (NullPointerException e) {
             this.log.severe("LoadCommands: Unable to load Essence commands.");
             this.log.info("");
@@ -173,6 +178,10 @@ public class Essence extends JavaPlugin {
 
         getCommand("gamemode").setTabCompleter(new GamemodeTabCompleter());
         getCommand("gm").setTabCompleter(new GamemodeTabCompleter());
+
+        getCommand("es").setTabCompleter(new EssenceTabCompleter());
+
+        getCommand("team").setTabCompleter(new TeamTabCompleter());
     }
 
     /**
@@ -181,5 +190,6 @@ public class Essence extends JavaPlugin {
     private void loadEventHandlers() {
         Bukkit.getServer().getPluginManager().registerEvents(new JoinEvent(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new DeathEvent(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerDamageEvent(this), this);
     }
 }
