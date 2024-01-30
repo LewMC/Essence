@@ -62,7 +62,7 @@ public class HomeCommand implements CommandExecutor {
                     chatHomeName = args[0].toLowerCase();
                     if (config.getSection(homeName) == null) {
                         config.close();
-                        message.PrivateMessage("home", "notfound");
+                        message.PrivateMessage("home", "notfound", args[0].toLowerCase());
                         return true;
                     }
                 } else {
@@ -70,7 +70,7 @@ public class HomeCommand implements CommandExecutor {
                     chatHomeName = "home";
                     if (config.getSection(homeName) == null) {
                         config.close();
-                        message.PrivateMessage("home", "notfound");
+                        message.PrivateMessage("home", "noneset");
                         return true;
                     }
                 }

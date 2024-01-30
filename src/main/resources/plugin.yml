@@ -1,5 +1,5 @@
 name: Essence
-version: 1.2.0
+version: 1.3.0-SNAPSHOT
 main: net.lewmc.essence.Essence
 api-version: 1.19
 author: LewMC
@@ -131,6 +131,10 @@ commands:
     description: Teleport to a random location.
     usage: /<command>
     aliases: ['tpr', 'rtp']
+  team:
+    description: Manage teams.
+    usage: /<command>
+    aliases: ['group']
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -272,3 +276,18 @@ permissions:
     description: Use /pay command.
   essence.economy.balance:
     description: Use /balance command.
+  essence.team.*:
+    description: Allows players to access all teams commands.
+    default: op
+    children:
+      essence.team.join: true
+      essence.team.create: true
+      essence.team.manage: true
+  essence.team.join:
+    description: Join a team.
+  essence.team.create:
+    description: Create a team.
+  essence.team.manage:
+    description: Manage any teams they are the leader of.
+  essence.team.list:
+    description: View team information.
