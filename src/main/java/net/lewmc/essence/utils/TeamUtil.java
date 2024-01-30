@@ -4,6 +4,7 @@ import net.lewmc.essence.Essence;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -29,9 +30,14 @@ public class TeamUtil {
             if (this.data.createFile("/data/teams/"+name+".yml")) {
                 this.loadData(name);
                 this.data.createSection("members");
-                ConfigurationSection cs = this.data.getSection("members");
-                cs.set("leader", leader.toString());
-                cs.set("default", null);
+                ConfigurationSection members = this.data.getSection("members");
+                members.set("leader", leader.toString());
+                members.set("default", null);
+
+                this.data.createSection("rules");
+                ConfigurationSection rules = this.data.getSection("rules");
+                rules.set("allow-friendly-fire", true);
+
                 this.data.save();
 
                 this.data.load(data.playerDataFile(leader));
@@ -322,5 +328,58 @@ public class TeamUtil {
         this.data.save();
 
         return this.data.deleteFile("/data/teams/" + team + ".yml");
+    }
+
+    public boolean areTeammates(Player p1, Player p2) {
+        this.data.load(this.data.playerDataFile(p1));
+        ConfigurationSection p1config = this.data.getSection("user");
+        if (p1config == null) { return false; }
+        String p1team = p1config.getString("team");
+        this.data.close();
+
+        this.data.load(this.data.playerDataFile(p2));
+        ConfigurationSection p2config = this.data.getSection("user");
+        if (p2config == null) { return false; }
+        String p2team = p1config.getString("team");
+        this.data.close();
+
+        return (p1team.equalsIgnoreCase(p2team));
+    }
+
+    public boolean getRule(String team, String rule) {
+        this.loadData(team);
+        ConfigurationSection cs = this.data.getSection("rules");
+        if (cs == null) {
+            this.data.createSection("rules");
+            this.data.getSection("rules");
+        }
+
+        boolean result = cs.getBoolean(rule);
+        this.data.save();
+
+        return result;
+    }
+
+    public boolean setRule(String team, String rule, String value) {
+        boolean booleanValue;
+        if (value.equalsIgnoreCase("true")) {
+            booleanValue = true;
+        } else if (value.equalsIgnoreCase("false")) {
+            booleanValue = false;
+        } else {
+            return false;
+        }
+
+        this.loadData(team);
+        ConfigurationSection cs = this.data.getSection("rules");
+        if (cs == null) {
+            this.data.createSection("rules");
+            this.data.getSection("rules");
+        }
+
+        cs.set(rule, booleanValue);
+        this.data.save();
+
+        return true;
     }
 }

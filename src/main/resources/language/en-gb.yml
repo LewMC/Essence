@@ -157,3 +157,8 @@ team:
   usernotmember: "§4[Essence] §c{{1}} is not a member of {{2}}."
   usernotrequested: "§4[Essence] §c{{1}} has not requested to join {{2}}."
   disbanded: "§2[Essence] §aYou've disbanded {{1}}."
+  rulechanged: "§2[Essence] §aRule {{1}} set to {{2}}."
+  cantchangerule: "§4[Essence] §cUnable to change rule {{1}} to {{2}}, please ensure it is 'true' or 'false'."
+  rulenotfound: "§4[Essence] §cRule {{1}} does not exist."
+  rulemissing: "§4[Essence] §cPlease specify the rule you'd like to change."
+  rulevalue: "§6[Essence] §eRule {{1}} is currently set to {{2}}."

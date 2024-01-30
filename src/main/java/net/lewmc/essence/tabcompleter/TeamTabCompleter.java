@@ -20,6 +20,10 @@ public class TeamTabCompleter implements TabCompleter {
         String[] keys;
         if (args.length == 1) {
             keys = new String[]{"create", "join", "requests", "accept", "decline", "leave", "changeleader", "kick", "disband"};
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("rule")) {
+            keys = new String[]{"allow-friendly-fire"};
+        } else if (args.length == 3) {
+            keys = new String[]{"true", "false"};
         } else {
             keys = new String[]{};
         }

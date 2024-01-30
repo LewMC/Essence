@@ -232,6 +232,38 @@ public class TeamCommands implements CommandExecutor {
                     } else {
                         permission.not();
                     }
+                } else if (args[0].equalsIgnoreCase("rule")) {
+                    if (permission.has("essence.team.manage")) {
+                        String playerTeam = team.getPlayerTeam(player.getUniqueId());
+                        if (playerTeam != null) {
+                            if (team.isLeader(playerTeam, player.getUniqueId())) {
+                                if (args.length > 1 && args[1].equalsIgnoreCase("allow-friendly-fire")) {
+                                    if (args.length > 2) {
+                                        if (team.setRule(playerTeam, args[1], args[2])) {
+                                            message.PrivateMessage("team", "rulechanged", args[1], args[2]);
+                                        } else {
+                                            message.PrivateMessage("team", "cantchangerule", args[1], args[2]);
+                                        }
+                                    } else {
+                                        message.PrivateMessage("team", "rulevalue", args[1], String.valueOf(team.getRule(playerTeam, args[1])));
+                                    }
+                                } else {
+                                    if (args.length > 1) {
+                                        message.PrivateMessage("team", "rulenotfound", args[1]);
+                                    } else {
+                                        message.PrivateMessage("team", "rulemissing");
+                                    }
+                                }
+                            } else {
+                                message.PrivateMessage("team", "leaderrequired");
+                                return true;
+                            }
+                        } else {
+                            message.PrivateMessage("team", "noteam");
+                        }
+                    } else {
+                        permission.not();
+                    }
                 } else {
                     if (permission.has("essence.team.list")) {
                         if (team.exists(args[0])) {

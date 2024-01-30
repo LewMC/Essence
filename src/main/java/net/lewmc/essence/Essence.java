@@ -11,6 +11,7 @@ import net.lewmc.essence.commands.stats.*;
 import net.lewmc.essence.commands.teleportation.*;
 import net.lewmc.essence.events.DeathEvent;
 import net.lewmc.essence.events.JoinEvent;
+import net.lewmc.essence.events.PlayerDamageEvent;
 import net.lewmc.essence.tabcompleter.*;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.UpdateUtil;
@@ -189,5 +190,6 @@ public class Essence extends JavaPlugin {
     private void loadEventHandlers() {
         Bukkit.getServer().getPluginManager().registerEvents(new JoinEvent(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new DeathEvent(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerDamageEvent(this), this);
     }
 }
