@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Set;
+import java.util.UUID;
 
 public class DataUtil {
     private final Essence plugin;
@@ -75,7 +76,7 @@ public class DataUtil {
      */
     public void save() {
         try {
-            this.plugin.getConfig().save(configFile);
+            this.plugin.getConfig().save(this.configFile);
         } catch (IOException e) {
             this.log.warn("Error saving configuration: " + e);
             this.message.PrivateMessage("generic", "configexception");
@@ -124,7 +125,11 @@ public class DataUtil {
 
         if (!fsFile.exists()) {
             try {
-                return fsFile.createNewFile();
+                if (fsFile.getParentFile().mkdirs()) {
+                    return fsFile.createNewFile();
+                } else {
+                    return false;
+                }
             } catch (IOException e) {
                 this.log.severe("IOException whilst creating data file '"+file+"': "+e);
                 return false;
@@ -147,6 +152,15 @@ public class DataUtil {
      */
     public String playerDataFile(Player player) {
         return "/data/players/" +player.getUniqueId()+".yml";
+    }
+
+    /**
+     * Return the location of the player's data file.
+     * @param player The UUID of the player.
+     * @return The data file URI inside the /plugin/essence folder.
+     */
+    public String playerDataFile(UUID player) {
+        return "/data/players/" +player+".yml";
     }
 }
 
