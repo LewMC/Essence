@@ -198,6 +198,7 @@ permissions:
       essence.teleport.player: true
       essence.teleport.back: true
       essence.teleport.random: true
+      essence.teleport.other: true
   essence.teleport.coord:
     description: Allows players to teleport to coordinates.
   essence.teleport.player:
@@ -206,6 +207,8 @@ permissions:
     description: Go back to your last location before teleporting.
   essence.teleport.random:
     description: Teleport to a random location.
+  essence.teleport.other:
+    description: Teleport another player.
   essence.warp.*:
     description: Allows players to use and manage warps.
     default: op
