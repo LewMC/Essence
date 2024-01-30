@@ -34,7 +34,8 @@ public class JoinEvent implements Listener {
             if (data.createFile(playerDataFile)) {
                 log.info("Created player data!");
             } else {
-                log.warn("Unable to create player data!");
+                log.warn("Unable to create player data! This may cause some commands to stop working.");
+                return;
             }
 
             data.load(playerDataFile);
@@ -42,7 +43,18 @@ public class JoinEvent implements Listener {
             ConfigurationSection economy = data.getSection("economy");
             economy.set("balance", plugin.getConfig().getDouble("economy.start-money"));
             economy.set("accepting-payments", true);
-            data.save();
+            data.createSection("user");
+            ConfigurationSection user = data.getSection("user");
+            user.set("last-known-name", event.getPlayer().getName());
+        } else {
+            data.load(playerDataFile);
+            ConfigurationSection cs = data.getSection("user");
+            if (cs == null) {
+                data.createSection("user");
+                cs = data.getSection("user");
+            }
+            cs.set("last-known-name", event.getPlayer().getName());
         }
+        data.save();
     }
 }
