@@ -66,6 +66,35 @@ public class TeamUtil {
         }
     }
 
+    public String requestsToJoin(String team) {
+        if (this.data.fileExists("/data/teams/"+team+".yml")) {
+            this.loadData(team);
+            ConfigurationSection cs = this.data.getSection("members");
+            List<String> requests = cs.getStringList("requests");
+            this.data.close();
+
+            StringBuilder requestList = new StringBuilder();
+            int i = 0;
+
+            for (String key : requests) {
+                this.data.load(data.playerDataFile(UUID.fromString(key)));
+                ConfigurationSection user = this.data.getSection("user");
+                if (i == 0) {
+                    requestList.append(user.getString("last-known-name"));
+                } else {
+                    requestList.append(", ").append(user.getString("last-known-name"));
+                }
+                this.data.close();
+                i++;
+            }
+
+            return requestList.toString();
+        } else {
+            message.PrivateMessage("team", "notfound");
+            return "";
+        }
+    }
+
     public boolean isLeader(String team, UUID player) {
         if (this.data.fileExists("/data/teams/"+team+".yml")) {
             this.loadData(team);
@@ -79,11 +108,15 @@ public class TeamUtil {
     }
 
     public @Nullable String getPlayerTeam(UUID player) {
-        this.data.load("/data/players/"+player.toString());
+        this.data.load(data.playerDataFile(player));
         ConfigurationSection cs = this.data.getSection("team");
-        String team = cs.getString("name");
-        this.data.close();
-        return team;
+        if (cs == null) {
+            return null;
+        } else {
+            String team = cs.getString("name");
+            this.data.close();
+            return team;
+        }
     }
 
     public void loadData(String team) {

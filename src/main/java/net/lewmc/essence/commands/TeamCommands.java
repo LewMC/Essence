@@ -45,7 +45,7 @@ public class TeamCommands implements CommandExecutor {
         Player player = (Player) commandSender;
 
         if (command.getName().equalsIgnoreCase("team")) {
-            if (args.length > 1) {
+            if (args.length > 0) {
                 TeamUtil team = new TeamUtil(this.plugin, message);
                 if (args[0].equalsIgnoreCase("create")) {
                     if (permission.has("essence.team.create")) {
@@ -77,7 +77,7 @@ public class TeamCommands implements CommandExecutor {
                         String playerTeam = team.getPlayerTeam(player.getUniqueId());
                         if (playerTeam != null) {
                             if (team.isLeader(playerTeam, player.getUniqueId())) {
-                                message.PrivateMessage("team", "teamrequests", playerTeam, "Test");
+                                message.PrivateMessage("team", "teamrequests", playerTeam, team.requestsToJoin(playerTeam));
                                 message.PrivateMessage("team", "howtoaccept");
                                 message.PrivateMessage("team", "howtodecline");
                             } else {
