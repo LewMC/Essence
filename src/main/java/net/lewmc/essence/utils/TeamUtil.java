@@ -302,4 +302,25 @@ public class TeamUtil {
 
         return false;
     }
+
+    public boolean disband(String team, String teamLeader) {
+        this.loadData(team);
+        ConfigurationSection cs = data.getSection("members");
+        List<String> members = cs.getStringList("default");
+        this.data.close();
+
+        for (String key : members) {
+            this.data.load(data.playerDataFile(UUID.fromString(key)));
+            ConfigurationSection user = this.data.getSection("user");
+            user.set("team", null);
+            this.data.save();
+        }
+
+        this.data.load(data.playerDataFile(UUID.fromString(teamLeader)));
+        ConfigurationSection user = this.data.getSection("user");
+        user.set("team", null);
+        this.data.save();
+
+        return this.data.deleteFile("/data/teams/" + team + ".yml");
+    }
 }

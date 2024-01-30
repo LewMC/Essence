@@ -70,7 +70,7 @@ help:
   teamdecline: "§6[Essence] §e/team decline <name> - Decline join request."
   teamtransfer: "§6[Essence] §e/team changeleader <name> - Change leader."
   teamkick: "§6[Essence] §e/team kick <name> - Kick a member from your team."
-  teamdisband: "§6[Essence] §e/team disband - Disband your team."
+  teamdisband: "§6[Essence] §e/team disband - Disband (delete) your team."
   help: "§6[Essence] --------------- Essence Help ---------------"
   helpinventory: "§6[Essence] §e/es help inventory - Inventory commands."
   helpgamemode: "§6[Essence] §e/es help gamemode - Gamemode commands."
@@ -156,3 +156,4 @@ team:
   kicked: "§2[Essence] §a{{1}} was kicked from {{2}}."
   usernotmember: "§4[Essence] §c{{1}} is not a member of {{2}}."
   usernotrequested: "§4[Essence] §c{{1}} has not requested to join {{2}}."
+  disbanded: "§2[Essence] §aYou've disbanded {{1}}."

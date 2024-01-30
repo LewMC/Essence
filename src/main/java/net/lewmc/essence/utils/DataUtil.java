@@ -163,5 +163,10 @@ public class DataUtil {
     public String playerDataFile(UUID player) {
         return "/data/players/" +player+".yml";
     }
+
+    public boolean deleteFile(String filePath) {
+        File file = new File(filePath);
+        return file.delete();
+    }
 }
 

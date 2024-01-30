@@ -212,6 +212,26 @@ public class TeamCommands implements CommandExecutor {
                     } else {
                         permission.not();
                     }
+                } else if (args[0].equalsIgnoreCase("disband")) {
+                    if (permission.has("essence.team.manage")) {
+                        String playerTeam = team.getPlayerTeam(player.getUniqueId());
+                        if (playerTeam != null) {
+                            if (team.isLeader(playerTeam, player.getUniqueId())) {
+                                if (team.disband(playerTeam, player.getUniqueId().toString())) {
+                                    message.PrivateMessage("team", "disbanded", playerTeam);
+                                } else {
+                                    message.PrivateMessage("generic", "exception");
+                                }
+                            } else {
+                                message.PrivateMessage("team", "leaderrequired");
+                                return true;
+                            }
+                        } else {
+                            message.PrivateMessage("team", "noteam");
+                        }
+                    } else {
+                        permission.not();
+                    }
                 } else {
                     if (permission.has("essence.team.list")) {
                         if (team.exists(args[0])) {
