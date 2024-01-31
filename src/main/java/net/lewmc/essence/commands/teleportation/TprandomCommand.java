@@ -66,6 +66,8 @@ public class TprandomCommand implements CommandExecutor {
 
                 LocationUtil loc = new LocationUtil(this.plugin, message);
 
+                teleUtil.setCooldown(player, "randomtp");
+
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -85,8 +87,6 @@ public class TprandomCommand implements CommandExecutor {
                                     LocationUtil locationUtil = new LocationUtil(plugin, message);
                                     locationUtil.UpdateLastLocation(player);
                                     teleportPlayer(player, teleportLocation);
-
-                                    teleUtil.setCooldown(player, "randomtp");
                                 }
                             }.runTask(plugin);
                         } else {
