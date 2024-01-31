@@ -289,6 +289,7 @@ permissions:
       essence.team.join: true
       essence.team.create: true
       essence.team.manage: true
+      essence.team.list: true
   essence.team.join:
     description: Join a team.
   essence.team.create:
