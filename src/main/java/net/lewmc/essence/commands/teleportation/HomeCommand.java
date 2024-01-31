@@ -108,6 +108,8 @@ public class HomeCommand implements CommandExecutor {
                     message.PrivateMessage("teleport", "wait", String.valueOf(waitTime));
                 }
 
+                teleUtil.setCooldown(player, "home");
+
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -122,8 +124,6 @@ public class HomeCommand implements CommandExecutor {
 
                         player.teleport(loc);
                         config.close();
-
-                        teleUtil.setCooldown(player, "home");
 
                         message.PrivateMessage("home", "teleporting", chatHomeName);
                     }
