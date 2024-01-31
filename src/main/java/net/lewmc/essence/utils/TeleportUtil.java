@@ -4,15 +4,17 @@ import net.lewmc.essence.Essence;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.time.DateTimeException;
 import java.time.Duration;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class TeleportUtil {
     private final Essence plugin;
+    private final LogUtil log;
 
     public TeleportUtil(Essence plugin) {
         this.plugin = plugin;
+        this.log = new LogUtil(plugin);
     }
 
     public boolean cooldownSurpassed(Player player, String type) {
@@ -30,8 +32,16 @@ public class TeleportUtil {
 
         data.close();
 
-        LocalTime lastEvent = LocalTime.parse(last, DateTimeFormatter.ISO_LOCAL_TIME);
-        LocalTime currentTime = LocalTime.now();
+        LocalDateTime lastEvent;
+        try {
+            lastEvent = LocalDateTime.parse(last);
+        } catch (DateTimeException e) {
+            this.log.warn("DateTimeException: "+e);
+            this.log.warn("Unable to calculate cooldown, the field may be missing or corrupted. Resetting...");
+            return true;
+        }
+
+        LocalDateTime currentTime = LocalDateTime.now();
 
         Duration timeElapsed = Duration.between(lastEvent, currentTime);
 
@@ -48,7 +58,7 @@ public class TeleportUtil {
             cs = data.getSection("cooldown");
         }
 
-        LocalTime currentTime = LocalTime.now();
+        LocalDateTime currentTime = LocalDateTime.now();
 
         cs.set(type, currentTime.toString());
 
@@ -72,9 +82,16 @@ public class TeleportUtil {
 
         data.close();
 
-        LocalTime lastEvent = LocalTime.parse(last, DateTimeFormatter.ISO_LOCAL_TIME);
+        LocalDateTime lastEvent;
+        try {
+            lastEvent = LocalDateTime.parse(last);
+        } catch (DateTimeException e) {
+            this.log.warn("DateTimeException: "+e);
+            this.log.warn("Unable to calculate cooldown, the field may be missing or corrupted. Resetting...");
+            return 0;
+        }
 
-        LocalTime currentTime = LocalTime.now();
+        LocalDateTime currentTime = LocalDateTime.now();
         Duration timeElapsed = Duration.between(lastEvent, currentTime);
 
         return Math.toIntExact(Math.max(0, (long) cooldown - timeElapsed.getSeconds()));

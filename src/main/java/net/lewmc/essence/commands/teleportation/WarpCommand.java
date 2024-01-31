@@ -81,6 +81,8 @@ public class WarpCommand implements CommandExecutor {
                         message.PrivateMessage("teleport", "wait", String.valueOf(waitTime));
                     }
 
+                    teleUtil.setCooldown(player, "warp");
+
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -96,8 +98,6 @@ public class WarpCommand implements CommandExecutor {
 
                             player.teleport(loc);
                             config.close();
-
-                            teleUtil.setCooldown(player, "warp");
 
                             message.PrivateMessage("warp", "teleporting", args[0].toLowerCase());
                         }
