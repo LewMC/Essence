@@ -23,4 +23,10 @@ public class CommandUtil {
 
         return true;
     }
+
+    public boolean isPaper() {
+        String software = this.plugin.getServer().getName();
+
+        return software.equals("Paper");
+    }
 }

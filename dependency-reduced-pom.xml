@@ -4,7 +4,7 @@
   <groupId>net.lewmc</groupId>
   <artifactId>essence</artifactId>
   <name>Essence</name>
-  <version>1.3.1</version>
+  <version>1.4.0-SNAPSHOT</version>
   <build>
     <resources>
       <resource>
@@ -45,7 +45,7 @@
   </build>
   <repositories>
     <repository>
-      <id>papermc-repo</id>
+      <id>spigot-repo</id>
       <url>https://repo.papermc.io/repository/maven-public/</url>
     </repository>
     <repository>

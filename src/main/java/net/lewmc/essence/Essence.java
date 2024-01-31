@@ -53,6 +53,7 @@ public class Essence extends JavaPlugin {
         }
 
         checkForEssentials();
+        checkForPaper();
 
         if (!isDisabled) {
             initFileSystem();
@@ -66,6 +67,16 @@ public class Essence extends JavaPlugin {
             update.UpdateLanguage();
 
             this.log.info("Startup completed.");
+        }
+    }
+
+    private void checkForPaper() {
+        CommandUtil cmd = new CommandUtil(this);
+        if (!cmd.isPaper()) {
+            this.log.severe("You are running " + this.getServer().getName());
+            this.log.severe("Some commands have been disabled, please see https://bit.ly/essencepaper for help.");
+            this.log.severe("To get full plugin support please consider using Paper instead.");
+            this.log.severe("You can download it from https://papermc.io");
         }
     }
 
