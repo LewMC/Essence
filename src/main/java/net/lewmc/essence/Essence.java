@@ -24,7 +24,6 @@ import java.io.File;
 
 public class Essence extends JavaPlugin {
     private final LogUtil log = new LogUtil(this);
-    private boolean isDisabled = false;
 
     @Override
     public void onEnable() {
@@ -55,19 +54,17 @@ public class Essence extends JavaPlugin {
         checkForEssentials();
         checkForPaper();
 
-        if (!isDisabled) {
-            initFileSystem();
-            loadCommands();
-            loadEventHandlers();
-            loadTabCompleters();
+        initFileSystem();
+        loadCommands();
+        loadEventHandlers();
+        loadTabCompleters();
 
-            UpdateUtil update = new UpdateUtil(this);
-            update.VersionCheck();
-            update.UpdateConfig();
-            update.UpdateLanguage();
+        UpdateUtil update = new UpdateUtil(this);
+        update.VersionCheck();
+        update.UpdateConfig();
+        update.UpdateLanguage();
 
-            this.log.info("Startup completed.");
-        }
+        this.log.info("Startup completed.");
     }
 
     private void checkForPaper() {
@@ -88,13 +85,10 @@ public class Essence extends JavaPlugin {
             getServer().getPluginManager().getPlugin("Essentials") != null ||
             getServer().getPluginManager().getPlugin("EssentialsX") != null
         ) {
-            this.isDisabled = true;
             this.log.severe("Essentials is installed alongside Essence.");
-            this.log.severe("Essence's commands clash with Essentials, to prevent issues with data Essence is now disabled.");
+            this.log.severe("Essence's commands clash with Essentials, this may cause issues later down the line.");
             this.log.severe("If you require commands that are in Essentials but not in Essence, please remove Essence from the server.");
             this.log.severe("All Essence commands are implemented in Essentials in a similar way.");
-            this.log.info("");
-            getServer().getPluginManager().disablePlugin(this);
         }
     }
 
