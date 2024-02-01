@@ -66,8 +66,6 @@ public class TprandomCommand implements CommandExecutor {
 
                 LocationUtil loc = new LocationUtil(this.plugin, message);
 
-                teleUtil.setCooldown(player, "randomtp");
-
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -78,6 +76,7 @@ public class TprandomCommand implements CommandExecutor {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
+                                    teleUtil.setCooldown(player, "randomtp");
                                     Chunk chunk = teleportLocation.getChunk();
                                     if (!chunk.isLoaded()) {
                                         message.PrivateMessage("tprandom", "generating");
