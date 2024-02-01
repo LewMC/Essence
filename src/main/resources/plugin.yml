@@ -66,7 +66,7 @@ commands:
   trash:
     description: Open a disposal menu.
     usage: /<command>
-    aliases: ['disposal']
+    aliases: ['disposal','garbage']
   tp:
     description: Teleport to a player or coordinates.
     usage: /<command> <player> OR /<command> <x> <y> <z>
