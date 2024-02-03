@@ -1,5 +1,5 @@
 name: Essence
-version: 1.4.0-SNAPSHOT
+version: 1.3.2
 main: net.lewmc.essence.Essence
 api-version: 1.19
 author: LewMC

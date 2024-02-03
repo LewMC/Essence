@@ -337,11 +337,19 @@ public class TeamUtil {
         String p1team = p1config.getString("team");
         this.data.close();
 
+        if (p1team == null) {
+            return false;
+        }
+
         this.data.load(this.data.playerDataFile(p2));
         ConfigurationSection p2config = this.data.getSection("user");
         if (p2config == null) { return false; }
         String p2team = p1config.getString("team");
         this.data.close();
+
+        if (p2team == null) {
+            return false;
+        }
 
         return (p1team.equalsIgnoreCase(p2team));
     }
