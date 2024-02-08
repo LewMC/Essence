@@ -20,7 +20,11 @@ public class JoinEvent implements Listener {
         plugin.reloadConfig();
         if (plugin.getConfig().getBoolean("motd.enabled")) {
             if (plugin.getConfig().getString("motd.message") != null) {
-                event.getPlayer().sendMessage(plugin.getConfig().getString("motd.message"));
+                String message = plugin.getConfig().getString("motd.message");
+                if (message != null) {
+                    message = message.replace("{{version}}", this.plugin.getDescription().getVersion());
+                    event.getPlayer().sendMessage(message);
+                }
             }
         }
 
