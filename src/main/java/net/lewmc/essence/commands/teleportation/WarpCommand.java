@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public class WarpCommand implements CommandExecutor {
@@ -45,10 +46,17 @@ public class WarpCommand implements CommandExecutor {
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
+        TeleportUtil teleUtil = new TeleportUtil(this.plugin);
 
         if (command.getName().equalsIgnoreCase("warp")) {
             if (permission.has("essence.warp.use")) {
+                int waitTime = plugin.getConfig().getInt("teleportation.warp.wait");
                 if (args.length > 0) {
+                    if (!teleUtil.cooldownSurpassed(player, "warp")) {
+                        message.PrivateMessage("teleport", "tryagain", String.valueOf(teleUtil.cooldownRemaining(player, "warp")));
+                        return true;
+                    }
+
                     DataUtil config = new DataUtil(this.plugin, message);
                     config.load("data/warps.yml");
 
@@ -66,23 +74,34 @@ public class WarpCommand implements CommandExecutor {
                         this.log.warn("Error: world is null, please check configuration file.");
                         return true;
                     }
-
                     LocationUtil locationUtil = new LocationUtil(this.plugin, message);
                     locationUtil.UpdateLastLocation(player);
 
-                    Location loc = new Location(
-                        Bukkit.getServer().getWorld(cs.getString("world")),
-                        cs.getDouble("X"),
-                        cs.getDouble("Y"),
-                        cs.getDouble("Z"),
-                        (float) cs.getDouble("yaw"),
-                        (float) cs.getDouble("pitch")
-                    );
+                    if (waitTime > 0) {
+                        message.PrivateMessage("teleport", "wait", String.valueOf(waitTime));
+                    }
 
-                    player.teleport(loc);
-                    config.close();
+                    teleUtil.setCooldown(player, "warp");
 
-                    message.PrivateMessage("warp", "teleporting", args[0].toLowerCase());
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+
+                            Location loc = new Location(
+                                    Bukkit.getServer().getWorld(cs.getString("world")),
+                                    cs.getDouble("X"),
+                                    cs.getDouble("Y"),
+                                    cs.getDouble("Z"),
+                                    (float) cs.getDouble("yaw"),
+                                    (float) cs.getDouble("pitch")
+                            );
+
+                            player.teleport(loc);
+                            config.close();
+
+                            message.PrivateMessage("warp", "teleporting", args[0].toLowerCase());
+                        }
+                    }.runTaskLater(plugin, waitTime * 20L);
 
                     return true;
                 } else {

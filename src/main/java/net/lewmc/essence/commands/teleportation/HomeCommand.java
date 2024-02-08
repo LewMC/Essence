@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public class HomeCommand implements CommandExecutor {
@@ -46,9 +47,16 @@ public class HomeCommand implements CommandExecutor {
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
+        TeleportUtil teleUtil = new TeleportUtil(this.plugin);
 
         if (command.getName().equalsIgnoreCase("home")) {
             if (permission.has("essence.home.use")) {
+                int waitTime = plugin.getConfig().getInt("teleportation.home.wait");
+                if (!teleUtil.cooldownSurpassed(player, "home")) {
+                    message.PrivateMessage("teleport", "tryagain", String.valueOf(teleUtil.cooldownRemaining(player, "home")));
+                    return true;
+                }
+
                 DataUtil config = new DataUtil(this.plugin, message);
                 config.load(config.playerDataFile(player));
 
@@ -62,7 +70,7 @@ public class HomeCommand implements CommandExecutor {
                     chatHomeName = args[0].toLowerCase();
                     if (config.getSection(homeName) == null) {
                         config.close();
-                        message.PrivateMessage("home", "notfound");
+                        message.PrivateMessage("home", "notfound", args[0].toLowerCase());
                         return true;
                     }
                 } else {
@@ -70,7 +78,7 @@ public class HomeCommand implements CommandExecutor {
                     chatHomeName = "home";
                     if (config.getSection(homeName) == null) {
                         config.close();
-                        message.PrivateMessage("home", "notfound");
+                        message.PrivateMessage("home", "noneset");
                         return true;
                     }
                 }
@@ -96,26 +104,34 @@ public class HomeCommand implements CommandExecutor {
                 LocationUtil locationUtil = new LocationUtil(this.plugin, message);
                 locationUtil.UpdateLastLocation(player);
 
+                if (waitTime > 0) {
+                    message.PrivateMessage("teleport", "wait", String.valueOf(waitTime));
+                }
 
-                Location loc = new Location(
-                    Bukkit.getServer().getWorld(cs.getString("world")),
-                    cs.getDouble("X"),
-                    cs.getDouble("Y"),
-                    cs.getDouble("Z"),
-                    (float) cs.getDouble("yaw"),
-                    (float) cs.getDouble("pitch")
-                );
+                teleUtil.setCooldown(player, "home");
 
-                player.teleport(loc);
-                config.close();
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Location loc = new Location(
+                                Bukkit.getServer().getWorld(cs.getString("world")),
+                                cs.getDouble("X"),
+                                cs.getDouble("Y"),
+                                cs.getDouble("Z"),
+                                (float) cs.getDouble("yaw"),
+                                (float) cs.getDouble("pitch")
+                        );
 
-                message.PrivateMessage("home", "teleporting", chatHomeName);
+                        player.teleport(loc);
+                        config.close();
 
-            } else {
-                permission.not();
+                        message.PrivateMessage("home", "teleporting", chatHomeName);
+                    }
+                }.runTaskLater(plugin, waitTime * 20L);
             }
-            return true;
+        } else {
+            permission.not();
         }
-        return false;
+        return true;
     }
 }

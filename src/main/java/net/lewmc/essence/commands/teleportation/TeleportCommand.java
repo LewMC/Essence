@@ -40,12 +40,17 @@ public class TeleportCommand implements CommandExecutor {
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
+        Player player = null;
+
+        if (console(commandSender) && args.length != 4) {
             this.log.noConsole();
             return true;
         }
+
+        if (!console(commandSender)) {
+            player = (Player) commandSender;
+        }
         MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("tp")) {
@@ -59,6 +64,38 @@ public class TeleportCommand implements CommandExecutor {
                     double z = Double.parseDouble(args[2]);
                     Location location = new Location(player.getWorld(), x, y, z);
                     player.teleport(location);
+                } else {
+                    permission.not();
+                }
+                return true;
+            } else if (args.length == 4) {
+                if (permission.has("essence.teleport.other") && permission.has("essence.teleport.coord")) {
+                    String p = args[0];
+                    if (p.equalsIgnoreCase("@s")) {
+                        LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                        locationUtil.UpdateLastLocation(player);
+
+                        double x = Double.parseDouble(args[1]);
+                        double y = Double.parseDouble(args[2]);
+                        double z = Double.parseDouble(args[3]);
+                        Location location = new Location(player.getWorld(), x, y, z);
+                        player.teleport(location);
+                    } else {
+                        Player playerToTeleport = this.plugin.getServer().getPlayer(args[0]);
+                        if (playerToTeleport == null) {
+                            message.PrivateMessage("generic", "playernotfound");
+                            return true;
+                        }
+
+                        LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                        locationUtil.UpdateLastLocation(playerToTeleport);
+
+                        double x = Double.parseDouble(args[1]);
+                        double y = Double.parseDouble(args[2]);
+                        double z = Double.parseDouble(args[3]);
+                        Location location = new Location(playerToTeleport.getWorld(), x, y, z);
+                        playerToTeleport.teleport(location);
+                    }
                 } else {
                     permission.not();
                 }
@@ -87,5 +124,9 @@ public class TeleportCommand implements CommandExecutor {
         }
 
         return false;
+    }
+
+    public boolean console(CommandSender commandSender) {
+        return !(commandSender instanceof Player);
     }
 }

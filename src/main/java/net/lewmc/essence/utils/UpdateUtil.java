@@ -43,6 +43,7 @@ public class UpdateUtil {
                     } else {
                         log.warn("UPDATE > There's a new version of Essence available.");
                         log.warn("UPDATE > Your version: "+this.plugin.getDescription().getVersion()+" - latest version: "+response);
+                        log.warn("UPDATE > You can download the latest version from lewmc.net/essence");
                         this.log.info("");
                     }
                 } else {
@@ -69,6 +70,16 @@ public class UpdateUtil {
             ConfigUpdater.update(plugin, "config.yml", configFile);
         } catch (IOException e) {
             this.log.warn("Unable to update configuration: "+e);
+        }
+    }
+
+    public void UpdateLanguage() {
+        File languageFile = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "en-gb.yml");
+
+        try {
+            ConfigUpdater.update(plugin, "language/en-gb.yml", languageFile);
+        } catch (IOException e) {
+            this.log.warn("Unable to update en-gb language file: "+e);
         }
     }
 }

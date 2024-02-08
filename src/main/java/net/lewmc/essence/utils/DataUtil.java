@@ -8,7 +8,12 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.util.Set;
+import java.util.UUID;
 
 public class DataUtil {
     private final Essence plugin;
@@ -75,11 +80,13 @@ public class DataUtil {
      */
     public void save() {
         try {
-            this.plugin.getConfig().save(configFile);
+            this.plugin.getConfig().save(this.configFile);
         } catch (IOException e) {
             this.log.warn("Error saving configuration: " + e);
             this.message.PrivateMessage("generic", "configexception");
         }
+
+        this.configFile = null;
 
         try {
             this.plugin.getConfig().load(this.defaultConfig);
@@ -93,6 +100,7 @@ public class DataUtil {
      * Closes the custom config file.
      */
     public void close() {
+        this.configFile = null;
         try {
             this.plugin.getConfig().load(this.defaultConfig);
         } catch (IOException | InvalidConfigurationException e) {
@@ -124,12 +132,14 @@ public class DataUtil {
 
         if (!fsFile.exists()) {
             try {
+                fsFile.getParentFile().mkdirs();
                 return fsFile.createNewFile();
             } catch (IOException e) {
                 this.log.severe("IOException whilst creating data file '"+file+"': "+e);
                 return false;
             }
         } else {
+            this.log.warn("Attempted to create file that already exists.");
             return false;
         }
     }
@@ -147,6 +157,36 @@ public class DataUtil {
      */
     public String playerDataFile(Player player) {
         return "/data/players/" +player.getUniqueId()+".yml";
+    }
+
+    /**
+     * Return the location of the player's data file.
+     * @param player The UUID of the player.
+     * @return The data file URI inside the /plugin/essence folder.
+     */
+    public String playerDataFile(UUID player) {
+        return "/data/players/" +player+".yml";
+    }
+
+    public boolean deleteFile(String filePath) {
+        this.close();
+
+        Path path = Path.of(this.plugin.getDataFolder() + filePath);
+
+        try {
+            Files.delete(path);
+        } catch (NoSuchFileException e) {
+            this.log.warn("Attempted to delete a file that does not exist. File: "+path+" Exception: "+e);
+            return false;
+        } catch (DirectoryNotEmptyException e) {
+            this.log.warn("Attempted to delete a directory that isn't empty. File: "+path+" Exception: "+e);
+            return false;
+        } catch (IOException e) {
+            this.log.warn("Attempted to delete a file with IOException. File: "+path+" Exception: "+e);
+            return false;
+        }
+
+        return true;
     }
 }
 

@@ -1,8 +1,9 @@
 package net.lewmc.essence.commands;
 
+import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -13,11 +14,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class GamemodeCommands implements CommandExecutor {
     private final Essence plugin;
-    private PermissionHandler permission;
     private MessageUtil message;
-    private Player player;
-    private boolean isPlayer;
-    private String toPlayer;
+    private CommandSender commandSender;
+    private final LogUtil log;
 
     /**
      * Constructor for the GamemodeCommands class.
@@ -25,6 +24,7 @@ public class GamemodeCommands implements CommandExecutor {
      */
     public GamemodeCommands(Essence plugin) {
         this.plugin = plugin;
+        this.log = new LogUtil(this.plugin);
     }
 
     /**
@@ -41,144 +41,137 @@ public class GamemodeCommands implements CommandExecutor {
         @NotNull String s,
         String[] args
     ) {
+        PlayerUtil playerUtil = new PlayerUtil(this.plugin, commandSender);
+        this.message = new MessageUtil(commandSender, this.plugin);
+        this.commandSender = commandSender;
 
-        if (!(commandSender instanceof Player)) {
-            this.isPlayer = false;
-        } else {
-            this.player = (Player) commandSender;
-            this.isPlayer = true;
-        }
-
-        this.message = new MessageUtil(commandSender, plugin);
-        this.permission = new PermissionHandler(commandSender, this.message);
-
+        Player player;
         if (command.getName().equalsIgnoreCase("gamemode")) {
-            if (args.length == 2) {
-                this.toPlayer = args[1];
-            }
-            if (args.length == 1 || args.length == 2) {
-                if (args[0].equalsIgnoreCase("survival")) {
-                    gamemodeSurvival();
-                } else if (args[0].equalsIgnoreCase("creative")) {
-                    gamemodeCreative();
-                } else if (args[0].equalsIgnoreCase("adventure")) {
-                    gamemodeAdventure();
-                } else if (args[0].equalsIgnoreCase("spectator")) {
-                    gamemodeSpectator();
-                } else {
-                    message.PrivateMessage("gamemode", "usage");
-                }
-                return true;
+            GameMode gamemode;
+            if (args.length > 0) {
+                if (args[0].equalsIgnoreCase("creative")) { gamemode = GameMode.CREATIVE; }
+                else if (args[0].equalsIgnoreCase("c")) { gamemode = GameMode.CREATIVE; }
+                else if (args[0].equalsIgnoreCase("1")) { gamemode = GameMode.CREATIVE; }
+                else if (args[0].equalsIgnoreCase("survival")) { gamemode = GameMode.SURVIVAL; }
+                else if (args[0].equalsIgnoreCase("s")) { gamemode = GameMode.SURVIVAL; }
+                else if (args[0].equalsIgnoreCase("0")) { gamemode = GameMode.SURVIVAL; }
+                else if (args[0].equalsIgnoreCase("adventure")) { gamemode = GameMode.ADVENTURE; }
+                else if (args[0].equalsIgnoreCase("a")) { gamemode = GameMode.ADVENTURE; }
+                else if (args[0].equalsIgnoreCase("2")) { gamemode = GameMode.ADVENTURE; }
+                else if (args[0].equalsIgnoreCase("spectator")) { gamemode = GameMode.SPECTATOR; }
+                else if (args[0].equalsIgnoreCase("sp")) { gamemode = GameMode.SPECTATOR; }
+                else if (args[0].equalsIgnoreCase("3")) { gamemode = GameMode.SPECTATOR; }
+                else { return this.noModeSet(); }
             } else {
-                return noModeSet();
+                return this.noModeSet();
             }
+
+            if (args.length == 2) {
+                player = Bukkit.getPlayer(args[1]);
+                if (player == null) {
+                    message.PrivateMessage("generic", "playernotfound");
+                    return true;
+                }
+            } else {
+                if (console()) {
+                    log.warn("Usage: /gamemode "+gamemode.toString().toLowerCase()+" <player>");
+                    return true;
+                } else {
+                    player = (Player) commandSender;
+                }
+            }
+
+            return playerUtil.setGamemode(this.commandSender, player, gamemode);
         }
 
         if (command.getName().equalsIgnoreCase("gmc")) {
             if (args.length == 1) {
-                this.toPlayer = args[0];
+                player = Bukkit.getPlayer(args[0]);
+                if (player == null) {
+                    message.PrivateMessage("generic", "playernotfound");
+                    return true;
+                }
+            } else {
+                if (console()) {
+                    log.warn("Usage: /gmc <player>");
+                    return true;
+                } else {
+                    player = (Player) commandSender;
+                }
             }
-            return gamemodeCreative();
+
+            return playerUtil.setGamemode(this.commandSender, player, GameMode.CREATIVE);
         }
 
         if (command.getName().equalsIgnoreCase("gms")) {
             if (args.length == 1) {
-                this.toPlayer = args[0];
+                player = Bukkit.getPlayer(args[0]);
+                if (player == null) {
+                    message.PrivateMessage("generic", "playernotfound");
+                    return true;
+                }
+            } else {
+                if (console()) {
+                    log.warn("Usage: /gms <player>");
+                    return true;
+                } else {
+                    if (console()) {
+                        return true;
+                    } else {
+                        player = (Player) commandSender;
+                    }
+                }
             }
-            return gamemodeSurvival();
+
+            return playerUtil.setGamemode(this.commandSender, player, GameMode.SURVIVAL);
         }
 
         if (command.getName().equalsIgnoreCase("gma")) {
             if (args.length == 1) {
-                this.toPlayer = args[0];
+                player = Bukkit.getPlayer(args[0]);
+                if (player == null) {
+                    message.PrivateMessage("generic", "playernotfound");
+                    return true;
+                }
+            } else {
+                if (console()) {
+                    log.warn("Usage: /gma <player>");
+                    return true;
+                } else {
+                    player = (Player) commandSender;
+                }
             }
-            return gamemodeAdventure();
+
+            return playerUtil.setGamemode(this.commandSender, player, GameMode.ADVENTURE);
         }
 
         if (command.getName().equalsIgnoreCase("gmsp")) {
             if (args.length == 1) {
-                this.toPlayer = args[0];
+                player = Bukkit.getPlayer(args[0]);
+                if (player == null) {
+                    message.PrivateMessage("generic", "playernotfound");
+                    return true;
+                }
+            } else {
+                if (console()) {
+                    log.warn("Usage: /gmsp <player>");
+                    return true;
+                } else {
+                    player = (Player) commandSender;
+                }
             }
-            return gamemodeSpectator();
-        }
 
+            return playerUtil.setGamemode(this.commandSender, player, GameMode.SPECTATOR);
+        }
         return false;
     }
 
-    public boolean gamemodeSurvival () {
-        if (this.permission.has("essence.gamemode.survival")) {
-            if (isPlayer) {
-                this.player.setGameMode(GameMode.SURVIVAL);
-                this.message.PrivateMessage("gamemode", "survival");
-            } else {
-                Player player = Bukkit.getPlayer(this.toPlayer);
-                if (player != null) {
-                    player.setGameMode(GameMode.SURVIVAL);
-                    this.message.SendTo(player, "gamemode", "survival");
-                }
-            }
-        } else {
-            this.permission.not();
-        }
-        return true;
-    }
-
-    public boolean gamemodeCreative () {
-        if (this.permission.has("essence.gamemode.creative")) {
-            if (isPlayer) {
-                this.player.setGameMode(GameMode.CREATIVE);
-                this.message.PrivateMessage("gamemode", "creative");
-            } else {
-                Player player = Bukkit.getPlayer(this.toPlayer);
-                if (player != null) {
-                    player.setGameMode(GameMode.CREATIVE);
-                    this.message.SendTo(player, "gamemode", "creative");
-                }
-            }
-        } else {
-            this.permission.not();
-        }
-        return true;
-    }
-
-    public boolean gamemodeSpectator () {
-        if (this.permission.has("essence.gamemode.spectator")) {
-            if (isPlayer) {
-                this.player.setGameMode(GameMode.SPECTATOR);
-                this.message.PrivateMessage("gamemode", "spectator");
-            } else {
-                Player player = Bukkit.getPlayer(this.toPlayer);
-                if (player != null) {
-                    player.setGameMode(GameMode.SPECTATOR);
-                    this.message.SendTo(player, "gamemode", "spectator");
-                }
-            }
-        } else {
-            this.permission.not();
-        }
-        return true;
-    }
-
-    public boolean gamemodeAdventure () {
-        if (this.permission.has("essence.gamemode.adventure")) {
-            if (isPlayer) {
-                this.player.setGameMode(GameMode.ADVENTURE);
-                this.message.PrivateMessage("gamemode", "adventure");
-            } else {
-                Player player = Bukkit.getPlayer(this.toPlayer);
-                if (player != null) {
-                    player.setGameMode(GameMode.ADVENTURE);
-                    this.message.SendTo(player, "gamemode", "adventure");
-                }
-            }
-        } else {
-            this.permission.not();
-        }
-        return true;
-    }
-
-    public boolean noModeSet () {
+    public boolean noModeSet() {
         this.message.PrivateMessage("gamemode", "specify");
         return true;
+    }
+
+    public boolean console() {
+        return !(this.commandSender instanceof Player);
     }
 }

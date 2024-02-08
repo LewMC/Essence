@@ -9,6 +9,7 @@ import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +34,12 @@ public class WarpTabCompleter implements TabCompleter {
         Set<String> keys = data.getKeys("warps");
 
         data.close();
+
+        if (keys == null) {
+            return new ArrayList<>(Arrays.asList(new String[]{
+                    ""
+            }));
+        }
 
         return new ArrayList<>(keys);
     }
