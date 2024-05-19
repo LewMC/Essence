@@ -20,7 +20,7 @@ body:
 - type: textarea
   attributes:
     label: "Server information:"
-    value: Minecraft Version: [e.g. 1.20.4] - Server Implementation: [e.g. Bukkit, Spigot, Paper, etc.] - Essence Version: [e.g. 1.1.0]
+    value: "Minecraft Version: [e.g. 1.20.4] - Server Implementation: [e.g. Bukkit, Spigot, Paper, etc.] - Essence Version: [e.g. 1.1.0]"
 - type: textarea
   attributes:
     label: "Please enter a link to your logs"
