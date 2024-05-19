@@ -19,7 +19,7 @@ body:
     description: "What did you expect to happen instead of the issue you're reporting?"
 - type: textarea
   attributes:
-    label: "Server information (please complete the following information):"
+    label: "Server information:"
     value: Minecraft Version: [e.g. 1.20.4] - Server Implementation: [e.g. Bukkit, Spigot, Paper, etc.] - Essence Version: [e.g. 1.1.0]
 - type: textarea
   attributes:
