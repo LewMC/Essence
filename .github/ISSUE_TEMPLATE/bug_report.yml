@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve our software.
+description: Create a report to help us improve our software.
 title: Bug report
 labels: bug
 assignees: "LewMilburn"
