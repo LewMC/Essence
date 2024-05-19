@@ -1,6 +1,6 @@
 ---
 name: Feature request
-description: Request or suggest a new feature.
+about: Request or suggest a new feature.
 title: Feature request
 labels: enhancement
 assignees: "LewMilburn"
