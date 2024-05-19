@@ -1,0 +1,20 @@
+---
+name: Feature request
+description: Request or suggest a new feature.
+title: Feature request
+labels: enhancement
+assignees: "LewMilburn"
+body:
+- type: textarea
+  attributes:
+    label: "What feature would you like to request?"
+- type: textarea
+  attributes:
+    label: "Are you able to help implement the feature?"
+- type: textarea
+  attributes:
+    label: "Is your feature request related to an existing bug or issue?"
+- type: textarea
+  attributes:
+    label: "Please enter any additional comments below."
+---

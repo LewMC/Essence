@@ -39,6 +39,8 @@ public class Essence extends JavaPlugin {
         this.log.info("Running Essence version "+this.getDescription().getVersion()+ ".");
         this.log.info("Please report any issues with Essence to our GitHub repository: https://github.com/lewmilburn/essence/issues");
         this.log.info("");
+        this.log.info("Please consider leaving us a review at https://www.spigotmc.org/resources/essence.114553");
+        this.log.info("");
         this.log.info("Beginning startup...");
         this.log.info("");
         int pluginId = 20768; // <-- Replace with the id of your plugin!
