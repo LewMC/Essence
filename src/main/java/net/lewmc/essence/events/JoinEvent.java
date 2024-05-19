@@ -4,6 +4,7 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.DataUtil;
+import net.lewmc.essence.utils.TagUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,8 +23,8 @@ public class JoinEvent implements Listener {
             if (plugin.getConfig().getString("motd.message") != null) {
                 String message = plugin.getConfig().getString("motd.message");
                 if (message != null) {
-                    message = message.replace("{{version}}", this.plugin.getDescription().getVersion());
-                    event.getPlayer().sendMessage(message);
+                    TagUtil tag = new TagUtil(plugin);
+                    event.getPlayer().sendMessage(tag.doReplacement(message));
                 }
             }
         }
