@@ -98,11 +98,6 @@ public class Essence extends JavaPlugin {
     private void initFileSystem() {
         saveDefaultConfig();
 
-        File warpsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "warps.yml");
-        if (!warpsFile.exists()) {
-            saveResource("data/warps.yml", false);
-        }
-
         File languageFile = new File(getDataFolder() + File.separator + "language" + File.separator + "en-gb.yml");
         if (!languageFile.exists()) {
             saveResource("language/en-gb.yml", false);
@@ -119,6 +114,16 @@ public class Essence extends JavaPlugin {
                 this.log.info("");
                 getServer().getPluginManager().disablePlugin(this);
             }
+        }
+
+        File warpsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "warps.yml");
+        if (!warpsFile.exists()) {
+            saveResource("data/warps.yml", false);
+        }
+
+        File spawnsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "spawns.yml");
+        if (!spawnsFile.exists()) {
+            saveResource("data/spawns.yml", false);
         }
     }
 
@@ -150,16 +155,21 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("feed")) { this.getCommand("feed").setExecutor(new FeedCommand(this)); }
             if (command.isEnabled("heal")) { this.getCommand("heal").setExecutor(new HealCommand(this)); }
 
-            if (command.isEnabled("delhome")) { this.getCommand("delhome").setExecutor(new DelhomeCommand(this)); }
-            if (command.isEnabled("delwarp")) { this.getCommand("delwarp").setExecutor(new DelwarpCommand(this)); }
+            if (command.isEnabled("tp")) { this.getCommand("tp").setExecutor(new TeleportCommand(this)); }
+            if (command.isEnabled("tprandom")) { this.getCommand("tprandom").setExecutor(new TprandomCommand(this)); }
+
             if (command.isEnabled("home")) { this.getCommand("home").setExecutor(new HomeCommand(this)); }
             if (command.isEnabled("homes")) { this.getCommand("homes").setExecutor(new HomesCommand(this)); }
             if (command.isEnabled("sethome")) { this.getCommand("sethome").setExecutor(new SethomeCommand(this)); }
-            if (command.isEnabled("setwarp")) { this.getCommand("setwarp").setExecutor(new SetwarpCommand(this)); }
-            if (command.isEnabled("tp")) { this.getCommand("tp").setExecutor(new TeleportCommand(this)); }
-            if (command.isEnabled("tprandom")) { this.getCommand("tprandom").setExecutor(new TprandomCommand(this)); }
+            if (command.isEnabled("delhome")) { this.getCommand("delhome").setExecutor(new DelhomeCommand(this)); }
+
             if (command.isEnabled("warp")) { this.getCommand("warp").setExecutor(new WarpCommand(this)); }
             if (command.isEnabled("warps")) { this.getCommand("warps").setExecutor(new WarpsCommand(this)); }
+            if (command.isEnabled("setwarp")) { this.getCommand("setwarp").setExecutor(new SetwarpCommand(this)); }
+            if (command.isEnabled("delwarp")) { this.getCommand("delwarp").setExecutor(new DelwarpCommand(this)); }
+
+            if (command.isEnabled("setspawn")) { this.getCommand("setspawn").setExecutor(new SetspawnCommand(this)); }
+
             if (command.isEnabled("back")) { this.getCommand("back").setExecutor(new BackCommand(this)); }
 
             if (command.isEnabled("broadcast")) { this.getCommand("broadcast").setExecutor(new BroadcastCommand(this)); }
