@@ -33,7 +33,7 @@ teleportation:
   randomtp:
     cooldown: 60
   spawn:
-    wait: 3
+    wait: 0
     cooldown: 10
 # LANGUAGE
 # The file that will be used to display messages.

@@ -139,6 +139,10 @@ commands:
     description: Set the spawn.
     usage: /<command>
     aliases: ['spawnset']
+  spawn:
+    description: Teleport to spawn.
+    usage: /<command>
+    aliases: ['spawnpoint']
 permissions:
   essence.*:
     description: Access to all essence commands.

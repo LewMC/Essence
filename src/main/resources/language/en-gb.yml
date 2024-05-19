@@ -164,3 +164,5 @@ team:
   rulevalue: "§6[Essence] §eRule {{1}} is currently set to {{2}}."
 spawn:
   set: "§2[Essence] §aSpawn set."
+  teleporting: "§2[Essence] §aTeleporting..."
+  notfound: "§4[Essence] §cThere is no spawn set for this world."

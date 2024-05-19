@@ -170,6 +170,7 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("setwarp")) { this.getCommand("setwarp").setExecutor(new SetwarpCommand(this)); }
             if (command.isEnabled("delwarp")) { this.getCommand("delwarp").setExecutor(new DelwarpCommand(this)); }
 
+            if (command.isEnabled("spawn")) { this.getCommand("spawn").setExecutor(new SpawnCommand(this)); }
             if (command.isEnabled("setspawn")) { this.getCommand("setspawn").setExecutor(new SetspawnCommand(this)); }
 
             if (command.isEnabled("back")) { this.getCommand("back").setExecutor(new BackCommand(this)); }
