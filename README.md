@@ -1,8 +1,6 @@
 ﻿# Essence
 > 💡At the moment I have a high workload due to University projects, I've made a post explaining what's happening with the plugin during this time, you can [read it here](https://github.com/lewmilburn/Essence/issues/40). Thank you for supporting Essence!
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/J4aQrof3tuEV777kzxuWe6/Y5N36CErUKsyybBwBT4bDk/tree/main.svg?style=svg&circle-token=a1b270ad2bcd3486d032639a2443684e1ac89424)](https://dl.circleci.com/status-badge/redirect/circleci/J4aQrof3tuEV777kzxuWe6/Y5N36CErUKsyybBwBT4bDk/tree/main)
-
 - ⭐ Enjoying Essence? We'd love to hear your feedback on Spigot. Leave us a review [here](https://www.spigotmc.org/resources/essence.114553/).
 
 ## Creating a local copy.
