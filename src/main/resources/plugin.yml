@@ -142,7 +142,7 @@ commands:
   spawn:
     description: Teleport to spawn.
     usage: /<command>
-    aliases: ['spawnpoint']
+    aliases: ['spawnpoint','world']
 permissions:
   essence.*:
     description: Access to all essence commands.
