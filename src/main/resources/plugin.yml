@@ -1,5 +1,5 @@
 name: Essence
-version: 1.3.2
+version: '${project.version}'
 main: net.lewmc.essence.Essence
 api-version: 1.19
 author: LewMC
@@ -135,6 +135,14 @@ commands:
     description: Manage teams.
     usage: /<command>
     aliases: ['group']
+  setspawn:
+    description: Set the spawn.
+    usage: /<command>
+    aliases: ['spawnset']
+  spawn:
+    description: Teleport to spawn.
+    usage: /<command> [world]
+    aliases: ['spawnpoint','world']
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -298,3 +306,17 @@ permissions:
     description: Manage any teams they are the leader of.
   essence.team.list:
     description: View team information.
+  essence.spawn.*:
+    description: Allows players to access all spawn commands.
+    default: op
+    children:
+      essence.spawn: true
+      essence.spawn.set: true
+      essence.spawn.other: true
+  essence.spawn.set:
+    description: Set the spawn.
+  essence.spawn:
+    default: not op
+    description: Teleport to spawn.
+  essence.spawn.other:
+    description: Teleport to other world's spawns.

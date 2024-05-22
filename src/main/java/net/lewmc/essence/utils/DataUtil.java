@@ -51,6 +51,9 @@ public class DataUtil {
         } catch (IOException e) {
             this.log.warn("IOException loading configuration: " + e + " (File requested: '"+data+"')");
             this.message.PrivateMessage("generic", "configexception");
+        } catch (Exception e) {
+            this.log.warn("Exception loading configuration: " + e + " (File requested: '"+data+"')");
+            this.message.PrivateMessage("generic", "configexception");
         }
     }
 
@@ -82,7 +85,10 @@ public class DataUtil {
         try {
             this.plugin.getConfig().save(this.configFile);
         } catch (IOException e) {
-            this.log.warn("Error saving configuration: " + e);
+            this.log.warn("IOException saving configuration: " + e);
+            this.message.PrivateMessage("generic", "configexception");
+        } catch (Exception e) {
+            this.log.warn("Exception saving configuration: " + e);
             this.message.PrivateMessage("generic", "configexception");
         }
 
@@ -91,7 +97,10 @@ public class DataUtil {
         try {
             this.plugin.getConfig().load(this.defaultConfig);
         } catch (IOException | InvalidConfigurationException e) {
-            this.log.warn("Error loading configuration: " + e);
+            this.log.warn("IOException/InvalidConfigurationException loading configuration: " + e);
+            this.message.PrivateMessage("generic", "configexception");
+        } catch (Exception e) {
+            this.log.warn("Exception loading configuration: " + e);
             this.message.PrivateMessage("generic", "configexception");
         }
     }
@@ -104,7 +113,10 @@ public class DataUtil {
         try {
             this.plugin.getConfig().load(this.defaultConfig);
         } catch (IOException | InvalidConfigurationException e) {
-            this.log.warn("Error loading configuration: " + e);
+            this.log.warn("IOException/InvalidConfigurationException loading configuration: " + e);
+            this.message.PrivateMessage("generic", "configexception");
+        } catch (Exception e) {
+            this.log.warn("Exception loading configuration: " + e);
             this.message.PrivateMessage("generic", "configexception");
         }
     }
@@ -136,6 +148,9 @@ public class DataUtil {
                 return fsFile.createNewFile();
             } catch (IOException e) {
                 this.log.severe("IOException whilst creating data file '"+file+"': "+e);
+                return false;
+            } catch (Exception e) {
+                this.log.warn("Exception whilst creating data file. File: "+file+" Exception: "+e);
                 return false;
             }
         } else {
@@ -184,6 +199,8 @@ public class DataUtil {
         } catch (IOException e) {
             this.log.warn("Attempted to delete a file with IOException. File: "+path+" Exception: "+e);
             return false;
+        } catch (Exception e) {
+            this.log.warn("Attempted to delete a file with Exception. File: "+path+" Exception: "+e);
         }
 
         return true;
