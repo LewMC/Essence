@@ -17,6 +17,11 @@ motd:
     §2§lWelcome to the server!
     §aYou can change this message in Essence's config.yml
 
+# SPAWN KITS
+# Players are given these kits when they first join the server.
+# Set to "[]" to disable this feature.
+spawn-kits: ["wooden-tools"]
+
 # ECONOMY
 economy:
   start-money: 100.0
