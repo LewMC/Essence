@@ -59,8 +59,13 @@ public class RepairCommand implements CommandExecutor {
                     } else {
                         message.PrivateMessage("repair", "invalidtype");
                     }
+                } else {
+                    message.PrivateMessage("repair", "invalidtype");
                 }
+            } else {
+                permission.not();
             }
+            return true;
         }
 
         return false;
