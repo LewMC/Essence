@@ -143,6 +143,10 @@ commands:
     description: Teleport to spawn.
     usage: /<command> [world]
     aliases: ['spawnpoint','world']
+  repair:
+    description: Repair the item in your hand.
+    usage: /<command>
+    aliases: ['fix']
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -246,10 +250,13 @@ permissions:
     children:
       essence.stats.heal: true
       essence.stats.feed: true
+      essence.stats.repair: true
   essence.stats.heal:
     description: Allows you to heal yourself.
   essence.stats.feed:
     description: Allows you to feed yourself.
+  essence.stats.repair:
+    description: Allows you to repair items.
   essence.stats.other.*:
     description: Allows players to manage other player's stats such as health and hunger.
     default: op

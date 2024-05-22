@@ -56,14 +56,18 @@ public class HelpCommand {
                     this.message.PrivateMessage("help", "delhome");
                     this.message.PrivateMessage("help", "back");
                     this.message.PrivateMessage("help", "tpr");
-                    this.blank(5);
+                    this.message.PrivateMessage("help", "setspawn");
+                    this.message.PrivateMessage("help", "spawn");
+                    this.message.PrivateMessage("help", "world");
+                    this.blank(2);
                     this.message.PrivateMessage("help", "page", "2", "2");
                 }
             } else if ("stats".equalsIgnoreCase(args[1])) {
                 this.message.PrivateMessage("help", "stats");
                 this.message.PrivateMessage("help", "feed");
                 this.message.PrivateMessage("help", "heal");
-                this.blank(6);
+                this.message.PrivateMessage("help", "repair");
+                this.blank(5);
                 this.message.PrivateMessage("help", "page", "1", "1");
             } else if ("economy".equalsIgnoreCase(args[1])) {
                 this.message.PrivateMessage("help", "economy");
