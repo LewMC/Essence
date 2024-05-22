@@ -165,4 +165,5 @@ team:
 spawn:
   set: "§2[Essence] §aSpawn set."
   teleporting: "§2[Essence] §aTeleporting..."
-  notfound: "§4[Essence] §cThere is no spawn set for this world."
+  notexist: "§4[Essence] §cThe world requested either does not exist or could not be loaded."
+  worldnoperms: "§4[Essence] §cYou do not have permission to change worlds."

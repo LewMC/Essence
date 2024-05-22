@@ -49,7 +49,7 @@ public class SpawnCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("spawn")) {
-            if (permission.has("essence.spawn.teleport")) {
+            if (permission.has("essence.spawn")) {
 
                 int waitTime = plugin.getConfig().getInt("teleportation.spawn.wait");
                 TeleportUtil teleUtil = new TeleportUtil(this.plugin);
@@ -61,20 +61,53 @@ public class SpawnCommand implements CommandExecutor {
 
                 Location loc = player.getLocation();
 
-                String spawnName = loc.getWorld().getName();
+                String spawnName;
+
+                if (args.length == 1) {
+                    if (permission.has("essence.spawn.other")) {
+                        spawnName = args[0];
+                    } else {
+                        message.PrivateMessage("spawn", "worldnoperms");
+                        return true;
+                    }
+                } else {
+                    spawnName = loc.getWorld().getName();
+                }
 
                 DataUtil config = new DataUtil(this.plugin, message);
                 config.load("data/spawns.yml");
 
                 ConfigurationSection cs = config.getSection("spawn." + spawnName);
 
-                if (cs == null) {
-                    message.PrivateMessage("spawn", "notfound");
-                    return true;
-                }
+                Location teleportLocation;
 
-                LocationUtil locationUtil = new LocationUtil(this.plugin, message);
-                locationUtil.UpdateLastLocation(player);
+                if (cs == null) {
+                    if (Bukkit.getServer().getWorld(spawnName) != null) {
+                        teleportLocation = new Location(
+                                Bukkit.getServer().getWorld(spawnName),
+                                Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getX(),
+                                Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY(),
+                                Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getZ(),
+                                Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getYaw(),
+                                Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch()
+                        );
+                    } else {
+                        message.PrivateMessage("spawn", "notexist");
+                        return true;
+                    }
+                } else {
+                    LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                    locationUtil.UpdateLastLocation(player);
+
+                    teleportLocation = new Location(
+                            Bukkit.getServer().getWorld(spawnName),
+                            cs.getDouble("X"),
+                            cs.getDouble("Y"),
+                            cs.getDouble("Z"),
+                            (float) cs.getDouble("yaw"),
+                            (float) cs.getDouble("pitch")
+                    );
+                }
 
                 if (waitTime > 0) {
                     message.PrivateMessage("teleport", "wait", String.valueOf(waitTime));
@@ -86,21 +119,13 @@ public class SpawnCommand implements CommandExecutor {
                     @Override
                     public void run() {
 
-                        Location loc = new Location(
-                                Bukkit.getServer().getWorld(spawnName),
-                                cs.getDouble("X"),
-                                cs.getDouble("Y"),
-                                cs.getDouble("Z"),
-                                (float) cs.getDouble("yaw"),
-                                (float) cs.getDouble("pitch")
-                        );
-
-                        player.teleport(loc);
+                        player.teleport(teleportLocation);
                         config.close();
 
                         message.PrivateMessage("spawn", "teleporting");
                     }
                 }.runTaskLater(plugin, waitTime * 20L);
+
             } else {
                 permission.not();
             }

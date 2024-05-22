@@ -141,7 +141,7 @@ commands:
     aliases: ['spawnset']
   spawn:
     description: Teleport to spawn.
-    usage: /<command>
+    usage: /<command> [world]
     aliases: ['spawnpoint','world']
 permissions:
   essence.*:
@@ -310,10 +310,13 @@ permissions:
     description: Allows players to access all spawn commands.
     default: op
     children:
+      essence.spawn: true
       essence.spawn.set: true
-      essence.spawn.teleport: true
+      essence.spawn.other: true
   essence.spawn.set:
     description: Set the spawn.
-  essence.spawn.teleport:
+  essence.spawn:
     default: not op
     description: Teleport to spawn.
+  essence.spawn.other:
+    description: Teleport to other world's spawns.
