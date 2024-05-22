@@ -1,1 +1,6 @@
 kits:
+  wooden-tools:
+    items: ["WOODEN_AXE","WOODEN_PICKAXE","WOODEN_SHOVEL","WOODEN_SWORD"]
+  god-tools:
+    items: ["DIAMOND_AXE","DIAMOND_PICKAXE","DIAMOND_SHOVEL","DIAMOND_SWORD"]
+    permission: "essence.kits.god"
