@@ -157,6 +157,7 @@ public class Essence extends JavaPlugin {
 
             if (command.isEnabled("feed")) { this.getCommand("feed").setExecutor(new FeedCommand(this)); }
             if (command.isEnabled("heal")) { this.getCommand("heal").setExecutor(new HealCommand(this)); }
+            if (command.isEnabled("repair")) { this.getCommand("repair").setExecutor(new RepairCommand(this)); }
 
             if (command.isEnabled("tp")) { this.getCommand("tp").setExecutor(new TeleportCommand(this)); }
             if (command.isEnabled("tprandom")) { this.getCommand("tprandom").setExecutor(new TprandomCommand(this)); }

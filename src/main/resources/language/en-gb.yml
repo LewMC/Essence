@@ -36,6 +36,10 @@ help:
   stonecutter: "§6[Essence] §e/stonecutter - Open a stonecutter."
   echest: "§6[Essence] §e/echest - Open your ender chest."
   trash: "§6[Essence] §e/trash - Open a disposal menu."
+  repair: "§6[Essence] §e/repair - Repair the item you're holding."
+  setspawn: "§6[Essence] §e/setspawn - Set the world spawn."
+  spawn: "§6[Essence] §e/spawn - Teleport to spawn."
+  world: "§6[Essence] §e/world - Teleport to a world."
   gamemode: "§6[Essence] ---------- Essence Help - Gamemode ---------"
   gmc: "§6[Essence] §e/gmc - Switch to creative mode."
   gms: "§6[Essence] §e/gms - Switch to survival mode."
@@ -167,3 +171,6 @@ spawn:
   teleporting: "§2[Essence] §aTeleporting..."
   notexist: "§4[Essence] §cThe world requested either does not exist or could not be loaded."
   worldnoperms: "§4[Essence] §cYou do not have permission to change worlds."
+repair:
+  done: "§2[Essence] §aItem repaired."
+  invalidtype: "§4[Essence] §cThe item in your hand is not repairable."
