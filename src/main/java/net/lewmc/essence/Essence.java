@@ -128,6 +128,11 @@ public class Essence extends JavaPlugin {
         if (!spawnsFile.exists()) {
             saveResource("data/spawns.yml", false);
         }
+
+        File kitsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "kits.yml");
+        if (!kitsFile.exists()) {
+            saveResource("data/kits.yml", false);
+        }
     }
 
     /**
