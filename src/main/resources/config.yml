@@ -42,6 +42,7 @@ teleportation:
     cooldown: 10
     main-spawn-world: world
     always-spawn: false
+
 # LANGUAGE
 # The file that will be used to display messages.
 # Please ensure the file exists in the 'language' sub-folder before changing this value.
