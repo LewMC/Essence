@@ -174,3 +174,8 @@ spawn:
 repair:
   done: "§2[Essence] §aItem repaired."
   invalidtype: "§4[Essence] §cThe item in your hand is not repairable."
+kit:
+  select: "§6[Essence] §ePlease select a Kit: {{1}}."
+  nopermission: "§4[Essence] §cYou do not have access to this kit."
+  notexist: "§4[Essence] §cThis kit does not exist."
+  done: "§2[Essence] §aYou now have the {{1}} kit."
