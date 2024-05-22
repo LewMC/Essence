@@ -154,6 +154,7 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("smithing")) { this.getCommand("smithing").setExecutor(new SmithingCommand(this)); }
             if (command.isEnabled("stonecutter")) { this.getCommand("stonecutter").setExecutor(new StonecutterCommand(this)); }
             if (command.isEnabled("trash")) { this.getCommand("trash").setExecutor(new TrashCommand(this)); }
+            if (command.isEnabled("kit")) { this.getCommand("kit").setExecutor(new KitCommand(this)); }
 
             if (command.isEnabled("feed")) { this.getCommand("feed").setExecutor(new FeedCommand(this)); }
             if (command.isEnabled("heal")) { this.getCommand("heal").setExecutor(new HealCommand(this)); }
