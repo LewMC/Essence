@@ -147,6 +147,10 @@ commands:
     description: Repair the item in your hand.
     usage: /<command>
     aliases: ['fix']
+  kit:
+    description: Get kits.
+    usage: /<command>
+    aliases: ['kits']
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -327,3 +331,10 @@ permissions:
     description: Teleport to spawn.
   essence.spawn.other:
     description: Teleport to other world's spawns.
+  essence.kits.*:
+    description: Allows players to access all kit commands.
+    default: op
+    children:
+      essence.kits.all: true
+  essence.kits.all:
+    description: Allows players to access all kits.
