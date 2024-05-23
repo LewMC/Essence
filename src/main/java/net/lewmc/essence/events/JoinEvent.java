@@ -1,10 +1,7 @@
 package net.lewmc.essence.events;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.DataUtil;
-import net.lewmc.essence.utils.TagUtil;
+import net.lewmc.essence.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -13,16 +10,31 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.Objects;
+
 public class JoinEvent implements Listener {
     private final Essence plugin;
 
     public JoinEvent(Essence plugin) {
         this.plugin = plugin;
     }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        LogUtil log = new LogUtil(this.plugin);
+
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getPlayer().getName());
         boolean firstJoin = offlinePlayer.isOnline();
+
+        if (firstJoin) {
+            KitUtil kit = new KitUtil(this.plugin, event.getPlayer());
+            if (this.plugin.getConfig().get("spawn-kits") != null && !Objects.equals(this.plugin.getConfig().getString("spawn-kits"), "false")) {
+                for (Object giveKit : this.plugin.getConfig().getList("spawn-kits")) {
+                    log.info("Giving player '"+event.getPlayer().getName()+"' spawn kit '"+giveKit+"'");
+                    kit.giveKit(giveKit.toString());
+                }
+            }
+        }
 
         plugin.reloadConfig();
         if (plugin.getConfig().getBoolean("motd.enabled")) {
@@ -48,7 +60,6 @@ public class JoinEvent implements Listener {
             ConfigurationSection cs = config.getSection("spawn." + spawnName);
 
             if (cs == null) {
-                LogUtil log = new LogUtil(this.plugin);
                 if (Bukkit.getServer().getWorld(spawnName) != null) {
                     event.getPlayer().teleport(new Location(
                             Bukkit.getServer().getWorld(spawnName),
@@ -75,8 +86,6 @@ public class JoinEvent implements Listener {
 
             config.close();
         }
-
-        LogUtil log = new LogUtil(this.plugin);
 
         DataUtil data = new DataUtil(plugin, new MessageUtil(event.getPlayer(), plugin));
         String playerDataFile = data.playerDataFile(event.getPlayer());
