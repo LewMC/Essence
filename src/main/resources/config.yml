@@ -20,7 +20,8 @@ motd:
 # SPAWN KITS
 # Players are given these kits when they first join the server.
 # Set to "false" to disable this feature.
-spawn-kits: ["wooden-tools"]
+spawn-kits:
+  - wooden-tools
 
 # ECONOMY
 economy:
