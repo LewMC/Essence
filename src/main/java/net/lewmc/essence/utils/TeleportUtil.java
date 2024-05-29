@@ -118,15 +118,16 @@ public class TeleportUtil {
                 pitch
         );
 
-        CommandUtil cu = new CommandUtil(this.plugin);
-        if (!cu.isFolia()) {
-            player.teleport(loc);
-        }
+        this.doTeleport(player, loc);
     }
 
     public void doTeleport(Player player, Location location) {
         CommandUtil cu = new CommandUtil(this.plugin);
-        if (!cu.isFolia()) {
+        if (cu.isFolia()) {
+            LogUtil log = new LogUtil(this.plugin);
+            log.severe("Teleportation of users is currently unavailable on Folia.");
+            log.severe("We hope to bring this feature back soon .");
+        } else {
             player.teleport(location);
         }
     }
