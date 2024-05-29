@@ -3,7 +3,6 @@ package net.lewmc.essence.events;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
@@ -61,27 +60,31 @@ public class JoinEvent implements Listener {
 
             if (cs == null) {
                 if (Bukkit.getServer().getWorld(spawnName) != null) {
-                    event.getPlayer().teleport(new Location(
+                    TeleportUtil tp = new TeleportUtil(plugin);
+                    tp.doTeleport(
+                            event.getPlayer(),
                             Bukkit.getServer().getWorld(spawnName),
                             Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getX(),
                             Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY(),
                             Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getZ(),
                             Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getYaw(),
                             Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch()
-                    ));
+                    );
                 } else {
                     message.PrivateMessage("spawn", "notexist");
                     log.info("Failed to respawn player - world '"+Bukkit.getServer().getWorld(spawnName)+"' does not exist.");
                 }
             } else {
-                event.getPlayer().teleport(new Location(
+                TeleportUtil tp = new TeleportUtil(plugin);
+                tp.doTeleport(
+                        event.getPlayer(),
                         Bukkit.getServer().getWorld(spawnName),
                         cs.getDouble("X"),
                         cs.getDouble("Y"),
                         cs.getDouble("Z"),
                         (float) cs.getDouble("yaw"),
                         (float) cs.getDouble("pitch")
-                ));
+                );
             }
 
             config.close();

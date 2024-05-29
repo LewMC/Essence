@@ -4,8 +4,8 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.DataUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
+import net.lewmc.essence.utils.TeleportUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,27 +34,31 @@ public class RespawnEvent implements Listener {
         if (cs == null) {
             LogUtil log = new LogUtil(this.plugin);
             if (Bukkit.getServer().getWorld(spawnName) != null) {
-                event.setRespawnLocation(new Location(
+                TeleportUtil tp = new TeleportUtil(plugin);
+                tp.doTeleport(
+                        event.getPlayer(),
                         Bukkit.getServer().getWorld(spawnName),
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getX(),
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY(),
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getZ(),
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getYaw(),
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch()
-                ));
+                );
             } else {
                 message.PrivateMessage("spawn", "notexist");
                 log.info("Failed to respawn player - world '"+Bukkit.getServer().getWorld(spawnName)+"' does not exist.");
             }
         } else {
-            event.setRespawnLocation(new Location(
+            TeleportUtil tp = new TeleportUtil(plugin);
+            tp.doTeleport(
+                    event.getPlayer(),
                     Bukkit.getServer().getWorld(spawnName),
                     cs.getDouble("X"),
                     cs.getDouble("Y"),
                     cs.getDouble("Z"),
                     (float) cs.getDouble("yaw"),
                     (float) cs.getDouble("pitch")
-            ));
+            );
         }
 
         config.close();

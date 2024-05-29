@@ -3,13 +3,14 @@ package net.lewmc.essence.commands.teleportation;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class BackCommand implements CommandExecutor {
     private final Essence plugin;
@@ -62,16 +63,17 @@ public class BackCommand implements CommandExecutor {
                 LocationUtil locationUtil = new LocationUtil(this.plugin, message);
                 locationUtil.UpdateLastLocation(player);
 
-                Location loc = new Location(
-                    Bukkit.getServer().getWorld(cs.getString("world")),
-                    cs.getDouble("X"),
-                    cs.getDouble("Y"),
-                    cs.getDouble("Z"),
-                    (float) cs.getDouble("yaw"),
-                    (float) cs.getDouble("pitch")
+                TeleportUtil tp = new TeleportUtil(plugin);
+                tp.doTeleport(
+                        player,
+                        Bukkit.getServer().getWorld(Objects.requireNonNull(cs.getString("world"))),
+                        cs.getDouble("X"),
+                        cs.getDouble("Y"),
+                        cs.getDouble("Z"),
+                        (float) cs.getDouble("yaw"),
+                        (float) cs.getDouble("pitch")
                 );
 
-                player.teleport(loc);
                 config.close();
 
                 message.PrivateMessage("back", "going");

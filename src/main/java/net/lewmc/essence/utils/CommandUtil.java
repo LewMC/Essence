@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.util.List;
@@ -26,9 +27,17 @@ public class CommandUtil {
     }
 
     public boolean isPaperCompatible() {
-        File pwd = new File("/config/paper-world-defaults.yml");
-        File g = new File("/config/paper-global.yml");
+        File pwd = new File("config/paper-world-defaults.yml");
+        File g = new File("config/paper-global.yml");
 
         return pwd.exists() && g.exists();
+    }
+
+    public boolean isFolia() {
+        return (
+                Bukkit.getServer().getName().equals("Folia") ||
+                Bukkit.getServer().getName().equals("Luminol") ||
+                Bukkit.getServer().getName().equals("LightningLuminol")
+        );
     }
 }

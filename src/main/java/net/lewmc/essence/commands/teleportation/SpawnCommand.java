@@ -118,8 +118,9 @@ public class SpawnCommand implements CommandExecutor {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        TeleportUtil tp = new TeleportUtil(plugin);
+                        tp.doTeleport(player, teleportLocation);
 
-                        player.teleport(teleportLocation);
                         config.close();
 
                         message.PrivateMessage("spawn", "teleporting");

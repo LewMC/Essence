@@ -85,7 +85,9 @@ public class TprandomCommand implements CommandExecutor {
 
                                     LocationUtil locationUtil = new LocationUtil(plugin, message);
                                     locationUtil.UpdateLastLocation(player);
-                                    teleportPlayer(player, teleportLocation);
+
+                                    TeleportUtil tp = new TeleportUtil(plugin);
+                                    tp.doTeleport(player, teleportLocation);
                                 }
                             }.runTask(plugin);
                         } else {

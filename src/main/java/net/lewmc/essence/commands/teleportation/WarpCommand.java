@@ -3,7 +3,6 @@ package net.lewmc.essence.commands.teleportation;
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,6 +10,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class WarpCommand implements CommandExecutor {
     private final Essence plugin;
@@ -86,9 +87,10 @@ public class WarpCommand implements CommandExecutor {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-
-                            Location loc = new Location(
-                                    Bukkit.getServer().getWorld(cs.getString("world")),
+                            TeleportUtil tp = new TeleportUtil(plugin);
+                            tp.doTeleport(
+                                    player,
+                                    Bukkit.getServer().getWorld(Objects.requireNonNull(cs.getString("world"))),
                                     cs.getDouble("X"),
                                     cs.getDouble("Y"),
                                     cs.getDouble("Z"),
@@ -96,7 +98,6 @@ public class WarpCommand implements CommandExecutor {
                                     (float) cs.getDouble("pitch")
                             );
 
-                            player.teleport(loc);
                             config.close();
 
                             message.PrivateMessage("warp", "teleporting", args[0].toLowerCase());
