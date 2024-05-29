@@ -2,6 +2,7 @@ package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,9 +25,10 @@ public class CommandUtil {
         return true;
     }
 
-    public boolean isPaper() {
-        String software = this.plugin.getServer().getName();
+    public boolean isPaperCompatible() {
+        File pwd = new File("/config/paper-world-defaults.yml");
+        File g = new File("/config/paper-global.yml");
 
-        return software.equals("Paper");
+        return pwd.exists() && g.exists();
     }
 }

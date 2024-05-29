@@ -72,7 +72,7 @@ public class Essence extends JavaPlugin {
 
     private void checkForPaper() {
         CommandUtil cmd = new CommandUtil(this);
-        if (!cmd.isPaper()) {
+        if (!cmd.isPaperCompatible()) {
             this.log.severe("You are running " + this.getServer().getName());
             this.log.severe("Some commands have been disabled, please see https://bit.ly/essencepaper for help.");
             this.log.severe("To get full plugin support please consider using Paper instead.");
