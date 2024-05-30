@@ -1,17 +1,12 @@
 package net.lewmc.essence.tabcompleter;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.MessageUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 public class HomeTabCompleter implements TabCompleter {
 
@@ -28,20 +23,7 @@ public class HomeTabCompleter implements TabCompleter {
             @NotNull String arg,
             String[] args
     ) {
-
-        DataUtil data = new DataUtil(this.plugin, new MessageUtil(sender, this.plugin));
-
-        data.load(data.playerDataFile((Player) sender));
-        Set<String> keys = data.getKeys("homes");
-
-        data.close();
-
-        if (keys == null) {
-            return new ArrayList<>(Arrays.asList(new String[]{
-                ""
-            }));
-        }
-
-        return new ArrayList<>(keys);
+        // TODO: FIX THIS
+        return null;
     }
 }
