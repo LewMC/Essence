@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.io.File;
 import java.util.Objects;
 
 public class JoinEvent implements Listener {
@@ -48,17 +49,17 @@ public class JoinEvent implements Listener {
 
         if (plugin.getConfig().getBoolean("teleportation.spawn.always-spawn") || firstJoin) {
             MessageUtil message = new MessageUtil(event.getPlayer(), this.plugin);
-            DataUtil config = new DataUtil(this.plugin, message);
-            config.load("config.yml");
-            ConfigurationSection configCS = config.getSection("teleportation");
-            String spawnName = configCS.get("spawn.main-spawn-world").toString();
-            config.close();
 
-            config.load("data/spawns.yml");
+            FileUtil essenceConfiguration = new FileUtil(this.plugin);
+            essenceConfiguration.load("config.yml");
 
-            ConfigurationSection cs = config.getSection("spawn." + spawnName);
+            String spawnName = essenceConfiguration.get("teleportation.spawn.main-spawn-world").toString();
+            essenceConfiguration.close();
 
-            if (cs == null) {
+            FileUtil spawnConfiguration = new FileUtil(this.plugin);
+            spawnConfiguration.load("data/spawns.yml");
+
+            if (spawnConfiguration.get("spawn") == null) {
                 if (Bukkit.getServer().getWorld(spawnName) != null) {
                     TeleportUtil tp = new TeleportUtil(plugin);
                     tp.doTeleport(
@@ -79,46 +80,38 @@ public class JoinEvent implements Listener {
                 tp.doTeleport(
                         event.getPlayer(),
                         Bukkit.getServer().getWorld(spawnName),
-                        cs.getDouble("X"),
-                        cs.getDouble("Y"),
-                        cs.getDouble("Z"),
-                        (float) cs.getDouble("yaw"),
-                        (float) cs.getDouble("pitch")
+                        spawnConfiguration.getDouble("spawn."+spawnName+"X"),
+                        spawnConfiguration.getDouble("spawn."+spawnName+"Y"),
+                        spawnConfiguration.getDouble("spawn."+spawnName+"Z"),
+                        (float) spawnConfiguration.getDouble("spawn."+spawnName+"yaw"),
+                        (float) spawnConfiguration.getDouble("spawn."+spawnName+"pitch")
                 );
             }
 
-            config.close();
+            spawnConfiguration.close();
         }
 
-        DataUtil data = new DataUtil(plugin, new MessageUtil(event.getPlayer(), plugin));
-        String playerDataFile = data.playerDataFile(event.getPlayer());
+        FileUtil playerFile = new FileUtil(plugin);
+        String playerDataFile = playerFile.playerDataFile(event.getPlayer());
 
-        if (!data.fileExists(playerDataFile)) {
+        if (!playerFile.exists(playerDataFile)) {
             log.info("Player data does not exist, creating file...");
-            if (data.createFile(playerDataFile)) {
+
+            if (playerFile.create(playerDataFile)) {
                 log.info("Created player data!");
             } else {
                 log.warn("Unable to create player data! This may cause some commands to stop working.");
                 return;
             }
 
-            data.load(playerDataFile);
-            data.createSection("economy");
-            ConfigurationSection economy = data.getSection("economy");
-            economy.set("balance", plugin.getConfig().getDouble("economy.start-money"));
-            economy.set("accepting-payments", true);
-            data.createSection("user");
-            ConfigurationSection user = data.getSection("user");
-            user.set("last-known-name", event.getPlayer().getName());
+            playerFile.load(playerDataFile);
+            playerFile.set("economy.balance", plugin.getConfig().getDouble("economy.start-money"));
+            playerFile.set("economy.accepting-payments", true);
+            playerFile.set("user.last-known-name", event.getPlayer().getName());
         } else {
-            data.load(playerDataFile);
-            ConfigurationSection cs = data.getSection("user");
-            if (cs == null) {
-                data.createSection("user");
-                cs = data.getSection("user");
-            }
-            cs.set("last-known-name", event.getPlayer().getName());
+            playerFile.load(playerDataFile);
+            playerFile.set("user.last-known-name", event.getPlayer().getName());
         }
-        data.save();
+        playerFile.save();
     }
 }

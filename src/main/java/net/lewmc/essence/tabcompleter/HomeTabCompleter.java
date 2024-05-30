@@ -1,7 +1,6 @@
 package net.lewmc.essence.tabcompleter;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.DataUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

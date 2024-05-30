@@ -1,7 +1,6 @@
 package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.DataUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
