@@ -4,12 +4,10 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.io.File;
 import java.util.Objects;
 
 public class JoinEvent implements Listener {
@@ -80,11 +78,11 @@ public class JoinEvent implements Listener {
                 tp.doTeleport(
                         event.getPlayer(),
                         Bukkit.getServer().getWorld(spawnName),
-                        spawnConfiguration.getDouble("spawn."+spawnName+"X"),
-                        spawnConfiguration.getDouble("spawn."+spawnName+"Y"),
-                        spawnConfiguration.getDouble("spawn."+spawnName+"Z"),
-                        (float) spawnConfiguration.getDouble("spawn."+spawnName+"yaw"),
-                        (float) spawnConfiguration.getDouble("spawn."+spawnName+"pitch")
+                        spawnConfiguration.getDouble("spawn."+spawnName+".X"),
+                        spawnConfiguration.getDouble("spawn."+spawnName+".Y"),
+                        spawnConfiguration.getDouble("spawn."+spawnName+".Z"),
+                        (float) spawnConfiguration.getDouble("spawn."+spawnName+".yaw"),
+                        (float) spawnConfiguration.getDouble("spawn."+spawnName+".pitch")
                 );
             }
 
