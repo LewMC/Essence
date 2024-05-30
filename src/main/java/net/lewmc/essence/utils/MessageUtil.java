@@ -4,7 +4,6 @@ import net.lewmc.essence.Essence;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 
 public class MessageUtil {
 
