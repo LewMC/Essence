@@ -258,6 +258,6 @@ public class FileUtil {
      * @return The data file URI inside the /plugin/essence folder.
      */
     public String playerDataFile(Player player) {
-        return this.plugin.getDataFolder()+"data/"+player.getUniqueId()+".yml";
+        return "data/"+player.getUniqueId()+".yml";
     }
 }
