@@ -5,7 +5,6 @@ import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,11 +45,10 @@ public class BalanceCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("balance")) {
             if (permission.has("essence.economy.balance")) {
-                DataUtil data = new DataUtil(this.plugin, message);
+                FileUtil data = new FileUtil(this.plugin);
                 data.load(data.playerDataFile(player));
 
-                ConfigurationSection cs = data.getSection("economy");
-                double balance = cs.getDouble("balance");
+                double balance = data.getDouble("economy.balance");
                 data.close();
 
                 message.PrivateMessage("economy","balance", plugin.getConfig().getString("economy.symbol") + balance);
