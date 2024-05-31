@@ -35,9 +35,9 @@ public class CommandUtil {
 
     public boolean isFolia() {
         return (
-                Bukkit.getServer().getName().equals("Folia") ||
-                Bukkit.getServer().getName().equals("Luminol") ||
-                Bukkit.getServer().getName().equals("LightningLuminol")
+                this.plugin.getServer().getName().equals("Folia") ||
+                this.plugin.getServer().getName().equals("Luminol") ||
+                this.plugin.getServer().getName().equals("LightningLuminol")
         );
     }
 }

@@ -129,6 +129,7 @@ public class HomeCommand implements CommandExecutor {
                         message.PrivateMessage("home", "teleporting", chatHomeName);
                     }
                 }.runTaskLater(plugin, waitTime * 20L);
+                message.PrivateMessage("home", "teleporting", args[0], waitTime+"");
             }
         } else {
             permission.not();

@@ -13,10 +13,12 @@ import java.util.Objects;
 public class TeleportUtil {
     private final Essence plugin;
     private final LogUtil log;
+    private final MessageUtil message;
 
-    public TeleportUtil(Essence plugin) {
+    public TeleportUtil(Essence plugin, MessageUtil message) {
         this.plugin = plugin;
         this.log = new LogUtil(plugin);
+        this.message = message;
     }
 
     public boolean cooldownSurpassed(Player player, String type) {
@@ -98,7 +100,8 @@ public class TeleportUtil {
             double Y,
             double Z,
             float yaw,
-            float pitch
+            float pitch,
+            int delay
     ) {
         Location loc = new Location(
                 world,
@@ -109,16 +112,18 @@ public class TeleportUtil {
                 pitch
         );
 
-        this.doTeleport(player, loc);
+        this.doTeleport(player, loc, delay);
     }
 
-    public void doTeleport(Player player, Location location) {
+    public void doTeleport(Player player, Location location, int delay) {
         CommandUtil cu = new CommandUtil(this.plugin);
+        LogUtil log = new LogUtil(this.plugin);
         if (cu.isFolia()) {
-            LogUtil log = new LogUtil(this.plugin);
+
             log.severe("Teleportation of users is currently unavailable on Folia.");
-            log.severe("We hope to bring this feature back soon .");
+            log.severe("We hope to bring this feature back soon.");
         } else {
+            log.severe("Not folia!");
             player.teleport(location);
         }
     }

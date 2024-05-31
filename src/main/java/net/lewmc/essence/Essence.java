@@ -77,6 +77,10 @@ public class Essence extends JavaPlugin {
             this.log.severe("Some commands have been disabled, please see https://bit.ly/essencepaper for help.");
             this.log.severe("To get full plugin support please consider using Paper instead.");
             this.log.severe("You can download it from https://papermc.io");
+        } else {
+            this.log.info("Running server jar: "+ this.getServer().getName());
+            CommandUtil cu = new CommandUtil(this);
+            this.log.info("Is Folia: "+ cu.isFolia());
         }
     }
 

@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Array;
 import java.util.Objects;
 
 public class WarpCommand implements CommandExecutor {
@@ -95,14 +96,16 @@ public class WarpCommand implements CommandExecutor {
                                     cs.getDouble("Y"),
                                     cs.getDouble("Z"),
                                     (float) cs.getDouble("yaw"),
-                                    (float) cs.getDouble("pitch")
+                                    (float) cs.getDouble("pitch"),
+                                    waitTime
                             );
 
                             config.close();
 
-                            message.PrivateMessage("warp", "teleporting", args[0].toLowerCase());
+
                         }
                     }.runTaskLater(plugin, waitTime * 20L);
+                    message.PrivateMessage("warp", "teleporting", args[0], waitTime+"");
 
                     return true;
                 } else {
