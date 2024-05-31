@@ -5,6 +5,7 @@ import net.lewmc.essence.Essence;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.DateTimeException;
 import java.time.Duration;
@@ -116,6 +117,15 @@ public class TeleportUtil {
 
     public void doTeleport(Player player, Location location, int delay) {
         FoliaLib flib = new FoliaLib(this.plugin);
-        flib.getImpl().runAtEntityLater(player, () -> player.teleport(location), delay * 20L);
+        if (flib.isFolia()) {
+            flib.getImpl().runAtEntityLater(player, () -> player.teleportAsync(location), delay * 20L);
+        } else {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.teleport(location);
+                }
+            }.runTaskLater(plugin, delay * 20L);
+        }
     }
 }
