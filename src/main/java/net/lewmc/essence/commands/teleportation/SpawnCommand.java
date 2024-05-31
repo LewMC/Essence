@@ -100,7 +100,7 @@ public class SpawnCommand implements CommandExecutor {
                         LogUtil log = new LogUtil(this.plugin);
                         log.info("Spawn implicitly set for world '"+spawnName+"'.");
                     }
-                    LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                    LocationUtil locationUtil = new LocationUtil(this.plugin);
                     locationUtil.UpdateLastLocation(player);
 
                     teleportLocation = new Location(

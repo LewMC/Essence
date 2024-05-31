@@ -96,7 +96,7 @@ public class HomeCommand implements CommandExecutor {
                     return true;
                 }
 
-                LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                LocationUtil locationUtil = new LocationUtil(this.plugin);
                 locationUtil.UpdateLastLocation(player);
 
                 teleUtil.setCooldown(player, "home");

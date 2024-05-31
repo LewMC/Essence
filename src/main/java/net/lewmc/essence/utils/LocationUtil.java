@@ -5,18 +5,22 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.Random;
 
+/**
+ * Essence location utility.
+ */
 public class LocationUtil {
     private final Essence plugin;
-    private final MessageUtil message;
 
-    public LocationUtil(Essence plugin, MessageUtil message) {
+    /**
+     * Constructor for the LocationUtil class.
+     * @param plugin Reference to the main Essence class.
+     */
+    public LocationUtil(Essence plugin) {
         this.plugin = plugin;
-        this.message = message;
     }
 
     public void UpdateLastLocation(Player player) {

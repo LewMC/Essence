@@ -71,7 +71,7 @@ public class WarpCommand implements CommandExecutor {
                         this.log.warn("Error: world is null, please check configuration file.");
                         return true;
                     }
-                    LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                    LocationUtil locationUtil = new LocationUtil(this.plugin);
                     locationUtil.UpdateLastLocation(player);
 
                     teleUtil.setCooldown(player, "warp");

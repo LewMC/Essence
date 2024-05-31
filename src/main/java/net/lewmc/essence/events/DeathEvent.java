@@ -17,7 +17,7 @@ public class DeathEvent implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         MessageUtil message = new MessageUtil((CommandSender)event.getPlayer(), this.plugin);
-        LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+        LocationUtil locationUtil = new LocationUtil(this.plugin);
         locationUtil.UpdateLastLocation(event.getPlayer());
     }
 }

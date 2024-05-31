@@ -32,10 +32,23 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 
+/**
+ * The main Essence class.
+ */
 public class Essence extends JavaPlugin {
+    /**
+     * The logging system.
+     */
     private final LogUtil log = new LogUtil(this);
+
+    /**
+     * The config.yml's verbose value is stored here.
+     */
     public boolean verbose;
 
+    /**
+     * This function runs when Essence is enabled.
+     */
     @Override
     public void onEnable() {
 
@@ -82,6 +95,9 @@ public class Essence extends JavaPlugin {
         this.log.info("Startup completed.");
     }
 
+    /**
+     * Checks if the server is running Paper, and informs the user that they should upgrade if not.
+     */
     private void checkForPaper() {
         CommandUtil cmd = new CommandUtil(this);
         if (!cmd.isPaperCompatible()) {

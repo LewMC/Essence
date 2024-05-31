@@ -12,15 +12,28 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Essence's teleportation utility.
+ */
 public class TeleportUtil {
     private final Essence plugin;
     private final LogUtil log;
 
+    /**
+     * Constructor for the TeleportUtil class.
+     * @param plugin Reference to the main Essence class.
+     */
     public TeleportUtil(Essence plugin) {
         this.plugin = plugin;
         this.log = new LogUtil(plugin);
     }
 
+    /**
+     * Checks if the cooldown has surpassed for a specific type of teleportation.
+     * @param player Player - The player to query
+     * @param type String - The type of teleportation.
+     * @return boolean - If the cooldown has surpassed or not.
+     */
     public boolean cooldownSurpassed(Player player, String type) {
         int cooldown = this.plugin.getConfig().getInt("teleportation."+type+".cooldown");
         if (cooldown < 0) { return true; }
@@ -51,6 +64,11 @@ public class TeleportUtil {
         return timeElapsed.getSeconds() >= cooldown;
     }
 
+    /**
+     * Sets the cooldown for a specific type of teleportation.
+     * @param player Player - The player to set the cooldown for.
+     * @param type String - The type of cooldown.
+     */
     public void setCooldown(Player player, String type) {
         FileUtil data = new FileUtil(this.plugin);
         data.load(data.playerDataFile(player));
@@ -63,6 +81,12 @@ public class TeleportUtil {
 
     }
 
+    /**
+     * Gets the amount of time remaining on a specific type of cooldown.
+     * @param player Player - The player to set the cooldown for.
+     * @param type String - The type of cooldown.
+     * @return int - The amount of time remaining.
+     */
     public int cooldownRemaining(Player player, String type) {
         int cooldown = this.plugin.getConfig().getInt("teleportation."+type + ".cooldown");
 
@@ -93,6 +117,17 @@ public class TeleportUtil {
         return Math.toIntExact(Math.max(0, (long) cooldown - timeElapsed.getSeconds()));
     }
 
+    /**
+     * Creates a location to teleport a player, then teleports them.
+     * @param player Player - The player to teleport.
+     * @param world World - The world to teleport them to.
+     * @param X double - The X coordinate.
+     * @param Y double - The Y coordinate.
+     * @param Z double - The Z coordinate.
+     * @param yaw float - The yaw.
+     * @param pitch float - The pitch
+     * @param delay int - The time to wait before teleporting.
+     */
     public void doTeleport(
             Player player,
             World world,
@@ -115,6 +150,12 @@ public class TeleportUtil {
         this.doTeleport(player, loc, delay);
     }
 
+    /**
+     * Teleports a player.
+     * @param player Player - The player to teleport.
+     * @param location Location - The location to teleport them to,
+     * @param delay int - The amount of time to wait before teleporting.
+     */
     public void doTeleport(Player player, Location location, int delay) {
         FoliaLib flib = new FoliaLib(this.plugin);
         if (flib.isFolia()) {

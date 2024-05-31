@@ -57,7 +57,7 @@ public class BackCommand implements CommandExecutor {
                     return true;
                 }
 
-                LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                LocationUtil locationUtil = new LocationUtil(this.plugin);
                 locationUtil.UpdateLastLocation(player);
 
                 TeleportUtil tp = new TeleportUtil(plugin);
