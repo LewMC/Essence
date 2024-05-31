@@ -1,4 +1,4 @@
-name: Maven Build & JavaDoc Deploy
+name: Deploy JavaDoc
 
 on:
   push:
