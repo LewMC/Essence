@@ -66,9 +66,9 @@ public class SethomeCommand implements CommandExecutor {
                     return true;
                 }
 
-                String homeName = "homes" + name.toLowerCase();
+                String homeName = "homes." + name.toLowerCase();
 
-                if (playerData.get(homeName) == null) {
+                if (playerData.get(homeName) != null) {
                     playerData.close();
                     message.PrivateMessage("home", "alreadyexists");
                     return true;
