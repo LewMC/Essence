@@ -38,6 +38,14 @@
               <pattern>org.bstats</pattern>
               <shadedPattern>net.lewmc.essence</shadedPattern>
             </relocation>
+            <relocation>
+              <pattern>com.tcoded</pattern>
+              <shadedPattern>net.lewmc.essence</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.tchristofferson</pattern>
+              <shadedPattern>net.lewmc.essence</shadedPattern>
+            </relocation>
           </relocations>
         </configuration>
       </plugin>
