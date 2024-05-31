@@ -1,9 +1,9 @@
-name: Deploy Javadoc to GitHub Pages
+name: Maven Build & JavaDoc Deploy
 
 on:
   push:
     branches:
-      - main  # Change this to your default branch if it's not "main"
+      - main
 
 jobs:
   build:
@@ -19,11 +19,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
       - name: Generate Javadoc
         run: |
           mkdir -p javadoc
           javadoc -d javadoc -sourcepath src/main/java -subpackages net.lewmc.essence
-          # Replace 'src/main/java' and 'net.lewmc.essence' with the actual source path and package name of your project
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
