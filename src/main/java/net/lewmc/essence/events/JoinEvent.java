@@ -67,7 +67,8 @@ public class JoinEvent implements Listener {
                             Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY(),
                             Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getZ(),
                             Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getYaw(),
-                            Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch()
+                            Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch(),
+                            0
                     );
                 } else {
                     message.PrivateMessage("spawn", "notexist");
@@ -82,7 +83,8 @@ public class JoinEvent implements Listener {
                         spawnConfiguration.getDouble("spawn."+spawnName+".Y"),
                         spawnConfiguration.getDouble("spawn."+spawnName+".Z"),
                         (float) spawnConfiguration.getDouble("spawn."+spawnName+".yaw"),
-                        (float) spawnConfiguration.getDouble("spawn."+spawnName+".pitch")
+                        (float) spawnConfiguration.getDouble("spawn."+spawnName+".pitch"),
+                        0
                 );
             }
 

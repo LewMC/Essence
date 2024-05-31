@@ -39,7 +39,8 @@ public class RespawnEvent implements Listener {
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY(),
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getZ(),
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getYaw(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch()
+                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch(),
+                        0
                 );
             } else {
                 message.PrivateMessage("spawn", "notexist");
@@ -54,7 +55,8 @@ public class RespawnEvent implements Listener {
                     spawns.getDouble("spawn."+spawnName+".Y"),
                     spawns.getDouble("spawn."+spawnName+".Z"),
                     (float) spawns.getDouble("spawn."+spawnName+".yaw"),
-                    (float) spawns.getDouble("spawn."+spawnName+".pitch")
+                    (float) spawns.getDouble("spawn."+spawnName+".pitch"),
+                    0
             );
         }
 
