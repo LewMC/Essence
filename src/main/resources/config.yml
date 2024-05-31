@@ -56,8 +56,8 @@ disabled-commands:
   - example
 
 # VERBOSE
-# Outputs more information to the console.
-# If you're having issues, enable this.
+# Outputs more information to the console. If you're having issues, enable this.
+# Warning: Creates a lot of console spam.
 verbose: true
 
 # Do not change this!

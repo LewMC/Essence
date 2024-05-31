@@ -52,7 +52,7 @@ public class WarpsCommand implements CommandExecutor {
                 FileUtil data = new FileUtil(this.plugin);
                 data.load("/data/warps.yml");
 
-                Set<String> keys = data.getKeys("warp", false);
+                Set<String> keys = data.getKeys("warps", false);
 
                 if (keys == null) {
                     data.close();

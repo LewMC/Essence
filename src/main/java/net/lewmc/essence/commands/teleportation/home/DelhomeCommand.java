@@ -56,19 +56,21 @@ public class DelhomeCommand implements CommandExecutor {
                 FileUtil config = new FileUtil(this.plugin);
                 config.load(config.playerDataFile(player));
 
-                if (config.get("homes."+name) == null) {
+                String homeName = name.toLowerCase();
+
+                if (config.get("homes."+homeName) == null) {
                     config.close();
                     message.PrivateMessage("home", "notfound", name);
                     return true;
                 }
 
-                String homeName = name.toLowerCase();
-
-                config.set("homes"+homeName, null);
+                if (config.remove("homes."+homeName)) {
+                    message.PrivateMessage("home", "deleted", homeName);
+                } else {
+                    message.PrivateMessage("generic", "exception");
+                }
 
                 config.save();
-
-                message.PrivateMessage("home", "deleted", homeName);
             } else {
                 permission.not();
             }

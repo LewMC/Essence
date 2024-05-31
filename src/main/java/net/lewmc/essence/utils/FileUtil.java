@@ -353,4 +353,22 @@ public class FileUtil {
         }
         return fileName;
     }
+
+    /**
+     * Removes a key and it's associated data.
+     * @param key String - The item to remove.
+     * @return If the operation was successful
+     */
+    public boolean remove(String key) {
+        if (this.isOpen()) {
+            this.set(key,null);
+            if (this.plugin.verbose) {
+                this.log.info("Removed "+key+" from file "+this.file);
+            }
+            return true;
+        } else {
+            this.log.warn("Tried to remove an item from a file before one had been opened.");
+            return false;
+        }
+    }
 }

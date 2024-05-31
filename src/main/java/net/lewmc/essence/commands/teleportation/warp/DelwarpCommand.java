@@ -63,11 +63,13 @@ public class DelwarpCommand implements CommandExecutor {
                     return true;
                 }
 
-                config.set("warps"+warpName, null);
+                if (config.remove("warps."+warpName)) {
+                    message.PrivateMessage("warp", "deleted", warpName);
+                } else {
+                    message.PrivateMessage("generic", "exception");
+                }
 
                 config.save();
-
-                message.PrivateMessage("warp", "deleted", warpName);
             } else {
                 permission.not();
             }
