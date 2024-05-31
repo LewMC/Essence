@@ -7,17 +7,16 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.*;
 
 public class TeamUtil {
     private final Essence plugin;
     private final MessageUtil message;
-    private final DataUtil data;
 
     public TeamUtil(Essence plugin, MessageUtil message) {
         this.plugin = plugin;
         this.message = message;
-        this.data = new DataUtil(this.plugin, this.message);
     }
     public void CreateNewTeam(String name, UUID leader) {
         SecurityUtil su = new SecurityUtil();
@@ -26,28 +25,24 @@ public class TeamUtil {
             return;
         }
 
-        if (!this.data.fileExists("/data/teams/"+name+".yml")) {
-            if (this.data.createFile("/data/teams/"+name+".yml")) {
-                this.loadData(name);
-                this.data.createSection("members");
-                ConfigurationSection members = this.data.getSection("members");
-                members.set("leader", leader.toString());
-                members.set("default", null);
+        FileUtil teamsFile = new FileUtil(this.plugin);
 
-                this.data.createSection("rules");
-                ConfigurationSection rules = this.data.getSection("rules");
-                rules.set("allow-friendly-fire", true);
+        if (!teamsFile.exists("/data/teams/"+name+".yml")) {
+            if (teamsFile.create("/data/teams/"+name+".yml")) {
+                teamsFile.load(name);
 
-                this.data.save();
+                teamsFile.set("members.leader", leader.toString());
+                teamsFile.set("members.default", null);
 
-                this.data.load(data.playerDataFile(leader));
-                ConfigurationSection cs2 = this.data.getSection("user");
-                if (cs2 == null) {
-                    this.data.createSection("user");
-                    cs2 = this.data.getSection("user");
-                }
-                cs2.set("team", name);
-                this.data.save();
+                teamsFile.set("rules.allow-friendly-fire", true);
+
+                teamsFile.save();
+
+                FileUtil playerDataFile = new FileUtil(this.plugin);
+                playerDataFile.load(playerDataFile.playerDataFile(leader));
+
+                playerDataFile.set("user.team", name);
+                playerDataFile.save();
 
                 message.PrivateMessage("team", "created", name);
             } else {
@@ -61,13 +56,13 @@ public class TeamUtil {
     }
 
     public void requestJoin(String team, UUID player) {
-        if (this.data.fileExists("/data/teams/"+team+".yml")) {
-            this.loadData(team);
-            ConfigurationSection cs = this.data.getSection("members");
-            List<String> requests = cs.getStringList("requests");
+        FileUtil teamsFile = new FileUtil(this.plugin);
+        if (teamsFile.exists("/data/teams/"+team+".yml")) {
+            teamsFile.load("/data/teams/"+team+".yml");
+            List<String> requests = teamsFile.getStringList("members.requests");
             requests.add(player.toString());
-            cs.set("requests", requests);
-            this.data.save();
+            teamsFile.set("members.requests", requests);
+            teamsFile.save();
             message.PrivateMessage("team", "requested", team);
         } else {
             message.PrivateMessage("team", "notfound");
@@ -75,24 +70,25 @@ public class TeamUtil {
     }
 
     public String requestsToJoin(String team) {
-        if (this.data.fileExists("/data/teams/"+team+".yml")) {
-            this.loadData(team);
-            ConfigurationSection cs = this.data.getSection("members");
-            List<String> requests = cs.getStringList("requests");
-            this.data.close();
+        FileUtil teamsFile = new FileUtil(this.plugin);
+        if (teamsFile.exists("/data/teams/"+team+".yml")) {
+            teamsFile.load("/data/teams/"+team+".yml");
+
+            List<String> requests = teamsFile.getStringList("members.requests");
+            teamsFile.close();
 
             StringBuilder requestList = new StringBuilder();
             int i = 0;
 
             for (String key : requests) {
-                this.data.load(data.playerDataFile(UUID.fromString(key)));
-                ConfigurationSection user = this.data.getSection("user");
+                FileUtil playerFile = new FileUtil(this.plugin);
+                playerFile.load(playerFile.playerDataFile(UUID.fromString(key)));
                 if (i == 0) {
-                    requestList.append(user.getString("last-known-name"));
+                    requestList.append(playerFile.getString("user.last-known-name"));
                 } else {
-                    requestList.append(", ").append(user.getString("last-known-name"));
+                    requestList.append(", ").append(playerFile.getString("user.last-known-name"));
                 }
-                this.data.close();
+                playerFile.close();
                 i++;
             }
 
@@ -104,11 +100,11 @@ public class TeamUtil {
     }
 
     public boolean isLeader(String team, UUID player) {
-        if (this.data.fileExists("/data/teams/"+team+".yml")) {
-            this.loadData(team);
-            ConfigurationSection cs = this.data.getSection("members");
-            String leader = cs.getString("leader");
-            this.data.close();
+        FileUtil teamData = new FileUtil(this.plugin);
+        if (teamData.exists("/data/teams/"+team+".yml")) {
+            teamData.load("/data/teams/"+team+".yml");
+            String leader = teamData.getString("members.leader");
+            teamData.close();
             return leader.equalsIgnoreCase(player.toString());
         } else {
             return false;
@@ -116,90 +112,75 @@ public class TeamUtil {
     }
 
     public @Nullable String getPlayerTeam(UUID player) {
-        this.data.load(data.playerDataFile(player));
-        ConfigurationSection cs = this.data.getSection("user");
-        if (cs == null) {
+        FileUtil playerData = new FileUtil(this.plugin);
+        playerData.load(playerData.playerDataFile(player));
+        if (playerData.getString("user.team") == null) {
+            playerData.close();
             return null;
         } else {
-            String team = cs.getString("team");
-            this.data.close();
+            String team = playerData.getString("user.team");
+            playerData.close();
             return team;
         }
-    }
-
-    public void loadData(String team) {
-        this.data.load("/data/teams/" + team + ".yml");
     }
 
     public boolean acceptRequest(String team, String player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
-        this.data.load(this.data.playerDataFile(op.getUniqueId()));
-        ConfigurationSection requestedUser = this.data.getSection("user");
-        if (requestedUser == null) {
-            this.data.createSection("user");
-            requestedUser = this.data.getSection("user");
-        }
-        requestedUser.set("team", team);
-        this.data.save();
+        FileUtil playerData = new FileUtil(this.plugin);
+        playerData.load(playerData.playerDataFile(op.getUniqueId()));
 
-        this.loadData(team);
-        ConfigurationSection teamData = this.data.getSection("members");
-        if (teamData == null) {
-            this.data.createSection("members");
-            teamData = this.data.getSection("members");
-        }
+        playerData.set("user.team", team);
+        playerData.save();
 
-        List<String> defaultMembers = teamData.getStringList("default");
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+team+".yml");
+
+        List<String> defaultMembers = teamData.getStringList("members.default");
         defaultMembers.add(String.valueOf(op.getUniqueId()));
-        teamData.set("default", defaultMembers);
+        teamData.set("members.default", defaultMembers);
 
-        List<String> requestedMembers = teamData.getStringList("requests");
+        List<String> requestedMembers = teamData.getStringList("members.requests");
         requestedMembers.remove(String.valueOf(op.getUniqueId()));
-        teamData.set("requests", requestedMembers);
+        teamData.set("members.requests", requestedMembers);
 
-        this.data.save();
+        teamData.save();
         return true;
     }
 
     public boolean declineRequest(String team, String player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
-        this.loadData(team);
-        ConfigurationSection teamData = this.data.getSection("members");
-        if (teamData == null) {
-            this.data.createSection("members");
-            teamData = this.data.getSection("members");
-        }
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+team+".yml");
 
-        List<String> requestedMembers = teamData.getStringList("requests");
+        List<String> requestedMembers = teamData.getStringList("members.requests");
         requestedMembers.remove(String.valueOf(op.getUniqueId()));
-        teamData.set("requests", requestedMembers);
+        teamData.set("members.requests", requestedMembers);
 
-        this.data.save();
+        teamData.save();
         return true;
     }
 
     public boolean leave(String playerTeam, UUID uuid) {
-        this.data.load(this.data.playerDataFile(uuid));
+        
+        FileUtil playerData = new FileUtil(this.plugin);
+        playerData.load(playerData.playerDataFile(uuid));
 
-        ConfigurationSection leavingUser = this.data.getSection("user");
-        if (leavingUser != null) {
-            leavingUser.set("team", null);
+        if (playerData.get("team") != null) {
+            playerData.set("team", null);
         }
 
-        this.data.save();
+        playerData.save();
 
-        this.loadData(playerTeam);
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+playerTeam+".yml");
 
-        ConfigurationSection teamData = this.data.getSection("members");
-        if (teamData != null) {
-            List<String> defaultMembers = teamData.getStringList("default");
-            defaultMembers.remove(String.valueOf(uuid));
-            teamData.set("default", defaultMembers);
-        }
+        List<String> defaultMembers = teamData.getStringList("members.default");
+        defaultMembers.remove(String.valueOf(uuid));
+        teamData.set("members.default", defaultMembers);
 
-        this.data.save();
+        playerData.save();
 
         return true;
     }
@@ -207,61 +188,53 @@ public class TeamUtil {
     public boolean changeLeader(String playerTeam, String newLeader, String oldLeader) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(newLeader);
 
-        this.loadData(playerTeam);
-        ConfigurationSection cs = this.data.getSection("members");
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+playerTeam+".yml");
 
-        if (cs == null) {
-            return false;
-        }
+        teamData.set("members.leader", String.valueOf(op.getUniqueId()));
 
-        cs.set("leader", String.valueOf(op.getUniqueId()));
-
-        List<String> defaultMembers = cs.getStringList("default");
+        List<String> defaultMembers = teamData.getStringList("members.default");
         defaultMembers.add(oldLeader);
         defaultMembers.remove(String.valueOf(op.getUniqueId()));
-        cs.set("default", defaultMembers);
+        teamData.set("members.default", defaultMembers);
 
-        this.data.save();
+        teamData.save();
 
         return true;
     }
 
-    public boolean exists(String team) {
-        return this.data.fileExists("/data/teams/" + team + ".yml");
-    }
-
     public String getTeamLeader(String team) {
-        this.loadData(team);
-        ConfigurationSection cs = this.data.getSection("members");
-        String leader = cs.getString("leader");
-        this.data.close();
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+team+".yml");
+        String leader = teamData.getString("members.leader");
+        teamData.close();
 
-        this.data.load(data.playerDataFile(UUID.fromString(leader)));
-        ConfigurationSection user = this.data.getSection("user");
-        leader = user.getString("last-known-name");
-        this.data.close();
+        FileUtil playerData = new FileUtil(this.plugin);
+        playerData.load(playerData.playerDataFile(UUID.fromString(leader)));
+        leader = playerData.getString("user.last-known-name");
+        playerData.close();
 
         return leader;
     }
 
     public String getTeamMembers(String team) {
-        this.loadData(team);
-        ConfigurationSection cs = data.getSection("members");
-        List<String> requests = cs.getStringList("default");
-        this.data.close();
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+team+".yml");
+        List<String> requests = teamData.getStringList("members.default");
+        teamData.close();
 
         StringBuilder membersList = new StringBuilder();
         int i = 0;
 
         for (String key : requests) {
-            this.data.load(data.playerDataFile(UUID.fromString(key)));
-            ConfigurationSection user = this.data.getSection("user");
+            FileUtil playerDataFile = new FileUtil(this.plugin);
+            playerDataFile.load(playerDataFile.playerDataFile(UUID.fromString(key)));
             if (i == 0) {
-                membersList.append(user.getString("last-known-name"));
+                membersList.append(playerDataFile.getString("user.last-known-name"));
             } else {
-                membersList.append(", ").append(user.getString("last-known-name"));
+                membersList.append(", ").append(playerDataFile.getString("user.last-known-name"));
             }
-            this.data.close();
+            playerDataFile.close();
             i++;
         }
 
@@ -277,10 +250,10 @@ public class TeamUtil {
         OfflinePlayer op = Bukkit.getOfflinePlayer(username);
         String uuid = op.getUniqueId().toString();
 
-        this.loadData(team);
-        ConfigurationSection cs = data.getSection("members");
-        List<String> members = cs.getStringList("default");
-        this.data.close();
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+team+".yml");
+        List<String> members = teamData.getStringList("members.default");
+        teamData.close();
 
         for (String key : members) {
             if (Objects.equals(key, uuid)) {
@@ -295,10 +268,10 @@ public class TeamUtil {
         OfflinePlayer op = Bukkit.getOfflinePlayer(username);
         String uuid = op.getUniqueId().toString();
 
-        this.loadData(team);
-        ConfigurationSection cs = data.getSection("members");
-        List<String> members = cs.getStringList("requests");
-        this.data.close();
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+team+".yml");
+        List<String> members = teamData.getStringList("members.requests");
+        teamData.close();
 
         for (String key : members) {
             if (Objects.equals(key, uuid)) {
@@ -310,60 +283,48 @@ public class TeamUtil {
     }
 
     public boolean disband(String team, String teamLeader) {
-        this.loadData(team);
-        ConfigurationSection cs = data.getSection("members");
-        List<String> members = cs.getStringList("default");
-        this.data.close();
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+team+".yml");
+        List<String> members = teamData.getStringList("members.default");
+        teamData.close();
 
         for (String key : members) {
-            this.data.load(data.playerDataFile(UUID.fromString(key)));
-            ConfigurationSection user = this.data.getSection("user");
-            user.set("team", null);
-            this.data.save();
+            FileUtil playerData = new FileUtil(this.plugin);
+            playerData.load(playerData.playerDataFile(UUID.fromString(key)));
+            playerData.set("user.team", null);
+            playerData.save();
         }
 
-        this.data.load(data.playerDataFile(UUID.fromString(teamLeader)));
-        ConfigurationSection user = this.data.getSection("user");
-        user.set("team", null);
-        this.data.save();
+        FileUtil playerData = new FileUtil(this.plugin);
+        playerData.load(playerData.playerDataFile(UUID.fromString(teamLeader)));
+        playerData.set("user.team", null);
+        playerData.save();
 
-        return this.data.deleteFile("/data/teams/" + team + ".yml");
+        return teamData.delete("/data/teams/" + team + ".yml");
     }
 
     public boolean areTeammates(Player p1, Player p2) {
-        this.data.load(this.data.playerDataFile(p1));
-        ConfigurationSection p1config = this.data.getSection("user");
-        if (p1config == null) { return false; }
-        String p1team = p1config.getString("team");
-        this.data.close();
+        FileUtil p1data = new FileUtil(this.plugin);
+        p1data.load(p1data.playerDataFile(p1));
+        if (p1data.getString("user.team") == null) { return false; }
+        String p1team = p1data.getString("user.team");
+        p1data.close();
 
-        if (p1team == null) {
-            return false;
-        }
-
-        this.data.load(this.data.playerDataFile(p2));
-        ConfigurationSection p2config = this.data.getSection("user");
-        if (p2config == null) { return false; }
-        String p2team = p1config.getString("team");
-        this.data.close();
-
-        if (p2team == null) {
-            return false;
-        }
+        FileUtil p2data = new FileUtil(this.plugin);
+        p2data.load(p2data.playerDataFile(p2));
+        if (p2data.getString("user.team") == null) { return false; }
+        String p2team = p2data.getString("user.team");
+        p2data.close();
 
         return (p1team.equalsIgnoreCase(p2team));
     }
 
     public boolean getRule(String team, String rule) {
-        this.loadData(team);
-        ConfigurationSection cs = this.data.getSection("rules");
-        if (cs == null) {
-            this.data.createSection("rules");
-            this.data.getSection("rules");
-        }
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+team+".yml");
 
-        boolean result = cs.getBoolean(rule);
-        this.data.save();
+        boolean result = teamData.getBoolean("rules."+rule);
+        teamData.save();
 
         return result;
     }
@@ -378,15 +339,11 @@ public class TeamUtil {
             return false;
         }
 
-        this.loadData(team);
-        ConfigurationSection cs = this.data.getSection("rules");
-        if (cs == null) {
-            this.data.createSection("rules");
-            this.data.getSection("rules");
-        }
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+team+".yml");
 
-        cs.set(rule, booleanValue);
-        this.data.save();
+        teamData.set("rules."+rule, booleanValue);
+        teamData.save();
 
         return true;
     }

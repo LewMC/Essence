@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class FileUtil {
     private final Essence plugin;
@@ -79,6 +80,26 @@ public class FileUtil {
             }
         } else {
             this.log.warn("Tried to open a file when another file was already open.");
+            return false;
+        }
+    }
+
+    /**
+     * Deletes a file.
+     * @return boolean - If the operation was successful
+     */
+    public boolean delete(String name) {
+        if (this.isOpen()) {
+            try {
+                File file = new File(this.plugin.getDataFolder() + name);
+                return file.delete();
+            } catch (SecurityException e) {
+                this.log.severe("Failed to save file " + name);
+                this.log.severe(e.getMessage());
+                return false;
+            }
+        } else {
+            this.log.warn("Tried to save a file without opening a file first.");
             return false;
         }
     }
@@ -217,13 +238,13 @@ public class FileUtil {
     }
 
     /**
-     * Gets a List from the configuration file.
+     * Gets a String List from the configuration file.
      * @param key The location of the value.
      * @return List - the value.
      */
-    public List<?> getList(String key) {
+    public List<String> getStringList(String key) {
         if (this.isOpen()) {
-            return this.config.getList(key);
+            return this.config.getStringList(key);
         } else {
             this.log.warn("Tried to get list from a file without opening a file first.");
             return null;
@@ -289,11 +310,20 @@ public class FileUtil {
     }
 
     /**
-     * Return the location of the player's data file.
+     * Return the location of the player's data file from an instance of the player.
      * @param player The player.
      * @return The data file URI inside the /plugin/essence folder.
      */
     public String playerDataFile(Player player) {
         return "data/"+player.getUniqueId()+".yml";
+    }
+
+    /**
+     * Return the location of the player's data file from the player's UUID.
+     * @param uuid The player's UUID.
+     * @return The data file URI inside the /plugin/essence folder.
+     */
+    public String playerDataFile(UUID uuid) {
+        return "data/"+uuid+".yml";
     }
 }
