@@ -7,9 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public class SpawnCommand implements CommandExecutor {
@@ -80,6 +78,10 @@ public class SpawnCommand implements CommandExecutor {
                 Location teleportLocation;
 
                 if (spawnData.get("spawn."+spawnName) == null) {
+                    if (this.plugin.verbose) {
+                        LogUtil log = new LogUtil(this.plugin);
+                        log.warn("Spawn not implicitly set for world '"+spawnName+"', grabbing vanilla spawnpoint.");
+                    }
                     if (Bukkit.getServer().getWorld(spawnName) != null) {
                         teleportLocation = new Location(
                                 Bukkit.getServer().getWorld(spawnName),
@@ -94,16 +96,20 @@ public class SpawnCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    if (this.plugin.verbose) {
+                        LogUtil log = new LogUtil(this.plugin);
+                        log.info("Spawn implicitly set for world '"+spawnName+"'.");
+                    }
                     LocationUtil locationUtil = new LocationUtil(this.plugin, message);
                     locationUtil.UpdateLastLocation(player);
 
                     teleportLocation = new Location(
                             Bukkit.getServer().getWorld(spawnName),
-                            spawnData.getDouble("spawn"+spawnName+"X"),
-                            spawnData.getDouble("spawn"+spawnName+"Y"),
-                            spawnData.getDouble("spawn"+spawnName+"Z"),
-                            (float) spawnData.getDouble("spawn"+spawnName+"yaw"),
-                            (float) spawnData.getDouble("spawn"+spawnName+"pitch")
+                            spawnData.getDouble("spawn."+spawnName+".X"),
+                            spawnData.getDouble("spawn."+spawnName+".Y"),
+                            spawnData.getDouble("spawn."+spawnName+".Z"),
+                            (float) spawnData.getDouble("spawn."+spawnName+".yaw"),
+                            (float) spawnData.getDouble("spawn."+spawnName+".pitch")
                     );
                 }
 

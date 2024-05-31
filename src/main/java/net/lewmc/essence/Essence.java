@@ -95,6 +95,7 @@ public class Essence extends JavaPlugin {
                 FoliaLib flib = new FoliaLib(this);
                 this.log.info("Is Folia: " + flib.isFolia());
             }
+            this.log.info("");
         }
     }
 
