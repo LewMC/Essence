@@ -49,7 +49,7 @@ public class JoinEvent implements Listener {
             MessageUtil message = new MessageUtil(event.getPlayer(), this.plugin);
 
             FileUtil essenceConfiguration = new FileUtil(this.plugin);
-            if (!essenceConfiguration.rootLoad("config.yml")) {
+            if (!essenceConfiguration.load("config.yml")) {
                 log.severe("Unable to load configuration file 'config.yml'. Essence may be unable to set some player data");
                 return;
             }
@@ -101,25 +101,33 @@ public class JoinEvent implements Listener {
         String playerDataFile = playerFile.playerDataFile(event.getPlayer());
 
         if (!playerFile.exists(playerDataFile)) {
-            log.info("Player data does not exist, creating file...");
+            if (this.plugin.verbose) {
+                log.info("Player data does not exist, creating file...");
+            }
 
             if (playerFile.create(playerDataFile)) {
-                log.info("Created player data!");
+                if (this.plugin.verbose) {
+                    log.info("Created player data!");
+                }
             } else {
                 log.warn("Unable to create player data! This may cause some commands to stop working.");
                 return;
             }
 
             if (!playerFile.load(playerDataFile)) {
-                log.severe("Unable to load configuration file 'data/players/"+event.getPlayer().getName()+".yml'. Essence may be unable to teleport players to the correct spawn");
+                log.severe("Unable to load configuration file '"+playerDataFile+"'. Essence may be unable to teleport players to the correct spawn");
                 return;
             }
+
             playerFile.set("economy.balance", plugin.getConfig().getDouble("economy.start-money"));
             playerFile.set("economy.accepting-payments", true);
             playerFile.set("user.last-known-name", event.getPlayer().getName());
         } else {
+            if (this.plugin.verbose) {
+                log.info("Player data exists.");
+            }
             if (!playerFile.load(playerDataFile)) {
-                log.severe("Unable to load configuration file 'data/players/"+event.getPlayer().getName()+".yml'. Essence may be unable to teleport players to the correct spawn");
+                log.severe("Unable to load configuration file '"+playerDataFile+"'. Essence may be unable to teleport players to the correct spawn");
                 return;
             }
 
@@ -133,6 +141,12 @@ public class JoinEvent implements Listener {
 
             playerFile.set("user.last-known-name", event.getPlayer().getName());
         }
-        playerFile.save();
+        if (playerFile.save()) {
+            if (this.plugin.verbose) {
+                log.info("Player data saved.");
+            }
+        } else {
+            log.warn("Unable to save player file - this may cause some issues.");
+        }
     }
 }

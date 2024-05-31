@@ -16,7 +16,7 @@ public class FileUtil {
     private final Essence plugin;
     private final LogUtil log;
     private YamlConfiguration config;
-    private String file;
+    private File file;
 
     /**
      * The constructor for the FileUtil class.
@@ -33,9 +33,12 @@ public class FileUtil {
      * @return boolean - If the file and directories (if required) were created successfully.
      */
     public boolean create(String name) {
-        File createFile = new File(this.plugin.getDataFolder()+name);
+        File createFile = new File(this.plugin.getDataFolder(), this.parseFileName(name));
         try {
-            if (createFile.getParentFile().mkdirs()) {
+            if (createFile.getParentFile().mkdirs() || createFile.getParentFile().exists()) {
+                if (this.plugin.verbose) {
+                    this.log.info("Created file at "+new File(this.plugin.getDataFolder(),this.parseFileName(name)));
+                }
                 return createFile.createNewFile();
             } else {
                 this.log.severe("Failed to create file " + name);
@@ -54,7 +57,7 @@ public class FileUtil {
      * @return boolean - If the file exists
      */
     public boolean exists(String name) {
-        File file = new File(this.plugin.getDataFolder()+name);
+        File file = new File(this.plugin.getDataFolder(), this.parseFileName(name));
         return file.exists();
     }
 
@@ -65,42 +68,21 @@ public class FileUtil {
     public boolean load(String name) {
         if (!this.isOpen()) {
             this.config = new YamlConfiguration();
+            File file = new File(this.plugin.getDataFolder(), this.parseFileName(name));
             try {
-                if (this.exists(name)) {
-                    this.config.load(new File(this.parseFileName(this.plugin.getDataFolder() + name)));
-                    this.file = this.plugin.getDataFolder() + name;
+                if (file.exists()) {
+                    this.config.load(file);
+                    this.file = file;
+                    if (this.plugin.verbose) {
+                        this.log.info("Opened file at "+file);
+                    }
                     return true;
                 } else {
+                    this.log.warn("Unable to open file at '" + file.getAbsolutePath() + "'.");
                     return false;
                 }
             } catch (IOException | InvalidConfigurationException e) {
-                this.log.severe("Failed to read file " + name);
-                this.log.severe(e.getMessage());
-                return false;
-            }
-        } else {
-            this.log.warn("Tried to open a file when another file was already open.");
-            return false;
-        }
-    }
-
-    /**
-     * Opens a configuration file from the server's root folder.
-     * @return boolean - If the operation was successful
-     */
-    public boolean rootLoad(String name) {
-        if (!this.isOpen()) {
-            this.config = new YamlConfiguration();
-            try {
-                if (this.exists(name)) {
-                    this.config.load(new File(this.parseFileName(name)));
-                    this.file = name;
-                    return true;
-                } else {
-                    return false;
-                }
-            } catch (IOException | InvalidConfigurationException e) {
-                this.log.severe("Failed to read file " + name);
+                this.log.severe("Failed to read file " + file.getAbsolutePath());
                 this.log.severe(e.getMessage());
                 return false;
             }
@@ -117,7 +99,7 @@ public class FileUtil {
     public boolean delete(String name) {
         if (this.isOpen()) {
             try {
-                File file = new File(this.plugin.getDataFolder() + name);
+                File file = new File(this.parseFileName(this.plugin.getDataFolder() + name));
                 return file.delete();
             } catch (SecurityException e) {
                 this.log.severe("Failed to save file " + name);
@@ -134,10 +116,10 @@ public class FileUtil {
      * Saves and closes the current configuration file to a custom location.
      * @return boolean - If the operation was successful
      */
-    public boolean save(String name) {
+    public boolean save(File name) {
         if (this.isOpen()) {
             try {
-                this.config.save(new File(this.plugin.getDataFolder() + name));
+                this.config.save(name);
                 this.close();
                 return true;
             } catch (IOException e) {
@@ -158,8 +140,10 @@ public class FileUtil {
     public boolean save() {
         if (this.isOpen()) {
             try {
-                this.config.save(new File(this.file));
-                this.close();
+                this.config.save(this.file);
+                if (this.plugin.verbose) {
+                    this.log.info("Saved file to "+this.file);
+                }
                 return true;
             } catch (IOException e) {
                 this.log.severe("Failed to save file " + this.file);
@@ -181,12 +165,11 @@ public class FileUtil {
      */
     public boolean set(String key, Object value) {
         if (this.isOpen()) {
-            if (this.config.get(key) != null) {
-                this.config.set(key, value);
-                return true;
-            } else {
-                return false;
+            this.config.set(key, value);
+            if (this.plugin.verbose) {
+                this.log.info("Set "+key+" to "+value+" in file "+this.file);
             }
+            return true;
         } else {
             this.log.warn("Tried to set a value in a file without opening a file first.");
             return false;
@@ -341,7 +324,7 @@ public class FileUtil {
      * @return The data file URI inside the /plugin/essence folder.
      */
     public String playerDataFile(Player player) {
-        return "data/"+player.getUniqueId()+".yml";
+        return "data/players/"+player.getUniqueId()+".yml";
     }
 
     /**
@@ -350,7 +333,7 @@ public class FileUtil {
      * @return The data file URI inside the /plugin/essence folder.
      */
     public String playerDataFile(UUID uuid) {
-        return "data/"+uuid+".yml";
+        return "data/players/"+uuid+".yml";
     }
 
     /**
@@ -359,8 +342,14 @@ public class FileUtil {
      * @return The correctly parsed filename.
      */
     private String parseFileName(String fileName) {
-        if (fileName != null && !fileName.startsWith("/")) {
-            return "/" + fileName;
+        if (fileName != null) {
+            // Replace backslashes with forward slashes
+            fileName = fileName.replace("\\", "/");
+
+            // Ensure the file name starts with a forward slash
+            if (!fileName.startsWith("/")) {
+                fileName = "/" + fileName;
+            }
         }
         return fileName;
     }
