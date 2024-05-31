@@ -56,10 +56,10 @@ public class SetspawnCommand implements CommandExecutor {
                 spawnFile.load("data/spawns.yml");
 
                 spawnFile.set("spawn."+spawnName+".X", loc.getX());
-                spawnFile.set("spawn."+spawnName+"Y", loc.getY());
-                spawnFile.set("spawn."+spawnName+"Z", loc.getZ());
-                spawnFile.set("spawn."+spawnName+"yaw", loc.getYaw());
-                spawnFile.set("spawn."+spawnName+"pitch", loc.getPitch());
+                spawnFile.set("spawn."+spawnName+".Y", loc.getY());
+                spawnFile.set("spawn."+spawnName+".Z", loc.getZ());
+                spawnFile.set("spawn."+spawnName+".yaw", loc.getYaw());
+                spawnFile.set("spawn."+spawnName+".pitch", loc.getPitch());
 
                 // Save the configuration to the file
                 spawnFile.save();
