@@ -1,4 +1,4 @@
-package net.lewmc.essence.commands.teleportation;
+package net.lewmc.essence.commands.teleportation.warp;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.FileUtil;
