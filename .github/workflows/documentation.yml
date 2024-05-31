@@ -1,4 +1,6 @@
 name: Deploy JavaDoc
+permissions:
+  actions: write
 
 on:
   push:
