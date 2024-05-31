@@ -67,7 +67,7 @@ public class FileUtil {
             this.config = new YamlConfiguration();
             try {
                 if (this.exists(name)) {
-                    this.config.load(new File(this.plugin.getDataFolder() + name));
+                    this.config.load(new File(this.parseFileName(this.plugin.getDataFolder() + name)));
                     this.file = this.plugin.getDataFolder() + name;
                     return true;
                 } else {
@@ -93,7 +93,7 @@ public class FileUtil {
             this.config = new YamlConfiguration();
             try {
                 if (this.exists(name)) {
-                    this.config.load(new File(name));
+                    this.config.load(new File(this.parseFileName(name)));
                     this.file = name;
                     return true;
                 } else {
@@ -337,7 +337,7 @@ public class FileUtil {
 
     /**
      * Return the location of the player's data file from an instance of the player.
-     * @param player The player.
+     * @param player Player - The player.
      * @return The data file URI inside the /plugin/essence folder.
      */
     public String playerDataFile(Player player) {
@@ -346,10 +346,22 @@ public class FileUtil {
 
     /**
      * Return the location of the player's data file from the player's UUID.
-     * @param uuid The player's UUID.
+     * @param uuid UUID - The player's UUID.
      * @return The data file URI inside the /plugin/essence folder.
      */
     public String playerDataFile(UUID uuid) {
         return "data/"+uuid+".yml";
+    }
+
+    /**
+     * Parses the filename to ensure leading slashes are correct.
+     * @param fileName String - The name of the file to be opened.
+     * @return The correctly parsed filename.
+     */
+    private String parseFileName(String fileName) {
+        if (fileName != null && !fileName.startsWith("/")) {
+            return "/" + fileName;
+        }
+        return fileName;
     }
 }
