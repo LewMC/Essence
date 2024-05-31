@@ -58,7 +58,7 @@ disabled-commands:
 # VERBOSE
 # Outputs more information to the console. If you're having issues, enable this.
 # Warning: Creates a lot of console spam.
-verbose: true
+verbose: false
 
 # Do not change this!
 config-version: 1
