@@ -85,6 +85,32 @@ public class FileUtil {
     }
 
     /**
+     * Opens a configuration file from the server's root folder.
+     * @return boolean - If the operation was successful
+     */
+    public boolean rootLoad(String name) {
+        if (!this.isOpen()) {
+            this.config = new YamlConfiguration();
+            try {
+                if (this.exists(name)) {
+                    this.config.load(new File(name));
+                    this.file = name;
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (IOException | InvalidConfigurationException e) {
+                this.log.severe("Failed to read file " + name);
+                this.log.severe(e.getMessage());
+                return false;
+            }
+        } else {
+            this.log.warn("Tried to open a file when another file was already open.");
+            return false;
+        }
+    }
+
+    /**
      * Deletes a file.
      * @return boolean - If the operation was successful
      */

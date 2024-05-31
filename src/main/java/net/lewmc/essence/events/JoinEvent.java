@@ -49,13 +49,19 @@ public class JoinEvent implements Listener {
             MessageUtil message = new MessageUtil(event.getPlayer(), this.plugin);
 
             FileUtil essenceConfiguration = new FileUtil(this.plugin);
-            essenceConfiguration.load("config.yml");
+            if (!essenceConfiguration.rootLoad("config.yml")) {
+                log.severe("Unable to load configuration file 'config.yml'. Essence may be unable to set some player data");
+                return;
+            }
 
             String spawnName = essenceConfiguration.get("teleportation.spawn.main-spawn-world").toString();
             essenceConfiguration.close();
 
             FileUtil spawnConfiguration = new FileUtil(this.plugin);
-            spawnConfiguration.load("data/spawns.yml");
+            if (!spawnConfiguration.load("data/spawns.yml")) {
+                log.severe("Unable to load configuration file 'data/spawns.yml'. Essence may be unable to teleport players to the correct spawn");
+                return;
+            }
 
             if (spawnConfiguration.get("spawn") == null) {
                 if (Bukkit.getServer().getWorld(spawnName) != null) {
@@ -104,12 +110,27 @@ public class JoinEvent implements Listener {
                 return;
             }
 
-            playerFile.load(playerDataFile);
+            if (!playerFile.load(playerDataFile)) {
+                log.severe("Unable to load configuration file 'data/players/"+event.getPlayer().getName()+".yml'. Essence may be unable to teleport players to the correct spawn");
+                return;
+            }
             playerFile.set("economy.balance", plugin.getConfig().getDouble("economy.start-money"));
             playerFile.set("economy.accepting-payments", true);
             playerFile.set("user.last-known-name", event.getPlayer().getName());
         } else {
-            playerFile.load(playerDataFile);
+            if (!playerFile.load(playerDataFile)) {
+                log.severe("Unable to load configuration file 'data/players/"+event.getPlayer().getName()+".yml'. Essence may be unable to teleport players to the correct spawn");
+                return;
+            }
+
+            if (playerFile.get("economy.balance") == null) {
+                playerFile.set("economy.balance", plugin.getConfig().getDouble("economy.start-money"));
+            }
+
+            if (playerFile.get("economy-accepting-payment") == null) {
+                playerFile.set("economy.accepting-payments", true);
+            }
+
             playerFile.set("user.last-known-name", event.getPlayer().getName());
         }
         playerFile.save();
