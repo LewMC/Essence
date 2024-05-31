@@ -2,6 +2,7 @@ name: Deploy JavaDoc
 permissions:
   contents: write
   pages: write
+  pull-requests: write
 
 on:
   push:
