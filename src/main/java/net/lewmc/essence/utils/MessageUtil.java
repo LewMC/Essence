@@ -94,7 +94,7 @@ public class MessageUtil {
         data.load("language/"+language+".yml");
 
         if (data.get(group) != null) {
-            String toSend = data.getString("group."+code);
+            String toSend = data.getString(group+"."+code);
             data.close();
             return toSend;
         } else {
