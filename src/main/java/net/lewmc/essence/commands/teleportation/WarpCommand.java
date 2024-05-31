@@ -59,17 +59,15 @@ public class WarpCommand implements CommandExecutor {
                         return true;
                     }
 
-                    DataUtil config = new DataUtil(this.plugin, message);
+                    FileUtil config = new FileUtil(this.plugin);
                     config.load("data/warps.yml");
 
-                    if (config.getSection("warps." + args[0].toLowerCase()) == null) {
+                    if (config.get("warps." + args[0].toLowerCase()) == null) {
                         message.PrivateMessage("warp", "notfound", args[0].toLowerCase());
                         return true;
                     }
 
-                    ConfigurationSection cs = config.getSection("warps." + args[0].toLowerCase());
-
-                    if (cs.getString("world") == null) {
+                    if (config.getString("warps." + args[0].toLowerCase()+".world") == null) {
                         config.close();
                         message.PrivateMessage("generic", "exception");
                         this.log.warn("Player "+player+" attempted to warp to "+args[0].toLowerCase()+" but couldn't due to an error.");
@@ -85,26 +83,18 @@ public class WarpCommand implements CommandExecutor {
 
                     teleUtil.setCooldown(player, "warp");
 
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            TeleportUtil tp = new TeleportUtil(plugin);
-                            tp.doTeleport(
-                                    player,
-                                    Bukkit.getServer().getWorld(Objects.requireNonNull(cs.getString("world"))),
-                                    cs.getDouble("X"),
-                                    cs.getDouble("Y"),
-                                    cs.getDouble("Z"),
-                                    (float) cs.getDouble("yaw"),
-                                    (float) cs.getDouble("pitch"),
-                                    waitTime
-                            );
+                    teleUtil.doTeleport(
+                            player,
+                            Bukkit.getServer().getWorld(Objects.requireNonNull(config.getString("warps." + args[0].toLowerCase()+".world"))),
+                            config.getDouble("warps." + args[0].toLowerCase()+".X"),
+                            config.getDouble("warps." + args[0].toLowerCase()+".Y"),
+                            config.getDouble("warps." + args[0].toLowerCase()+".Z"),
+                            (float) config.getDouble("warps." + args[0].toLowerCase()+".yaw"),
+                            (float) config.getDouble("warps." + args[0].toLowerCase()+".pitch"),
+                            waitTime
+                    );
 
-                            config.close();
-
-
-                        }
-                    }.runTaskLater(plugin, waitTime * 20L);
+                    config.close();
                     message.PrivateMessage("warp", "teleporting", args[0], waitTime+"");
 
                     return true;

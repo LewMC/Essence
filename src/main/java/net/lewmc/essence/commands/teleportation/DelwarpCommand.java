@@ -1,5 +1,6 @@
 package net.lewmc.essence.commands.teleportation;
 
+import net.lewmc.essence.utils.FileUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
@@ -52,22 +53,19 @@ public class DelwarpCommand implements CommandExecutor {
                     message.PrivateMessage("warp", "delusage");
                     return true;
                 }
-                DataUtil config = new DataUtil(this.plugin, message);
+                FileUtil config = new FileUtil(this.plugin);
                 config.load("data/warps.yml");
 
                 String warpName = args[0].toLowerCase();
 
-                if (!config.sectionExists("warps."+warpName)) {
+                if (config.get("warps."+warpName) == null) {
                     config.close();
                     message.PrivateMessage("warp", "notfound", warpName);
                     return true;
                 }
 
-                ConfigurationSection cs = config.getSection("warps");
+                config.set("warps"+warpName, null);
 
-                cs.set(warpName, null);
-
-                // Save the configuration to the file
                 config.save();
 
                 message.PrivateMessage("warp", "deleted", warpName);

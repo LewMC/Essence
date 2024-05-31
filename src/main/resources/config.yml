@@ -55,5 +55,10 @@ language: en-gb
 disabled-commands:
   - example
 
+# VERBOSE
+# Outputs more information to the console.
+# If you're having issues, enable this.
+verbose: true
+
 # Do not change this!
 config-version: 1

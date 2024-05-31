@@ -58,44 +58,40 @@ public class HomeCommand implements CommandExecutor {
                     return true;
                 }
 
-                DataUtil config = new DataUtil(this.plugin, message);
-                config.load(config.playerDataFile(player));
-
-                HomeUtil homeUtil = new HomeUtil();
+                FileUtil playerData = new FileUtil(this.plugin);
+                playerData.load(playerData.playerDataFile(player));
 
                 String homeName;
                 String chatHomeName;
 
                 if (args.length == 1) {
-                    homeName = homeUtil.HomeWrapper(args[0].toLowerCase());
+                    homeName = "homes." + args[0].toLowerCase();
                     chatHomeName = args[0].toLowerCase();
-                    if (config.getSection(homeName) == null) {
-                        config.close();
+                    if (playerData.get(homeName) == null) {
+                        playerData.close();
                         message.PrivateMessage("home", "notfound", args[0].toLowerCase());
                         return true;
                     }
                 } else {
-                    homeName = homeUtil.HomeWrapper("home");
+                    homeName = "homes.home";
                     chatHomeName = "home";
-                    if (config.getSection(homeName) == null) {
-                        config.close();
+                    if (playerData.get(homeName) == null) {
+                        playerData.close();
                         message.PrivateMessage("home", "noneset");
                         return true;
                     }
                 }
 
-                ConfigurationSection cs = config.getSection(homeName);
-
-                if (cs == null) {
-                    config.close();
+                if (playerData.get(homeName) == null) {
+                    playerData.close();
                     message.PrivateMessage("generic", "exception");
                     this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: Unable to load from configuration file, please check configuration file.");
                     return true;
                 }
 
-                if (cs.getString("world") == null) {
-                    config.close();
+                if (playerData.getString(homeName + ".world") == null) {
+                    playerData.close();
                     message.PrivateMessage("generic", "exception");
                     this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: world is null, please check configuration file.");
@@ -111,28 +107,23 @@ public class HomeCommand implements CommandExecutor {
 
                 teleUtil.setCooldown(player, "home");
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        TeleportUtil tp = new TeleportUtil(plugin);
-                        tp.doTeleport(
-                                player,
-                                Bukkit.getServer().getWorld(Objects.requireNonNull(cs.getString("world"))),
-                                cs.getDouble("X"),
-                                cs.getDouble("Y"),
-                                cs.getDouble("Z"),
-                                (float) cs.getDouble("yaw"),
-                                (float) cs.getDouble("pitch")
-                        );
-                        config.close();
+                teleUtil.doTeleport(
+                        player,
+                        Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString(homeName + ".world"))),
+                        playerData.getDouble(homeName + ".X"),
+                        playerData.getDouble(homeName + ".Y"),
+                        playerData.getDouble(homeName + ".Z"),
+                        (float) playerData.getDouble(homeName + ".yaw"),
+                        (float) playerData.getDouble(homeName + ".pitch"),
+                        waitTime
+                );
+                playerData.close();
 
-                        message.PrivateMessage("home", "teleporting", chatHomeName);
-                    }
-                }.runTaskLater(plugin, waitTime * 20L);
-                message.PrivateMessage("home", "teleporting", args[0], waitTime+"");
+                message.PrivateMessage("home", "teleporting", chatHomeName, waitTime + "");
+
+            } else {
+                permission.not();
             }
-        } else {
-            permission.not();
         }
         return true;
     }

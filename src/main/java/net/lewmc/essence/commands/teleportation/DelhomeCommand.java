@@ -54,10 +54,10 @@ public class DelhomeCommand implements CommandExecutor {
                     name = args[0];
                 }
 
-                DataUtil config = new DataUtil(this.plugin, message);
+                FileUtil config = new FileUtil(this.plugin);
                 config.load(config.playerDataFile(player));
 
-                if (!config.sectionExists("homes."+name)) {
+                if (config.get("homes."+name) == null) {
                     config.close();
                     message.PrivateMessage("home", "notfound", name);
                     return true;
@@ -65,11 +65,8 @@ public class DelhomeCommand implements CommandExecutor {
 
                 String homeName = name.toLowerCase();
 
-                ConfigurationSection cs = config.getSection("homes");
+                config.set("homes"+homeName, null);
 
-                cs.set(homeName, null);
-
-                // Save the configuration to the file
                 config.save();
 
                 message.PrivateMessage("home", "deleted", homeName);

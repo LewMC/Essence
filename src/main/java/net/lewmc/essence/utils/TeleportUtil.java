@@ -1,9 +1,12 @@
 package net.lewmc.essence.utils;
 
+import com.tcoded.folialib.FoliaLib;
+import io.papermc.paper.threadedregions.scheduler.EntityScheduler;
 import net.lewmc.essence.Essence;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.DateTimeException;
 import java.time.Duration;
@@ -13,12 +16,10 @@ import java.util.Objects;
 public class TeleportUtil {
     private final Essence plugin;
     private final LogUtil log;
-    private final MessageUtil message;
 
-    public TeleportUtil(Essence plugin, MessageUtil message) {
+    public TeleportUtil(Essence plugin) {
         this.plugin = plugin;
         this.log = new LogUtil(plugin);
-        this.message = message;
     }
 
     public boolean cooldownSurpassed(Player player, String type) {
@@ -116,15 +117,7 @@ public class TeleportUtil {
     }
 
     public void doTeleport(Player player, Location location, int delay) {
-        CommandUtil cu = new CommandUtil(this.plugin);
-        LogUtil log = new LogUtil(this.plugin);
-        if (cu.isFolia()) {
-
-            log.severe("Teleportation of users is currently unavailable on Folia.");
-            log.severe("We hope to bring this feature back soon.");
-        } else {
-            log.severe("Not folia!");
-            player.teleport(location);
-        }
+        FoliaLib flib = new FoliaLib(this.plugin);
+        flib.getImpl().runAtEntityLater(player, () -> { player.teleport(location); }, delay * 20L);
     }
 }

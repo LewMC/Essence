@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public class FileUtil {
     private final Essence plugin;
@@ -222,6 +224,40 @@ public class FileUtil {
     public List<?> getList(String key) {
         if (this.isOpen()) {
             return this.config.getList(key);
+        } else {
+            this.log.warn("Tried to get list from a file without opening a file first.");
+            return null;
+        }
+    }
+
+    /**
+     * Gets a List from the configuration file if is root.
+     * @param deep Should do deep search?
+     * @return List - the value.
+     */
+    public Set<String> getKeys(boolean deep) {
+        if (this.isOpen()) {
+            return this.config.getKeys(deep);
+        } else {
+            this.log.warn("Tried to get list from a file without opening a file first.");
+            return null;
+        }
+    }
+
+    /**
+     * Gets a List from the configuration file if not root.
+     * @param section The section of the file.
+     * @param deep Should do deep search?
+     * @return List - the value.
+     */
+    public Set<String> getKeys(String section, boolean deep) {
+        if (this.isOpen()) {
+            ConfigurationSection cs = this.config.getConfigurationSection(section);
+            if (cs != null) {
+                return cs.getKeys(deep);
+            } else {
+                return null;
+            }
         } else {
             this.log.warn("Tried to get list from a file without opening a file first.");
             return null;

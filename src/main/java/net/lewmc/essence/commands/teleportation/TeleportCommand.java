@@ -61,7 +61,7 @@ public class TeleportCommand implements CommandExecutor {
                     double z = Double.parseDouble(args[2]);
                     Location location = new Location(player.getWorld(), x, y, z);
                     TeleportUtil tp = new TeleportUtil(this.plugin);
-                    tp.doTeleport(player, location);
+                    tp.doTeleport(player, location, 0);
                 } else {
                     permission.not();
                 }
@@ -93,7 +93,7 @@ public class TeleportCommand implements CommandExecutor {
                         double z = Double.parseDouble(args[3]);
                         Location location = new Location(playerToTeleport.getWorld(), x, y, z);
                         TeleportUtil tp = new TeleportUtil(this.plugin);
-                        tp.doTeleport(player, location);
+                        tp.doTeleport(player, location, 0);
                     }
                 } else {
                     permission.not();
@@ -109,7 +109,7 @@ public class TeleportCommand implements CommandExecutor {
                             message.PrivateMessage("teleport", "to", p.getName());
 
                             TeleportUtil tp = new TeleportUtil(this.plugin);
-                            tp.doTeleport(player, player.getLocation());
+                            tp.doTeleport(player, p.getLocation(), 0);
                             return true;
                         }
                     }

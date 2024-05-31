@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.FileUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
@@ -48,13 +49,13 @@ public class WarpsCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("warps")) {
             if (permission.has("essence.warp.list")) {
-                DataUtil dataUtil = new DataUtil(this.plugin, message);
-                dataUtil.load("/data/warps.yml");
+                FileUtil data = new FileUtil(this.plugin);
+                data.load("/data/warps.yml");
 
-                Set<String> keys = dataUtil.getKeys("warps");
+                Set<String> keys = data.getKeys("warp", false);
 
                 if (keys == null) {
-                    dataUtil.close();
+                    data.close();
                     message.PrivateMessage("warp", "noneset");
                     return true;
                 }
@@ -71,7 +72,7 @@ public class WarpsCommand implements CommandExecutor {
                     }
                     i++;
                 }
-                dataUtil.close();
+                data.close();
                 message.PrivateMessage("warp", "list", warps.toString());
             } else {
                 permission.not();

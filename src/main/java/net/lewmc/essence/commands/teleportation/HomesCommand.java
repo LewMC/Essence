@@ -47,10 +47,10 @@ public class HomesCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("homes")) {
             if (permission.has("essence.home.list")) {
-                DataUtil dataUtil = new DataUtil(this.plugin, message);
+                FileUtil dataUtil = new FileUtil(this.plugin);
                 dataUtil.load(dataUtil.playerDataFile(player));
 
-                Set<String> keys = dataUtil.getKeys("homes");
+                Set<String> keys = dataUtil.getKeys("homes", false);
 
                 if (keys == null) {
                     dataUtil.close();

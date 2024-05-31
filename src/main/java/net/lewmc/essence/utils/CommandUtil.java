@@ -1,7 +1,6 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
-import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.util.List;
@@ -31,13 +30,5 @@ public class CommandUtil {
         File g = new File("config/paper-global.yml");
 
         return pwd.exists() && g.exists();
-    }
-
-    public boolean isFolia() {
-        return (
-                this.plugin.getServer().getName().equals("Folia") ||
-                this.plugin.getServer().getName().equals("Luminol") ||
-                this.plugin.getServer().getName().equals("LightningLuminol")
-        );
     }
 }

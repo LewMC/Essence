@@ -68,7 +68,8 @@ public class BackCommand implements CommandExecutor {
                         playerData.getDouble("last-location.Y"),
                         playerData.getDouble("last-location.Z"),
                         (float) playerData.getDouble("last-location.yaw"),
-                        (float) playerData.getDouble("last-location.pitch")
+                        (float) playerData.getDouble("last-location.pitch"),
+                        0
                 );
 
                 playerData.close();
