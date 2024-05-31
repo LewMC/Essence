@@ -33,3 +33,8 @@ jobs:
           java-version: 17
           target-folder: javadoc
           project: maven
+          
+      - name: Create pull request ✈️
+        run: gh pr create -B main -H javadoc --title 'Deploy Javadocs' --body 'Created by Github action'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
