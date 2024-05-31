@@ -1,5 +1,6 @@
 package net.lewmc.essence;
 
+import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.commands.TeamCommands;
 import net.lewmc.essence.commands.chat.*;
 import net.lewmc.essence.commands.economy.BalanceCommand;
@@ -25,6 +26,7 @@ import java.io.File;
 
 public class Essence extends JavaPlugin {
     private final LogUtil log = new LogUtil(this);
+    public boolean verbose;
 
     @Override
     public void onEnable() {
@@ -46,6 +48,8 @@ public class Essence extends JavaPlugin {
         this.log.info("");
         int pluginId = 20768; // <-- Replace with the id of your plugin!
         new Metrics(this, pluginId);
+
+        this.verbose = this.getConfig().getBoolean("verbose");
 
         if (!Bukkit.getOnlineMode()) {
             this.log.severe(">> Your server is running in offline mode.");
@@ -79,8 +83,10 @@ public class Essence extends JavaPlugin {
             this.log.severe("You can download it from https://papermc.io");
         } else {
             this.log.info("Running server jar: "+ this.getServer().getName());
-            CommandUtil cu = new CommandUtil(this);
-            this.log.info("Is Folia: "+ cu.isFolia());
+            if (this.verbose) {
+                FoliaLib flib = new FoliaLib(this);
+                this.log.info("Is Folia: " + flib.isFolia());
+            }
         }
     }
 
@@ -170,7 +176,6 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("repair")) { this.getCommand("repair").setExecutor(new RepairCommand(this)); }
 
             if (command.isEnabled("tp")) { this.getCommand("tp").setExecutor(new TeleportCommand(this)); }
-            if (command.isEnabled("tprandom")) { this.getCommand("tprandom").setExecutor(new TprandomCommand(this)); }
 
             if (command.isEnabled("home")) { this.getCommand("home").setExecutor(new HomeCommand(this)); }
             if (command.isEnabled("homes")) { this.getCommand("homes").setExecutor(new HomesCommand(this)); }

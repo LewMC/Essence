@@ -55,11 +55,10 @@ public class HelpCommand {
                     this.message.PrivateMessage("help", "teleport");
                     this.message.PrivateMessage("help", "delhome");
                     this.message.PrivateMessage("help", "back");
-                    this.message.PrivateMessage("help", "tpr");
                     this.message.PrivateMessage("help", "setspawn");
                     this.message.PrivateMessage("help", "spawn");
                     this.message.PrivateMessage("help", "world");
-                    this.blank(2);
+                    this.blank(3);
                     this.message.PrivateMessage("help", "page", "2", "2");
                 }
             } else if ("stats".equalsIgnoreCase(args[1])) {
