@@ -74,12 +74,12 @@ public class SethomeCommand implements CommandExecutor {
                     return true;
                 }
 
-                playerData.set(homeName + "world", loc.getWorld().getName());
-                playerData.set(homeName + "X", loc.getX());
-                playerData.set(homeName + "Y", loc.getY());
-                playerData.set(homeName + "Z", loc.getZ());
-                playerData.set(homeName + "yaw", loc.getYaw());
-                playerData.set(homeName + "pitch", loc.getPitch());
+                playerData.set(homeName + ".world", loc.getWorld().getName());
+                playerData.set(homeName + ".X", loc.getX());
+                playerData.set(homeName + ".Y", loc.getY());
+                playerData.set(homeName + ".Z", loc.getZ());
+                playerData.set(homeName + ".yaw", loc.getYaw());
+                playerData.set(homeName + ".pitch", loc.getPitch());
 
                 // Save the configuration to the file
                 playerData.save();

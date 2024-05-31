@@ -74,10 +74,6 @@ public class WarpCommand implements CommandExecutor {
                     LocationUtil locationUtil = new LocationUtil(this.plugin, message);
                     locationUtil.UpdateLastLocation(player);
 
-                    if (waitTime > 0) {
-                        message.PrivateMessage("teleport", "wait", String.valueOf(waitTime));
-                    }
-
                     teleUtil.setCooldown(player, "warp");
 
                     teleUtil.doTeleport(
