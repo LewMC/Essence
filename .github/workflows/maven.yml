@@ -1,0 +1,23 @@
+name: Maven Build
+
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository 📡
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17 🔧
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build with Maven 🏗️
+        run: mvn -B package --file pom.xml
