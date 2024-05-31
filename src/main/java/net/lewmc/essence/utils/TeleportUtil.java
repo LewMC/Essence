@@ -1,12 +1,16 @@
 package net.lewmc.essence.utils;
 
+import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class TeleportUtil {
     private final Essence plugin;
@@ -21,12 +25,11 @@ public class TeleportUtil {
         int cooldown = this.plugin.getConfig().getInt("teleportation."+type+".cooldown");
         if (cooldown < 0) { return true; }
 
-        DataUtil data = new DataUtil(this.plugin, new MessageUtil(player, this.plugin));
+        FileUtil data = new FileUtil(this.plugin);
         data.load(data.playerDataFile(player));
 
-        ConfigurationSection cs = data.getSection("cooldown");
-        if (cs == null) { return true; }
-        String last = cs.getString(type);
+        if (data.get("cooldown."+type) == null) { return true; }
+        String last = data.getString("cooldown."+type);
 
         if (last == null) { return true; }
 
@@ -49,18 +52,12 @@ public class TeleportUtil {
     }
 
     public void setCooldown(Player player, String type) {
-        DataUtil data = new DataUtil(this.plugin, new MessageUtil(player, this.plugin));
+        FileUtil data = new FileUtil(this.plugin);
         data.load(data.playerDataFile(player));
-
-        ConfigurationSection cs = data.getSection("cooldown");
-        if (cs == null) {
-            data.createSection("cooldown");
-            cs = data.getSection("cooldown");
-        }
 
         LocalDateTime currentTime = LocalDateTime.now();
 
-        cs.set(type, currentTime.toString());
+        data.set("cooldown."+type, currentTime.toString());
 
         data.save();
 
@@ -73,18 +70,17 @@ public class TeleportUtil {
             return 0;
         }
 
-        DataUtil data = new DataUtil(this.plugin, new MessageUtil(player, this.plugin));
+        FileUtil data = new FileUtil(this.plugin);
         data.load(data.playerDataFile(player));
 
-        ConfigurationSection cs = data.getSection("cooldown");
-        if (cs == null) { return 0; }
-        String last = cs.getString(type);
+        if (data.getString("cooldown."+type) == null) { return 0; }
+        String last = data.getString("cooldown."+type);
 
         data.close();
 
         LocalDateTime lastEvent;
         try {
-            lastEvent = LocalDateTime.parse(last);
+            lastEvent = LocalDateTime.parse(Objects.requireNonNull(last));
         } catch (DateTimeException e) {
             this.log.warn("DateTimeException: "+e);
             this.log.warn("Unable to calculate cooldown, the field may be missing or corrupted. Resetting...");
@@ -95,5 +91,41 @@ public class TeleportUtil {
         Duration timeElapsed = Duration.between(lastEvent, currentTime);
 
         return Math.toIntExact(Math.max(0, (long) cooldown - timeElapsed.getSeconds()));
+    }
+
+    public void doTeleport(
+            Player player,
+            World world,
+            double X,
+            double Y,
+            double Z,
+            float yaw,
+            float pitch,
+            int delay
+    ) {
+        Location loc = new Location(
+                world,
+                X,
+                Y,
+                Z,
+                yaw,
+                pitch
+        );
+
+        this.doTeleport(player, loc, delay);
+    }
+
+    public void doTeleport(Player player, Location location, int delay) {
+        FoliaLib flib = new FoliaLib(this.plugin);
+        if (flib.isFolia()) {
+            flib.getImpl().runAtEntityLater(player, () -> player.teleportAsync(location), delay * 20L);
+        } else {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.teleport(location);
+                }
+            }.runTaskLater(plugin, delay * 20L);
+        }
     }
 }

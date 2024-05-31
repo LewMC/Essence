@@ -3,13 +3,13 @@ package net.lewmc.essence.commands.teleportation;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class BackCommand implements CommandExecutor {
     private final Essence plugin;
@@ -49,12 +49,10 @@ public class BackCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("back")) {
             if (permission.has("essence.teleport.back")) {
-                DataUtil config = new DataUtil(this.plugin, message);
-                config.load(config.playerDataFile(player));
+                FileUtil playerData = new FileUtil(this.plugin);
+                playerData.load(playerData.playerDataFile(player));
 
-                ConfigurationSection cs = config.getSection("last-location");
-
-                if (cs == null) {
+                if (playerData.get("last-location") == null) {
                     message.PrivateMessage("back", "cant");
                     return true;
                 }
@@ -62,17 +60,19 @@ public class BackCommand implements CommandExecutor {
                 LocationUtil locationUtil = new LocationUtil(this.plugin, message);
                 locationUtil.UpdateLastLocation(player);
 
-                Location loc = new Location(
-                    Bukkit.getServer().getWorld(cs.getString("world")),
-                    cs.getDouble("X"),
-                    cs.getDouble("Y"),
-                    cs.getDouble("Z"),
-                    (float) cs.getDouble("yaw"),
-                    (float) cs.getDouble("pitch")
+                TeleportUtil tp = new TeleportUtil(plugin);
+                tp.doTeleport(
+                        player,
+                        Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString("last-location.world"))),
+                        playerData.getDouble("last-location.X"),
+                        playerData.getDouble("last-location.Y"),
+                        playerData.getDouble("last-location.Z"),
+                        (float) playerData.getDouble("last-location.yaw"),
+                        (float) playerData.getDouble("last-location.pitch"),
+                        0
                 );
 
-                player.teleport(loc);
-                config.close();
+                playerData.close();
 
                 message.PrivateMessage("back", "going");
 

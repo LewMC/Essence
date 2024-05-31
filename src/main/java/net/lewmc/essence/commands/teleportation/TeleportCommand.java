@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation;
 
-import net.lewmc.essence.utils.LocationUtil;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
+import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -63,7 +60,8 @@ public class TeleportCommand implements CommandExecutor {
                     double y = Double.parseDouble(args[1]);
                     double z = Double.parseDouble(args[2]);
                     Location location = new Location(player.getWorld(), x, y, z);
-                    player.teleport(location);
+                    TeleportUtil tp = new TeleportUtil(this.plugin);
+                    tp.doTeleport(player, location, 0);
                 } else {
                     permission.not();
                 }
@@ -94,7 +92,8 @@ public class TeleportCommand implements CommandExecutor {
                         double y = Double.parseDouble(args[2]);
                         double z = Double.parseDouble(args[3]);
                         Location location = new Location(playerToTeleport.getWorld(), x, y, z);
-                        playerToTeleport.teleport(location);
+                        TeleportUtil tp = new TeleportUtil(this.plugin);
+                        tp.doTeleport(player, location, 0);
                     }
                 } else {
                     permission.not();
@@ -108,7 +107,9 @@ public class TeleportCommand implements CommandExecutor {
                             locationUtil.UpdateLastLocation(player);
 
                             message.PrivateMessage("teleport", "to", p.getName());
-                            player.teleport(p);
+
+                            TeleportUtil tp = new TeleportUtil(this.plugin);
+                            tp.doTeleport(player, p.getLocation(), 0);
                             return true;
                         }
                     }

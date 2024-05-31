@@ -56,7 +56,6 @@ help:
   sethome: "§6[Essence] §e/sethome [name] - Create a home where you are."
   delhome: "§6[Essence] §e/delhome [name] - Delete a home."
   back: "§6[Essence] §e/back - Go back to your last location."
-  tpr: "§6[Essence] §e/tpr - Teleport to a random location."
   stats: "§6[Essence] ----------- Essence Help - Stats -----------"
   feed: "§6[Essence] §e/feed [user] - Feed yourself or another."
   heal: "§6[Essence] §e/heal [user] - Feed yourself or another."
@@ -87,7 +86,7 @@ back:
 home:
   notfound: "§4[Essence] §cHome {{1}} does not exist. Use /homes for a list of homes."
   deleted: "§2[Essence] §aHome {{1}} has been deleted."
-  teleporting: "§2[Essence] §aTeleporting to home {{1}}..."
+  teleporting: "§2[Essence] §aTeleporting to home {{1}} in {{2}} seconds..."
   noneset: "§4[Essence] §cYou haven't set any homes."
   list: "§6[Essence] §eHomes: {{1}}"
   specialchars: "§4[Essence] §cHomes cannot contain special characters!"
@@ -102,7 +101,7 @@ warp:
   specialchars: "§4[Essence] §cWarps cannot contain special characters!"
   alreadyexists: "§4[Essence] §cA warp with this name already exists."
   created: "§2[Essence] §aCreated warp '{{1}}'."
-  teleporting: "§2[Essence] §aWarping to '{{1}}'..."
+  teleporting: "§2[Essence] §aWarping to '{{1}}' in {{2}} seconds..."
   noneset: "§4[Essence] §cThere are no warps set."
   list: "§6[Essence] §eWarps: {{1}}"
 teleport:
@@ -110,11 +109,6 @@ teleport:
   usage: "§4[Essence] §cUsage: /tp <player> OR /tp <x> <y> <z>"
   wait: "§6[Essence] §eTeleporting in {{1}} seconds..."
   tryagain: "§4[Essence] §cPlease wait {{1}} seconds before teleporting again."
-tprandom:
-  searching: "§6[Essence] §eFinding somewhere to go..."
-  teleporting: "§2[Essence] §aTeleporting..."
-  generating: "§6[Essence] §eGenerating chunk... (this may take some time)"
-  nosafe: "§4[Essence] §cCouldn't find suitable location, please try again."
 feed:
   fed: "§2[Essence] §aYou fed {{1}}."
   serverfed: "§2[Essence] §aYou've been fed by a magical force."
@@ -168,7 +162,7 @@ team:
   rulevalue: "§6[Essence] §eRule {{1}} is currently set to {{2}}."
 spawn:
   set: "§2[Essence] §aSpawn set."
-  teleporting: "§2[Essence] §aTeleporting..."
+  teleporting: "§2[Essence] §aTeleporting in {{1}} seconds......"
   notexist: "§4[Essence] §cThe world requested either does not exist or could not be loaded."
   worldnoperms: "§4[Essence] §cYou do not have permission to change worlds."
 repair:

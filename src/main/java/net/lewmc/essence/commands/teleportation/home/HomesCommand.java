@@ -1,10 +1,7 @@
-package net.lewmc.essence.commands.teleportation;
+package net.lewmc.essence.commands.teleportation.home;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.DataUtil;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,15 +10,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-public class WarpsCommand implements CommandExecutor {
+public class HomesCommand implements CommandExecutor {
     private final Essence plugin;
     private final LogUtil log;
 
     /**
-     * Constructor for the WarpsCommand class.
+     * Constructor for the HomesCommand class.
      * @param plugin References to the main plugin class.
      */
-    public WarpsCommand(Essence plugin) {
+    public HomesCommand(Essence plugin) {
         this.plugin = plugin;
         this.log = new LogUtil(plugin);
     }
@@ -45,35 +42,35 @@ public class WarpsCommand implements CommandExecutor {
             return true;
         }
         MessageUtil message = new MessageUtil(commandSender, plugin);
+        Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (command.getName().equalsIgnoreCase("warps")) {
-            if (permission.has("essence.warp.list")) {
-                DataUtil dataUtil = new DataUtil(this.plugin, message);
-                dataUtil.load("/data/warps.yml");
+        if (command.getName().equalsIgnoreCase("homes")) {
+            if (permission.has("essence.home.list")) {
+                FileUtil dataUtil = new FileUtil(this.plugin);
+                dataUtil.load(dataUtil.playerDataFile(player));
 
-                Set<String> keys = dataUtil.getKeys("warps");
+                Set<String> keys = dataUtil.getKeys("homes", false);
 
                 if (keys == null) {
                     dataUtil.close();
-                    message.PrivateMessage("warp", "noneset");
+                    message.PrivateMessage("home", "noneset");
                     return true;
                 }
 
-                StringBuilder warps = new StringBuilder();
+                StringBuilder setHomes = new StringBuilder();
                 int i = 0;
 
                 for (String key : keys) {
-                    this.log.info(key);
                     if (i == 0) {
-                        warps.append(key);
+                        setHomes.append(key);
                     } else {
-                        warps.append(", ").append(key);
+                        setHomes.append(", ").append(key);
                     }
                     i++;
                 }
                 dataUtil.close();
-                message.PrivateMessage("warp", "list", warps.toString());
+                message.PrivateMessage("home", "list", setHomes.toString());
             } else {
                 permission.not();
             }

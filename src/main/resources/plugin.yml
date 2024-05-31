@@ -6,6 +6,7 @@ author: LewMC
 description: An Essentials alternative for LewMC servers.
 website: https://lewmc.net
 load: POSTWORLD
+folia-supported: true
 commands:
   essence:
     description: Main command

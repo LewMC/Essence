@@ -7,9 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public class SpawnCommand implements CommandExecutor {
@@ -74,14 +72,16 @@ public class SpawnCommand implements CommandExecutor {
                     spawnName = loc.getWorld().getName();
                 }
 
-                DataUtil config = new DataUtil(this.plugin, message);
-                config.load("data/spawns.yml");
-
-                ConfigurationSection cs = config.getSection("spawn." + spawnName);
+                FileUtil spawnData = new FileUtil(this.plugin);
+                spawnData.load("data/spawns.yml");
 
                 Location teleportLocation;
 
-                if (cs == null) {
+                if (spawnData.get("spawn."+spawnName) == null) {
+                    if (this.plugin.verbose) {
+                        LogUtil log = new LogUtil(this.plugin);
+                        log.warn("Spawn not implicitly set for world '"+spawnName+"', grabbing vanilla spawnpoint.");
+                    }
                     if (Bukkit.getServer().getWorld(spawnName) != null) {
                         teleportLocation = new Location(
                                 Bukkit.getServer().getWorld(spawnName),
@@ -96,16 +96,20 @@ public class SpawnCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    if (this.plugin.verbose) {
+                        LogUtil log = new LogUtil(this.plugin);
+                        log.info("Spawn implicitly set for world '"+spawnName+"'.");
+                    }
                     LocationUtil locationUtil = new LocationUtil(this.plugin, message);
                     locationUtil.UpdateLastLocation(player);
 
                     teleportLocation = new Location(
                             Bukkit.getServer().getWorld(spawnName),
-                            cs.getDouble("X"),
-                            cs.getDouble("Y"),
-                            cs.getDouble("Z"),
-                            (float) cs.getDouble("yaw"),
-                            (float) cs.getDouble("pitch")
+                            spawnData.getDouble("spawn."+spawnName+".X"),
+                            spawnData.getDouble("spawn."+spawnName+".Y"),
+                            spawnData.getDouble("spawn."+spawnName+".Z"),
+                            (float) spawnData.getDouble("spawn."+spawnName+".yaw"),
+                            (float) spawnData.getDouble("spawn."+spawnName+".pitch")
                     );
                 }
 
@@ -115,16 +119,11 @@ public class SpawnCommand implements CommandExecutor {
 
                 teleUtil.setCooldown(player, "spawn");
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
+                teleUtil.doTeleport(player, teleportLocation, waitTime);
 
-                        player.teleport(teleportLocation);
-                        config.close();
+                spawnData.close();
 
-                        message.PrivateMessage("spawn", "teleporting");
-                    }
-                }.runTaskLater(plugin, waitTime * 20L);
+                message.PrivateMessage("spawn", "teleporting", String.valueOf(waitTime));
 
             } else {
                 permission.not();

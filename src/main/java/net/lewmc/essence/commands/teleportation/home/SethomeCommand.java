@@ -1,4 +1,4 @@
-package net.lewmc.essence.commands.teleportation;
+package net.lewmc.essence.commands.teleportation.home;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,37 +56,33 @@ public class SethomeCommand implements CommandExecutor {
                 }
 
                 Location loc = player.getLocation();
-                DataUtil config = new DataUtil(this.plugin, message);
-                config.load(config.playerDataFile(player));
+                FileUtil playerData = new FileUtil(this.plugin);
+                playerData.load(playerData.playerDataFile(player));
 
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {
-                    config.close();
+                    playerData.close();
                     message.PrivateMessage("home", "specialchars");
                     return true;
                 }
 
-                HomeUtil homeUtil = new HomeUtil();
-                String homeName = homeUtil.HomeWrapper(name.toLowerCase());
+                String homeName = "homes." + name.toLowerCase();
 
-                if (config.sectionExists(homeName)) {
-                    config.close();
+                if (playerData.get(homeName) != null) {
+                    playerData.close();
                     message.PrivateMessage("home", "alreadyexists");
                     return true;
                 }
 
-                config.createSection(homeName);
-
-                ConfigurationSection cs = config.getSection(homeName);
-                cs.set("world", loc.getWorld().getName());
-                cs.set("X", loc.getX());
-                cs.set("Y", loc.getY());
-                cs.set("Z", loc.getZ());
-                cs.set("yaw", loc.getYaw());
-                cs.set("pitch", loc.getPitch());
+                playerData.set(homeName + ".world", loc.getWorld().getName());
+                playerData.set(homeName + ".X", loc.getX());
+                playerData.set(homeName + ".Y", loc.getY());
+                playerData.set(homeName + ".Z", loc.getZ());
+                playerData.set(homeName + ".yaw", loc.getYaw());
+                playerData.set(homeName + ".pitch", loc.getPitch());
 
                 // Save the configuration to the file
-                config.save();
+                playerData.save();
 
                 message.PrivateMessage("home", "created", name);
             } else {

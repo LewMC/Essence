@@ -20,22 +20,17 @@ public class LocationUtil {
     }
 
     public void UpdateLastLocation(Player player) {
+        FileUtil playerData = new FileUtil(this.plugin);
+        playerData.load(playerData.playerDataFile(player));
 
-        DataUtil data = new DataUtil(this.plugin, this.message);
-        data.load(data.playerDataFile(player));
+        playerData.set("last-location.world", player.getLocation().getWorld().getName());
+        playerData.set("last-location.X", player.getLocation().getX());
+        playerData.set("last-location.Y", player.getLocation().getY());
+        playerData.set("last-location.Z", player.getLocation().getZ());
+        playerData.set("last-location.yaw", player.getLocation().getYaw());
+        playerData.set("last-location.pitch", player.getLocation().getPitch());
 
-        if (!data.sectionExists("last-location")) {
-            data.createSection("last-location");
-        }
-        ConfigurationSection cs = data.getSection("last-location");
-        cs.set("world", player.getLocation().getWorld().getName());
-        cs.set("X", player.getLocation().getX());
-        cs.set("Y", player.getLocation().getY());
-        cs.set("Z", player.getLocation().getZ());
-        cs.set("yaw", player.getLocation().getYaw());
-        cs.set("pitch", player.getLocation().getPitch());
-
-        data.save();
+        playerData.save();
     }
 
     public Location GetRandomLocation(Player player, WorldBorder wb) {

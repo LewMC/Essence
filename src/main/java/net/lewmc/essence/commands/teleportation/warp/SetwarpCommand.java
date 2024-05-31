@@ -1,4 +1,4 @@
-package net.lewmc.essence.commands.teleportation;
+package net.lewmc.essence.commands.teleportation.warp;
 
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,36 +52,33 @@ public class SetwarpCommand implements CommandExecutor {
                     return true;
                 }
                 Location loc = player.getLocation();
-                DataUtil config = new DataUtil(this.plugin, message);
-                config.load("data/warps.yml");
+                FileUtil warpsData = new FileUtil(this.plugin);
+                warpsData.load("data/warps.yml");
 
                 String warpName = args[0].toLowerCase();
 
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(warpName)) {
-                    config.close();
+                    warpsData.close();
                     message.PrivateMessage("warp", "specialchars");
                     return true;
                 }
 
-                if (config.sectionExists("warps." + warpName)) {
-                    config.close();
+                if (warpsData.get("warps." + warpName) != null) {
+                    warpsData.close();
                     message.PrivateMessage("warp", "alreadyexists");
                     return true;
                 }
 
-                config.createSection("warps." + warpName);
-
-                ConfigurationSection cs = config.getSection("warps." + warpName);
-                cs.set("world", loc.getWorld().getName());
-                cs.set("X", loc.getX());
-                cs.set("Y", loc.getY());
-                cs.set("Z", loc.getZ());
-                cs.set("yaw", loc.getYaw());
-                cs.set("pitch", loc.getPitch());
+                warpsData.set("warps."+warpName+".world", loc.getWorld().getName());
+                warpsData.set("warps."+warpName+".X", loc.getX());
+                warpsData.set("warps."+warpName+".Y", loc.getY());
+                warpsData.set("warps."+warpName+".Z", loc.getZ());
+                warpsData.set("warps."+warpName+".yaw", loc.getYaw());
+                warpsData.set("warps."+warpName+".pitch", loc.getPitch());
 
                 // Save the configuration to the file
-                config.save();
+                warpsData.save();
 
                 message.PrivateMessage("warp", "created", args[0]);
             } else {

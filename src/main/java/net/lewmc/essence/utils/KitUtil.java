@@ -20,29 +20,28 @@ public class KitUtil {
     }
 
     public int giveKit(String kit) {
-        DataUtil data = new DataUtil(this.plugin, this.message);
+        FileUtil kitData = new FileUtil(this.plugin);
 
-        data.load("data/kits.yml");
-        ConfigurationSection cs = data.getSection("kits."+kit);
+        kitData.load("data/kits.yml");
 
-        if (cs == null) {
+        if (kitData.get("kits."+kit) == null) {
             return 2;
         }
 
-        if (cs.get("permission") != null) {
+        if (kitData.get("kits."+kit+"permission") != null) {
             PermissionHandler perm = new PermissionHandler(this.player, this.message);
-            if (!perm.has(cs.get("permission").toString())) {
+            if (!perm.has(kitData.get("kits."+kit+"permission").toString())) {
                 return 1;
             }
         }
 
-        List<?> items = cs.getList("items");
+        List<String> items = kitData.getStringList("kits."+kit+"items");
 
         for (Object object : items) {
             this.player.getInventory().addItem(new ItemStack(Material.getMaterial((String) object)));
         }
 
-        data.close();
+        kitData.close();
 
         return 0;
     }

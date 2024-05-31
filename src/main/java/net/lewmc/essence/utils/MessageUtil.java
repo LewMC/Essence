@@ -4,7 +4,6 @@ import net.lewmc.essence.Essence;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 
 public class MessageUtil {
 
@@ -91,11 +90,11 @@ public class MessageUtil {
 
     private String GetMessage(String code, String group) {
         String language = this.plugin.getConfig().getString("language");
-        DataUtil data = new DataUtil(this.plugin, this);
+        FileUtil data = new FileUtil(this.plugin);
         data.load("language/"+language+".yml");
-        ConfigurationSection msg = data.getSection(group);
-        if (msg != null) {
-            String toSend = String.valueOf(msg.get(code));
+
+        if (data.get(group) != null) {
+            String toSend = data.getString(group+"."+code);
             data.close();
             return toSend;
         } else {

@@ -49,25 +49,20 @@ public class SetspawnCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("setspawn")) {
             if (permission.has("essence.spawn.set")) {
                 Location loc = player.getLocation();
-                DataUtil config = new DataUtil(this.plugin, message);
+                FileUtil spawnFile = new FileUtil(this.plugin);
 
                 String spawnName = loc.getWorld().getName();
 
-                config.load("data/spawns.yml");
+                spawnFile.load("data/spawns.yml");
 
-                if (!config.sectionExists("spawn." + spawnName)) {
-                    config.createSection("spawn." + spawnName);
-                }
-
-                ConfigurationSection cs = config.getSection("spawn."+spawnName);
-                cs.set("X", loc.getX());
-                cs.set("Y", loc.getY());
-                cs.set("Z", loc.getZ());
-                cs.set("yaw", loc.getYaw());
-                cs.set("pitch", loc.getPitch());
+                spawnFile.set("spawn."+spawnName+".X", loc.getX());
+                spawnFile.set("spawn."+spawnName+".Y", loc.getY());
+                spawnFile.set("spawn."+spawnName+".Z", loc.getZ());
+                spawnFile.set("spawn."+spawnName+".yaw", loc.getYaw());
+                spawnFile.set("spawn."+spawnName+".pitch", loc.getPitch());
 
                 // Save the configuration to the file
-                config.save();
+                spawnFile.save();
 
                 message.PrivateMessage("spawn", "set");
             } else {

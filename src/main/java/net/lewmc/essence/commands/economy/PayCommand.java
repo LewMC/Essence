@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,27 +47,24 @@ public class PayCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("pay")) {
             if (permission.has("essence.economy.pay")) {
                 if (args.length == 2) {
-                    DataUtil data = new DataUtil(this.plugin, message);
-                    data.load(data.playerDataFile(player));
+                    FileUtil senderDataFile = new FileUtil(this.plugin);
+                    senderDataFile.load(senderDataFile.playerDataFile(player));
 
-                    ConfigurationSection cs = data.getSection("economy");
-                    double balance = cs.getDouble("balance");
+                    double balance = senderDataFile.getDouble("economy.balance");
 
                     double amount = Double.parseDouble(args[1]);
 
                     if ((balance - amount) >= 0) {
-                        cs.set("balance", (balance - amount));
-                        data.save();
+                        senderDataFile.set("economy.balance", (balance - amount));
+                        senderDataFile.save();
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                                LocationUtil locationUtil = new LocationUtil(this.plugin, message);
-                                locationUtil.UpdateLastLocation(player);
+                                FileUtil recieverDataFile = new FileUtil(this.plugin);
 
-                                data.load(data.playerDataFile(p));
-                                cs = data.getSection("economy");
-                                double newBalance = cs.getDouble("balance") + amount;
-                                cs.set("balance", newBalance);
-                                data.save();
+                                recieverDataFile.load(senderDataFile.playerDataFile(p));
+                                double newBalance = recieverDataFile.getDouble("economy.balance") + amount;
+                                recieverDataFile.set("economy.balance", newBalance);
+                                recieverDataFile.save();
 
                                 message.PrivateMessage("economy", "sent", plugin.getConfig().getString("economy.symbol") + amount, p.getName());
                                 message.SendTo(p, "economy", "received", (plugin.getConfig().getString("economy.symbol") + amount), player.getName());

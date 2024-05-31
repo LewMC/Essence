@@ -1,0 +1,32 @@
+name: Deploy Javadoc to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Change this to your default branch if it's not "main"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Generate Javadoc
+        run: |
+          mkdir -p javadoc
+          javadoc -d javadoc -sourcepath src/main/java -subpackages your.package.name
+          # Replace 'src/main/java' and 'your.package.name' with the actual source path and package name of your project
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./javadoc

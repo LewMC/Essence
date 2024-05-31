@@ -1,24 +1,26 @@
-package net.lewmc.essence.commands.teleportation;
+package net.lewmc.essence.commands.teleportation.warp;
 
+import net.lewmc.essence.utils.FileUtil;
+import net.lewmc.essence.utils.LogUtil;
+import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.*;
+import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class DelhomeCommand implements CommandExecutor {
-    private final LogUtil log;
+public class DelwarpCommand implements CommandExecutor {
     private final Essence plugin;
+    private final LogUtil log;
 
     /**
-     * Constructor for the DelhomeCommand class.
+     * Constructor for the DelwarpCommand class.
      *
      * @param plugin References to the main plugin class.
      */
-    public DelhomeCommand(Essence plugin) {
+    public DelwarpCommand(Essence plugin) {
         this.plugin = plugin;
         this.log = new LogUtil(plugin);
     }
@@ -41,38 +43,33 @@ public class DelhomeCommand implements CommandExecutor {
             this.log.noConsole();
             return true;
         }
-        MessageUtil message = new MessageUtil(commandSender,plugin);
-        Player player = (Player) commandSender;
+        MessageUtil message = new MessageUtil(commandSender, plugin);
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (command.getName().equalsIgnoreCase("delhome")) {
-            if (permission.has("essence.home.delete")) {
-                String name;
+        if (command.getName().equalsIgnoreCase("delwarp")) {
+            if (permission.has("essence.warp.delete")) {
                 if (args.length == 0) {
-                    name = "home";
-                } else {
-                    name = args[0];
+                    message.PrivateMessage("warp", "delusage");
+                    return true;
                 }
+                FileUtil config = new FileUtil(this.plugin);
+                config.load("data/warps.yml");
 
-                DataUtil config = new DataUtil(this.plugin, message);
-                config.load(config.playerDataFile(player));
+                String warpName = args[0].toLowerCase();
 
-                if (!config.sectionExists("homes."+name)) {
+                if (config.get("warps."+warpName) == null) {
                     config.close();
-                    message.PrivateMessage("home", "notfound", name);
+                    message.PrivateMessage("warp", "notfound", warpName);
                     return true;
                 }
 
-                String homeName = name.toLowerCase();
+                if (config.remove("warps."+warpName)) {
+                    message.PrivateMessage("warp", "deleted", warpName);
+                } else {
+                    message.PrivateMessage("generic", "exception");
+                }
 
-                ConfigurationSection cs = config.getSection("homes");
-
-                cs.set(homeName, null);
-
-                // Save the configuration to the file
                 config.save();
-
-                message.PrivateMessage("home", "deleted", homeName);
             } else {
                 permission.not();
             }
