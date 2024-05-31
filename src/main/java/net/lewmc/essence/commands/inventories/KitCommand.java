@@ -53,21 +53,20 @@ public class KitCommand implements CommandExecutor {
                 if (args.length == 0) {
                     String kits = "No kits found.";
 
-                    DataUtil config = new DataUtil(this.plugin, message);
-                    config.load("data/kits.yml");
-                    Set<String> keys = config.getKeys("kits");
+                    FileUtil kitData = new FileUtil(this.plugin);
+                    kitData.load("data/kits.yml");
+                    Set<String> keys = kitData.getKeys("kits", false);
 
                     int i = 0;
                     for (Object object : keys) {
-                        ConfigurationSection cs = config.getSection("kits."+object);
-                        if (cs.get("permission") == null) {
+                        if (kitData.get("kits."+object+"permission") == null) {
                             if (i == 0) {
                                 kits = object.toString();
                             } else {
                                 kits += ", " + object.toString();
                             }
                         } else {
-                            if (permission.has(cs.get("permission").toString()) || permission.has("essence.kits.all")) {
+                            if (permission.has(kitData.get("kits."+object+"permission").toString()) || permission.has("essence.kits.all")) {
                                 if (i == 0) {
                                     kits = object.toString();
                                 } else {
@@ -78,7 +77,7 @@ public class KitCommand implements CommandExecutor {
                         i++;
                     }
 
-                    config.close();
+                    kitData.close();
 
                     message.PrivateMessage("kit", "select", kits);
                 } else {

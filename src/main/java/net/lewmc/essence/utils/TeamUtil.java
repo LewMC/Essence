@@ -347,4 +347,9 @@ public class TeamUtil {
 
         return true;
     }
+
+    public boolean exists(String team) {
+        FileUtil teamData = new FileUtil(this.plugin);
+        return teamData.exists("/data/teams/"+team+".yml");
+    }
 }
