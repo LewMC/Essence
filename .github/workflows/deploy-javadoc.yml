@@ -22,8 +22,8 @@ jobs:
       - name: Generate Javadoc
         run: |
           mkdir -p javadoc
-          javadoc -d javadoc -sourcepath src/main/java -subpackages your.package.name
-          # Replace 'src/main/java' and 'your.package.name' with the actual source path and package name of your project
+          javadoc -d javadoc -sourcepath src/main/java -subpackages net.lewmc.essence
+          # Replace 'src/main/java' and 'net.lewmc.essence' with the actual source path and package name of your project
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
