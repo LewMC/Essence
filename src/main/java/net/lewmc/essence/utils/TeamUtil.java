@@ -3,21 +3,33 @@ package net.lewmc.essence.utils;
 import net.lewmc.essence.Essence;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.util.*;
 
+/**
+ * Team Utility
+ */
 public class TeamUtil {
     private final Essence plugin;
     private final MessageUtil message;
 
+    /**
+     * Constructor for TeamUtil.
+     * @param plugin Reference to main Essence class.
+     * @param message MessageUtil - reference to MessageUtil class.
+     */
     public TeamUtil(Essence plugin, MessageUtil message) {
         this.plugin = plugin;
         this.message = message;
     }
+
+    /**
+     * Creates a new team
+     * @param name String - Team name
+     * @param leader UUID - Leader's UUID
+     */
     public void CreateNewTeam(String name, UUID leader) {
         SecurityUtil su = new SecurityUtil();
         if (su.hasSpecialCharacters(name)) {
@@ -55,6 +67,11 @@ public class TeamUtil {
         }
     }
 
+    /**
+     * Adds a join request to a specific team.
+     * @param team String - team name
+     * @param player UUID - UUID of the player requesting to join.
+     */
     public void requestJoin(String team, UUID player) {
         FileUtil teamsFile = new FileUtil(this.plugin);
         if (teamsFile.exists("/data/teams/"+team+".yml")) {
@@ -69,6 +86,11 @@ public class TeamUtil {
         }
     }
 
+    /**
+     * Lists pending join requests.
+     * @param team String - team name
+     * @return String - list of join requests as a String
+     */
     public String requestsToJoin(String team) {
         FileUtil teamsFile = new FileUtil(this.plugin);
         if (teamsFile.exists("/data/teams/"+team+".yml")) {
@@ -99,6 +121,12 @@ public class TeamUtil {
         }
     }
 
+    /**
+     * Checks if user is the leader of the team.
+     * @param team String - team name
+     * @param player UUID - Player's UUID.
+     * @return boolean - If they are the leader.
+     */
     public boolean isLeader(String team, UUID player) {
         FileUtil teamData = new FileUtil(this.plugin);
         if (teamData.exists("/data/teams/"+team+".yml")) {
@@ -111,6 +139,11 @@ public class TeamUtil {
         }
     }
 
+    /**
+     * Get the requested player's team.
+     * @param player UUID - Player's UUID.
+     * @return String - Name of the player's team.
+     */
     public @Nullable String getPlayerTeam(UUID player) {
         FileUtil playerData = new FileUtil(this.plugin);
         playerData.load(playerData.playerDataFile(player));
@@ -124,6 +157,12 @@ public class TeamUtil {
         }
     }
 
+    /**
+     * Accepts a pending join request.
+     * @param team String - Team name
+     * @param player String - Player's name.
+     * @return boolean - If the operation was successful.
+     */
     public boolean acceptRequest(String team, String player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
@@ -148,6 +187,12 @@ public class TeamUtil {
         return true;
     }
 
+    /**
+     * Declines a pending join request.
+     * @param team String - Team name
+     * @param player String - Player's name.
+     * @return boolean - If the operation was successful.
+     */
     public boolean declineRequest(String team, String player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
@@ -162,6 +207,12 @@ public class TeamUtil {
         return true;
     }
 
+    /**
+     * Leaves a team.
+     * @param playerTeam String - The name of the team the player should leave.
+     * @param uuid UUID - The player who is leaving's UUID,
+     * @return boolean - If the operation is successful.
+     */
     public boolean leave(String playerTeam, UUID uuid) {
         
         FileUtil playerData = new FileUtil(this.plugin);
@@ -185,6 +236,13 @@ public class TeamUtil {
         return true;
     }
 
+    /**
+     * Changes a team's leader.
+     * @param playerTeam String - Name of the team.
+     * @param newLeader String - Name of the team's new leader.
+     * @param oldLeader String - Name of the team's old leader.
+     * @return boolean - If the operation was successful.
+     */
     public boolean changeLeader(String playerTeam, String newLeader, String oldLeader) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(newLeader);
 
@@ -203,6 +261,11 @@ public class TeamUtil {
         return true;
     }
 
+    /**
+     * Gets a team's leader,
+     * @param team String - The team to request the leader of.
+     * @return String - The leader of the team.
+     */
     public String getTeamLeader(String team) {
         FileUtil teamData = new FileUtil(this.plugin);
         teamData.load("/data/teams/"+team+".yml");
@@ -217,6 +280,11 @@ public class TeamUtil {
         return leader;
     }
 
+    /**
+     * Gets a string list of the team's members.
+     * @param team String - Name of the team.
+     * @return String - List of team members as a string.
+     */
     public String getTeamMembers(String team) {
         FileUtil teamData = new FileUtil(this.plugin);
         teamData.load("/data/teams/"+team+".yml");
@@ -241,11 +309,23 @@ public class TeamUtil {
         return membersList.toString();
     }
 
+    /**
+     * Kicks a player from a team.
+     * @param playerTeam String - Name of the team.
+     * @param playerToKick String - Name of the player to kick.
+     * @return boolean - If the operation was successful.
+     */
     public boolean kick(String playerTeam, String playerToKick) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(playerToKick);
         return this.leave(playerTeam, op.getUniqueId());
     }
 
+    /**
+     * Checks if the player is a member of a team.
+     * @param team String - Name of the team.
+     * @param username String - Player's username.
+     * @return boolean - If the player is a member.
+     */
     public boolean isMember(String team, String username) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(username);
         String uuid = op.getUniqueId().toString();
@@ -264,6 +344,12 @@ public class TeamUtil {
         return false;
     }
 
+    /**
+     * Checks if a user has requested to join a team.
+     * @param team String - Team name.
+     * @param username String - Player name.
+     * @return boolean - If the player has requested to join a team.
+     */
     public boolean hasRequested(String team, String username) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(username);
         String uuid = op.getUniqueId().toString();
@@ -282,6 +368,12 @@ public class TeamUtil {
         return false;
     }
 
+    /**
+     * Disbands a team.
+     * @param team String - Name of the team.
+     * @param teamLeader String - A team's leader.
+     * @return boolean - If the operation was successful.
+     */
     public boolean disband(String team, String teamLeader) {
         FileUtil teamData = new FileUtil(this.plugin);
         teamData.load("/data/teams/"+team+".yml");
@@ -303,6 +395,12 @@ public class TeamUtil {
         return teamData.delete("/data/teams/" + team + ".yml");
     }
 
+    /**
+     * Checks if players are in the same team..
+     * @param p1 Player - Player 1.
+     * @param p2 Player - Player 2.
+     * @return boolean - If the players are in the same team.
+     */
     public boolean areTeammates(Player p1, Player p2) {
         FileUtil p1data = new FileUtil(this.plugin);
         p1data.load(p1data.playerDataFile(p1));
@@ -319,6 +417,12 @@ public class TeamUtil {
         return (p1team.equalsIgnoreCase(p2team));
     }
 
+    /**
+     * Gets a rule for a team.
+     * @param team String - Team name.
+     * @param rule String - Rule name
+     * @return boolean - If the rule is set to true or false.
+     */
     public boolean getRule(String team, String rule) {
         FileUtil teamData = new FileUtil(this.plugin);
         teamData.load("/data/teams/"+team+".yml");
@@ -329,6 +433,15 @@ public class TeamUtil {
         return result;
     }
 
+    /**
+     * Sets a rule for a team.
+     * @param team String - Team name.
+     * @param rule String - Rule to set.
+     * @param value String - Value of a rule (must be "true" or "false")
+     * @return boolean - if the operation was successful.
+     * @deprecated Use setRule(String, String, boolean) instead.
+     */
+    @Deprecated
     public boolean setRule(String team, String rule, String value) {
         boolean booleanValue;
         if (value.equalsIgnoreCase("true")) {
@@ -348,6 +461,29 @@ public class TeamUtil {
         return true;
     }
 
+    /**
+     * Sets a rule for a team.
+     * @param team String - Team name.
+     * @param rule String - Rule to set.
+     * @param value boolean - Value of a rule.
+     * @return boolean - if the operation was successful.
+     */
+    public boolean setRule(String team, String rule, boolean value) {
+
+        FileUtil teamData = new FileUtil(this.plugin);
+        teamData.load("/data/teams/"+team+".yml");
+
+        teamData.set("rules."+rule, value);
+        teamData.save();
+
+        return true;
+    }
+
+    /**
+     * Checks if a team exists.
+     * @param team String - Team name
+     * @return boolean - If the team exists.
+     */
     public boolean exists(String team) {
         FileUtil teamData = new FileUtil(this.plugin);
         return teamData.exists("/data/teams/"+team+".yml");

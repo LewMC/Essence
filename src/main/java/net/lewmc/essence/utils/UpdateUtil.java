@@ -9,15 +9,25 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+/**
+ * Essence's update utility.
+ */
 public class UpdateUtil {
     private final Essence plugin;
     private final LogUtil log;
 
+    /**
+     * Constructor for UpdateUtil class.
+     * @param plugin Reference to the main Essence class.
+     */
     public UpdateUtil(Essence plugin) {
         this.plugin = plugin;
         this.log = new LogUtil(plugin);
     }
 
+    /**
+     * Checks Essence's version.
+     */
     public void VersionCheck() {
         if (this.plugin.getConfig().getBoolean("update-check")) {
             try {
@@ -63,6 +73,9 @@ public class UpdateUtil {
         }
     }
 
+    /**
+     * Updates Essence's configuration.
+     */
     public void UpdateConfig() {
         File configFile = new File(this.plugin.getDataFolder(), "config.yml");
 
@@ -73,6 +86,9 @@ public class UpdateUtil {
         }
     }
 
+    /**
+     * Updates Essence's language files.
+     */
     public void UpdateLanguage() {
         File languageFile = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "en-gb.yml");
 

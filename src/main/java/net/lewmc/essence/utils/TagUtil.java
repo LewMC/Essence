@@ -5,13 +5,25 @@ import net.lewmc.essence.Essence;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/**
+ * The tag utility replaces tags with preconfigured text (placeholders)
+ */
 public class TagUtil {
     private final Essence plugin;
 
+    /**
+     * Constructor
+     * @param plugin Reference to the main Essence class.
+     */
     public TagUtil(Essence plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * Replaces tags with preconfigured text.
+     * @param text String - Text to search and replace.
+     * @return String - Resulting String
+     */
     public String doReplacement(String text) {
         String mcVersion = this.plugin.getServer().getBukkitVersion();
         String[] mcVersionArray = mcVersion.split("-");

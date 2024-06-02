@@ -10,12 +10,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
+/**
+ * RespawnEvent class.
+ */
 public class RespawnEvent implements Listener {
     private final Essence plugin;
 
+    /**
+     * Constructor for the RespawnEvent class.
+     * @param plugin Essence - Reference to the main Essence class.
+     */
     public RespawnEvent(Essence plugin) {
         this.plugin = plugin;
     }
+
+    /**
+     * Event handler for when a player respawns.
+     * @param event PlayerRespawnEvent - Server thrown event.
+     */
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         MessageUtil message = new MessageUtil(event.getPlayer(), this.plugin);

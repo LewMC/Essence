@@ -9,7 +9,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Tab completer for the /team command.
+ */
 public class TeamTabCompleter implements TabCompleter {
+
+    /**
+     * Tab completer for the /team command.
+     * @param sender CommandSender - The command executor.
+     * @param cde Command - The command.
+     * @param arg String - Command argument.
+     * @param args String[] - Command arguments.
+     * @return ArrayList<> - List of command autocomplete options.
+     */
     @Override
     public List<String> onTabComplete(
             @NotNull CommandSender sender,

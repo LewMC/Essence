@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Essence File Utility.
+ */
 public class FileUtil {
     private final Essence plugin;
     private final LogUtil log;

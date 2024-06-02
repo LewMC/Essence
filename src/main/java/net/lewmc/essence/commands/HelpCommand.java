@@ -6,11 +6,20 @@ public class HelpCommand {
     private final MessageUtil message;
     private final String[] args;
 
+    /**
+     * Constructor for the HelpCommand class.
+     * @param message MessageUtil - Instance of the MessageUtil class.
+     * @param args String[] - Array of command arguments.
+     */
     public HelpCommand(MessageUtil message, String[] args) {
         this.message = message;
         this.args = args;
     }
 
+    /**
+     * Runs the /help command.
+     * @return If the command was executed correctly.
+     */
     public boolean runHelpCommand() {
         if (args.length > 1) {
             if ("inventory".equalsIgnoreCase(args[1])) {
@@ -110,6 +119,10 @@ public class HelpCommand {
         return true;
     }
 
+    /**
+     * Sends a set number of blank lines to the command executor.
+     * @param number int - Number of blank lines to send.
+     */
     private void blank(int number) {
         for (int i = 0; i < number; i++) {
             this.message.PrivateMessage("generic", "blankmessage");

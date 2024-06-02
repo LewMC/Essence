@@ -53,7 +53,7 @@ public class TeleportCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("tp")) {
             if (args.length == 3) {
                 if (permission.has("essence.teleport.coord")) {
-                    LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                    LocationUtil locationUtil = new LocationUtil(this.plugin);
                     locationUtil.UpdateLastLocation(player);
 
                     double x = Double.parseDouble(args[0]);
@@ -70,7 +70,7 @@ public class TeleportCommand implements CommandExecutor {
                 if (permission.has("essence.teleport.other") && permission.has("essence.teleport.coord")) {
                     String p = args[0];
                     if (p.equalsIgnoreCase("@s")) {
-                        LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                        LocationUtil locationUtil = new LocationUtil(this.plugin);
                         locationUtil.UpdateLastLocation(player);
 
                         double x = Double.parseDouble(args[1]);
@@ -85,7 +85,7 @@ public class TeleportCommand implements CommandExecutor {
                             return true;
                         }
 
-                        LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                        LocationUtil locationUtil = new LocationUtil(this.plugin);
                         locationUtil.UpdateLastLocation(playerToTeleport);
 
                         double x = Double.parseDouble(args[1]);
@@ -103,7 +103,7 @@ public class TeleportCommand implements CommandExecutor {
                 if (permission.has("essence.teleport.player")) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                            LocationUtil locationUtil = new LocationUtil(this.plugin, message);
+                            LocationUtil locationUtil = new LocationUtil(this.plugin);
                             locationUtil.UpdateLastLocation(player);
 
                             message.PrivateMessage("teleport", "to", p.getName());
