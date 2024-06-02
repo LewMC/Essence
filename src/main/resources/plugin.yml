@@ -152,6 +152,24 @@ commands:
     description: Get kits.
     usage: /<command>
     aliases: ['kits']
+  tpa:
+    description: Request to teleport to a player.
+    usage: /tpa <user>
+    aliases: ['tprequest']
+  tpaccept:
+    description: Accept a teleportation request.
+    usage: /tpaccept
+  tpdeny:
+    description: Deny a teleportation request.
+    usage: /tpdeny
+    aliases: ['/tpdecline']
+  tpahere:
+    description: Request a player to teleport to you.
+    usage: /tpahere
+  tptoggle:
+    description: Toggle receiving teleport requests.
+    usage: /tptoggle
+    aliases: ['/toggletp']
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -215,7 +233,7 @@ permissions:
   essence.inventory.trash:
     description: Allows players to open the disposal menu.
   essence.teleport.*:
-    description: Allows players to teleport and warp.
+    description: Allows players to teleport.
     default: op
     children:
       essence.teleport.coord: true
@@ -223,6 +241,7 @@ permissions:
       essence.teleport.back: true
       essence.teleport.random: true
       essence.teleport.other: true
+      essence.teleport.request.*: true
   essence.teleport.coord:
     description: Allows players to teleport to coordinates.
   essence.teleport.player:
@@ -233,6 +252,25 @@ permissions:
     description: Teleport to a random location.
   essence.teleport.other:
     description: Teleport another player.
+  essence.teleport.request.*:
+    description: Allow players to request to teleport.
+    default: op
+    children:
+      essence.teleport.request.send: true
+      essence.teleport.request.here: true
+      essence.teleport.request.accept: true
+      essence.teleport.request.deny: true
+      essence.teleport.request.toggle: true
+  essence.teleport.request.send:
+    description: Request to teleport to a player.
+  essence.teleport.request.here:
+    description: Request a player teleport to you.
+  essence.teleport.request.accept:
+    description: Accept a teleport request.
+  essence.teleport.request.deny:
+    description: Deny a teleport request.
+  essence.teleport.request.toggle:
+    description: Toggle receiving teleport requests.
   essence.warp.*:
     description: Allows players to use and manage warps.
     default: op
