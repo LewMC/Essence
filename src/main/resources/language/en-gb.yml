@@ -61,6 +61,7 @@ help:
   tpdeny: "§6[Essence] §e/tpdeny - Deny a teleport request."
   tptoggle: "§6[Essence] §e/tptoggle - Toggle teleport requests."
   tpahere: "§6[Essence] §e/tpahere - Request a player teleports to you."
+  tpcancel: "§6[Essence] §e/tpcancel - Cancel a teleport request."
   stats: "§6[Essence] ----------- Essence Help - Stats -----------"
   feed: "§6[Essence] §e/feed [user] - Feed yourself or another."
   heal: "§6[Essence] §e/heal [user] - Feed yourself or another."

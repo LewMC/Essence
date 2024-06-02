@@ -170,6 +170,10 @@ commands:
     description: Toggle receiving teleport requests.
     usage: /tptoggle
     aliases: ['/toggletp']
+  tpcancel:
+    description: Cancel a teleport request.
+    usage: /tpcancel
+    aliases: ['/canceltp']
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -261,6 +265,7 @@ permissions:
       essence.teleport.request.accept: true
       essence.teleport.request.deny: true
       essence.teleport.request.toggle: true
+      essence.teleport.request.cancel: true
   essence.teleport.request.send:
     description: Request to teleport to a player.
   essence.teleport.request.here:
@@ -271,6 +276,8 @@ permissions:
     description: Deny a teleport request.
   essence.teleport.request.toggle:
     description: Toggle receiving teleport requests.
+  essence.teleport.request.cancel:
+    description: Cancel a teleport request.
   essence.warp.*:
     description: Allows players to use and manage warps.
     default: op

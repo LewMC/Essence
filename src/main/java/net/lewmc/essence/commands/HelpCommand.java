@@ -55,29 +55,31 @@ public class HelpCommand {
                 if (args.length < 3 || args[2].equals("1")) {
                     this.message.PrivateMessage("help", "teleport");
                     this.message.PrivateMessage("help", "tp");
+                    this.message.PrivateMessage("help", "tpa");
+                    this.message.PrivateMessage("help", "tpaccept");
+                    this.message.PrivateMessage("help", "tpdeny");
+                    this.message.PrivateMessage("help", "tpahere");
+                    this.message.PrivateMessage("help", "tptoggle");
+                    this.message.PrivateMessage("help", "tpcancel");
                     this.message.PrivateMessage("help", "warp");
+                    this.message.PrivateMessage("help", "page", "1", "3");
+                } else if (args[2].equals("2")) {
+                    this.message.PrivateMessage("help", "teleport");
                     this.message.PrivateMessage("help", "warps");
                     this.message.PrivateMessage("help", "setwarp");
                     this.message.PrivateMessage("help", "delwarp");
                     this.message.PrivateMessage("help", "home");
                     this.message.PrivateMessage("help", "homes");
                     this.message.PrivateMessage("help", "sethome");
-                    this.message.PrivateMessage("help", "page", "1", "3");
-                } else if (args[2].equals("2")) {
-                    this.message.PrivateMessage("help", "teleport");
                     this.message.PrivateMessage("help", "delhome");
                     this.message.PrivateMessage("help", "back");
+                    this.message.PrivateMessage("help", "page", "2", "3");
+                } else if (args[2].equals("3")) {
+                    this.message.PrivateMessage("help", "teleport");
                     this.message.PrivateMessage("help", "setspawn");
                     this.message.PrivateMessage("help", "spawn");
                     this.message.PrivateMessage("help", "world");
-                    this.message.PrivateMessage("help", "tpa");
-                    this.message.PrivateMessage("help", "tpaccept");
-                    this.message.PrivateMessage("help", "tpdeny");
-                    this.message.PrivateMessage("help", "page", "2", "3");
-                } else if (args[2].equals("3")) {
-                    this.message.PrivateMessage("help", "tpahere");
-                    this.message.PrivateMessage("help", "tptoggle");
-                    this.blank(7);
+                    this.blank(5);
                     this.message.PrivateMessage("help", "page", "3", "3");
                 }
             } else if ("stats".equalsIgnoreCase(args[1])) {
