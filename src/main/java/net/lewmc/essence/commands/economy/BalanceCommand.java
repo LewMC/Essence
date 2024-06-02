@@ -13,7 +13,7 @@ public class BalanceCommand implements CommandExecutor {
     private final LogUtil log;
 
     /**
-     * Constructor for the PayCommand class.
+     * Constructor for the BalanceCommand class.
      * @param plugin References to the main plugin class.
      */
     public BalanceCommand(Essence plugin) {
@@ -22,6 +22,7 @@ public class BalanceCommand implements CommandExecutor {
     }
 
     /**
+     * /bal command handler.
      * @param commandSender Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.

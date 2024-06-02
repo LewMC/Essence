@@ -10,13 +10,24 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.Objects;
 
+/**
+ * JoinEvent class.
+ */
 public class JoinEvent implements Listener {
     private final Essence plugin;
 
+    /**
+     * Constructor for the JoinEvent class.
+     * @param plugin Essence - Reference to the main Essence class.
+     */
     public JoinEvent(Essence plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * Event handler for when a player joins.
+     * @param event PlayerJoinEvent - Server thrown event.
+     */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         LogUtil log = new LogUtil(this.plugin);

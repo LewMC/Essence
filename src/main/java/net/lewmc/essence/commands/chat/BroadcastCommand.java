@@ -20,7 +20,7 @@ public class BroadcastCommand implements CommandExecutor {
     }
 
     /**
-     * /essence command handler.
+     * /broadcast command handler.
      * @param commandSender Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.

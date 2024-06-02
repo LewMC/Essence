@@ -9,7 +9,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Tab completer for the /essence command.
+ */
 public class EssenceTabCompleter implements TabCompleter {
+
+    /**
+     * Tab completer for the /essence command.
+     * @param sender CommandSender - The command executor.
+     * @param cde Command - The command.
+     * @param arg String - Command argument.
+     * @param args String[] - Command arguments.
+     * @return ArrayList<> - List of command autocomplete options.
+     */
     @Override
     public List<String> onTabComplete(
             @NotNull CommandSender sender,
