@@ -5,12 +5,14 @@ import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
+/**
+ * /kit command.
+ */
 public class KitCommand implements CommandExecutor {
 
     private final Essence plugin;

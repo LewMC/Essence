@@ -12,6 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * /trash command.
+ */
 public class TrashCommand implements CommandExecutor {
     private final Essence plugin;
     private final LogUtil log;

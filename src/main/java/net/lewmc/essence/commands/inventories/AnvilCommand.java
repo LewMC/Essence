@@ -10,6 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * /anvil command.
+ */
 public class AnvilCommand implements CommandExecutor {
     private final Essence plugin;
     private final LogUtil log;

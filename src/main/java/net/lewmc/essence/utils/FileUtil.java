@@ -33,23 +33,24 @@ public class FileUtil {
 
     /**
      * Creates a file.
+     * @param path String - Path to the file.
      * @return boolean - If the file and directories (if required) were created successfully.
      */
-    public boolean create(String name) {
-        File createFile = new File(this.plugin.getDataFolder(), this.parseFileName(name));
+    public boolean create(String path) {
+        File createFile = new File(this.plugin.getDataFolder(), this.parseFileName(path));
         try {
             if (createFile.getParentFile().mkdirs() || createFile.getParentFile().exists()) {
                 if (this.plugin.verbose) {
-                    this.log.info("Created file at "+new File(this.plugin.getDataFolder(),this.parseFileName(name)));
+                    this.log.info("Created file at "+new File(this.plugin.getDataFolder(),this.parseFileName(path)));
                 }
                 return createFile.createNewFile();
             } else {
-                this.log.severe("Failed to create file " + name);
+                this.log.severe("Failed to create file " + path);
                 this.log.severe("Unable to create parent directory.");
                 return false;
             }
         } catch (IOException e) {
-            this.log.severe("Failed to create file " + name);
+            this.log.severe("Failed to create file " + path);
             this.log.severe(e.getMessage());
             return false;
         }
@@ -57,21 +58,23 @@ public class FileUtil {
 
     /**
      * Checks if a file exists.
+     * @param path - Path to the file.
      * @return boolean - If the file exists
      */
-    public boolean exists(String name) {
-        File file = new File(this.plugin.getDataFolder(), this.parseFileName(name));
+    public boolean exists(String path) {
+        File file = new File(this.plugin.getDataFolder(), this.parseFileName(path));
         return file.exists();
     }
 
     /**
      * Opens a configuration file.
+     * @param path String - Path to the file
      * @return boolean - If the operation was successful
      */
-    public boolean load(String name) {
+    public boolean load(String path) {
         if (!this.isOpen()) {
             this.config = new YamlConfiguration();
-            File file = new File(this.plugin.getDataFolder(), this.parseFileName(name));
+            File file = new File(this.plugin.getDataFolder(), this.parseFileName(path));
             try {
                 if (file.exists()) {
                     this.config.load(file);
@@ -97,36 +100,38 @@ public class FileUtil {
 
     /**
      * Deletes a file.
+     * @param path String - The path of the file
      * @return boolean - If the operation was successful
      */
-    public boolean delete(String name) {
+    public boolean delete(String path) {
         if (this.isOpen()) {
             try {
-                File file = new File(this.parseFileName(this.plugin.getDataFolder() + name));
+                File file = new File(path);
                 return file.delete();
             } catch (SecurityException e) {
-                this.log.severe("Failed to save file " + name);
+                this.log.severe("Failed to delete file " + path);
                 this.log.severe(e.getMessage());
                 return false;
             }
         } else {
-            this.log.warn("Tried to save a file without opening a file first.");
+            this.log.warn("Tried to delete a file without opening a file first.");
             return false;
         }
     }
 
     /**
      * Saves and closes the current configuration file to a custom location.
+     * @param file String - The file.
      * @return boolean - If the operation was successful
      */
-    public boolean save(File name) {
+    public boolean save(File file) {
         if (this.isOpen()) {
             try {
-                this.config.save(name);
+                this.config.save(file);
                 this.close();
                 return true;
             } catch (IOException e) {
-                this.log.severe("Failed to save file " + name);
+                this.log.severe("Failed to save file " + file);
                 this.log.severe(e.getMessage());
                 return false;
             }
