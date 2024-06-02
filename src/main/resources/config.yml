@@ -43,6 +43,9 @@ teleportation:
     cooldown: 10
     main-spawn-world: world
     always-spawn: false
+  requests:
+    cooldown: 10
+    default-enabled: true
 
 # LANGUAGE
 # The file that will be used to display messages.

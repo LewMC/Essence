@@ -115,6 +115,7 @@ teleport:
   usage: "§4[Essence] §cUsage: /tp <player> OR /tp <x> <y> <z>"
   wait: "§6[Essence] §eTeleporting in {{1}} seconds..."
   tryagain: "§4[Essence] §cPlease wait {{1}} seconds before teleporting again."
+  toggled: "§2[Essence] §aTeleportation requests {{1}}."
 feed:
   fed: "§2[Essence] §aYou fed {{1}}."
   serverfed: "§2[Essence] §aYou've been fed by a magical force."

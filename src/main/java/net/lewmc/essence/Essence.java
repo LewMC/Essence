@@ -207,6 +207,7 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("tpdeny")) { this.getCommand("tpdeny").setExecutor(new TpdenyCommand(this)); }
             if (command.isEnabled("tptoggle")) { this.getCommand("tptoggle").setExecutor(new TptoggleCommand(this)); }
             if (command.isEnabled("tpahere")) { this.getCommand("tpahere").setExecutor(new TpahereCommand(this)); }
+            if (command.isEnabled("tpcancel")) { this.getCommand("tpcancel").setExecutor(new TpcancelCommand(this)); }
 
             if (command.isEnabled("home")) { this.getCommand("home").setExecutor(new HomeCommand(this)); }
             if (command.isEnabled("homes")) { this.getCommand("homes").setExecutor(new HomesCommand(this)); }
