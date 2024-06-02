@@ -12,6 +12,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Gamemode commands class.
+ */
 public class GamemodeCommands implements CommandExecutor {
     private final Essence plugin;
     private MessageUtil message;

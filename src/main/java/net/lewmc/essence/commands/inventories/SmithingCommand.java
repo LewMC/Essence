@@ -10,6 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * /smithing command.
+ */
 public class SmithingCommand implements CommandExecutor {
     private final Essence plugin;
     private final LogUtil log;

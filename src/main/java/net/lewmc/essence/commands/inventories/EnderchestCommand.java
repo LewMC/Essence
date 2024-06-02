@@ -10,6 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * /echest command.
+ */
 public class EnderchestCommand implements CommandExecutor {
     private final Essence plugin;
     private final LogUtil log;

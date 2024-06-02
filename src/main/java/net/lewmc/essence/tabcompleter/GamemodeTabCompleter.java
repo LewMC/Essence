@@ -20,7 +20,7 @@ public class GamemodeTabCompleter implements TabCompleter {
      * @param cde Command - The command.
      * @param arg String - Command argument.
      * @param args String[] - Command arguments.
-     * @return ArrayList<> - List of command autocomplete options.
+     * @return ArrayList - List of command autocomplete options.
      */
     @Override
     public List<String> onTabComplete(

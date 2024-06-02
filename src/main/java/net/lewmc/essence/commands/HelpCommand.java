@@ -2,6 +2,9 @@ package net.lewmc.essence.commands;
 
 import net.lewmc.essence.utils.MessageUtil;
 
+/**
+ * Help command class.
+ */
 public class HelpCommand {
     private final MessageUtil message;
     private final String[] args;
