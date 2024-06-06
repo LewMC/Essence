@@ -5,13 +5,26 @@ import net.lewmc.essence.Essence;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The TeleportRequestUtil class.
+ */
 public class TeleportRequestUtil {
     private final Essence plugin;
 
+    /**
+     * Constructor for the TeleportRequestUtil class.
+     * @param plugin Reference to main Essence class.
+     */
     public TeleportRequestUtil(Essence plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * Creates a teleportation request.
+     * @param requester String - The user sending the request.
+     * @param requested String - The user being requested.
+     * @param teleportToRequester boolean - If the user being requested should be teleported to the requester (true), or if the requester should be teleported to them (false).
+     */
     public void createRequest(String requester, String requested, boolean teleportToRequester) {
         this.deleteFromRequester(requester);
 
@@ -22,6 +35,11 @@ public class TeleportRequestUtil {
         }
     }
 
+    /**
+     * Deletes a teleport request by finding it from the requesting player.
+     * @param requester String - Name of the requester.
+     * @return boolean - If the request was found and deleted.
+     */
     public boolean deleteFromRequester(String requester) {
         boolean found = false;
         if (this.plugin.teleportRequests == null) {
@@ -40,6 +58,10 @@ public class TeleportRequestUtil {
         return found;
     }
 
+    /**
+     * Deletes a request by finding it from the requested player.
+     * @param requested String - Name of the requested player.
+     */
     public void deleteFromRequested(String requested) {
         if (this.plugin.teleportRequests == null) {
             return;
@@ -47,6 +69,11 @@ public class TeleportRequestUtil {
         this.plugin.teleportRequests.remove(requested);
     }
 
+    /**
+     * Accepts a teleportation request.
+     * @param requested String - Name of the requested player.
+     * @return boolean - Success
+     */
     public boolean acceptRequest(String requested) {
         String[] tpaRequest = this.plugin.teleportRequests.get(requested);
         if (tpaRequest == null) {
