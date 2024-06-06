@@ -51,8 +51,6 @@ public class TeleportRequestUtil {
         String[] tpaRequest = this.plugin.teleportRequests.get(requested);
         log.info(this.plugin.teleportRequests.toString());
         if (tpaRequest == null) {
-            log.severe("Unable to teleport, request is null. Please re-request and try again.");
-            log.severe("If this problem persists try restarting your server.");
             return false;
         }
 
