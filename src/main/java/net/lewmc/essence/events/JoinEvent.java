@@ -33,7 +33,7 @@ public class JoinEvent implements Listener {
         LogUtil log = new LogUtil(this.plugin);
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getPlayer().getName());
-        boolean firstJoin = offlinePlayer.isOnline();
+        boolean firstJoin = !offlinePlayer.hasPlayedBefore();
 
         if (firstJoin) {
             KitUtil kit = new KitUtil(this.plugin, event.getPlayer());
