@@ -33,7 +33,7 @@ public class JoinEvent implements Listener {
         LogUtil log = new LogUtil(this.plugin);
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getPlayer().getName());
-        boolean firstJoin = offlinePlayer.isOnline();
+        boolean firstJoin = !offlinePlayer.hasPlayedBefore();
 
         if (firstJoin) {
             KitUtil kit = new KitUtil(this.plugin, event.getPlayer());
@@ -133,6 +133,7 @@ public class JoinEvent implements Listener {
             playerFile.set("economy.balance", plugin.getConfig().getDouble("economy.start-money"));
             playerFile.set("economy.accepting-payments", true);
             playerFile.set("user.last-known-name", event.getPlayer().getName());
+            playerFile.set("user.accepting-teleport-requests", plugin.getConfig().getDouble("teleportation.requests.default-enabled"));
         } else {
             if (this.plugin.verbose) {
                 log.info("Player data exists.");
@@ -140,6 +141,10 @@ public class JoinEvent implements Listener {
             if (!playerFile.load(playerDataFile)) {
                 log.severe("Unable to load configuration file '"+playerDataFile+"'. Essence may be unable to teleport players to the correct spawn");
                 return;
+            }
+
+            if (playerFile.get("user.accepting-teleport-requests") == null) {
+                playerFile.set("user.accepting-teleport-requests", plugin.getConfig().getDouble("teleportation.requests.default-enabled"));
             }
 
             if (playerFile.get("economy.balance") == null) {
