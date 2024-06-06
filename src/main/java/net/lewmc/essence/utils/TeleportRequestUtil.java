@@ -2,7 +2,6 @@ package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,9 +27,11 @@ public class TeleportRequestUtil {
         if (this.plugin.teleportRequests == null) {
             return false;
         }
+
         for (Map.Entry<String, String[]> entry : this.plugin.teleportRequests.entrySet()) {
             String[] values = entry.getValue();
             String key = entry.getKey();
+
             if (values.length > 0 && values[0].equalsIgnoreCase(requester)) {
                 this.plugin.teleportRequests.remove(key);
                 found = true;
@@ -47,15 +48,12 @@ public class TeleportRequestUtil {
     }
 
     public boolean acceptRequest(String requested) {
-        LogUtil log = new LogUtil(this.plugin);
         String[] tpaRequest = this.plugin.teleportRequests.get(requested);
-        log.info(this.plugin.teleportRequests.toString());
         if (tpaRequest == null) {
             return false;
         }
 
         TeleportUtil tpu = new TeleportUtil(this.plugin);
-        log.info(Arrays.toString(tpaRequest));
         if (Objects.equals(tpaRequest[1], "true")) {
             tpu.doTeleport(
                     this.plugin.getServer().getPlayer(requested),

@@ -45,11 +45,8 @@ public class TpdenyCommand implements CommandExecutor {
             if (permission.has("essence.teleport.request.deny")) {
                 MessageUtil msg = new MessageUtil(commandSender, this.plugin);
                 TeleportRequestUtil tpru = new TeleportRequestUtil(this.plugin);
-                if (tpru.deleteFromRequester(commandSender.getName())) {
-                    msg.PrivateMessage("teleport","canceldone");
-                } else {
-                    msg.PrivateMessage("teleport","cancelnone");
-                }
+                tpru.deleteFromRequested(commandSender.getName());
+                msg.PrivateMessage("teleport","canceldone");
                 return true;
             } else {
                 return permission.not();

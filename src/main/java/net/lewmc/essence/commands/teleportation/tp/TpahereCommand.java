@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.teleportation.tp;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.FileUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
 import net.lewmc.essence.utils.TeleportRequestUtil;
@@ -57,6 +58,14 @@ public class TpahereCommand implements CommandExecutor {
                         message.PrivateMessage("generic", "cantyourself");
                         return true;
                     }
+
+                    FileUtil playerData = new FileUtil(this.plugin);
+                    playerData.load(playerData.playerDataFile(playerToRequest));
+                    if (!playerData.getBoolean("user.accepting-teleport-requests")) {
+                        message.PrivateMessage("teleport", "requestsdisabled", playerToRequest.getName());
+                        return true;
+                    }
+                    playerData.close();
 
                     TeleportRequestUtil tpru = new TeleportRequestUtil(this.plugin);
                     tpru.createRequest(commandSender.getName(), playerToRequest.getName(), true);

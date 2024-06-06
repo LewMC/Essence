@@ -125,6 +125,7 @@ teleport:
   requestsent: "§2[Essence] §aTeleport request sent."
   canceldone: "§2[Essence] §aCancelled pending teleport requests."
   cancelnone: "§4[Essence] §cYou have no pending teleport requests to cancel."
+  requestsdisabled: "§4[Essence] §c{{1}} has teleportation requests disabled."
 feed:
   fed: "§2[Essence] §aYou fed {{1}}."
   serverfed: "§2[Essence] §aYou've been fed by a magical force."
