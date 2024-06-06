@@ -66,6 +66,7 @@ public class TptoggleCommand implements CommandExecutor {
                 }
 
                 file.save();
+                return true;
             } else {
                 return permission.not();
             }
