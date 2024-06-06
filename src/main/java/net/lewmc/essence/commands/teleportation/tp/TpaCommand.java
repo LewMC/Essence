@@ -3,6 +3,7 @@ package net.lewmc.essence.commands.teleportation.tp;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.TeleportRequestUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -52,8 +53,15 @@ public class TpaCommand implements CommandExecutor {
                         return true;
                     }
 
-                    this.plugin.teleportRequests.put(playerToRequest.toString(), new String[]{commandSender.getName(), "false"});
+                    if (playerToRequest.getName().equals(commandSender.getName())) {
+                        message.PrivateMessage("generic", "cantyourself");
+                        return true;
+                    }
 
+                    TeleportRequestUtil tpru = new TeleportRequestUtil(this.plugin);
+                    tpru.createRequest(commandSender.getName(), playerToRequest.getName(), false);
+
+                    message.PrivateMessage("teleport", "requestsent");
                     message.SendTo(playerToRequest, "teleport", "requested", commandSender.getName());
                     message.SendTo(playerToRequest, "teleport", "acceptdeny");
 

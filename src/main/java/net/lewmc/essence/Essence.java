@@ -53,7 +53,7 @@ public class Essence extends JavaPlugin {
      * String = The requested player's name.
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
      */
-    public HashMap<String, String[]> teleportRequests;
+    public HashMap<String, String[]> teleportRequests = new HashMap<>();
 
     /**
      * This function runs when Essence is enabled.

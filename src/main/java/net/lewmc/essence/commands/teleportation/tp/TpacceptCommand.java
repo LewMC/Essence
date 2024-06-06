@@ -3,6 +3,7 @@ package net.lewmc.essence.commands.teleportation.tp;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.TeleportRequestUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,10 +41,17 @@ public class TpacceptCommand implements CommandExecutor {
         MessageUtil message = new MessageUtil(commandSender, this.plugin);
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (permission.has("essence.teleport.request.accept")) {
-            return true;
-        } else {
-            return permission.not();
+        if (command.getName().equalsIgnoreCase("tpaccept")) {
+            if (permission.has("essence.teleport.request.accept")) {
+                TeleportRequestUtil tpru = new TeleportRequestUtil(plugin);
+                if (!tpru.acceptRequest(commandSender.getName())) {
+                    message.PrivateMessage("generic", "exception");
+                }
+                return true;
+            } else {
+                return permission.not();
+            }
         }
+        return false;
     }
 }

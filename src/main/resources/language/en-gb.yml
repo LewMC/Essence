@@ -21,6 +21,7 @@ economy:
 generic:
   blankmessage: "§6[Essence]"
   playernotfound: "§4[Essence] §cPlayer could not be found."
+  cantyourself: "§4[Essence] §cYou can't do that to yourself!"
   exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this command, please see console for details."
   configexception: "§4[Essence] §cEssence encountered an issue whilst trying to process a configuration file, please see console for details."
   missingpermission: "§4[Essence] §cYou don't have the required permission to run this command."
@@ -120,6 +121,9 @@ teleport:
   requested: "§6[Essence] §e{{1}} has requested to teleport to you."
   requestedhere: "§6[Essence] §e{{1}} has requested that you teleport to them."
   acceptdeny: "§6[Essence] §eTo accept type /tpaccept, to deny type /tpdeny."
+  requestsent: "§2[Essence] §aTeleport request sent."
+  canceldone: "§2[Essence] §aCancelled pending teleport requests."
+  cancelnone: "§4[Essence] §cYou have no pending teleport requests to cancel."
 feed:
   fed: "§2[Essence] §aYou fed {{1}}."
   serverfed: "§2[Essence] §aYou've been fed by a magical force."

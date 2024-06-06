@@ -3,6 +3,7 @@ package net.lewmc.essence.commands.teleportation.tp;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.TeleportRequestUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,10 +41,20 @@ public class TpcancelCommand implements CommandExecutor {
         MessageUtil message = new MessageUtil(commandSender, this.plugin);
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (permission.has("essence.teleport.request.cancel")) {
-            return true;
-        } else {
-            return permission.not();
+        if (command.getName().equalsIgnoreCase("tpcancel")) {
+            if (permission.has("essence.teleport.request.cancel")) {
+                MessageUtil msg = new MessageUtil(commandSender, this.plugin);
+                TeleportRequestUtil tpru = new TeleportRequestUtil(this.plugin);
+                if (tpru.deleteFromRequester(commandSender.getName())) {
+                    msg.PrivateMessage("teleport","canceldone");
+                } else {
+                    msg.PrivateMessage("teleport","cancelnone");
+                }
+                return true;
+            } else {
+                return permission.not();
+            }
         }
+        return false;
     }
 }
