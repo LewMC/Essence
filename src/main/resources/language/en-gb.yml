@@ -116,6 +116,10 @@ teleport:
   wait: "§6[Essence] §eTeleporting in {{1}} seconds..."
   tryagain: "§4[Essence] §cPlease wait {{1}} seconds before teleporting again."
   toggled: "§2[Essence] §aTeleportation requests {{1}}."
+  userrequired: "§4[Essence] §cPlease enter a username to request to teleport to."
+  requested: "§6[Essence] §e{{1}} has requested to teleport to you."
+  requestedhere: "§6[Essence] §e{{1}} has requested that you teleport to them."
+  acceptdeny: "§6[Essence] §eTo accept type /tpaccept, to deny type /tpdeny."
 feed:
   fed: "§2[Essence] §aYou fed {{1}}."
   serverfed: "§2[Essence] §aYou've been fed by a magical force."

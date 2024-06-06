@@ -6,6 +6,7 @@ import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,10 +41,29 @@ public class TpaCommand implements CommandExecutor {
         MessageUtil message = new MessageUtil(commandSender, this.plugin);
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (permission.has("essence.teleport.request.send")) {
-            return true;
+        if (command.getName().equalsIgnoreCase("tpa")) {
+            if (permission.has("essence.teleport.request.send")) {
+                if (args.length == 0) {
+                    message.PrivateMessage("teleport", "userrequired");
+                } else {
+                    Player playerToRequest = this.plugin.getServer().getPlayer(args[0]);
+                    if (playerToRequest == null) {
+                        message.PrivateMessage("generic", "playernotfound");
+                        return true;
+                    }
+
+                    this.plugin.teleportRequests.put(playerToRequest.toString(), new String[]{commandSender.getName(), "false"});
+
+                    message.SendTo(playerToRequest, "teleport", "requested", commandSender.getName());
+                    message.SendTo(playerToRequest, "teleport", "acceptdeny");
+
+                }
+                return true;
+            } else {
+                return permission.not();
+            }
         } else {
-            return permission.not();
+            return false;
         }
     }
 }

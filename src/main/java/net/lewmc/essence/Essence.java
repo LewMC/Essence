@@ -32,6 +32,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.HashMap;
 
 /**
  * The main Essence class.
@@ -46,6 +47,13 @@ public class Essence extends JavaPlugin {
      * The config.yml's verbose value is stored here.
      */
     public boolean verbose;
+
+    /**
+     * Stores pending teleport requests.
+     * String = The requested player's name.
+     * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
+     */
+    public HashMap<String, String[]> teleportRequests;
 
     /**
      * This function runs when Essence is enabled.
