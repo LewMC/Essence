@@ -1,6 +1,8 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.List;
@@ -46,5 +48,14 @@ public class CommandUtil {
         File g = new File("config/paper-global.yml");
 
         return pwd.exists() && g.exists();
+    }
+
+    /**
+     * Checks if the commandSender is the console.
+     * @param commandSender CommandSender
+     * @return true if the command sender is the console.
+     */
+    public boolean console(CommandSender commandSender) {
+        return !(commandSender instanceof Player);
     }
 }

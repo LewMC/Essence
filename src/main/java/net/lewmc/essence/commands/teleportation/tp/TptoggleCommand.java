@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation.tp;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.FileUtil;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TptoggleCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the TptoggleCommand class.
@@ -25,7 +21,6 @@ public class TptoggleCommand implements CommandExecutor {
      */
     public TptoggleCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -42,8 +37,11 @@ public class TptoggleCommand implements CommandExecutor {
             @NotNull String s,
             String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
+        LogUtil log = new LogUtil(this.plugin);
+
+        CommandUtil cmd = new CommandUtil(this.plugin);
+        if (cmd.console(commandSender)) {
+            log.noConsole();
             return true;
         }
 

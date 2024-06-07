@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation.tp;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.FileUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.PermissionHandler;
-import net.lewmc.essence.utils.TeleportRequestUtil;
+import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -42,6 +39,13 @@ public class TpahereCommand implements CommandExecutor {
     ) {
         MessageUtil message = new MessageUtil(commandSender, this.plugin);
         PermissionHandler permission = new PermissionHandler(commandSender, message);
+        LogUtil log = new LogUtil(this.plugin);
+
+        CommandUtil cmd = new CommandUtil(this.plugin);
+        if (cmd.console(commandSender)) {
+            log.noConsole();
+            return true;
+        }
 
         if (command.getName().equalsIgnoreCase("tpahere")) {
             if (permission.has("essence.teleport.request.here")) {

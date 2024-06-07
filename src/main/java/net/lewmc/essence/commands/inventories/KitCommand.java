@@ -16,7 +16,6 @@ import java.util.Set;
 public class KitCommand implements CommandExecutor {
 
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the KitCommand class.
@@ -24,7 +23,6 @@ public class KitCommand implements CommandExecutor {
      */
     public KitCommand (Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -41,62 +39,60 @@ public class KitCommand implements CommandExecutor {
             @NotNull String s,
             @NotNull String[] args)
     {
+        LogUtil log = new LogUtil(this.plugin);
 
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
+        CommandUtil cmd = new CommandUtil(this.plugin);
+        if (cmd.console(commandSender)) {
+            log.noConsole();
             return true;
         }
+
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("kit")) {
-            if (permission.has("essence.inventory.loom")) {
-                if (args.length == 0) {
-                    String kits = "No kits found.";
+            if (args.length == 0) {
+                String kits = "No kits found.";
 
-                    FileUtil kitData = new FileUtil(this.plugin);
-                    kitData.load("data/kits.yml");
-                    Set<String> keys = kitData.getKeys("kits", false);
+                FileUtil kitData = new FileUtil(this.plugin);
+                kitData.load("data/kits.yml");
+                Set<String> keys = kitData.getKeys("kits", false);
 
-                    int i = 0;
-                    for (Object object : keys) {
-                        if (kitData.get("kits."+object+"permission") == null) {
+                int i = 0;
+                for (Object object : keys) {
+                    if (kitData.get("kits." + object + ".permission") == null) {
+                        if (i == 0) {
+                            kits = object.toString();
+                        } else {
+                            kits += ", " + object.toString();
+                        }
+                    } else {
+                        if (permission.has(kitData.get("kits." + object + ".permission").toString()) || permission.has("essence.kits.all")) {
                             if (i == 0) {
                                 kits = object.toString();
                             } else {
                                 kits += ", " + object.toString();
                             }
-                        } else {
-                            if (permission.has(kitData.get("kits."+object+"permission").toString()) || permission.has("essence.kits.all")) {
-                                if (i == 0) {
-                                    kits = object.toString();
-                                } else {
-                                    kits += ", " + object.toString();
-                                }
-                            }
                         }
-                        i++;
                     }
-
-                    kitData.close();
-
-                    message.PrivateMessage("kit", "select", kits);
-                } else {
-                    KitUtil kit = new KitUtil(this.plugin, player);
-
-                    if (kit.giveKit(args[0]) == 0) {
-                        message.PrivateMessage("kit", "done", args[0]);
-                    } else if (kit.giveKit(args[0]) == 1) {
-                        message.PrivateMessage("kit", "nopermission");
-                    } else if (kit.giveKit(args[0]) == 2) {
-                        message.PrivateMessage("kit", "notexist");
-                    }
+                    i++;
                 }
-            } else {
-                permission.not();
-            }
 
+                kitData.close();
+
+                message.PrivateMessage("kit", "select", kits);
+            } else {
+                KitUtil kit = new KitUtil(this.plugin, player);
+
+                if (kit.giveKit(args[0]) == 0) {
+                    message.PrivateMessage("kit", "done", args[0]);
+                } else if (kit.giveKit(args[0]) == 1) {
+                    message.PrivateMessage("kit", "nopermission");
+                } else if (kit.giveKit(args[0]) == 2) {
+                    message.PrivateMessage("kit", "notexist");
+                }
+            }
             return true;
         }
         return false;
