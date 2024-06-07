@@ -1,4 +1,5 @@
-﻿# Essence
+![Essence](https://cdn.modrinth.com/data/cached_images/1a9959eb6d98d5e50f561c021de086a8212cc7cc.png)
+
 - 💾 **Download Essence** - https://lewmc.net/plugin/essence
 - 🔧 **View the JavaDocs** - https://lewmc.github.io/Essence
 - ⭐ Enjoying Essence? We'd love to hear your feedback on Spigot. Leave us a review [here](https://www.spigotmc.org/resources/essence.114553/). 
