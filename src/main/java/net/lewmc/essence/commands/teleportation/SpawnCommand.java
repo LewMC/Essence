@@ -4,6 +4,7 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -107,6 +108,11 @@ public class SpawnCommand implements CommandExecutor {
                     }
                     LocationUtil locationUtil = new LocationUtil(this.plugin);
                     locationUtil.UpdateLastLocation(player);
+
+                    if (Bukkit.getServer().getWorld(spawnName) == null) {
+                        WorldCreator creator = new WorldCreator(spawnName);
+                        creator.createWorld();
+                    }
 
                     teleportLocation = new Location(
                             Bukkit.getServer().getWorld(spawnName),
