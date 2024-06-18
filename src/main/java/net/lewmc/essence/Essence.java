@@ -24,10 +24,7 @@ import net.lewmc.essence.commands.teleportation.warp.DelwarpCommand;
 import net.lewmc.essence.commands.teleportation.warp.SetwarpCommand;
 import net.lewmc.essence.commands.teleportation.warp.WarpCommand;
 import net.lewmc.essence.commands.teleportation.warp.WarpsCommand;
-import net.lewmc.essence.events.DeathEvent;
-import net.lewmc.essence.events.JoinEvent;
-import net.lewmc.essence.events.PlayerDamageEvent;
-import net.lewmc.essence.events.RespawnEvent;
+import net.lewmc.essence.events.*;
 import net.lewmc.essence.tabcompleter.*;
 import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
@@ -156,8 +153,7 @@ public class Essence extends JavaPlugin {
         }
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
-        if (!statsFolder.exists()) {
-            if (!statsFolder.mkdirs()) {
+        if (!statsFolder.exists() && !statsFolder.mkdirs()) {
                 log.severe("Unable to make data folder.");
                 log.warn("The plugin is being disabled, most of the plugin's features will not work without the data folder.");
                 log.warn("Please create a folder called 'data' in the 'Essence' folder.");
@@ -166,7 +162,7 @@ public class Essence extends JavaPlugin {
                 this.log.info("");
                 getServer().getPluginManager().disablePlugin(this);
             }
-        }
+
 
         File warpsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "warps.yml");
         if (!warpsFile.exists()) {
@@ -280,5 +276,6 @@ public class Essence extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new DeathEvent(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerDamageEvent(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new RespawnEvent(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerBedEnter(this), this);
     }
 }

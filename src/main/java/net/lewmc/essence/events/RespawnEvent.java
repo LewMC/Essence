@@ -35,6 +35,30 @@ public class RespawnEvent implements Listener {
         FileUtil config = new FileUtil(this.plugin);
         config.load("config.yml");
         String spawnName = config.getString("teleportation.spawn.main-spawn-world");
+        boolean alwaysSpawn = config.getBoolean("teleportation.spawn.always-spawn");
+        config.close();
+
+        FileUtil playerData = new FileUtil(this.plugin);
+        playerData.load(config.playerDataFile(event.getPlayer()));
+
+        if ((playerData.getString("user.last-sleep-location") != null) && !alwaysSpawn) {
+            TeleportUtil tp = new TeleportUtil(plugin);
+            tp.doTeleport(
+                    event.getPlayer(),
+                    Bukkit.getServer().getWorld("user.last-sleep-location.world"),
+                    playerData.getDouble("user.last-sleep-location.X"),
+                    playerData.getDouble("user.last-sleep-location.Y"),
+                    playerData.getDouble("user.last-sleep-location.Z"),
+                    (float) playerData.getDouble("user.last-sleep-location.yaw"),
+                    (float) playerData.getDouble("user.last-sleep-location.pitch"),
+                    0
+            );
+
+            config.close();
+
+            return;
+        }
+
         config.close();
 
         FileUtil spawns = new FileUtil(this.plugin);
@@ -42,7 +66,10 @@ public class RespawnEvent implements Listener {
 
         if (spawns.get("spawn."+spawnName) != null) {
             LogUtil log = new LogUtil(this.plugin);
-            if (Bukkit.getServer().getWorld(spawnName) != null) {
+            if (
+                Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null &&
+                Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY() >= 10
+            ) {
                 TeleportUtil tp = new TeleportUtil(plugin);
                 tp.doTeleport(
                         event.getPlayer(),
@@ -72,6 +99,6 @@ public class RespawnEvent implements Listener {
             );
         }
 
-        config.close();
+        spawns.close();
     }
 }
