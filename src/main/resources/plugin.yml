@@ -1,7 +1,7 @@
 name: Essence
 version: '${project.version}'
 main: net.lewmc.essence.Essence
-api-version: 1.19
+api-version: 1.20
 author: LewMC
 description: An Essentials alternative for LewMC servers.
 website: https://lewmc.net
@@ -104,6 +104,22 @@ commands:
     description: Delete a home.
     usage: /<command> <name>
     aliases: []
+  thome:
+    description: Teleport to a team home.
+    usage: /<command> [name]
+    aliases: ['teamhome','ghome','grouphome']
+  thomes:
+    description: View a list of team homes.
+    usage: /<command>
+    aliases: ['teamhomes','ghomes','grouphomes']
+  setthome:
+    description: Create a team home.
+    usage: /<command> <name>
+    aliases: ['setteamhome','setghome','setgrouphome']
+  delthome:
+    description: Delete a team home.
+    usage: /<command> <name>
+    aliases: ['delteamhome','delghome','delgrouphome']
   heal:
     description: Heal yourself or someone else.
     usage: /<command> [user]
@@ -321,15 +337,30 @@ permissions:
     description: Allows players to use the home system.
     default: op
     children:
+      essence.home.list: true
       essence.home.use: true
       essence.home.set: true
       essence.home.delete: true
+      essence.home.team.list: true
+      essence.home.team.use: true
+      essence.home.team.set: true
+      essence.home.team.delete: true
+  essence.home.list:
+    description: View a list of homes.
   essence.home.use:
     description: Allows players to teleport to your homes.
   essence.home.set:
-    description: Allows players to set homes
+    description: Allows players to set homes.
   essence.home.delete:
-    description: Allows players to delete homes
+    description: Allows players to delete homes.
+  essence.home.team.list:
+    description: View a list of team homes.
+  essence.home.team.use:
+    description: Allows players to teleport to team homes.
+  essence.home.team.set:
+    description: Allows players to set team homes.
+  essence.home.team.delete:
+    description: Allows players to delete team homes.
   essence.chat.*:
     description: Allows players to use all chat commands.
     default: op

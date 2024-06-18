@@ -79,7 +79,8 @@ public class HelpCommand {
                     this.message.PrivateMessage("help", "setspawn");
                     this.message.PrivateMessage("help", "spawn");
                     this.message.PrivateMessage("help", "world");
-                    this.blank(5);
+                    this.message.PrivateMessage("help", "tpr");
+                    this.blank(4);
                     this.message.PrivateMessage("help", "page", "3", "3");
                 }
             } else if ("stats".equalsIgnoreCase(args[1])) {

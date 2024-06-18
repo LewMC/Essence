@@ -2,10 +2,7 @@
 
 ## Supported Versions
 
-| Version | Supported                   |
-| ------- | --------------------------- |
-| Latest  | Bugfixes & Security Updates |
-| 1.x.x   | Security Updates            |
+See https://wiki.lewmc.net/es-system-requirements.html
 
 ## Reporting a Vulnerability
 
