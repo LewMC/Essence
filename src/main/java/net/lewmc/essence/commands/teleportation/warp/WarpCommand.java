@@ -3,6 +3,7 @@ package net.lewmc.essence.commands.teleportation.warp;
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
 import org.bukkit.Bukkit;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -75,6 +76,11 @@ public class WarpCommand implements CommandExecutor {
                     locationUtil.UpdateLastLocation(player);
 
                     teleUtil.setCooldown(player, "warp");
+
+                    if (Bukkit.getServer().getWorld(config.getString("warps." + args[0].toLowerCase()+".world")) == null) {
+                        WorldCreator creator = new WorldCreator(config.getString("warps." + args[0].toLowerCase()+".world"));
+                        creator.createWorld();
+                    }
 
                     teleUtil.doTeleport(
                             player,

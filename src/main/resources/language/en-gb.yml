@@ -27,6 +27,8 @@ generic:
   missingpermission: "§4[Essence] §cYou don't have the required permission to run this command."
   nofolia: "§4[Essence] §cThis command cannot run on Folia-based server software."
   helpfolia: "§4[Essence] §cIf you'd like to help us add support for Folia please visit github.com/lewmc/essence"
+other:
+  respawnset: "§6[Essence] §eRespawn point set."
 help:
   page: "§6[Essence] ----------------- Page {{1}}/{{2}} -----------------"
   inventory: "§6[Essence] --------- Essence Help - Inventory ---------"

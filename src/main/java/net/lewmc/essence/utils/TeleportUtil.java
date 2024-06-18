@@ -158,6 +158,15 @@ public class TeleportUtil {
      */
     public void doTeleport(Player player, Location location, int delay) {
         FoliaLib flib = new FoliaLib(this.plugin);
+        this.log.warn(String.valueOf(location));
+        if (location.getWorld() == null) {
+            MessageUtil message = new MessageUtil(player, this.plugin);
+            message.PrivateMessage("generic","exception");
+            this.log.severe("Unable to locate world in universe.");
+            this.log.severe("Details: {\"error\": \"WORLD_IS_NULL\", \"caught\": \"TeleportUtil.java\", \"submitted\": \"null\", \"found\": \"null\"}.");
+            return;
+        }
+
         if (flib.isFolia()) {
             flib.getImpl().runAtEntityLater(player, () -> player.teleportAsync(location), delay * 20L);
         } else {

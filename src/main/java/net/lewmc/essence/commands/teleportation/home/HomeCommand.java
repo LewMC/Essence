@@ -3,6 +3,7 @@ package net.lewmc.essence.commands.teleportation.home;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import org.bukkit.Bukkit;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -100,6 +101,11 @@ public class HomeCommand implements CommandExecutor {
                 locationUtil.UpdateLastLocation(player);
 
                 teleUtil.setCooldown(player, "home");
+
+                if (Bukkit.getServer().getWorld(playerData.getString(homeName + ".world")) == null) {
+                    WorldCreator creator = new WorldCreator(playerData.getString(homeName + ".world"));
+                    creator.createWorld();
+                }
 
                 teleUtil.doTeleport(
                         player,

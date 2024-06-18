@@ -4,6 +4,7 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -77,6 +78,11 @@ public class SpawnCommand implements CommandExecutor {
 
                 Location teleportLocation;
 
+                if (Bukkit.getServer().getWorld(spawnName) == null) {
+                    this.log.severe("Unable to locate world in universe.");
+                    this.log.severe("Details: {\"error\": \"WORLD_IS_NULL\", \"caught\": \"SpawnCommand.java\", \"submitted\": \""+spawnName+"\", \"found\": \"null\"}.");
+                }
+
                 if (spawnData.get("spawn."+spawnName) == null) {
                     if (this.plugin.verbose) {
                         LogUtil log = new LogUtil(this.plugin);
@@ -102,6 +108,11 @@ public class SpawnCommand implements CommandExecutor {
                     }
                     LocationUtil locationUtil = new LocationUtil(this.plugin);
                     locationUtil.UpdateLastLocation(player);
+
+                    if (Bukkit.getServer().getWorld(spawnName) == null) {
+                        WorldCreator creator = new WorldCreator(spawnName);
+                        creator.createWorld();
+                    }
 
                     teleportLocation = new Location(
                             Bukkit.getServer().getWorld(spawnName),
