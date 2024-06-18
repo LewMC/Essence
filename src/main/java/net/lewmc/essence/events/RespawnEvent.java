@@ -66,7 +66,10 @@ public class RespawnEvent implements Listener {
 
         if (spawns.get("spawn."+spawnName) != null) {
             LogUtil log = new LogUtil(this.plugin);
-            if (Bukkit.getServer().getWorld(spawnName) != null) {
+            if (
+                Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null &&
+                Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY() >= 10
+            ) {
                 TeleportUtil tp = new TeleportUtil(plugin);
                 tp.doTeleport(
                         event.getPlayer(),

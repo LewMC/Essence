@@ -29,7 +29,7 @@ public class PlayerBedEnter implements Listener {
         FileUtil playerData = new FileUtil(this.plugin);
         playerData.load(playerData.playerDataFile(event.getPlayer()));
 
-        playerData.set("user.last-sleep-location.world", bedLocation.getWorld());
+        playerData.set("user.last-sleep-location.world", bedLocation.getWorld().getName());
         playerData.set("user.last-sleep-location.X", bedLocation.getX());
         playerData.set("user.last-sleep-location.Y", bedLocation.getY());
         playerData.set("user.last-sleep-location.Z", bedLocation.getZ());
