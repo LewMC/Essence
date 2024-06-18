@@ -2,6 +2,7 @@ package net.lewmc.essence.events;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.FileUtil;
+import net.lewmc.essence.utils.MessageUtil;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,5 +38,8 @@ public class PlayerBedEnter implements Listener {
         playerData.set("user.last-sleep-location.pitch", bedLocation.getPitch());
 
         playerData.save();
+
+        MessageUtil messageUtil = new MessageUtil(event.getPlayer(), this.plugin);
+        messageUtil.PrivateMessage("other", "respawnset");
     }
 }
