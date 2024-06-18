@@ -20,12 +20,10 @@ jobs:
           java-version: '17'
 
       - name: Build with Maven 🏗️
-        run: |
-          mvn -B package --file pom.xml
-          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+        run: mvn -B package --file pom.xml
 
       - name: Upload Plugin jar 📁
         uses: actions/upload-artifact@v4
         with:
-          name: essence-1.5.0-${{ env.git_hash }}.jar
+          name: essence-1.5.0-GITDEV.jar
           path: /home/runner/work/Essence/Essence/target/essence-1.5.0.jar
