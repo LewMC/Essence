@@ -26,4 +26,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: essence-1.5.0-${{ env.git_hash }}.jar
-          path: ${{ env.artifactPath }}/essence-1.5.0.jar
+          path: /Essence/Essence/target/essence-1.5.0.jar
