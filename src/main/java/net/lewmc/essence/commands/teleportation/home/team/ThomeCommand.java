@@ -61,7 +61,7 @@ public class ThomeCommand implements CommandExecutor {
             return true;
         }
 
-        if (command.getName().equalsIgnoreCase("home")) {
+        if (command.getName().equalsIgnoreCase("thome")) {
             if (permission.has("essence.home.team.use")) {
 
                 int waitTime = plugin.getConfig().getInt("teleportation.home.wait");
@@ -81,7 +81,7 @@ public class ThomeCommand implements CommandExecutor {
                     chatHomeName = args[0].toLowerCase();
                     if (dataUtil.get(homeName) == null) {
                         dataUtil.close();
-                        message.PrivateMessage("home", "notfound", args[0].toLowerCase());
+                        message.PrivateMessage("teamhome", "notfound", args[0].toLowerCase());
                         return true;
                     }
                 } else {
@@ -89,7 +89,7 @@ public class ThomeCommand implements CommandExecutor {
                     chatHomeName = "home";
                     if (dataUtil.get(homeName) == null) {
                         dataUtil.close();
-                        message.PrivateMessage("home", "noneset");
+                        message.PrivateMessage("teamhome", "noneset");
                         return true;
                     }
                 }
@@ -127,7 +127,7 @@ public class ThomeCommand implements CommandExecutor {
                 );
                 dataUtil.close();
 
-                message.PrivateMessage("home", "teleporting", chatHomeName, waitTime + "");
+                message.PrivateMessage("teamhome", "teleporting", chatHomeName, waitTime + "");
 
             } else {
                 permission.not();

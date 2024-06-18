@@ -73,12 +73,12 @@ public class DelthomeCommand implements CommandExecutor {
 
                 if (dataUtil.get("homes."+homeName) == null) {
                     dataUtil.close();
-                    message.PrivateMessage("home", "notfound", name);
+                    message.PrivateMessage("teamhome", "notfound", name);
                     return true;
                 }
 
                 if (dataUtil.remove("homes."+homeName)) {
-                    message.PrivateMessage("home", "deleted", homeName);
+                    message.PrivateMessage("teamhome", "deleted", homeName);
                 } else {
                     message.PrivateMessage("generic", "exception");
                 }

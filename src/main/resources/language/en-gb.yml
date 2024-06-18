@@ -99,6 +99,15 @@ home:
   specialchars: "§4[Essence] §cHomes cannot contain special characters!"
   alreadyexists: "§4[Essence] §cA home with this name already exists."
   created: "§2[Essence] §aCreated home '{{1}}'."
+teamhome:
+  notfound: "§4[Essence] §cTeam home {{1}} does not exist. Use /homes for a list of homes."
+  deleted: "§2[Essence] §aTeam home {{1}} has been deleted."
+  teleporting: "§2[Essence] §aTeleporting to team home {{1}} in {{2}} seconds..."
+  noneset: "§4[Essence] §cYou haven't set any team homes."
+  list: "§6[Essence] §eTeam homes: {{1}}"
+  specialchars: "§4[Essence] §cTeam homes cannot contain special characters!"
+  alreadyexists: "§4[Essence] §cA team home with this name already exists."
+  created: "§2[Essence] §aCreated team home '{{1}}'."
 warp:
   notfound: "§4[Essence] §cWarp {{1}} does not exist. Use /warps for a list of warps."
   deleted: "§2[Essence] §aWarp {{1}} has been deleted."

@@ -75,7 +75,7 @@ public class SetthomeCommand implements CommandExecutor {
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {
                     dataUtil.close();
-                    message.PrivateMessage("home", "specialchars");
+                    message.PrivateMessage("teamhome", "specialchars");
                     return true;
                 }
 
@@ -83,7 +83,7 @@ public class SetthomeCommand implements CommandExecutor {
 
                 if (dataUtil.get(homeName) != null) {
                     dataUtil.close();
-                    message.PrivateMessage("home", "alreadyexists");
+                    message.PrivateMessage("teamhome", "alreadyexists");
                     return true;
                 }
 
@@ -97,7 +97,7 @@ public class SetthomeCommand implements CommandExecutor {
                 // Save the configuration to the file
                 dataUtil.save();
 
-                message.PrivateMessage("home", "created", name);
+                message.PrivateMessage("teamhome", "created", name);
             } else {
                 permission.not();
             }

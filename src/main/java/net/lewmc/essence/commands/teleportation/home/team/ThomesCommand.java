@@ -67,7 +67,7 @@ public class ThomesCommand implements CommandExecutor {
 
                 if (keys == null) {
                     dataUtil.close();
-                    message.PrivateMessage("home", "noneset");
+                    message.PrivateMessage("teamhome", "noneset");
                     return true;
                 }
 
@@ -83,7 +83,7 @@ public class ThomesCommand implements CommandExecutor {
                     i++;
                 }
                 dataUtil.close();
-                message.PrivateMessage("home", "list", setHomes.toString());
+                message.PrivateMessage("teamhome", "list", setHomes.toString());
             } else {
                 permission.not();
             }
