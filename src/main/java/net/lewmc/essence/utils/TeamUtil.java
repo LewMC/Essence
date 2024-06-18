@@ -47,6 +47,7 @@ public class TeamUtil {
                 teamsFile.set("members.default", null);
 
                 teamsFile.set("rules.allow-friendly-fire", true);
+                teamsFile.set("rules.allow-team-homes", true);
 
                 teamsFile.save();
 

@@ -56,6 +56,11 @@ public class ThomeCommand implements CommandExecutor {
             return true;
         }
 
+        if (!tu.getRule(team, "allow-team-homes")) {
+            message.PrivateMessage("team", "disallowedhomes");
+            return true;
+        }
+
         if (command.getName().equalsIgnoreCase("home")) {
             if (permission.has("essence.home.team.use")) {
 

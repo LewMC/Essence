@@ -53,6 +53,11 @@ public class ThomesCommand implements CommandExecutor {
             return true;
         }
 
+        if (!tu.getRule(team, "allow-team-homes")) {
+            message.PrivateMessage("team", "disallowedhomes");
+            return true;
+        }
+
         if (command.getName().equalsIgnoreCase("thomes")) {
             if (permission.has("essence.home.team.list")) {
                 FileUtil dataUtil = new FileUtil(this.plugin);

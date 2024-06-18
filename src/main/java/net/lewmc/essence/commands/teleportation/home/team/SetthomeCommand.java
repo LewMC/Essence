@@ -53,6 +53,11 @@ public class SetthomeCommand implements CommandExecutor {
             return true;
         }
 
+        if (!tu.getRule(team, "allow-team-homes")) {
+            message.PrivateMessage("team", "disallowedhomes");
+            return true;
+        }
+
         if (command.getName().equalsIgnoreCase("sethome")) {
             if (permission.has("essence.home.team.create")) {
 

@@ -177,6 +177,7 @@ team:
   rulenotfound: "§4[Essence] §cRule {{1}} does not exist."
   rulemissing: "§4[Essence] §cPlease specify the rule you'd like to change."
   rulevalue: "§6[Essence] §eRule {{1}} is currently set to {{2}}."
+  disallowedhomes: "§4[Essence] §cYour team has disabled team homes."
 spawn:
   set: "§2[Essence] §aSpawn set."
   teleporting: "§2[Essence] §aTeleporting in {{1}} seconds......"
