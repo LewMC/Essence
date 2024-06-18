@@ -1,4 +1,4 @@
-package net.lewmc.essence.commands.inventories;
+package net.lewmc.essence.commands;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
@@ -53,7 +53,7 @@ public class KitCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("kit")) {
             if (args.length == 0) {
-                String kits = "No kits found.";
+                StringBuilder kits = new StringBuilder("No kits found.");
 
                 FileUtil kitData = new FileUtil(this.plugin);
                 kitData.load("data/kits.yml");
@@ -63,16 +63,16 @@ public class KitCommand implements CommandExecutor {
                 for (Object object : keys) {
                     if (kitData.get("kits." + object + ".permission") == null) {
                         if (i == 0) {
-                            kits = object.toString();
+                            kits = new StringBuilder(object.toString());
                         } else {
-                            kits += ", " + object.toString();
+                            kits.append(", ").append(object.toString());
                         }
                     } else {
                         if (permission.has(kitData.get("kits." + object + ".permission").toString()) || permission.has("essence.kits.all")) {
                             if (i == 0) {
-                                kits = object.toString();
+                                kits = new StringBuilder(object.toString());
                             } else {
-                                kits += ", " + object.toString();
+                                kits.append(", ").append(object.toString());
                             }
                         }
                     }
@@ -81,7 +81,7 @@ public class KitCommand implements CommandExecutor {
 
                 kitData.close();
 
-                message.PrivateMessage("kit", "select", kits);
+                message.PrivateMessage("kit", "select", kits.toString());
             } else {
                 KitUtil kit = new KitUtil(this.plugin, player);
 

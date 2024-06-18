@@ -1,6 +1,7 @@
 package net.lewmc.essence;
 
 import com.tcoded.folialib.FoliaLib;
+import net.lewmc.essence.commands.KitCommand;
 import net.lewmc.essence.commands.TeamCommands;
 import net.lewmc.essence.commands.chat.*;
 import net.lewmc.essence.commands.economy.BalanceCommand;
