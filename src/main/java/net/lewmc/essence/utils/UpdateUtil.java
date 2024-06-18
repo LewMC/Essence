@@ -35,7 +35,7 @@ public class UpdateUtil {
                 if (this.plugin.getDescription().getVersion().contains("SNAPSHOT")) {
                     log.warn("SNAPSHOT > You are running a snapshot build of Essence.");
                     log.warn("SNAPSHOT > This build may include bugs and is not recommended on production servers.");
-                    log.warn("SNAPSHOT > If you find any issues please report them to github.com/lewmilburn/essence.");
+                    log.warn("SNAPSHOT > If you find any issues please report them to github.com/lewmc/essence.");
                     this.log.info("");
                     url = new URL("https://service.lewmc.net/latest-version/?resource=essence-snapshot&format=simpleversion");
                 } else {
