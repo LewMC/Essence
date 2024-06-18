@@ -63,6 +63,7 @@ help:
   tptoggle: "§6[Essence] §e/tptoggle - Toggle teleport requests."
   tpahere: "§6[Essence] §e/tpahere - Request a player teleports to you."
   tpcancel: "§6[Essence] §e/tpcancel - Cancel a teleport request."
+  tpr: "§6[Essence] §e/tpr - Teleport to a random location."
   stats: "§6[Essence] ----------- Essence Help - Stats -----------"
   feed: "§6[Essence] §e/feed [user] - Feed yourself or another."
   heal: "§6[Essence] §e/heal [user] - Feed yourself or another."
@@ -87,6 +88,11 @@ help:
   helpstats: "§6[Essence] §e/es help stats - Manage your stats."
   helpeconomy: "§6[Essence] §e/es help economy - Economy commands."
   helpteam: "§6[Essence] §e/es help team - Team commands."
+tprandom:
+  searching: "§6[Essence] §eFinding somewhere to go..."
+  teleporting: "§2[Essence] §aTeleporting..."
+  generating: "§6[Essence] §eGenerating chunk... (this may take some time)"
+  nosafe: "§4[Essence] §cCouldn't find suitable location, please try again."
 back:
   cant: "§4[Essence] §cYou've not teleported anywhere before, so there's nowhere to go back to!"
   going: "§2[Essence] §aGoing back..."
