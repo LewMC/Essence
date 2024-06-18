@@ -158,6 +158,13 @@ public class TeleportUtil {
      */
     public void doTeleport(Player player, Location location, int delay) {
         FoliaLib flib = new FoliaLib(this.plugin);
+        if (location.getWorld().getName() == null) {
+            MessageUtil message = new MessageUtil(player, this.plugin);
+            message.PrivateMessage("generic","exception");
+            this.log.severe("World name may be null, unable to teleport to world '"+location.getWorld().getName()+"'");
+            return;
+        }
+
         if (flib.isFolia()) {
             flib.getImpl().runAtEntityLater(player, () -> player.teleportAsync(location), delay * 20L);
         } else {
