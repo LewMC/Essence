@@ -4,6 +4,7 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -75,6 +76,10 @@ public class JoinEvent implements Listener {
             }
 
             if (spawnConfiguration.get("spawn") == null) {
+                if (Bukkit.getServer().getWorld(spawnName) == null) {
+                    WorldCreator creator = new WorldCreator(spawnName);
+                    creator.createWorld();
+                }
                 if (Bukkit.getServer().getWorld(spawnName) != null) {
                     TeleportUtil tp = new TeleportUtil(plugin);
                     tp.doTeleport(
@@ -93,6 +98,10 @@ public class JoinEvent implements Listener {
                 }
             } else {
                 TeleportUtil tp = new TeleportUtil(plugin);
+                if (Bukkit.getServer().getWorld(spawnName) == null) {
+                    WorldCreator creator = new WorldCreator(spawnName);
+                    creator.createWorld();
+                }
                 tp.doTeleport(
                         event.getPlayer(),
                         Bukkit.getServer().getWorld(spawnName),
