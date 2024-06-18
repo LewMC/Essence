@@ -158,10 +158,12 @@ public class TeleportUtil {
      */
     public void doTeleport(Player player, Location location, int delay) {
         FoliaLib flib = new FoliaLib(this.plugin);
-        if (location.getWorld().getName() == null) {
+        this.log.warn(String.valueOf(location));
+        if (location.getWorld() == null) {
             MessageUtil message = new MessageUtil(player, this.plugin);
             message.PrivateMessage("generic","exception");
-            this.log.severe("World name may be null, unable to teleport to world '"+location.getWorld().getName()+"'");
+            this.log.severe("Unable to locate world in universe.");
+            this.log.severe("Details: {\"error\": \"WORLD_IS_NULL\", \"caught\": \"TeleportUtil.java\", \"submitted\": \"null\", \"found\": \"null\"}.");
             return;
         }
 
