@@ -67,7 +67,7 @@ public class DelthomeCommand implements CommandExecutor {
                 }
 
                 FileUtil dataUtil = new FileUtil(this.plugin);
-                dataUtil.load("/data/teams/"+team+".yml");
+                dataUtil.load("data/teams/"+team+".yml");
 
                 String homeName = name.toLowerCase();
 

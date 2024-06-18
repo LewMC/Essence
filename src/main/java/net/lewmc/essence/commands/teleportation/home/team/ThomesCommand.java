@@ -61,7 +61,7 @@ public class ThomesCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("thomes")) {
             if (permission.has("essence.home.team.list")) {
                 FileUtil dataUtil = new FileUtil(this.plugin);
-                dataUtil.load("/data/teams/"+team+".yml");
+                dataUtil.load("data/teams/"+team+".yml");
 
                 Set<String> keys = dataUtil.getKeys("homes", false);
 

@@ -58,7 +58,7 @@ public class SetthomeCommand implements CommandExecutor {
             return true;
         }
 
-        if (command.getName().equalsIgnoreCase("sethome")) {
+        if (command.getName().equalsIgnoreCase("setthome")) {
             if (permission.has("essence.home.team.create")) {
 
                 String name;
@@ -70,7 +70,7 @@ public class SetthomeCommand implements CommandExecutor {
 
                 Location loc = player.getLocation();
                 FileUtil dataUtil = new FileUtil(this.plugin);
-                dataUtil.load("/data/teams/"+team+".yml");
+                dataUtil.load("data/teams/"+team+".yml");
 
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {

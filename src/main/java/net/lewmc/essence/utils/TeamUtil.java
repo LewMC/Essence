@@ -39,9 +39,9 @@ public class TeamUtil {
 
         FileUtil teamsFile = new FileUtil(this.plugin);
 
-        if (!teamsFile.exists("/data/teams/"+name+".yml")) {
-            if (teamsFile.create("/data/teams/"+name+".yml")) {
-                teamsFile.load(name);
+        if (!teamsFile.exists("data/teams/"+name+".yml")) {
+            if (teamsFile.create("data/teams/"+name+".yml")) {
+                teamsFile.load("data/teams/"+name+".yml");
 
                 teamsFile.set("members.leader", leader.toString());
                 teamsFile.set("members.default", null);
@@ -61,7 +61,7 @@ public class TeamUtil {
             } else {
                 message.PrivateMessage("generic", "exception");
                 LogUtil log = new LogUtil(this.plugin);
-                log.warn("Unable to create new team file at '/data/teams/"+name+".yml' - is this file writeable?");
+                log.warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
             }
         } else {
             message.PrivateMessage("team", "exists");
@@ -75,8 +75,8 @@ public class TeamUtil {
      */
     public void requestJoin(String team, UUID player) {
         FileUtil teamsFile = new FileUtil(this.plugin);
-        if (teamsFile.exists("/data/teams/"+team+".yml")) {
-            teamsFile.load("/data/teams/"+team+".yml");
+        if (teamsFile.exists("data/teams/"+team+".yml")) {
+            teamsFile.load("data/teams/"+team+".yml");
             List<String> requests = teamsFile.getStringList("members.requests");
             requests.add(player.toString());
             teamsFile.set("members.requests", requests);
@@ -94,8 +94,8 @@ public class TeamUtil {
      */
     public String requestsToJoin(String team) {
         FileUtil teamsFile = new FileUtil(this.plugin);
-        if (teamsFile.exists("/data/teams/"+team+".yml")) {
-            teamsFile.load("/data/teams/"+team+".yml");
+        if (teamsFile.exists("data/teams/"+team+".yml")) {
+            teamsFile.load("data/teams/"+team+".yml");
 
             List<String> requests = teamsFile.getStringList("members.requests");
             teamsFile.close();
@@ -130,8 +130,8 @@ public class TeamUtil {
      */
     public boolean isLeader(String team, UUID player) {
         FileUtil teamData = new FileUtil(this.plugin);
-        if (teamData.exists("/data/teams/"+team+".yml")) {
-            teamData.load("/data/teams/"+team+".yml");
+        if (teamData.exists("data/teams/"+team+".yml")) {
+            teamData.load("data/teams/"+team+".yml");
             String leader = teamData.getString("members.leader");
             teamData.close();
             return leader.equalsIgnoreCase(player.toString());
@@ -174,7 +174,7 @@ public class TeamUtil {
         playerData.save();
 
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+team+".yml");
+        teamData.load("data/teams/"+team+".yml");
 
         List<String> defaultMembers = teamData.getStringList("members.default");
         defaultMembers.add(String.valueOf(op.getUniqueId()));
@@ -198,7 +198,7 @@ public class TeamUtil {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+team+".yml");
+        teamData.load("data/teams/"+team+".yml");
 
         List<String> requestedMembers = teamData.getStringList("members.requests");
         requestedMembers.remove(String.valueOf(op.getUniqueId()));
@@ -226,7 +226,7 @@ public class TeamUtil {
         playerData.save();
 
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+playerTeam+".yml");
+        teamData.load("data/teams/"+playerTeam+".yml");
 
         List<String> defaultMembers = teamData.getStringList("members.default");
         defaultMembers.remove(String.valueOf(uuid));
@@ -248,7 +248,7 @@ public class TeamUtil {
         OfflinePlayer op = Bukkit.getOfflinePlayer(newLeader);
 
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+playerTeam+".yml");
+        teamData.load("data/teams/"+playerTeam+".yml");
 
         teamData.set("members.leader", String.valueOf(op.getUniqueId()));
 
@@ -269,7 +269,7 @@ public class TeamUtil {
      */
     public String getTeamLeader(String team) {
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+team+".yml");
+        teamData.load("data/teams/"+team+".yml");
         String leader = teamData.getString("members.leader");
         teamData.close();
 
@@ -288,7 +288,7 @@ public class TeamUtil {
      */
     public String getTeamMembers(String team) {
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+team+".yml");
+        teamData.load("data/teams/"+team+".yml");
         List<String> requests = teamData.getStringList("members.default");
         teamData.close();
 
@@ -332,7 +332,7 @@ public class TeamUtil {
         String uuid = op.getUniqueId().toString();
 
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+team+".yml");
+        teamData.load("data/teams/"+team+".yml");
         List<String> members = teamData.getStringList("members.default");
         teamData.close();
 
@@ -356,7 +356,7 @@ public class TeamUtil {
         String uuid = op.getUniqueId().toString();
 
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+team+".yml");
+        teamData.load("data/teams/"+team+".yml");
         List<String> members = teamData.getStringList("members.requests");
         teamData.close();
 
@@ -377,7 +377,7 @@ public class TeamUtil {
      */
     public boolean disband(String team, String teamLeader) {
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+team+".yml");
+        teamData.load("data/teams/"+team+".yml");
         List<String> members = teamData.getStringList("members.default");
         teamData.close();
 
@@ -393,7 +393,7 @@ public class TeamUtil {
         playerData.set("user.team", null);
         playerData.save();
 
-        return teamData.delete("/data/teams/" + team + ".yml");
+        return teamData.delete("data/teams/" + team + ".yml");
     }
 
     /**
@@ -426,7 +426,7 @@ public class TeamUtil {
      */
     public boolean getRule(String team, String rule) {
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+team+".yml");
+        teamData.load("data/teams/"+team+".yml");
 
         boolean result = teamData.getBoolean("rules."+rule);
         teamData.save();
@@ -454,7 +454,7 @@ public class TeamUtil {
         }
 
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+team+".yml");
+        teamData.load("data/teams/"+team+".yml");
 
         teamData.set("rules."+rule, booleanValue);
         teamData.save();
@@ -472,7 +472,7 @@ public class TeamUtil {
     public boolean setRule(String team, String rule, boolean value) {
 
         FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("/data/teams/"+team+".yml");
+        teamData.load("data/teams/"+team+".yml");
 
         teamData.set("rules."+rule, value);
         teamData.save();
@@ -487,6 +487,6 @@ public class TeamUtil {
      */
     public boolean exists(String team) {
         FileUtil teamData = new FileUtil(this.plugin);
-        return teamData.exists("/data/teams/"+team+".yml");
+        return teamData.exists("data/teams/"+team+".yml");
     }
 }
