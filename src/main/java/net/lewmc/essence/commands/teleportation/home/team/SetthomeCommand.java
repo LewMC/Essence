@@ -45,9 +45,17 @@ public class SetthomeCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
+        TeamUtil tu = new TeamUtil(this.plugin, message);
+        String team = tu.getPlayerTeam(player.getUniqueId());
+
+        if (team == null) {
+            message.PrivateMessage("team", "noteam");
+            return true;
+        }
+
         if (command.getName().equalsIgnoreCase("sethome")) {
             if (permission.has("essence.home.team.create")) {
-                /*
+
                 String name;
                 if (args.length == 0) {
                     name = "home";
@@ -56,37 +64,35 @@ public class SetthomeCommand implements CommandExecutor {
                 }
 
                 Location loc = player.getLocation();
-                FileUtil playerData = new FileUtil(this.plugin);
-                playerData.load(playerData.playerDataFile(player));
+                FileUtil dataUtil = new FileUtil(this.plugin);
+                dataUtil.load("/data/teams/"+team+".yml");
 
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {
-                    playerData.close();
+                    dataUtil.close();
                     message.PrivateMessage("home", "specialchars");
                     return true;
                 }
 
                 String homeName = "homes." + name.toLowerCase();
 
-                if (playerData.get(homeName) != null) {
-                    playerData.close();
+                if (dataUtil.get(homeName) != null) {
+                    dataUtil.close();
                     message.PrivateMessage("home", "alreadyexists");
                     return true;
                 }
 
-                playerData.set(homeName + ".world", loc.getWorld().getName());
-                playerData.set(homeName + ".X", loc.getX());
-                playerData.set(homeName + ".Y", loc.getY());
-                playerData.set(homeName + ".Z", loc.getZ());
-                playerData.set(homeName + ".yaw", loc.getYaw());
-                playerData.set(homeName + ".pitch", loc.getPitch());
+                dataUtil.set(homeName + ".world", loc.getWorld().getName());
+                dataUtil.set(homeName + ".X", loc.getX());
+                dataUtil.set(homeName + ".Y", loc.getY());
+                dataUtil.set(homeName + ".Z", loc.getZ());
+                dataUtil.set(homeName + ".yaw", loc.getYaw());
+                dataUtil.set(homeName + ".pitch", loc.getPitch());
 
                 // Save the configuration to the file
-                playerData.save();
+                dataUtil.save();
 
                 message.PrivateMessage("home", "created", name);
-
-                 */
             } else {
                 permission.not();
             }

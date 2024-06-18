@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation.home.team;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.FileUtil;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -48,11 +45,18 @@ public class ThomesCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (command.getName().equalsIgnoreCase("homes")) {
+        TeamUtil tu = new TeamUtil(this.plugin, message);
+        String team = tu.getPlayerTeam(player.getUniqueId());
+
+        if (team == null) {
+            message.PrivateMessage("team", "noteam");
+            return true;
+        }
+
+        if (command.getName().equalsIgnoreCase("thomes")) {
             if (permission.has("essence.home.team.list")) {
-                /*
                 FileUtil dataUtil = new FileUtil(this.plugin);
-                dataUtil.load(dataUtil.playerDataFile(player));
+                dataUtil.load("/data/teams/"+team+".yml");
 
                 Set<String> keys = dataUtil.getKeys("homes", false);
 
@@ -75,8 +79,6 @@ public class ThomesCommand implements CommandExecutor {
                 }
                 dataUtil.close();
                 message.PrivateMessage("home", "list", setHomes.toString());
-
-                 */
             } else {
                 permission.not();
             }

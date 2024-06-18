@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation.home.team;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.FileUtil;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -47,9 +44,16 @@ public class DelthomeCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
+        TeamUtil tu = new TeamUtil(this.plugin, message);
+        String team = tu.getPlayerTeam(player.getUniqueId());
+
+        if (team == null) {
+            message.PrivateMessage("team", "noteam");
+            return true;
+        }
+
         if (command.getName().equalsIgnoreCase("delthome")) {
             if (permission.has("essence.home.team.delete")) {
-                /*
                 String name;
                 if (args.length == 0) {
                     name = "home";
@@ -57,25 +61,24 @@ public class DelthomeCommand implements CommandExecutor {
                     name = args[0];
                 }
 
-                FileUtil config = new FileUtil(this.plugin);
-                config.load(config.playerDataFile(player));
+                FileUtil dataUtil = new FileUtil(this.plugin);
+                dataUtil.load("/data/teams/"+team+".yml");
 
                 String homeName = name.toLowerCase();
 
-                if (config.get("homes."+homeName) == null) {
-                    config.close();
+                if (dataUtil.get("homes."+homeName) == null) {
+                    dataUtil.close();
                     message.PrivateMessage("home", "notfound", name);
                     return true;
                 }
 
-                if (config.remove("homes."+homeName)) {
+                if (dataUtil.remove("homes."+homeName)) {
                     message.PrivateMessage("home", "deleted", homeName);
                 } else {
                     message.PrivateMessage("generic", "exception");
                 }
 
-                config.save();
-                 */
+                dataUtil.save();
             } else {
                 permission.not();
             }

@@ -48,17 +48,25 @@ public class ThomeCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
         TeleportUtil teleUtil = new TeleportUtil(this.plugin);
 
+        TeamUtil tu = new TeamUtil(this.plugin, message);
+        String team = tu.getPlayerTeam(player.getUniqueId());
+
+        if (team == null) {
+            message.PrivateMessage("team", "noteam");
+            return true;
+        }
+
         if (command.getName().equalsIgnoreCase("home")) {
             if (permission.has("essence.home.team.use")) {
-                /*
+
                 int waitTime = plugin.getConfig().getInt("teleportation.home.wait");
                 if (!teleUtil.cooldownSurpassed(player, "home")) {
                     message.PrivateMessage("teleport", "tryagain", String.valueOf(teleUtil.cooldownRemaining(player, "home")));
                     return true;
                 }
 
-                FileUtil playerData = new FileUtil(this.plugin);
-                playerData.load(playerData.playerDataFile(player));
+                FileUtil dataUtil = new FileUtil(this.plugin);
+                dataUtil.load("/data/teams/"+team+".yml");
 
                 String homeName;
                 String chatHomeName;
@@ -66,31 +74,31 @@ public class ThomeCommand implements CommandExecutor {
                 if (args.length == 1) {
                     homeName = "homes." + args[0].toLowerCase();
                     chatHomeName = args[0].toLowerCase();
-                    if (playerData.get(homeName) == null) {
-                        playerData.close();
+                    if (dataUtil.get(homeName) == null) {
+                        dataUtil.close();
                         message.PrivateMessage("home", "notfound", args[0].toLowerCase());
                         return true;
                     }
                 } else {
                     homeName = "homes.home";
                     chatHomeName = "home";
-                    if (playerData.get(homeName) == null) {
-                        playerData.close();
+                    if (dataUtil.get(homeName) == null) {
+                        dataUtil.close();
                         message.PrivateMessage("home", "noneset");
                         return true;
                     }
                 }
 
-                if (playerData.get(homeName) == null) {
-                    playerData.close();
+                if (dataUtil.get(homeName) == null) {
+                    dataUtil.close();
                     message.PrivateMessage("generic", "exception");
                     this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: Unable to load from configuration file, please check configuration file.");
                     return true;
                 }
 
-                if (playerData.getString(homeName + ".world") == null) {
-                    playerData.close();
+                if (dataUtil.getString(homeName + ".world") == null) {
+                    dataUtil.close();
                     message.PrivateMessage("generic", "exception");
                     this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: world is null, please check configuration file.");
@@ -104,19 +112,17 @@ public class ThomeCommand implements CommandExecutor {
 
                 teleUtil.doTeleport(
                         player,
-                        Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString(homeName + ".world"))),
-                        playerData.getDouble(homeName + ".X"),
-                        playerData.getDouble(homeName + ".Y"),
-                        playerData.getDouble(homeName + ".Z"),
-                        (float) playerData.getDouble(homeName + ".yaw"),
-                        (float) playerData.getDouble(homeName + ".pitch"),
+                        Bukkit.getServer().getWorld(Objects.requireNonNull(dataUtil.getString(homeName + ".world"))),
+                        dataUtil.getDouble(homeName + ".X"),
+                        dataUtil.getDouble(homeName + ".Y"),
+                        dataUtil.getDouble(homeName + ".Z"),
+                        (float) dataUtil.getDouble(homeName + ".yaw"),
+                        (float) dataUtil.getDouble(homeName + ".pitch"),
                         waitTime
                 );
-                playerData.close();
+                dataUtil.close();
 
                 message.PrivateMessage("home", "teleporting", chatHomeName, waitTime + "");
-
-                 */
 
             } else {
                 permission.not();
