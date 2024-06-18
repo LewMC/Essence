@@ -21,3 +21,9 @@ jobs:
 
       - name: Build with Maven 🏗️
         run: mvn -B package --file pom.xml
+
+      - name: Upload Plugin jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: Plugin-${{ env.snapshotVersion }}-${{ env.git_hash }}.jar
+          path: ${{ env.artifactPath }}/Plugin-${{ env.snapshotVersion }}.jar
