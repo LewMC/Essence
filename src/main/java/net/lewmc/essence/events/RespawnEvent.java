@@ -41,7 +41,7 @@ public class RespawnEvent implements Listener {
         FileUtil playerData = new FileUtil(this.plugin);
         playerData.load(config.playerDataFile(event.getPlayer()));
 
-        if (playerData.getString("user.last-sleep-location") != null) {
+        if ((playerData.getString("user.last-sleep-location") != null) && !alwaysSpawn) {
             TeleportUtil tp = new TeleportUtil(plugin);
             tp.doTeleport(
                     event.getPlayer(),
@@ -53,6 +53,10 @@ public class RespawnEvent implements Listener {
                     (float) playerData.getDouble("user.last-sleep-location.pitch"),
                     0
             );
+
+            config.close();
+
+            return;
         }
 
         config.close();
@@ -60,7 +64,7 @@ public class RespawnEvent implements Listener {
         FileUtil spawns = new FileUtil(this.plugin);
         spawns.load("data/spawns.yml");
 
-        if (spawns.get("spawn."+spawnName) != null && alwaysSpawn) {
+        if (spawns.get("spawn."+spawnName) != null) {
             LogUtil log = new LogUtil(this.plugin);
             if (Bukkit.getServer().getWorld(spawnName) != null) {
                 TeleportUtil tp = new TeleportUtil(plugin);
