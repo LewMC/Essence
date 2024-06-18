@@ -54,9 +54,16 @@ public class TprandomCommand implements CommandExecutor {
             this.log.noConsole();
             return true;
         }
+
         MessageUtil message = new MessageUtil(commandSender, plugin);
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
+
+        if (this.flib.isFolia()) {
+            message.PrivateMessage("generic","nofolia");
+            message.PrivateMessage("generic","helpfolia");
+            return true;
+        }
 
         if (command.getName().equalsIgnoreCase("tprandom")) {
             if (permission.has("essence.teleport.random")) {
