@@ -14,6 +14,10 @@ import net.lewmc.essence.commands.teleportation.home.DelhomeCommand;
 import net.lewmc.essence.commands.teleportation.home.HomeCommand;
 import net.lewmc.essence.commands.teleportation.home.HomesCommand;
 import net.lewmc.essence.commands.teleportation.home.SethomeCommand;
+import net.lewmc.essence.commands.teleportation.home.team.DelthomeCommand;
+import net.lewmc.essence.commands.teleportation.home.team.SetthomeCommand;
+import net.lewmc.essence.commands.teleportation.home.team.ThomeCommand;
+import net.lewmc.essence.commands.teleportation.home.team.ThomesCommand;
 import net.lewmc.essence.commands.teleportation.tp.*;
 import net.lewmc.essence.commands.teleportation.warp.DelwarpCommand;
 import net.lewmc.essence.commands.teleportation.warp.SetwarpCommand;
@@ -221,6 +225,10 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("homes")) { this.getCommand("homes").setExecutor(new HomesCommand(this)); }
             if (command.isEnabled("sethome")) { this.getCommand("sethome").setExecutor(new SethomeCommand(this)); }
             if (command.isEnabled("delhome")) { this.getCommand("delhome").setExecutor(new DelhomeCommand(this)); }
+            if (command.isEnabled("thome")) { this.getCommand("thome").setExecutor(new ThomeCommand(this)); }
+            if (command.isEnabled("thomes")) { this.getCommand("thomes").setExecutor(new ThomesCommand(this)); }
+            if (command.isEnabled("setthome")) { this.getCommand("setthome").setExecutor(new SetthomeCommand(this)); }
+            if (command.isEnabled("delthome")) { this.getCommand("delthome").setExecutor(new DelthomeCommand(this)); }
 
             if (command.isEnabled("warp")) { this.getCommand("warp").setExecutor(new WarpCommand(this)); }
             if (command.isEnabled("warps")) { this.getCommand("warps").setExecutor(new WarpsCommand(this)); }
