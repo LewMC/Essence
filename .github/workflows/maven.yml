@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout Repository 📡
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17 🔧
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -24,8 +24,8 @@ jobs:
           mvn -B package --file pom.xml
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
 
-      - name: Upload Plugin jar
-        uses: actions/upload-artifact@v3
+      - name: Upload Plugin jar 📁
+        uses: actions/upload-artifact@v4
         with:
           name: essence-1.5.0-${{ env.git_hash }}.jar
           path: /home/runner/work/Essence/Essence/target/essence-1.5.0.jar
