@@ -42,6 +42,7 @@ public class TeamCommands implements CommandExecutor {
         if (!(commandSender instanceof Player)) {
             LogUtil log = new LogUtil(this.plugin);
             log.noConsole();
+            return true;
         }
         MessageUtil message = new MessageUtil(commandSender, plugin);
         PermissionHandler permission = new PermissionHandler(commandSender, message);
