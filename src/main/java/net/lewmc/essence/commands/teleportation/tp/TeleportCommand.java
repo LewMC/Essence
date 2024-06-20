@@ -39,19 +39,23 @@ public class TeleportCommand implements CommandExecutor {
     ) {
         Player player = null;
 
-        if (console(commandSender) && args.length != 4) {
-            this.log.noConsole();
-            return true;
-        }
-
         if (!console(commandSender)) {
             player = (Player) commandSender;
         }
+
         MessageUtil message = new MessageUtil(commandSender, plugin);
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("tp")) {
-            if (args.length == 3) {
+            TeleportUtil tu = new TeleportUtil(this.plugin);
+            TeleportUtil.Type type = tu.getTeleportType(args);
+
+            if (type == TeleportUtil.Type.TO_COORD) {
+                if (console(commandSender)) {
+                    this.log.noConsole();
+                    return true;
+                }
+
                 if (permission.has("essence.teleport.coord")) {
                     LocationUtil locationUtil = new LocationUtil(this.plugin);
                     locationUtil.UpdateLastLocation(player);
@@ -62,11 +66,13 @@ public class TeleportCommand implements CommandExecutor {
                     Location location = new Location(player.getWorld(), x, y, z);
                     TeleportUtil tp = new TeleportUtil(this.plugin);
                     tp.doTeleport(player, location, 0);
+
+                    message.PrivateMessage("teleport", "tocoord", x+", "+y+", "+z);
                 } else {
-                    permission.not();
+                    return permission.not();
                 }
                 return true;
-            } else if (args.length == 4) {
+            } else if (type == TeleportUtil.Type.PLAYER_TO_COORD) {
                 if (permission.has("essence.teleport.other") && permission.has("essence.teleport.coord")) {
                     String p = args[0];
                     if (p.equalsIgnoreCase("@s")) {
@@ -93,13 +99,19 @@ public class TeleportCommand implements CommandExecutor {
                         double z = Double.parseDouble(args[3]);
                         Location location = new Location(playerToTeleport.getWorld(), x, y, z);
                         TeleportUtil tp = new TeleportUtil(this.plugin);
-                        tp.doTeleport(player, location, 0);
+                        tp.doTeleport(playerToTeleport, location, 0);
+
+                        message.PrivateMessage("teleport", "playertocoord", playerToTeleport.getName(), x+", "+y+", "+z);
                     }
                 } else {
-                    permission.not();
+                    return permission.not();
                 }
                 return true;
-            } else if (args.length == 1) {
+            } else if (type == TeleportUtil.Type.TO_PLAYER) {
+                if (console(commandSender)) {
+                    this.log.noConsole();
+                    return true;
+                }
                 if (permission.has("essence.teleport.player")) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
@@ -114,10 +126,40 @@ public class TeleportCommand implements CommandExecutor {
                         }
                     }
                 } else {
-                    permission.not();
+                    return permission.not();
                 }
                 message.PrivateMessage("generic", "playernotfound");
                 return true;
+            } else if (type == TeleportUtil.Type.PLAYER_TO_PLAYER) {
+                if (permission.has("essence.teleport.other") && permission.has("essence.teleport.player")) {
+                    Player player1 = null;
+                    Player player2 = null;
+
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
+                            player1 = p;
+                        }
+                        if ((p.getName().toLowerCase()).equalsIgnoreCase(args[1])) {
+                            player2 = p;
+                        }
+                    }
+
+                    if (player1 == null || player2 == null) {
+                        message.PrivateMessage("generic", "playernotfound");
+                        return true;
+                    } else {
+                        LocationUtil locationUtil = new LocationUtil(this.plugin);
+                        locationUtil.UpdateLastLocation(player);
+
+                        message.PrivateMessage("teleport", "toplayer", player1.getName(), player2.getName());
+
+                        TeleportUtil tp = new TeleportUtil(this.plugin);
+                        tp.doTeleport(player1, player2.getLocation(), 0);
+                        return true;
+                    }
+                } else {
+                    return permission.not();
+                }
             } else {
                 message.PrivateMessage("teleport", "usage");
             }
