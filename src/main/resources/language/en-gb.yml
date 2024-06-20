@@ -135,7 +135,7 @@ teleport:
   toplayer: "§2[Essence] §aTeleporting {{1}} to {{2}}..."
   tocoord: "§2[Essence] §aTeleporting to {{1}}..."
   playertocoord: "§2[Essence] §aTeleporting {{1}} to {{2}}..."
-  usage: "§4[Essence] §cUsage: /tp <player> OR /tp <x> <y> <z>"
+  usage: "§4[Essence] §cUsage: /tp <player> OR /tp <player> <player> OR /tp <x> <y> <z> OR /tp <player> <x> <y> <z>"
   wait: "§6[Essence] §eTeleporting in {{1}} seconds..."
   tryagain: "§4[Essence] §cPlease wait {{1}} seconds before teleporting again."
   toggled: "§2[Essence] §aTeleportation requests {{1}}."
