@@ -64,7 +64,6 @@ public class WarpsCommand implements CommandExecutor {
                 int i = 0;
 
                 for (String key : keys) {
-                    this.log.info(key);
                     if (i == 0) {
                         warps.append(key);
                     } else {
