@@ -19,6 +19,10 @@ public class TeleportUtil {
     private final Essence plugin;
     private final LogUtil log;
 
+    public enum Type {
+        INVALID, TO_PLAYER, TO_COORD, PLAYER_TO_PLAYER, PLAYER_TO_COORD
+    }
+
     /**
      * Constructor for the TeleportUtil class.
      * @param plugin Reference to the main Essence class.
@@ -158,7 +162,6 @@ public class TeleportUtil {
      */
     public void doTeleport(Player player, Location location, int delay) {
         FoliaLib flib = new FoliaLib(this.plugin);
-        this.log.warn(String.valueOf(location));
         if (location.getWorld() == null) {
             MessageUtil message = new MessageUtil(player, this.plugin);
             message.PrivateMessage("generic","exception");
@@ -177,5 +180,25 @@ public class TeleportUtil {
                 }
             }.runTaskLater(plugin, delay * 20L);
         }
+    }
+
+    public Type getTeleportType(String[] args) {
+        if (args.length == 1) {
+            return Type.TO_PLAYER;
+        }
+
+        if (args.length == 2) {
+            return Type.PLAYER_TO_PLAYER;
+        }
+
+        if (args.length == 3) {
+            return Type.TO_COORD;
+        }
+
+        if (args.length == 4) {
+            return Type.PLAYER_TO_COORD;
+        }
+
+        return Type.INVALID;
     }
 }
