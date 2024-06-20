@@ -19,6 +19,9 @@ public class TeleportUtil {
     private final Essence plugin;
     private final LogUtil log;
 
+    /**
+     * Used to communicate the type of teleportation to commands where this may be ambiguous.
+     */
     public enum Type {
         INVALID, TO_PLAYER, TO_COORD, PLAYER_TO_PLAYER, PLAYER_TO_COORD
     }
@@ -182,6 +185,11 @@ public class TeleportUtil {
         }
     }
 
+    /**
+     * Determines which type of teleportation is taking place.
+     * @param args String[] - arguments from a command.
+     * @return Type - The teleportation type (instanceof TeleportUtil.Type)
+     */
     public Type getTeleportType(String[] args) {
         if (args.length == 1) {
             return Type.TO_PLAYER;
