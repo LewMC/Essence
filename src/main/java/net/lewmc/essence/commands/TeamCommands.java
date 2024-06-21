@@ -59,7 +59,7 @@ public class TeamCommands implements CommandExecutor {
                             message.PrivateMessage("team", "namerequired");
                         }
                     } else {
-                        permission.not();
+                        return permission.not();
                     }
                 } else if (args[0].equalsIgnoreCase("join")) {
                     if (permission.has("essence.team.join")) {
@@ -74,7 +74,7 @@ public class TeamCommands implements CommandExecutor {
                             message.PrivateMessage("team", "namerequired");
                         }
                     } else {
-                        permission.not();
+                        return permission.not();
                     }
                 } else if (args[0].equalsIgnoreCase("requests")) {
                     if (permission.has("essence.team.manage")) {
@@ -91,7 +91,7 @@ public class TeamCommands implements CommandExecutor {
                             message.PrivateMessage("team", "noteam");
                         }
                     } else {
-                        permission.not();
+                        return permission.not();
                     }
                 } else if (args[0].equalsIgnoreCase("accept")) {
                     if (permission.has("essence.team.manage")) {
@@ -114,7 +114,7 @@ public class TeamCommands implements CommandExecutor {
                             message.PrivateMessage("team", "usernamerequired");
                         }
                     } else {
-                        permission.not();
+                        return permission.not();
                     }
                 } else if (args[0].equalsIgnoreCase("decline")) {
                     if (permission.has("essence.team.manage")) {
@@ -137,7 +137,7 @@ public class TeamCommands implements CommandExecutor {
                             message.PrivateMessage("team", "usernamerequired");
                         }
                     } else {
-                        permission.not();
+                        return permission.not();
                     }
                 } else if (args[0].equalsIgnoreCase("leave")) {
                     if (permission.has("essence.team.join")) {
@@ -157,7 +157,7 @@ public class TeamCommands implements CommandExecutor {
                             message.PrivateMessage("team", "noteam");
                         }
                     } else {
-                        permission.not();
+                        return permission.not();
                     }
                 } else if (args[0].equalsIgnoreCase("changeleader")) {
                     if (permission.has("essence.team.manage")) {
@@ -186,7 +186,7 @@ public class TeamCommands implements CommandExecutor {
                             message.PrivateMessage("team", "noteam");
                         }
                     } else {
-                        permission.not();
+                        return permission.not();
                     }
                 } else if (args[0].equalsIgnoreCase("kick")) {
                     if (permission.has("essence.team.manage")) {
@@ -214,7 +214,7 @@ public class TeamCommands implements CommandExecutor {
                             message.PrivateMessage("team", "noteam");
                         }
                     } else {
-                        permission.not();
+                        return permission.not();
                     }
                 } else if (args[0].equalsIgnoreCase("disband")) {
                     if (permission.has("essence.team.manage")) {
@@ -234,7 +234,7 @@ public class TeamCommands implements CommandExecutor {
                             message.PrivateMessage("team", "noteam");
                         }
                     } else {
-                        permission.not();
+                        return permission.not();
                     }
                 } else if (args[0].equalsIgnoreCase("rule")) {
                     if (permission.has("essence.team.manage")) {
@@ -276,7 +276,7 @@ public class TeamCommands implements CommandExecutor {
                             message.PrivateMessage("team", "noteam");
                         }
                     } else {
-                        permission.not();
+                        return permission.not();
                     }
                 } else {
                     if (permission.has("essence.team.list")) {
