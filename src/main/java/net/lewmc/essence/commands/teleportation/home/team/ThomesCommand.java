@@ -62,7 +62,7 @@ public class ThomesCommand implements CommandExecutor {
                 StringBuilder setHomes = hu.getTeamHomesList(team);
 
                 if (setHomes == null) {
-                    message.PrivateMessage("home", "noneset");
+                    message.PrivateMessage("noneset", "noneset");
                     return true;
                 }
 

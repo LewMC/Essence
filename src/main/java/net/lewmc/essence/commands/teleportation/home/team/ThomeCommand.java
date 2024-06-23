@@ -89,18 +89,22 @@ public class ThomeCommand implements CommandExecutor {
                     homeName = "homes.home";
                     chatHomeName = "home";
                     if (dataUtil.get(homeName) == null) {
-                        dataUtil.close();
+                        if (permission.has("essence.home.list")) {
+                            dataUtil.close();
 
-                        HomeUtil hu = new HomeUtil(this.plugin);
-                        StringBuilder setHomes = hu.getTeamHomesList(team);
+                            HomeUtil hu = new HomeUtil(this.plugin);
+                            StringBuilder setHomes = hu.getTeamHomesList(team);
 
-                        if (setHomes == null) {
-                            message.PrivateMessage("home", "noneset");
+                            if (setHomes == null) {
+                                message.PrivateMessage("noneset", "noneset");
+                                return true;
+                            }
+
+                            message.PrivateMessage("teamhome", "list", setHomes.toString());
                             return true;
+                        } else {
+                            message.PrivateMessage("teamhome", "notfound", "home");
                         }
-
-                        message.PrivateMessage("home", "list", setHomes.toString());
-                        return true;
                     }
                 }
 
