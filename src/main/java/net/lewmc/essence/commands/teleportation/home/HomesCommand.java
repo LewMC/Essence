@@ -8,11 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class HomesCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the HomesCommand class.
@@ -20,7 +20,6 @@ public class HomesCommand implements CommandExecutor {
      */
     public HomesCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -38,7 +37,8 @@ public class HomesCommand implements CommandExecutor {
         String[] args
     ) {
         if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
+            LogUtil log = new LogUtil(this.plugin);
+            log.noConsole();
             return true;
         }
         MessageUtil message = new MessageUtil(commandSender, plugin);
@@ -52,7 +52,7 @@ public class HomesCommand implements CommandExecutor {
 
                 Set<String> keys = dataUtil.getKeys("homes", false);
 
-                if (keys == null) {
+                if (keys == null || Objects.equals(keys.toString(), "[]")) {
                     dataUtil.close();
                     message.PrivateMessage("home", "noneset");
                     return true;

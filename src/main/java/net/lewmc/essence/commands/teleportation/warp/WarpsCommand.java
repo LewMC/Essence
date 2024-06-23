@@ -11,11 +11,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class WarpsCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the WarpsCommand class.
@@ -23,7 +23,6 @@ public class WarpsCommand implements CommandExecutor {
      */
     public WarpsCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -41,7 +40,8 @@ public class WarpsCommand implements CommandExecutor {
         String[] args
     ) {
         if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
+            LogUtil log = new LogUtil(this.plugin);
+            log.noConsole();
             return true;
         }
         MessageUtil message = new MessageUtil(commandSender, plugin);
@@ -54,7 +54,7 @@ public class WarpsCommand implements CommandExecutor {
 
                 Set<String> keys = data.getKeys("warps", false);
 
-                if (keys == null) {
+                if (keys == null || Objects.equals(keys.toString(), "[]")) {
                     data.close();
                     message.PrivateMessage("warp", "noneset");
                     return true;

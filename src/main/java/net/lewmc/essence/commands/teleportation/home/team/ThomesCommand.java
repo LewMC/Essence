@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class ThomesCommand implements CommandExecutor {
@@ -65,7 +66,7 @@ public class ThomesCommand implements CommandExecutor {
 
                 Set<String> keys = dataUtil.getKeys("homes", false);
 
-                if (keys == null) {
+                if (keys == null || Objects.equals(keys.toString(), "[]")) {
                     dataUtil.close();
                     message.PrivateMessage("teamhome", "noneset");
                     return true;
