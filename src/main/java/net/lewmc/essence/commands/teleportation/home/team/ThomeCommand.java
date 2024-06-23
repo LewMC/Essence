@@ -89,7 +89,7 @@ public class ThomeCommand implements CommandExecutor {
                     homeName = "homes.home";
                     chatHomeName = "home";
                     if (dataUtil.get(homeName) == null) {
-                        if (permission.has("essence.home.list")) {
+                        if (permission.has("essence.home.team.list")) {
                             dataUtil.close();
 
                             HomeUtil hu = new HomeUtil(this.plugin);
