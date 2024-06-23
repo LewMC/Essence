@@ -30,7 +30,7 @@ public class MessageUtil {
      * @param replace String[] - Text that should be put in place of {{X}} in the message.
      * @since 1.5.3
      */
-    public void PrivateMessage(String group, String message, String[] replace) {
+    public void send(String group, String message, String[] replace) {
         message = this.GetMessage(message, group);
         if (message != null) {
             int i = 1;
@@ -51,6 +51,24 @@ public class MessageUtil {
      * @param group String - The group the message belongs to in the language file.
      * @param message String - The message taken from the language file.
      */
+    public void send(String group, String message) {
+        message = this.GetMessage(message, group);
+        if (message != null) {
+            this.cs.sendMessage(message);
+        } else {
+            this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
+            LogUtil log = new LogUtil(this.plugin);
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
+        }
+    }
+
+    /**
+     * Send a message to the user - use send(String, String) instead.
+     * @param group String - The group the message belongs to in the language file.
+     * @param message String - The message taken from the language file.
+     * @deprecated
+     */
+    @Deprecated
     public void PrivateMessage(String group, String message) {
         message = this.GetMessage(message, group);
         if (message != null) {
@@ -63,12 +81,13 @@ public class MessageUtil {
     }
 
     /**
-     * Send a message to the user - Use PrivateMessage(String, String, String[]) instead.
+     * Send a message to the user - Use send(String, String, String[]) instead.
      * @param group String - The group the message belongs to in the language file.
      * @param message String - The message taken from the language file.
      * @param extra1 String - Text that should be put in place of {{1}} in the message.
      * @deprecated
      */
+    @Deprecated
     public void PrivateMessage(String group, String message, String extra1) {
         message = this.GetMessage(message, group);
         if (message != null) {
@@ -82,13 +101,14 @@ public class MessageUtil {
     }
 
     /**
-     * Send a message to the user - Use PrivateMessage(String, String, String[]) instead.
+     * Send a message to the user - Use send(String, String, String[]) instead.
      * @param group String - The group the message belongs to in the language file.
      * @param message String - The message taken from the language file.
      * @param extra1 String - Text that should be put in place of {{1}} in the message.
      * @param extra2 String - Text that should be put in place of {{2}} in the message.
      * @deprecated
      */
+    @Deprecated
     public void PrivateMessage(String group, String message, String extra1, String extra2) {
         message = this.GetMessage(message, group);
         if (message != null) {
