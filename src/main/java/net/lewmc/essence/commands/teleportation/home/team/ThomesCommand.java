@@ -8,9 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-import java.util.Set;
-
 public class ThomesCommand implements CommandExecutor {
     private final Essence plugin;
     private final LogUtil log;
@@ -61,29 +58,14 @@ public class ThomesCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("thomes")) {
             if (permission.has("essence.home.team.list")) {
-                FileUtil dataUtil = new FileUtil(this.plugin);
-                dataUtil.load("data/teams/"+team+".yml");
+                HomeUtil hu = new HomeUtil(this.plugin);
+                StringBuilder setHomes = hu.getTeamHomesList(team);
 
-                Set<String> keys = dataUtil.getKeys("homes", false);
-
-                if (keys == null || Objects.equals(keys.toString(), "[]")) {
-                    dataUtil.close();
-                    message.PrivateMessage("teamhome", "noneset");
+                if (setHomes == null) {
+                    message.PrivateMessage("home", "noneset");
                     return true;
                 }
 
-                StringBuilder setHomes = new StringBuilder();
-                int i = 0;
-
-                for (String key : keys) {
-                    if (i == 0) {
-                        setHomes.append(key);
-                    } else {
-                        setHomes.append(", ").append(key);
-                    }
-                    i++;
-                }
-                dataUtil.close();
                 message.PrivateMessage("teamhome", "list", setHomes.toString());
             } else {
                 permission.not();

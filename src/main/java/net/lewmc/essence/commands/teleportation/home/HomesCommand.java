@@ -8,9 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-import java.util.Set;
-
 public class HomesCommand implements CommandExecutor {
     private final Essence plugin;
 
@@ -47,29 +44,14 @@ public class HomesCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("homes")) {
             if (permission.has("essence.home.list")) {
-                FileUtil dataUtil = new FileUtil(this.plugin);
-                dataUtil.load(dataUtil.playerDataFile(player));
+                HomeUtil hu = new HomeUtil(this.plugin);
+                StringBuilder setHomes = hu.getHomesList(player);
 
-                Set<String> keys = dataUtil.getKeys("homes", false);
-
-                if (keys == null || Objects.equals(keys.toString(), "[]")) {
-                    dataUtil.close();
+                if (setHomes == null) {
                     message.PrivateMessage("home", "noneset");
                     return true;
                 }
 
-                StringBuilder setHomes = new StringBuilder();
-                int i = 0;
-
-                for (String key : keys) {
-                    if (i == 0) {
-                        setHomes.append(key);
-                    } else {
-                        setHomes.append(", ").append(key);
-                    }
-                    i++;
-                }
-                dataUtil.close();
                 message.PrivateMessage("home", "list", setHomes.toString());
             } else {
                 permission.not();

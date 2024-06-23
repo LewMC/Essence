@@ -76,7 +76,16 @@ public class HomeCommand implements CommandExecutor {
                     chatHomeName = "home";
                     if (playerData.get(homeName) == null) {
                         playerData.close();
-                        message.PrivateMessage("home", "noneset");
+
+                        HomeUtil hu = new HomeUtil(this.plugin);
+                        StringBuilder setHomes = hu.getHomesList(player);
+
+                        if (setHomes == null) {
+                            message.PrivateMessage("home", "noneset");
+                            return true;
+                        }
+
+                        message.PrivateMessage("home", "list", setHomes.toString());
                         return true;
                     }
                 }
