@@ -75,18 +75,22 @@ public class HomeCommand implements CommandExecutor {
                     homeName = "homes.home";
                     chatHomeName = "home";
                     if (playerData.get(homeName) == null) {
-                        playerData.close();
+                        if (permission.has("essence.home.list")) {
+                            playerData.close();
 
-                        HomeUtil hu = new HomeUtil(this.plugin);
-                        StringBuilder setHomes = hu.getHomesList(player);
+                            HomeUtil hu = new HomeUtil(this.plugin);
+                            StringBuilder setHomes = hu.getHomesList(player);
 
-                        if (setHomes == null) {
-                            message.PrivateMessage("home", "noneset");
+                            if (setHomes == null) {
+                                message.PrivateMessage("home", "noneset");
+                                return true;
+                            }
+
+                            message.PrivateMessage("home", "list", setHomes.toString());
                             return true;
+                        } else {
+                            message.PrivateMessage("home", "notfound", "home");
                         }
-
-                        message.PrivateMessage("home", "list", setHomes.toString());
-                        return true;
                     }
                 }
 
