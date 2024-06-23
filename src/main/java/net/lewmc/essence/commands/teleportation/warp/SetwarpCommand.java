@@ -70,6 +70,7 @@ public class SetwarpCommand implements CommandExecutor {
                     return true;
                 }
 
+                warpsData.set("warps."+warpName+".creator", player.getUniqueId());
                 warpsData.set("warps."+warpName+".world", loc.getWorld().getName());
                 warpsData.set("warps."+warpName+".X", loc.getX());
                 warpsData.set("warps."+warpName+".Y", loc.getY());
