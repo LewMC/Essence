@@ -2,6 +2,9 @@ package net.lewmc.essence.utils;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+
+import java.util.Set;
 
 /**
  * Essence's Permission Handler.
@@ -39,7 +42,54 @@ public class PermissionHandler {
      * Informs the user that they do not have a permission.
      */
     public boolean not() {
-        this.message.PrivateMessage("generic", "missingpermission");
+        this.message.send("generic", "missingpermission");
         return false;
+    }
+
+    /**
+     * Gets the maximum number of homes a player can set from the permission system.
+     * @param player Player - The player to check.
+     * @return int - The number of homes (-1 is unlimited)
+     */
+    public int getHomesLimit(Player player) {
+        return this.getLimit(player, "home");
+    }
+
+    /**
+     * Gets the maximum number of team homes a player can set from the permission system.
+     * @param player Player - The player to check.
+     * @return int - The number of team homes (-1 is unlimited)
+     */
+    public int getTeamHomesLimit(Player player) {
+        return this.getLimit(player, "home.team");
+    }
+
+    /**
+     * Gets the maximum number of warps a player can set from the permission system.
+     * @param player Player - The player to check.
+     * @return int - The number of warps (-1 is unlimited)
+     */
+    public int getWarpsLimit(Player player) {
+        return this.getLimit(player, "warp");
+    }
+
+    /**
+     * Collects the limits for a defined type.
+     * @param player Player - The player to check.
+     * @param type String - The type to check.
+     * @return int - The number allowed (-1 is unlimited)
+     */
+    private int getLimit(Player player, String type) {
+        Set<PermissionAttachmentInfo> perms = player.getEffectivePermissions();
+        String[] vars;
+
+        for (PermissionAttachmentInfo i : perms) {
+            if (i.getPermission().contains("essence."+type+".limit")) {
+                vars = i.getPermission().split("\\.");
+                return Integer.parseInt(vars[vars.length - 1]);
+            }
+        }
+
+        return -1;
     }
 }

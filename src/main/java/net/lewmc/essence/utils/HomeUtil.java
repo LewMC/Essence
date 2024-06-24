@@ -6,13 +6,25 @@ import org.bukkit.entity.Player;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * /homes command helper utility.
+ */
 public class HomeUtil {
     private final Essence plugin;
 
+    /**
+     * Constructor for the HomeUtil class.
+     * @param plugin Essence - Reference to main class.
+     */
     public HomeUtil(Essence plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * Gets a list of homes.
+     * @param player Player - The player who's homes to list.
+     * @return StringBuilder|null - List of homes or null.
+     */
     public StringBuilder getHomesList(Player player) {
         FileUtil dataUtil = new FileUtil(this.plugin);
         dataUtil.load(dataUtil.playerDataFile(player));
@@ -40,6 +52,11 @@ public class HomeUtil {
         return setHomes;
     }
 
+    /**
+     * Gets a list of team homes.
+     * @param team String - The team who's homes to list.
+     * @return StringBuilder|null - List of homes or null.
+     */
     public StringBuilder getTeamHomesList(String team) {
         FileUtil dataUtil = new FileUtil(this.plugin);
         dataUtil.load("data/teams/"+team+".yml");
@@ -65,5 +82,44 @@ public class HomeUtil {
         dataUtil.close();
 
         return setHomes;
+    }
+
+    /**
+     * Returns the amount of homes that a user has set.
+     * @param player Player - The player who should be checked.
+     * @return int - The number of homes.
+     */
+    public int getHomeCount(Player player) {
+        FileUtil dataUtil = new FileUtil(this.plugin);
+        dataUtil.load(dataUtil.playerDataFile(player));
+
+        return dataUtil.getKeys("homes", false).size();
+    }
+
+    /**
+     * Returns the amount of team homes that a user has set.
+     * @param player Player - The player who should be checked.
+     * @return int - The number of team homes.
+     */
+    public int getTeamHomeCount(Player player) {
+        TeamUtil teamUtil = new TeamUtil(this.plugin, new MessageUtil(player, this.plugin));
+        FileUtil dataUtil = new FileUtil(this.plugin);
+        dataUtil.load("data/teams/"+teamUtil.getPlayerTeam(player.getUniqueId())+".yml");
+
+        Set<String> keys = dataUtil.getKeys("homes", false);
+
+        int homes = 0;
+
+        if (keys == null) {
+            return homes;
+        }
+
+        for (String key : keys) {
+            if (Objects.equals(dataUtil.getString("homes." + key + ".creator"), player.getUniqueId().toString())) {
+                homes++;
+            }
+        }
+
+        return homes;
     }
 }
