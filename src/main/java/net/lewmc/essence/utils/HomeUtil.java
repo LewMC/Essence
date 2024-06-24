@@ -95,4 +95,31 @@ public class HomeUtil {
 
         return dataUtil.getKeys("homes", false).size();
     }
+
+    /**
+     * Returns the amount of team homes that a user has set.
+     * @param player Player - The player who should be checked.
+     * @return int - The number of team homes.
+     */
+    public int getTeamHomeCount(Player player) {
+        TeamUtil teamUtil = new TeamUtil(this.plugin, new MessageUtil(player, this.plugin));
+        FileUtil dataUtil = new FileUtil(this.plugin);
+        dataUtil.load("data/teams/"+teamUtil.getPlayerTeam(player.getUniqueId())+".yml");
+
+        Set<String> keys = dataUtil.getKeys("homes", false);
+
+        int homes = 0;
+
+        if (keys == null) {
+            return homes;
+        }
+
+        for (String key : keys) {
+            if (Objects.equals(dataUtil.getString("homes." + key + ".creator"), player.getUniqueId().toString())) {
+                homes++;
+            }
+        }
+
+        return homes;
+    }
 }

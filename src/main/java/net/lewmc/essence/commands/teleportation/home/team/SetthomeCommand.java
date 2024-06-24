@@ -49,12 +49,12 @@ public class SetthomeCommand implements CommandExecutor {
         String team = tu.getPlayerTeam(player.getUniqueId());
 
         if (team == null) {
-            message.PrivateMessage("team", "noteam");
+            message.send("team", "noteam");
             return true;
         }
 
         if (!tu.getRule(team, "allow-team-homes")) {
-            message.PrivateMessage("team", "disallowedhomes");
+            message.send("team", "disallowedhomes");
             return true;
         }
 
@@ -75,7 +75,7 @@ public class SetthomeCommand implements CommandExecutor {
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {
                     dataUtil.close();
-                    message.PrivateMessage("teamhome", "specialchars");
+                    message.send("teamhome", "specialchars");
                     return true;
                 }
 
@@ -83,10 +83,18 @@ public class SetthomeCommand implements CommandExecutor {
 
                 if (dataUtil.get(homeName) != null) {
                     dataUtil.close();
-                    message.PrivateMessage("teamhome", "alreadyexists");
+                    message.send("teamhome", "alreadyexists");
                     return true;
                 }
 
+                HomeUtil hu = new HomeUtil(this.plugin);
+                int homeLimit = permission.getTeamHomesLimit(player);
+                if (hu.getTeamHomeCount(player) >= homeLimit && homeLimit != -1) {
+                    message.send("teamhome", "hitlimit");
+                    return true;
+                }
+
+                dataUtil.set(homeName + ".creator", player.getUniqueId().toString());
                 dataUtil.set(homeName + ".world", loc.getWorld().getName());
                 dataUtil.set(homeName + ".X", loc.getX());
                 dataUtil.set(homeName + ".Y", loc.getY());
