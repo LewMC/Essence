@@ -48,7 +48,7 @@ public class SetwarpCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("setwarp")) {
             if (permission.has("essence.warp.create")) {
                 if (args.length == 0) {
-                    message.PrivateMessage("warp", "setusage");
+                    message.send("warp", "setusage");
                     return true;
                 }
                 Location loc = player.getLocation();
@@ -60,17 +60,24 @@ public class SetwarpCommand implements CommandExecutor {
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(warpName)) {
                     warpsData.close();
-                    message.PrivateMessage("warp", "specialchars");
+                    message.send("warp", "specialchars");
                     return true;
                 }
 
                 if (warpsData.get("warps." + warpName) != null) {
                     warpsData.close();
-                    message.PrivateMessage("warp", "alreadyexists");
+                    message.send("warp", "alreadyexists");
                     return true;
                 }
 
-                warpsData.set("warps."+warpName+".creator", player.getUniqueId());
+                WarpUtil wu = new WarpUtil(this.plugin);
+                int warpLimit = permission.getWarpsLimit(player);
+                if (wu.getWarpCount(player) >= warpLimit && warpLimit != -1) {
+                    message.send("warp", "hitlimit");
+                    return true;
+                }
+
+                warpsData.set("warps."+warpName+".creator", player.getUniqueId().toString());
                 warpsData.set("warps."+warpName+".world", loc.getWorld().getName());
                 warpsData.set("warps."+warpName+".X", loc.getX());
                 warpsData.set("warps."+warpName+".Y", loc.getY());
