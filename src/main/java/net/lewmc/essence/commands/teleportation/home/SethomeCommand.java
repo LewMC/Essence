@@ -62,7 +62,7 @@ public class SethomeCommand implements CommandExecutor {
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {
                     playerData.close();
-                    message.PrivateMessage("home", "specialchars");
+                    message.send("home", "specialchars");
                     return true;
                 }
 
@@ -70,7 +70,14 @@ public class SethomeCommand implements CommandExecutor {
 
                 if (playerData.get(homeName) != null) {
                     playerData.close();
-                    message.PrivateMessage("home", "alreadyexists");
+                    message.send("home", "alreadyexists");
+                    return true;
+                }
+
+                HomeUtil hu = new HomeUtil(this.plugin);
+                int homeLimit = permission.getHomesLimit(player);
+                if (hu.getHomeCount(player) >= homeLimit && homeLimit != -1) {
+                    message.send("home", "hitlimit");
                     return true;
                 }
 

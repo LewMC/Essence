@@ -1,7 +1,11 @@
 package net.lewmc.essence.utils;
 
+import net.lewmc.essence.Essence;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+
+import java.util.Set;
 
 /**
  * Essence's Permission Handler.
@@ -41,5 +45,33 @@ public class PermissionHandler {
     public boolean not() {
         this.message.PrivateMessage("generic", "missingpermission");
         return false;
+    }
+
+    /**
+     * Gets the maximum number of homes a player can claim from the permission system.
+     * @param player Player - The player to check.
+     * @return int - The number of homes (-1 is unlimited)
+     */
+    public int getHomesLimit(Player player) {
+        Set<PermissionAttachmentInfo> perms = player.getEffectivePermissions();
+        String[] vars;
+
+        for (PermissionAttachmentInfo i : perms) {
+            if (i.getPermission().contains("essence.home.limit")) {
+                vars = i.getPermission().split("\\.");
+                return Integer.parseInt(vars[vars.length - 1]);
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Gets the maximum number of homes a player can claim from the permission system.
+     * @param player Player - The player to check.
+     * @return int - The number of homes (-1 is unlimited)
+     */
+    public int getWarpsLimit(Player player) {
+        return -1;
     }
 }

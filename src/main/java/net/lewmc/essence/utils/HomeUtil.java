@@ -83,4 +83,16 @@ public class HomeUtil {
 
         return setHomes;
     }
+
+    /**
+     * Returns the amount of homes that a user has set.
+     * @param player Player - The player who should be checked.
+     * @return int - The number of homes.
+     */
+    public int getHomeCount(Player player) {
+        FileUtil dataUtil = new FileUtil(this.plugin);
+        dataUtil.load(dataUtil.playerDataFile(player));
+
+        return dataUtil.getKeys("homes", false).size();
+    }
 }
