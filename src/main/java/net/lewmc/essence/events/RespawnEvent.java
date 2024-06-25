@@ -1,11 +1,9 @@
 package net.lewmc.essence.events;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.FileUtil;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.TeleportUtil;
+import net.lewmc.essence.utils.*;
 import org.bukkit.Bukkit;
+import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -41,6 +39,9 @@ public class RespawnEvent implements Listener {
         FileUtil playerData = new FileUtil(this.plugin);
         playerData.load(config.playerDataFile(event.getPlayer()));
 
+        LocationUtil locationUtil = new LocationUtil(this.plugin);
+        locationUtil.UpdateLastLocation(event.getPlayer());
+
         if ((playerData.getString("user.last-sleep-location") != null) && !alwaysSpawn) {
             TeleportUtil tp = new TeleportUtil(plugin);
             tp.doTeleport(
@@ -54,17 +55,15 @@ public class RespawnEvent implements Listener {
                     0
             );
 
-            config.close();
-
             return;
         }
 
-        config.close();
+        playerData.close();
 
         FileUtil spawns = new FileUtil(this.plugin);
         spawns.load("data/spawns.yml");
 
-        if (spawns.get("spawn."+spawnName) != null) {
+        if (spawns.get("spawn."+spawnName) == null) {
             LogUtil log = new LogUtil(this.plugin);
             if (
                 Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null &&
@@ -82,11 +81,17 @@ public class RespawnEvent implements Listener {
                         0
                 );
             } else {
-                message.PrivateMessage("spawn", "notexist");
+                message.send("spawn", "notexist");
                 log.info("Failed to respawn player - world '"+Bukkit.getServer().getWorld(spawnName)+"' does not exist.");
             }
         } else {
             TeleportUtil tp = new TeleportUtil(plugin);
+
+            if (Bukkit.getServer().getWorld(spawnName) == null) {
+                WorldCreator creator = new WorldCreator(spawnName);
+                creator.createWorld();
+            }
+
             tp.doTeleport(
                     event.getPlayer(),
                     Bukkit.getServer().getWorld(spawnName),
