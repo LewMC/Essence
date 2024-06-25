@@ -99,7 +99,7 @@ public class Essence extends JavaPlugin {
         loadTabCompleters();
 
         if (!setupEconomy()) {
-            getLogger().severe("Vault dependency not found! Using local economy.");
+            this.log.warn("Vault not found! Using local economy.");
         }
 
         UpdateUtil update = new UpdateUtil(this);
@@ -118,16 +118,23 @@ public class Essence extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
         }
+        this.log.info("Vault found, setting up economy service...");
 
         getServer().getServicesManager().register(Economy.class, new VaultEconomy(this), this, ServicePriority.Highest);
 
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
+            log.severe("No economy service provider found after registration!");
             return false;
         }
 
-        economy = rsp.getProvider();
-        return economy != null;
+        this.economy = rsp.getProvider();
+
+        if (this.economy == null) {
+            this.log.severe("Economy provider is null!");
+        }
+
+        return this.economy != null;
     }
 
     /**
