@@ -29,6 +29,6 @@ jobs:
       - name: Upload Plugin jar 📁
         uses: actions/upload-artifact@v4
         with:
-          name: essence-${{ env.VERSION }}-SNAPSHOT.jar
+          name: essence-${{ env.VERSION }}.jar
           path: /home/runner/work/Essence/Essence/target/essence-${{ env.VERSION }}.jar
 
