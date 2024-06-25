@@ -22,8 +22,13 @@ jobs:
       - name: Build with Maven 🏗️
         run: mvn -B package --file pom.xml
 
+      - name: Extract Version from pom.xml 📄
+        id: extract_version
+        run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
       - name: Upload Plugin jar 📁
         uses: actions/upload-artifact@v4
         with:
-          name: essence-1.5.1-GITDEV.jar
-          path: /home/runner/work/Essence/Essence/target/essence-1.5.1.jar
+          name: essence-${{ env.VERSION }}-GITDEV.jar
+          path: /home/runner/work/Essence/Essence/target/essence-${{ env.VERSION }}.jar
+
