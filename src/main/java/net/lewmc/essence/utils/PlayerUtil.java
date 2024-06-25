@@ -51,4 +51,45 @@ public class PlayerUtil {
             return permission.not();
         }
     }
+
+    /**
+     * Creates a player data file for the given player.
+     * @return boolean - If the operation was successful.
+     */
+    public boolean createPlayerData() {
+        FileUtil playerFile = new FileUtil(this.plugin);
+        Player player = (Player) this.commandSender;
+
+        if (!playerFile.exists(playerFile.playerDataFile(player.getUniqueId()))) {
+            playerFile.create(playerFile.playerDataFile(player.getUniqueId()));
+
+            LogUtil log = new LogUtil(this.plugin);
+
+            if (this.plugin.verbose) {
+                log.info("Player data exists.");
+            }
+            if (!playerFile.load(playerFile.playerDataFile(player.getUniqueId()))) {
+                log.severe("Unable to load configuration file '" + playerFile.playerDataFile(player.getUniqueId()) + "'. Essence may be unable to teleport players to the correct spawn");
+                return false;
+            }
+
+            if (playerFile.get("user.accepting-teleport-requests") == null) {
+                playerFile.set("user.accepting-teleport-requests", plugin.getConfig().getDouble("teleportation.requests.default-enabled"));
+            }
+
+            if (playerFile.get("economy.balance") == null) {
+                playerFile.set("economy.balance", plugin.getConfig().getDouble("economy.start-money"));
+            }
+
+            if (playerFile.get("economy-accepting-payment") == null) {
+                playerFile.set("economy.accepting-payments", true);
+            }
+
+            playerFile.set("user.last-known-name", player.getName());
+
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

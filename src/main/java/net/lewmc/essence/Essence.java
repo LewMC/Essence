@@ -11,26 +11,21 @@ import net.lewmc.essence.commands.EssenceCommands;
 import net.lewmc.essence.commands.GamemodeCommands;
 import net.lewmc.essence.commands.stats.*;
 import net.lewmc.essence.commands.teleportation.*;
-import net.lewmc.essence.commands.teleportation.home.DelhomeCommand;
-import net.lewmc.essence.commands.teleportation.home.HomeCommand;
-import net.lewmc.essence.commands.teleportation.home.HomesCommand;
-import net.lewmc.essence.commands.teleportation.home.SethomeCommand;
-import net.lewmc.essence.commands.teleportation.home.team.DelthomeCommand;
-import net.lewmc.essence.commands.teleportation.home.team.SetthomeCommand;
-import net.lewmc.essence.commands.teleportation.home.team.ThomeCommand;
-import net.lewmc.essence.commands.teleportation.home.team.ThomesCommand;
+import net.lewmc.essence.commands.teleportation.home.*;
+import net.lewmc.essence.commands.teleportation.home.team.*;
 import net.lewmc.essence.commands.teleportation.tp.*;
-import net.lewmc.essence.commands.teleportation.warp.DelwarpCommand;
-import net.lewmc.essence.commands.teleportation.warp.SetwarpCommand;
-import net.lewmc.essence.commands.teleportation.warp.WarpCommand;
-import net.lewmc.essence.commands.teleportation.warp.WarpsCommand;
+import net.lewmc.essence.commands.teleportation.warp.*;
 import net.lewmc.essence.events.*;
 import net.lewmc.essence.tabcompleter.*;
 import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.UpdateUtil;
+import net.lewmc.essence.utils.economy.VaultEconomy;
+import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -49,6 +44,11 @@ public class Essence extends JavaPlugin {
      * The config.yml's verbose value is stored here.
      */
     public boolean verbose;
+
+    /**
+     * The Vault economy handler.
+     */
+    private Economy economy = null;
 
     /**
      * Stores pending teleport requests.
@@ -98,12 +98,43 @@ public class Essence extends JavaPlugin {
         loadEventHandlers();
         loadTabCompleters();
 
+        if (!setupEconomy()) {
+            this.log.warn("Vault not found! Using local economy.");
+        }
+
         UpdateUtil update = new UpdateUtil(this);
         update.VersionCheck();
         update.UpdateConfig();
         update.UpdateLanguage();
 
         this.log.info("Startup completed.");
+    }
+
+    /**
+     * Sets up Vault to use Essence's economy.
+     * @return boolean - If it could be setup correctly.
+     */
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        this.log.info("Vault found, setting up economy service...");
+
+        getServer().getServicesManager().register(Economy.class, new VaultEconomy(this), this, ServicePriority.Highest);
+
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            log.severe("No economy service provider found after registration!");
+            return false;
+        }
+
+        this.economy = rsp.getProvider();
+
+        if (this.economy == null) {
+            this.log.severe("Economy provider is null!");
+        }
+
+        return this.economy != null;
     }
 
     /**

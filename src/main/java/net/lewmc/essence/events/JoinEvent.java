@@ -93,7 +93,7 @@ public class JoinEvent implements Listener {
                             0
                     );
                 } else {
-                    message.PrivateMessage("spawn", "notexist");
+                    message.send("spawn", "notexist");
                     log.info("Failed to respawn player - world '"+Bukkit.getServer().getWorld(spawnName)+"' does not exist.");
                 }
             } else {
@@ -144,27 +144,8 @@ public class JoinEvent implements Listener {
             playerFile.set("user.last-known-name", event.getPlayer().getName());
             playerFile.set("user.accepting-teleport-requests", plugin.getConfig().getDouble("teleportation.requests.default-enabled"));
         } else {
-            if (this.plugin.verbose) {
-                log.info("Player data exists.");
-            }
-            if (!playerFile.load(playerDataFile)) {
-                log.severe("Unable to load configuration file '"+playerDataFile+"'. Essence may be unable to teleport players to the correct spawn");
-                return;
-            }
-
-            if (playerFile.get("user.accepting-teleport-requests") == null) {
-                playerFile.set("user.accepting-teleport-requests", plugin.getConfig().getDouble("teleportation.requests.default-enabled"));
-            }
-
-            if (playerFile.get("economy.balance") == null) {
-                playerFile.set("economy.balance", plugin.getConfig().getDouble("economy.start-money"));
-            }
-
-            if (playerFile.get("economy-accepting-payment") == null) {
-                playerFile.set("economy.accepting-payments", true);
-            }
-
-            playerFile.set("user.last-known-name", event.getPlayer().getName());
+            PlayerUtil playerUtil = new PlayerUtil(this.plugin, offlinePlayer.getPlayer());
+            playerUtil.createPlayerData();
         }
         if (playerFile.save()) {
             if (this.plugin.verbose) {
