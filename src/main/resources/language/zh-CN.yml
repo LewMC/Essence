@@ -1,5 +1,8 @@
 # Translate Essence!
 # https://crowdin.com/project/lewmc-essence
+meta:
+  language: 中国人
+  author: Xiao Renjunya
 about:
   version: "§6[Essence] §e正在运行 Essence ，版本 {{1}}。"
   description: "§6[Essence] §eEssence 是一个轻量级、可定制的插件，它有home，warps等等。"
@@ -70,7 +73,7 @@ help:
   economy: "§6[Essence] ---------- Essence 帮助 - 经济 ----------"
   pay: "§6[Essence] §e/pay <user> <amount> - 给某人钱!"
   bal: "§6[Essence] §e/bal - 查看你的余额."
-  nochapter: "§4[Essence] §cUnable to find help chapter."
+  nochapter: "§4[Essence] §c无法找到帮助章节。"
   team: "§6[Essence] ----------- Essence 帮助 - 团队 ------------"
   teamcreate: "§6[Essence] §e/team create <name> - 创建一个团队."
   teamjoin: "§6[Essence] §e/team join <name> - 加入一个团队."
