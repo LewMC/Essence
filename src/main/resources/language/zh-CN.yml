@@ -1,8 +1,8 @@
 #Translate Essence!
 #https://crowdin.com/project/lewmc-essence
 meta:
-  language: British English
-  author: LewMC
+  language: 中国人
+  author: Xiao Renjunya
 about:
   version: "§6[Essence] §e正在运行 Essence ，版本 {{1}}。"
   description: "§6[Essence] §eEssence 是一个轻量级、可定制的插件，它有home，warps等等。"
