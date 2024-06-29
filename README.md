@@ -2,7 +2,8 @@
 
 - 💾 **Download Essence** - https://lewmc.net/plugin/essence
 - 🔧 **View the JavaDocs** - https://lewmc.github.io/Essence
-- ⭐ Enjoying Essence? We'd love to hear your feedback on Spigot. Leave us a review [here](https://www.spigotmc.org/resources/essence.114553/). 
+- 🌐 **Help Translate Essence** - https://crowdin.com/project/lewmc-essence
+- ⭐ Enjoying Essence? We'd love to hear your feedback on Spigot. Leave us a review [here](https://www.spigotmc.org/resources/essence.114553/).
 
 ## Creating a local copy.
 
