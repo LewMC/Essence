@@ -286,7 +286,10 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("seen")) { this.getCommand("seen").setExecutor(new SeenCommand(this)); }
             if (command.isEnabled("info")) { this.getCommand("info").setExecutor(new InfoCommand(this)); }
         } catch (NullPointerException e) {
-            this.log.severe("LoadCommands: Unable to load Essence commands.");
+            this.log.severe("Unable to load Essence commands.");
+            this.log.severe("");
+            this.log.severe("Error Message: " + e.getMessage());
+            this.log.severe("Cause: " + e.getCause());
             this.log.info("");
         }
     }
