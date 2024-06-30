@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -92,8 +93,20 @@ public class UpdateUtil {
     public void UpdateLanguage() {
         File languageFile = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "en-GB.yml");
 
+        FileUtil enGb = new FileUtil(this.plugin);
+        if (enGb.exists("language/en-gb.yml")) {
+            this.plugin.saveResource("language/en-GB.yml", false);
+            if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
+                this.plugin.getConfig().set("language", "en-GB");
+                this.plugin.reloadConfig();
+            }
+            enGb.delete("language/en-gb.yml");
+            enGb.close();
+        }
+
         try {
             ConfigUpdater.update(plugin, "language/en-GB.yml", languageFile);
+            ConfigUpdater.update(plugin, "language/zh-CN.yml", languageFile);
         } catch (IOException e) {
             this.log.warn("Unable to update en-gb language file: "+e);
         }

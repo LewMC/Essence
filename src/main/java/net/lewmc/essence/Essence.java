@@ -218,6 +218,13 @@ public class Essence extends JavaPlugin {
         if (!kitsFile.exists()) {
             saveResource("data/kits.yml", false);
         }
+
+        File setLang = new File(getDataFolder() + File.separator + "language" + File.separator + getConfig().getString("language") + ".yml");
+        if (!setLang.exists()) {
+            this.log.severe("Language file '"+getConfig().getString("language")+"' does not exist!");
+            this.log.severe("Please check the file and try again.");
+            getServer().getPluginManager().disablePlugin(this);
+        }
     }
 
     /**
