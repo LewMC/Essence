@@ -101,6 +101,7 @@ public class UpdateUtil {
                 this.plugin.getConfig().set("language", "en-GB");
                 this.plugin.reloadConfig();
             }
+            enGb.load("language/en-gb.yml");
             enGb.delete("language/en-gb.yml");
             enGb.close();
             this.log.info("Old language file migrated successfully.");

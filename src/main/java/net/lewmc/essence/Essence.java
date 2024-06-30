@@ -138,6 +138,8 @@ public class Essence extends JavaPlugin {
             this.log.severe("Economy provider is null!");
         }
 
+        this.log.info("");
+
         return this.economy != null;
     }
 
