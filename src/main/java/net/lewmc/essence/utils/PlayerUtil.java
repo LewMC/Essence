@@ -155,4 +155,17 @@ public class PlayerUtil {
         playerFile.save();
         return true;
     }
+
+    /**
+     * Gets the last time the player was online.
+     * @param player Player - The player to check.
+     * @return String - The last time the player was seen.
+     */
+    public String getLastSeen(Player player) {
+        FileUtil playerFile = new FileUtil(this.plugin);
+        playerFile.load(playerFile.playerDataFile(player));
+        String last = playerFile.getString("user.last-seen");
+        playerFile.close();
+        return last;
+    }
 }
