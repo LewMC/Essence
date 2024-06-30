@@ -94,13 +94,13 @@ public class Essence extends JavaPlugin {
             this.log.info("");
         }
 
-        checkForEssentials();
-        checkForPaper();
+        this.checkForEssentials();
+        this.checkForPaper();
 
-        initFileSystem();
-        loadCommands();
-        loadEventHandlers();
-        loadTabCompleters();
+        this.initFileSystem();
+        this.loadCommands();
+        this.loadEventHandlers();
+        this.loadTabCompleters();
 
         if (!setupEconomy()) {
             this.log.warn("Vault not found! Using local economy.");
@@ -110,6 +110,8 @@ public class Essence extends JavaPlugin {
         update.VersionCheck();
         update.UpdateConfig();
         update.UpdateLanguage();
+
+        this.checkLanguageSystem();
 
         this.log.info("Startup completed.");
     }
@@ -220,7 +222,12 @@ public class Essence extends JavaPlugin {
         if (!kitsFile.exists()) {
             saveResource("data/kits.yml", false);
         }
+    }
 
+    /**
+     * Checks the language system.
+     */
+    private void checkLanguageSystem() {
         File setLang = new File(getDataFolder() + File.separator + "language" + File.separator + getConfig().getString("language") + ".yml");
         if (!setLang.exists()) {
             this.log.severe("Language file '"+getConfig().getString("language")+"' does not exist!");

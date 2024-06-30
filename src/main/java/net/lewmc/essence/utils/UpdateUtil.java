@@ -91,28 +91,39 @@ public class UpdateUtil {
      * Updates Essence's language files.
      */
     public void UpdateLanguage() {
-        File languageFile = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "en-GB.yml");
+        File enGB = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "en-GB.yml");
+        File zhCN = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "zh-CN.yml");
+
+        try {
+            ConfigUpdater.update(plugin, "language/en-GB.yml", enGB);
+            ConfigUpdater.update(plugin, "language/zh-CN.yml", zhCN);
+        } catch (IOException e) {
+            this.log.warn("Unable to update en-gb language file: "+e);
+        }
 
         FileUtil enGb = new FileUtil(this.plugin);
         if (enGb.exists("language/en-gb.yml")) {
             this.log.info("Old language file found, migrating...");
-            this.plugin.saveResource("language/en-GB.yml", false);
-            if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
-                this.plugin.getConfig().set("language", "en-GB");
-                this.plugin.reloadConfig();
+            if (!enGb.exists("language/en-GB.yml")) {
+                this.plugin.saveResource("language/en-GB.yml", false);
             }
             enGb.load("language/en-gb.yml");
-            enGb.delete("language/en-gb.yml");
+            if (enGb.delete("language/en-gb.yml")) {
+                this.log.info("Old language file migrated successfully.");
+                this.log.info("If you experience any issues, please restart your server.");
+            } else {
+                this.log.warn("Unable to migrate old language file.");
+                this.log.warn("If you experience any issues, please delete your config.yml file.");
+            }
             enGb.close();
-            this.log.info("Old language file migrated successfully.");
-            this.log.info("If you experience any issues, please restart your server.");
         }
 
-        try {
-            ConfigUpdater.update(plugin, "language/en-GB.yml", languageFile);
-            ConfigUpdater.update(plugin, "language/zh-CN.yml", languageFile);
-        } catch (IOException e) {
-            this.log.warn("Unable to update en-gb language file: "+e);
+        if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
+            FileUtil config = new FileUtil(this.plugin);
+            config.load("config.yml");
+            config.set("language", "en-GB");
+            config.save();
+            this.plugin.reloadConfig();
         }
     }
 }

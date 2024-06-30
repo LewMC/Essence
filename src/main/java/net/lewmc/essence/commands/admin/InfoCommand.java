@@ -54,7 +54,11 @@ public class InfoCommand implements CommandExecutor {
                         if (fu.exists(fu.playerDataFile(p.getUniqueId()))) {
                             fu.load(fu.playerDataFile(p.getUniqueId()));
                             message.send("info", "lastname", new String[] { fu.getString("user.last-known-name") });
-                            message.send("info", "lastseen", new String[] { fu.getString("user.last-seen") });
+                            if (fu.getString("user.last-seen") != null) {
+                                message.send("info", "lastseen", new String[]{fu.getString("user.last-seen")});
+                            } else {
+                                message.send("info", "neverseen");
+                            }
                             fu.close();
                         } else {
                             message.send("generic","playernotfound");
