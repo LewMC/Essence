@@ -203,6 +203,12 @@ permissions:
       essence.stats.*: true
       essence.stats.other.*: true
       essence.home.*: true
+      essence.economy.*: true
+      essence.chat.*: true
+      essence.playerinfo.*: true
+      essence.team.*: true
+      essence.spawn.*: true
+      essence.kits.*: true
   essence.gamemode.*:
     description: Allows players to switch to any gamemode.
     default: op
