@@ -103,6 +103,13 @@ public class HelpCommand {
                 this.message.PrivateMessage("help", "reload");
                 this.blank(5);
                 this.message.PrivateMessage("help", "page", "1", "1");
+            } else if ("chat".equalsIgnoreCase(args[1])) {
+                this.message.PrivateMessage("help", "chat");
+                this.message.PrivateMessage("help", "broadcast");
+                this.message.PrivateMessage("help", "msg");
+                this.message.PrivateMessage("help", "reply");
+                this.blank(5);
+                this.message.PrivateMessage("help", "page", "1", "1");
             } else if ("team".equalsIgnoreCase(args[1])) {
                 if (args.length < 3 || args[2].equals("1")) {
                     this.message.PrivateMessage("help", "team");
@@ -127,6 +134,7 @@ public class HelpCommand {
             }
         } else {
             this.message.PrivateMessage("help", "help");
+            this.message.PrivateMessage("help", "helpchat");
             this.message.PrivateMessage("help", "helpinventory");
             this.message.PrivateMessage("help", "helpgamemode");
             this.message.PrivateMessage("help", "helpteleport");
@@ -134,7 +142,6 @@ public class HelpCommand {
             this.message.PrivateMessage("help", "helpeconomy");
             this.message.PrivateMessage("help", "helpteam");
             this.message.PrivateMessage("help", "helpadmin");
-            this.blank(1);
             this.message.PrivateMessage("help", "page", "1", "1");
         }
         return true;
