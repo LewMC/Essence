@@ -179,24 +179,25 @@ commands:
   tpdeny:
     description: Deny a teleportation request.
     usage: /tpdeny
-    aliases: ['/tpdecline']
+    aliases: ['tpdecline']
   tpahere:
     description: Request a player to teleport to you.
     usage: /tpahere
   tptoggle:
     description: Toggle receiving teleport requests.
     usage: /tptoggle
-    aliases: ['/toggletp']
+    aliases: ['toggletp']
   tpcancel:
     description: Cancel a teleport request.
     usage: /tpcancel
-    aliases: ['/canceltp']
+    aliases: ['canceltp']
   seen:
     description: See when a player was last online.
     usage: /seen <user>
   info:
     description: See information about a player.
     usage: /info <user>
+    aliases: ['pinfo','playerinfo']
 permissions:
   essence.*:
     description: Access to all essence commands.
