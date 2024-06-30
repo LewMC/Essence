@@ -46,6 +46,7 @@ public class InfoCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("info")) {
             if (permission.has("essence.playerinfo.info")) {
+                LogUtil log = new LogUtil(this.plugin);
                 if (args.length == 1) {
                     OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                     if (p.hasPlayedBefore()) {
@@ -57,6 +58,8 @@ public class InfoCommand implements CommandExecutor {
                             fu.close();
                         } else {
                             message.send("generic","playernotfound");
+                            log.info(String.valueOf(p.getUniqueId()));
+                            log.info(String.valueOf(fu.playerDataFile(p.getUniqueId())));
                         }
                     } else {
                         message.send("generic","playernotfound");
