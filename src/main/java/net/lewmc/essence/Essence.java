@@ -24,6 +24,7 @@ import net.lewmc.essence.utils.UpdateUtil;
 import net.lewmc.essence.utils.economy.VaultEconomy;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
@@ -81,7 +82,8 @@ public class Essence extends JavaPlugin {
         this.log.info("Beginning startup...");
         this.log.info("");
         int pluginId = 20768; // <-- Replace with the id of your plugin!
-        new Metrics(this, pluginId);
+        Metrics metrics = new Metrics(this, pluginId);
+        metrics.addCustomChart(new SimplePie("language", () -> getConfig().getString("language")));
 
         this.verbose = this.getConfig().getBoolean("verbose");
 
