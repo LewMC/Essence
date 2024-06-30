@@ -36,14 +36,11 @@ public class JoinEvent implements Listener {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getPlayer().getName());
         boolean firstJoin = !offlinePlayer.hasPlayedBefore();
 
-        if (firstJoin) {
-            this.firstJoin(event, log);
-        }
+        if (firstJoin) { this.firstJoin(event, log); }
 
         plugin.reloadConfig();
-        if (plugin.getConfig().getBoolean("motd.enabled")) {
-            this.motd(event);
-        }
+
+        if (plugin.getConfig().getBoolean("motd.enabled")) { this.motd(event); }
 
         if (plugin.getConfig().getBoolean("teleportation.spawn.always-spawn") || firstJoin) {
             this.spawn(event, log);
@@ -55,9 +52,21 @@ public class JoinEvent implements Listener {
         PlayerUtil pu = new PlayerUtil(this.plugin, event.getPlayer());
 
         if (!playerFile.exists(playerDataFile)) {
-            pu.createPlayerData();
+            if (pu.createPlayerData()) {
+                if (plugin.verbose) {
+                    log.info("Player data saved.");
+                }
+            } else {
+                log.severe("Unable to create player data.");
+            }
         } else {
-            pu.updatePlayerData();
+            if (pu.updatePlayerData()) {
+                if (plugin.verbose) {
+                    log.info("Player data saved.");
+                }
+            } else {
+                log.severe("Unable to create player data.");
+            }
         }
 
         playerFile.close();

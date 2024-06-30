@@ -28,7 +28,7 @@ public class PlayerUtil {
     /**
      * Sets the player's gamemode.
      * @param cs CommandSender - The executor of the command.
-     * @param player Player - The target player (may be self).
+     * @param player Player - The target player (might be self).
      * @param gamemode GameMode - The gamemode to set the player to.
      * @return boolean - Success
      */
