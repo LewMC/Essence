@@ -178,9 +178,9 @@ public class Essence extends JavaPlugin {
     private void initFileSystem() {
         saveDefaultConfig();
 
-        File languageFile = new File(getDataFolder() + File.separator + "language" + File.separator + "en-gb.yml");
+        File languageFile = new File(getDataFolder() + File.separator + "language" + File.separator + "en-GB.yml");
         if (!languageFile.exists()) {
-            saveResource("language/en-gb.yml", false);
+            saveResource("language/en-GB.yml", false);
         }
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");

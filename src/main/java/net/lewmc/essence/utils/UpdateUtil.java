@@ -90,10 +90,10 @@ public class UpdateUtil {
      * Updates Essence's language files.
      */
     public void UpdateLanguage() {
-        File languageFile = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "en-gb.yml");
+        File languageFile = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "en-GB.yml");
 
         try {
-            ConfigUpdater.update(plugin, "language/en-gb.yml", languageFile);
+            ConfigUpdater.update(plugin, "language/en-GB.yml", languageFile);
         } catch (IOException e) {
             this.log.warn("Unable to update en-gb language file: "+e);
         }

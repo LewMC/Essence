@@ -42,7 +42,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -58,7 +58,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -76,7 +76,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -96,7 +96,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -118,7 +118,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -142,7 +142,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -161,7 +161,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -181,7 +181,7 @@ public class MessageUtil {
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-gb.yml");
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-GB.yml");
         }
     }
 
