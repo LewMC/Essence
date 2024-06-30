@@ -1,9 +1,9 @@
 package net.lewmc.essence.commands.playerinfo;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.*;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -46,7 +46,23 @@ public class SeenCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("seen")) {
             if (permission.has("essence.playerinfo.seen")) {
-                // TODO: IMPLEMENT
+                if (args.length == 1) {
+                    OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
+                    if (p.hasPlayedBefore()) {
+                        FileUtil fu = new FileUtil(this.plugin);
+                        if (fu.exists(fu.playerDataFile(p.getUniqueId()))) {
+                            fu.load(fu.playerDataFile(p.getUniqueId()));
+                            message.send("seen", "lastseen", new String[] { p.getName(), fu.getString("user.last-seen") });
+                            fu.close();
+                        } else {
+                            message.send("generic","playernotfound");
+                        }
+                    } else {
+                        message.send("generic","playernotfound");
+                    }
+                } else {
+                    message.send("generic","playernotfound");
+                }
                 return true;
             } else {
                 return permission.not();
