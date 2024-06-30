@@ -228,3 +228,7 @@ info:
 seen:
   lastseen: "§6[Essence] §e{{1}} last logged in at {{2}}."
   neverseen: "§6[Essence] §e{{1}} does not have a recorded last login date."
+msg:
+  usage: "§4[Essence] §cUsage: /msg <player> <message>"
+reply:
+  usage: "§4[Essence] §cUsage: /reply <message>"

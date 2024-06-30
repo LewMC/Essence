@@ -198,6 +198,14 @@ commands:
     description: See information about a player.
     usage: /info <user>
     aliases: ['pinfo','playerinfo']
+  msg:
+    description: Send a private message to another player.
+    usage: /msg <user> <message>
+    aliases: ['message', 'pm']
+  reply:
+    description: Reply to the last private message sent to you.
+    usage: /reply <message>
+    aliases: ['r']
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -380,8 +388,14 @@ permissions:
     default: op
     children:
       essence.chat.broadcast: true
+      essence.chat.msg: true
+      essence.chat.reply: true
   essence.chat.broadcast:
     description: Allows players to broadcast a message to chat.
+  essence.chat.msg:
+    description: Allows players to privately message.
+  essence.chat.reply:
+    description: Allows players to reply to private messages.
   essence.economy.*:
     description: Allows players to access all economy commands.
     default: op
