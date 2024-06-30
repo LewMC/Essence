@@ -1,7 +1,7 @@
 #Translate Essence!
 #https://crowdin.com/project/lewmc-essence
 meta:
-  language: Français
+  language: British English
   author: LewMC
 about:
   version: "§6[Essence] §eRunning Essence version {{1}}."
@@ -215,3 +215,8 @@ kit:
   nopermission: "§4[Essence] §cYou do not have access to this kit."
   notexist: "§4[Essence] §cThis kit does not exist."
   done: "§2[Essence] §aYou now have the {{1}} kit."
+info:
+  lastname: "§6[Essence] §eLast known name: {{1}}."
+  lastseen: "§6[Essence] §eLast seen: {{1}}."
+seen:
+  lastseen: "§6[Essence] §e{{1}} was last seen at {{2}}."
