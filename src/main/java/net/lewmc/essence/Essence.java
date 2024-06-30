@@ -187,7 +187,7 @@ public class Essence extends JavaPlugin {
 
         File zhCN = new File(getDataFolder() + File.separator + "language" + File.separator + "zh-CN.yml");
         if (!zhCN.exists()) {
-            saveResource("language/zn-CN.yml", false);
+            saveResource("language/zh-CN.yml", false);
         }
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
