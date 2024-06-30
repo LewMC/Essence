@@ -95,6 +95,7 @@ public class UpdateUtil {
 
         FileUtil enGb = new FileUtil(this.plugin);
         if (enGb.exists("language/en-gb.yml")) {
+            this.log.info("Old language file found, migrating...");
             this.plugin.saveResource("language/en-GB.yml", false);
             if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
                 this.plugin.getConfig().set("language", "en-GB");
@@ -102,6 +103,8 @@ public class UpdateUtil {
             }
             enGb.delete("language/en-gb.yml");
             enGb.close();
+            this.log.info("Old language file migrated successfully.");
+            this.log.info("If you experience any issues, please restart your server.");
         }
 
         try {
