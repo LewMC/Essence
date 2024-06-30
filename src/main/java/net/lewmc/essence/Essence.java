@@ -3,8 +3,7 @@ package net.lewmc.essence;
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.commands.KitCommand;
 import net.lewmc.essence.commands.TeamCommands;
-import net.lewmc.essence.commands.admin.InfoCommand;
-import net.lewmc.essence.commands.admin.SeenCommand;
+import net.lewmc.essence.commands.admin.*;
 import net.lewmc.essence.commands.chat.*;
 import net.lewmc.essence.commands.economy.BalanceCommand;
 import net.lewmc.essence.commands.economy.PayCommand;
@@ -31,6 +30,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -287,9 +287,9 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("info")) { this.getCommand("info").setExecutor(new InfoCommand(this)); }
         } catch (NullPointerException e) {
             this.log.severe("Unable to load Essence commands.");
+            this.log.severe(e.getMessage());
             this.log.severe("");
-            this.log.severe("Error Message: " + e.getMessage());
-            this.log.severe("Cause: " + e.getCause());
+            this.log.severe(Arrays.toString(e.getStackTrace()));
             this.log.info("");
         }
     }
