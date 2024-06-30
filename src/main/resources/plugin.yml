@@ -422,13 +422,13 @@ permissions:
       essence.kits.all: true
   essence.kits.all:
     description: Allows players to access all kits.
-  essence.playerinfo.*:
+  essence.admin.*:
     description: Allows players to see information about other players.
     default: op
     children:
       essence.playerinfo.seen: true
       essence.playerinfo.info: true
-  essence.playerinfo.seen:
+  essence.admin.seen:
     description: Allows players to see when the player was last online.
-  essence.playerinfo.info:
+  essence.admin.info:
     description: Allows players to see information about the player.

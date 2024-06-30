@@ -1,4 +1,4 @@
-package net.lewmc.essence.commands.playerinfo;
+package net.lewmc.essence.commands.admin;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
