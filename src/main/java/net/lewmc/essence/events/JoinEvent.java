@@ -72,6 +72,11 @@ public class JoinEvent implements Listener {
         playerFile.close();
     }
 
+    /**
+     * Spawns the player.
+     * @param event PlayerJoinEvent - The event
+     * @param log LogUtil - Logging system.
+     */
     private void spawn(PlayerJoinEvent event, LogUtil log) {
         MessageUtil message = new MessageUtil(event.getPlayer(), this.plugin);
 
@@ -132,6 +137,11 @@ public class JoinEvent implements Listener {
         spawnConfiguration.close();
     }
 
+    /**
+     * Managers a player's first join.
+     * @param event PlayerJoinEvent - The event
+     * @param log LogUtil - Logging system.
+     */
     private void firstJoin(PlayerJoinEvent event, LogUtil log) {
         KitUtil kit = new KitUtil(this.plugin, event.getPlayer());
         if (this.plugin.getConfig().get("spawn-kits") != null && !Objects.equals(this.plugin.getConfig().getString("spawn-kits"), "false")) {
@@ -142,6 +152,10 @@ public class JoinEvent implements Listener {
         }
     }
 
+    /**
+     * Displays the MOTD
+     * @param event PlayerJoinEvent - The event
+     */
     private void motd(PlayerJoinEvent event) {
         if (plugin.getConfig().getString("motd.message") != null) {
             String message = plugin.getConfig().getString("motd.message");
