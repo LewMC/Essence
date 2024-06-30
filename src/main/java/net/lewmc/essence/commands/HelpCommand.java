@@ -96,6 +96,13 @@ public class HelpCommand {
                 this.message.PrivateMessage("help", "bal");
                 this.blank(6);
                 this.message.PrivateMessage("help", "page", "1", "1");
+            } else if ("admin".equalsIgnoreCase(args[1])) {
+                this.message.PrivateMessage("help", "admin");
+                this.message.PrivateMessage("help", "info");
+                this.message.PrivateMessage("help", "seen");
+                this.message.PrivateMessage("help", "reload");
+                this.blank(5);
+                this.message.PrivateMessage("help", "page", "1", "1");
             } else if ("team".equalsIgnoreCase(args[1])) {
                 if (args.length < 3 || args[2].equals("1")) {
                     this.message.PrivateMessage("help", "team");
@@ -126,7 +133,8 @@ public class HelpCommand {
             this.message.PrivateMessage("help", "helpstats");
             this.message.PrivateMessage("help", "helpeconomy");
             this.message.PrivateMessage("help", "helpteam");
-            this.blank(2);
+            this.message.PrivateMessage("help", "helpadmin");
+            this.blank(1);
             this.message.PrivateMessage("help", "page", "1", "1");
         }
         return true;

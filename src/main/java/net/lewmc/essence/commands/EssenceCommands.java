@@ -2,6 +2,7 @@ package net.lewmc.essence.commands;
 
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,6 +41,16 @@ public class EssenceCommands implements CommandExecutor {
                 if ("help".equals(args[0])) {
                     HelpCommand helpCommand = new HelpCommand(message, args);
                     return helpCommand.runHelpCommand();
+                } else if ("reload".equals(args[0])) {
+                    PermissionHandler perms = new PermissionHandler(commandSender, message);
+                    if (perms.has("essence.admin.reload")) {
+                        this.plugin.reloadConfig();
+                        this.plugin.verbose = this.plugin.getConfig().getBoolean("verbose");
+                        message.send("generic", "reload");
+                        return true;
+                    } else {
+                        return perms.not();
+                    }
                 }
             } else {
                 message.PrivateMessage("about", "version", plugin.getDescription().getVersion());

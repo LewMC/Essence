@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class InfoCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the InfoCommand class.
@@ -26,7 +25,6 @@ public class InfoCommand implements CommandExecutor {
      */
     public InfoCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -44,11 +42,11 @@ public class InfoCommand implements CommandExecutor {
             String[] args
     ) {
         MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("info")) {
             if (permission.has("essence.playerinfo.info")) {
+                LogUtil log = new LogUtil(this.plugin);
                 if (args.length == 1) {
                     OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                     if (p.hasPlayedBefore()) {

@@ -191,6 +191,12 @@ commands:
     description: Cancel a teleport request.
     usage: /tpcancel
     aliases: ['/canceltp']
+  seen:
+    description: See when a player was last online.
+    usage: /seen <user>
+  info:
+    description: See information about a player.
+    usage: /info <user>
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -428,7 +434,10 @@ permissions:
     children:
       essence.admin.seen: true
       essence.admin.info: true
+      essence.admin.reload: true
   essence.admin.seen:
     description: Allows players to see when the player was last online.
   essence.admin.info:
     description: Allows players to see information about the player.
+  essence.admin.reload:
+    description: Allows players to reload Essence.

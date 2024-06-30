@@ -3,8 +3,7 @@ package net.lewmc.essence;
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.commands.KitCommand;
 import net.lewmc.essence.commands.TeamCommands;
-import net.lewmc.essence.commands.admin.InfoCommand;
-import net.lewmc.essence.commands.admin.SeenCommand;
+import net.lewmc.essence.commands.admin.*;
 import net.lewmc.essence.commands.chat.*;
 import net.lewmc.essence.commands.economy.BalanceCommand;
 import net.lewmc.essence.commands.economy.PayCommand;
@@ -31,6 +30,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -187,7 +187,7 @@ public class Essence extends JavaPlugin {
 
         File zhCN = new File(getDataFolder() + File.separator + "language" + File.separator + "zh-CN.yml");
         if (!zhCN.exists()) {
-            saveResource("language/zn-CN.yml", false);
+            saveResource("language/zh-CN.yml", false);
         }
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
@@ -286,7 +286,10 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("seen")) { this.getCommand("seen").setExecutor(new SeenCommand(this)); }
             if (command.isEnabled("info")) { this.getCommand("info").setExecutor(new InfoCommand(this)); }
         } catch (NullPointerException e) {
-            this.log.severe("LoadCommands: Unable to load Essence commands.");
+            this.log.severe("Unable to load Essence commands.");
+            this.log.severe(e.getMessage());
+            this.log.severe("");
+            this.log.severe(Arrays.toString(e.getStackTrace()));
             this.log.info("");
         }
     }

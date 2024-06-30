@@ -26,6 +26,7 @@ generic:
   missingpermission: "§4[Essence] §cYou don't have the required permission to run this command."
   nofolia: "§4[Essence] §cThis command cannot run on Folia-based server software."
   helpfolia: "§4[Essence] §cIf you'd like to help us add support for Folia please visit github.com/lewmc/essence"
+  reload: "§2[Essence] §aReloaded."
 other:
   respawnset: "§6[Essence] §eRespawn point set."
 help:
@@ -84,6 +85,10 @@ help:
   teamtransfer: "§6[Essence] §e/team changeleader <name> - Change leader."
   teamkick: "§6[Essence] §e/team kick <name> - Kick a member from your team."
   teamdisband: "§6[Essence] §e/team disband - Disband (delete) your team."
+  admin: "§6[Essence] ------- Essence Help - Administration ------"
+  seen: "§6[Essence] §e/seen <name> - Last seen player."
+  info: "§6[Essence] §e/info <name> - View player information."
+  reload: "§6[Essence] §e/reload - Reload Essence."
   help: "§6[Essence] --------------- Essence Help ---------------"
   helpinventory: "§6[Essence] §e/es help inventory - Inventory commands."
   helpgamemode: "§6[Essence] §e/es help gamemode - Gamemode commands."
@@ -91,6 +96,7 @@ help:
   helpstats: "§6[Essence] §e/es help stats - Manage your stats."
   helpeconomy: "§6[Essence] §e/es help economy - Economy commands."
   helpteam: "§6[Essence] §e/es help team - Team commands."
+  helpadmin: "§6[Essence] §e/es help admin - Administration."
 tprandom:
   searching: "§6[Essence] §eFinding somewhere to go..."
   teleporting: "§2[Essence] §aTeleporting..."
@@ -217,6 +223,6 @@ kit:
   done: "§2[Essence] §aYou now have the {{1}} kit."
 info:
   lastname: "§6[Essence] §eLast known name: {{1}}."
-  lastseen: "§6[Essence] §eLast seen: {{1}}."
+  lastseen: "§6[Essence] §eLast logged in: {{1}}."
 seen:
-  lastseen: "§6[Essence] §e{{1}} was last seen at {{2}}."
+  lastseen: "§6[Essence] §e{{1}} last logged in at {{2}}."

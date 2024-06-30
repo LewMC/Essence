@@ -33,7 +33,7 @@ public class EssenceTabCompleter implements TabCompleter {
         if (args.length == 1) {
             keys = new String[]{"help"};
         } else if (args.length == 2) {
-            keys = new String[]{"inventory", "gamemode", "teleport", "stats", "economy", "team"};
+            keys = new String[]{"inventory", "gamemode", "teleport", "stats", "economy", "team", "admin"};
         } else if (
                 args.length == 3 && (
                 args[1].equalsIgnoreCase("teleport") ||

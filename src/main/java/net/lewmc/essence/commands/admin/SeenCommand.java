@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SeenCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the SeenCommand class.
@@ -23,7 +22,6 @@ public class SeenCommand implements CommandExecutor {
      */
     public SeenCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
@@ -41,7 +39,6 @@ public class SeenCommand implements CommandExecutor {
             String[] args
     ) {
         MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("seen")) {
