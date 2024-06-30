@@ -428,7 +428,10 @@ permissions:
     children:
       essence.admin.seen: true
       essence.admin.info: true
+      essence.admin.reload: true
   essence.admin.seen:
     description: Allows players to see when the player was last online.
   essence.admin.info:
     description: Allows players to see information about the player.
+  essence.admin.reload:
+    description: Allows players to reload Essence.
