@@ -224,5 +224,7 @@ kit:
 info:
   lastname: "§6[Essence] §eLast known name: {{1}}."
   lastseen: "§6[Essence] §eLast logged in: {{1}}."
+  neverseen: "§6[Essence] §eLast logged in: Never."
 seen:
   lastseen: "§6[Essence] §e{{1}} last logged in at {{2}}."
+  neverseen: "§6[Essence] §e{{1}} does not have a recorded last login date."
