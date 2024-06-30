@@ -203,6 +203,12 @@ permissions:
       essence.stats.*: true
       essence.stats.other.*: true
       essence.home.*: true
+      essence.economy.*: true
+      essence.chat.*: true
+      essence.playerinfo.*: true
+      essence.team.*: true
+      essence.spawn.*: true
+      essence.kits.*: true
   essence.gamemode.*:
     description: Allows players to switch to any gamemode.
     default: op
@@ -416,3 +422,13 @@ permissions:
       essence.kits.all: true
   essence.kits.all:
     description: Allows players to access all kits.
+  essence.admin.*:
+    description: Allows players to see information about other players.
+    default: op
+    children:
+      essence.admin.seen: true
+      essence.admin.info: true
+  essence.admin.seen:
+    description: Allows players to see when the player was last online.
+  essence.admin.info:
+    description: Allows players to see information about the player.

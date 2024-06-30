@@ -3,6 +3,8 @@ package net.lewmc.essence;
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.commands.KitCommand;
 import net.lewmc.essence.commands.TeamCommands;
+import net.lewmc.essence.commands.admin.InfoCommand;
+import net.lewmc.essence.commands.admin.SeenCommand;
 import net.lewmc.essence.commands.chat.*;
 import net.lewmc.essence.commands.economy.BalanceCommand;
 import net.lewmc.essence.commands.economy.PayCommand;
@@ -280,6 +282,9 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("balance")) { this.getCommand("balance").setExecutor(new BalanceCommand(this)); }
 
             if (command.isEnabled("team")) { this.getCommand("team").setExecutor(new TeamCommands(this)); }
+
+            if (command.isEnabled("seen")) { this.getCommand("seen").setExecutor(new SeenCommand(this)); }
+            if (command.isEnabled("info")) { this.getCommand("info").setExecutor(new InfoCommand(this)); }
         } catch (NullPointerException e) {
             this.log.severe("LoadCommands: Unable to load Essence commands.");
             this.log.info("");
