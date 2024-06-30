@@ -91,33 +91,38 @@ public class UpdateUtil {
      * Updates Essence's language files.
      */
     public void UpdateLanguage() {
-        File enGB = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "en-GB.yml");
-        File zhCN = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "zh-CN.yml");
-
-        try {
-            ConfigUpdater.update(plugin, "language/en-GB.yml", enGB);
-            ConfigUpdater.update(plugin, "language/zh-CN.yml", zhCN);
-        } catch (IOException e) {
-            this.log.warn("Unable to update en-gb language file: "+e);
+        // en-GB
+        File enGB = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "en-GB.yml");
+        if (!enGB.exists()) {
+            this.plugin.saveResource("language/en-GB.yml", false);
+        } else {
+            try {
+                ConfigUpdater.update(plugin, "language/en-GB.yml", enGB);
+            } catch (IOException e) {
+                this.log.warn("Unable to update en-GB language file: "+e);
+            }
         }
 
-        FileUtil enGb = new FileUtil(this.plugin);
-        if (enGb.exists("language/en-gb.yml")) {
-            this.log.info("Old language file found, migrating...");
-            if (!enGb.exists("language/en-GB.yml")) {
-                this.plugin.saveResource("language/en-GB.yml", false);
+        // zh-CN
+        File zhCN = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "zh-CN.yml");
+        if (!zhCN.exists()) {
+            this.plugin.saveResource("language/zh-CN.yml", false);
+        } else {
+            try {
+                ConfigUpdater.update(plugin, "language/zh-CN.yml", zhCN);
+            } catch (IOException e) {
+                this.log.warn("Unable to update zh-CN language file: "+e);
             }
-            enGb.load("language/en-gb.yml");
-            if (enGb.delete("language/en-gb.yml")) {
-                this.log.info("Old language file migrated successfully.");
-                this.log.info("If you experience any issues, please restart your server.");
-            } else {
-                this.log.warn("Unable to migrate old language file.");
-                this.log.warn("If you experience any issues, please delete your config.yml file.");
-            }
-            enGb.close();
         }
 
+        this.migrate();
+    }
+
+    /**
+     * Migrates old Essence files.
+     */
+    private void migrate() {
+        // Language.
         if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
             FileUtil config = new FileUtil(this.plugin);
             config.load("config.yml");
