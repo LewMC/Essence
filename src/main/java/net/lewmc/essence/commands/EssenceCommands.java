@@ -58,13 +58,12 @@ public class EssenceCommands implements CommandExecutor {
             } else {
                 message.send("about", "version", new String[] { plugin.getDescription().getVersion() });
                 message.send("about", "description");
+                message.send("about", "author");
                 if (!Objects.equals(this.plugin.getConfig().getString("language"), "en-GB")) {
                     FileUtil lang = new FileUtil(this.plugin);
                     lang.load("language/"+this.plugin.getConfig().getString("language")+".yml");
                     message.send("about", "authorLang", new String[] { lang.getString("meta.language"), lang.getString("meta.author") });
                     lang.close();
-                } else {
-                    message.send("about", "author");
                 }
                 message.send("about", "issues");
                 message.send("about", "more");

@@ -1,15 +1,12 @@
 package net.lewmc.essence;
 
 import com.tcoded.folialib.FoliaLib;
-import net.lewmc.essence.commands.KitCommand;
-import net.lewmc.essence.commands.TeamCommands;
+import net.lewmc.essence.commands.*;
 import net.lewmc.essence.commands.admin.*;
 import net.lewmc.essence.commands.chat.*;
 import net.lewmc.essence.commands.economy.BalanceCommand;
 import net.lewmc.essence.commands.economy.PayCommand;
 import net.lewmc.essence.commands.inventories.*;
-import net.lewmc.essence.commands.EssenceCommands;
-import net.lewmc.essence.commands.GamemodeCommands;
 import net.lewmc.essence.commands.stats.*;
 import net.lewmc.essence.commands.teleportation.*;
 import net.lewmc.essence.commands.teleportation.home.*;
@@ -222,6 +219,11 @@ public class Essence extends JavaPlugin {
         if (!kitsFile.exists()) {
             saveResource("data/kits.yml", false);
         }
+
+        File rulesFile = new File(getDataFolder() + File.separator + "rules.txt");
+        if (!rulesFile.exists()) {
+            saveResource("rules.txt", false);
+        }
     }
 
     /**
@@ -305,6 +307,8 @@ public class Essence extends JavaPlugin {
 
             if (command.isEnabled("seen")) { this.getCommand("seen").setExecutor(new SeenCommand(this)); }
             if (command.isEnabled("info")) { this.getCommand("info").setExecutor(new InfoCommand(this)); }
+
+            if (command.isEnabled("rules")) { this.getCommand("rules").setExecutor(new RulesCommands(this)); }
         } catch (NullPointerException e) {
             this.log.severe("Unable to load Essence commands.");
             this.log.severe(e.getMessage());
