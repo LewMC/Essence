@@ -5,10 +5,11 @@ meta:
   author: LewMC
 about:
   version: "§6[Essence] §eVersion d'Essence {{1}} en cours."
-  description: "§6[Essence] §eEssence is a lightweight and customisable plugin that adds warps, homes, and more."
+  description: "§6[Essence] §eEssence est un plugin léger et personnalisable qui ajoute des chaînes, des maisons et bien plus encore."
   author: "§6[Essence] §eCréé par LewMC"
-  issues: "§4[Essence] §cPlease report any bugs or issues to github.com/lewmc/essence"
-  more: "§6[Essence] §eUse /es help for more commands."
+  authorLang: "§6[Essence] §eCreated by LewMC - Translated into {{1}} by {{2}}."
+  issues: "§4[Essence] §cVeuillez signaler tout bug ou problème à github.com/lewmc/essence"
+  more: "§6[Essence] §eUtilisez /es help pour plus de commandes."
 broadcast:
   usage: "§4[Essence] §cUsage: /broadcast <message>"
 economy:
