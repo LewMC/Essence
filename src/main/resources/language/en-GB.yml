@@ -30,6 +30,7 @@ generic:
   reload: "§2[Essence] §aReloaded."
 other:
   respawnset: "§6[Essence] §eRespawn point set."
+  rule: "§a{{1}}"
 help:
   page: "§6[Essence] ----------------- Page {{1}}/{{2}} -----------------"
   inventory: "§6[Essence] --------- Essence Help - Inventory ---------"
@@ -94,6 +95,8 @@ help:
   broadcast: "§6[Essence] §e/broadcast <message> - Broadcast a message"
   msg: "§6[Essence] §e/msg <name> <message> - Message a player."
   reply: "§6[Essence] §e/reply <message> - Reply to your last /msg."
+  misc: "§6[Essence] -------- Essence Help - Miscellaneous ------"
+  rules: "§6[Essence] §e/rules - View the server rules."
   help: "§6[Essence] --------------- Essence Help ---------------"
   helpchat: "§6[Essence] §e/es help chat - Chat commands."
   helpinventory: "§6[Essence] §e/es help inventory - Inventory commands."
@@ -103,6 +106,7 @@ help:
   helpeconomy: "§6[Essence] §e/es help economy - Economy commands."
   helpteam: "§6[Essence] §e/es help team - Team commands."
   helpadmin: "§6[Essence] §e/es help admin - Administration."
+  helpmisc: "§6[Essence] §e/es help misc - Miscellaneous."
 tprandom:
   searching: "§6[Essence] §eFinding somewhere to go..."
   teleporting: "§2[Essence] §aTeleporting..."
