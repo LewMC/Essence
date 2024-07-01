@@ -1,5 +1,6 @@
 package net.lewmc.essence.commands;
 
+import net.lewmc.essence.utils.FileUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.PermissionHandler;
@@ -7,6 +8,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class EssenceCommands implements CommandExecutor {
     private final Essence plugin;
@@ -53,11 +56,18 @@ public class EssenceCommands implements CommandExecutor {
                     }
                 }
             } else {
-                message.PrivateMessage("about", "version", plugin.getDescription().getVersion());
-                message.PrivateMessage("about", "description");
-                message.PrivateMessage("about", "author");
-                message.PrivateMessage("about", "issues");
-                message.PrivateMessage("about", "more");
+                message.send("about", "version", new String[] { plugin.getDescription().getVersion() });
+                message.send("about", "description");
+                if (!Objects.equals(this.plugin.getConfig().getString("language"), "en-GB")) {
+                    FileUtil lang = new FileUtil(this.plugin);
+                    lang.load("language/"+this.plugin.getConfig().getString("language")+".yml");
+                    message.send("about", "authorLang", new String[] { lang.getString("meta.language"), lang.getString("meta.author") });
+                    lang.close();
+                } else {
+                    message.send("about", "author");
+                }
+                message.send("about", "issues");
+                message.send("about", "more");
 
                 return true;
             }

@@ -116,6 +116,18 @@ public class UpdateUtil {
                 this.log.warn("Unable to update zh-CN language file: "+e);
             }
         }
+
+        // fr-FR
+        File frFR = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "fr-FR.yml");
+        if (!frFR.exists()) {
+            this.plugin.saveResource("language/fr-FR.yml", false);
+        } else {
+            try {
+                ConfigUpdater.update(plugin, "language/fr-FR.yml", frFR);
+            } catch (IOException e) {
+                this.log.warn("Unable to update fr-FR language file: "+e);
+            }
+        }
     }
 
     /**
