@@ -1,12 +1,12 @@
 #Translate Essence!
 #https://crowdin.com/project/lewmc-essence
 meta:
-  language: British English
+  language: Français
   author: LewMC
 about:
-  version: "§6[Essence] §eRunning Essence version {{1}}."
+  version: "§6[Essence] §eVersion d'Essence {{1}} en cours."
   description: "§6[Essence] §eEssence is a lightweight and customisable plugin that adds warps, homes, and more."
-  author: "§6[Essence] §eCreated by LewMC"
+  author: "§6[Essence] §eCréé par LewMC"
   issues: "§4[Essence] §cPlease report any bugs or issues to github.com/lewmc/essence"
   more: "§6[Essence] §eUse /es help for more commands."
 broadcast:
