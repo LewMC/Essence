@@ -26,6 +26,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -59,6 +60,13 @@ public class Essence extends JavaPlugin {
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
      */
     public HashMap<String, String[]> teleportRequests = new HashMap<>();
+
+    /**
+     * Stores message history.
+     * CommandSender = The receiver.
+     * CommandSender = The sender.
+     */
+    public HashMap<CommandSender, CommandSender> msgHistory = new HashMap<>();
 
     /**
      * This function runs when Essence is enabled.
@@ -186,15 +194,7 @@ public class Essence extends JavaPlugin {
     private void initFileSystem() {
         saveDefaultConfig();
 
-        File enGB = new File(getDataFolder() + File.separator + "language" + File.separator + "en-GB.yml");
-        if (!enGB.exists()) {
-            saveResource("language/en-GB.yml", false);
-        }
-
-        File zhCN = new File(getDataFolder() + File.separator + "language" + File.separator + "zh-CN.yml");
-        if (!zhCN.exists()) {
-            saveResource("language/zh-CN.yml", false);
-        }
+        // Language files are in UpdateUtil!
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
         if (!statsFolder.exists() && !statsFolder.mkdirs()) {
@@ -295,6 +295,8 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("back")) { this.getCommand("back").setExecutor(new BackCommand(this)); }
 
             if (command.isEnabled("broadcast")) { this.getCommand("broadcast").setExecutor(new BroadcastCommand(this)); }
+            if (command.isEnabled("msg")) { this.getCommand("msg").setExecutor(new MsgCommand(this)); }
+            if (command.isEnabled("reply")) { this.getCommand("reply").setExecutor(new ReplyCommand(this)); }
 
             if (command.isEnabled("pay")) { this.getCommand("pay").setExecutor(new PayCommand(this)); }
             if (command.isEnabled("balance")) { this.getCommand("balance").setExecutor(new BalanceCommand(this)); }
