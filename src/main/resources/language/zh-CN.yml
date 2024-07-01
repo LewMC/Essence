@@ -89,7 +89,12 @@ help:
   seen: "§6[Essence] §e/seen <name> - 查看某人最后退出的时间."
   info: "§6[Essence] §e/info <name> - 查看某玩家信息."
   reload: "§6[Essence] §e/reload - 重载Essence."
+  chat: "§6[Essence] ------------ Essence Help - Chat -----------"
+  broadcast: "§6[Essence] §e/broadcast <message> - Broadcast a message"
+  msg: "§6[Essence] §e/msg <name> <message> - Message a player."
+  reply: "§6[Essence] §e/reply <message> - Reply to your last /msg."
   help: "§6[Essence] --------------- Essence 帮助 ---------------"
+  helpchat: "§6[Essence] §e/es help chat - Chat commands."
   helpinventory: "§6[Essence] §e/es help inventory - 仓库命令."
   helpgamemode: "§6[Essence] §e/es help gamemode - 游戏模式命令."
   helpteleport: "§6[Essence] §e/es help teleport - 传送命令."
@@ -228,3 +233,9 @@ info:
 seen:
   lastseen: "§6[Essence] §e{{1}} 最后登录在 {{2}}."
   neverseen: "§6[Essence] §e{{1}} 没有记录最后的登录日期."
+msg:
+  usage: "§4[Essence] §cUsage: /msg <player> <message>"
+  send: "§6[§e{{1}} §6-> §e{{2}}§6] §f{{3}}"
+reply:
+  usage: "§4[Essence] §cUsage: /reply <message>"
+  none: "§4[Essence] §cYou don't have anyone to reply to!"
