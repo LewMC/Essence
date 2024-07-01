@@ -8,6 +8,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
 public class ReplyCommand implements CommandExecutor {
     private final Essence plugin;
 
@@ -38,14 +40,30 @@ public class ReplyCommand implements CommandExecutor {
             MessageUtil message = new MessageUtil(commandSender, plugin);
             PermissionHandler permission = new PermissionHandler(commandSender, message);
             if (!permission.has("essence.chat.reply")) {
-                permission.not();
-                return true;
+                return permission.not();
             }
 
-            if (args.length > 1) {
-                // TODO: IMPLEMENT
+            if (args.length > 0) {
+                if (this.plugin.msgHistory.containsKey(commandSender)) {
+                    CommandSender p = this.plugin.msgHistory.get(commandSender);
+
+                    String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+                    String[] repl = new String[]{commandSender.getName(), p.getName(), msg};
+                    message.send("msg", "send", repl);
+                    message.sendTo(p, "msg", "send", repl);
+
+                    if (this.plugin.msgHistory.containsKey(p)) {
+                        this.plugin.msgHistory.replace(p, commandSender);
+                    } else {
+                        this.plugin.msgHistory.put(p, commandSender);
+                    }
+                } else {
+                    message.send("reply", "none");
+                }
+
+                return true;
             } else {
-                message.PrivateMessage("reply","usage");
+                message.send("reply","usage");
             }
 
             return true;

@@ -43,8 +43,7 @@ public class MsgCommand implements CommandExecutor {
             PermissionHandler permission = new PermissionHandler(commandSender, message);
 
             if (!permission.has("essence.chat.msg")) {
-                permission.not();
-                return true;
+                return permission.not();
             }
 
             if (args.length > 1) {

@@ -238,3 +238,4 @@ msg:
   send: "§6[§e{{1}} §6-> §e{{2}}§6] §f{{3}}"
 reply:
   usage: "§4[Essence] §cUsage: /reply <message>"
+  none: "§4[Essence] §cYou don't have anyone to reply to!"
