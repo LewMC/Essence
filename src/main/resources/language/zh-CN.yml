@@ -26,7 +26,7 @@ generic:
   missingpermission: "§4[Essence] §c你没有权限"
   nofolia: "§4[Essence] §c该命令不能在Folia端运行."
   helpfolia: "§4[Essence] §c如果您想帮助我们添加对Folia的支持，请访问 github.com/lewmc/essence"
-  reload: "§2[Essence] §aReloaded."
+  reload: "§2[Essence] §a已重载配置."
 other:
   respawnset: "§6[Essence] §e重生点设置."
 help:
@@ -85,10 +85,10 @@ help:
   teamtransfer: "§6[Essence] §e/team changeleader <name> - 变更领导者."
   teamkick: "§6[Essence] §e/team kick <name> - 提出团队中的一名成员."
   teamdisband: "§6[Essence] §e/team disband - 解散（删除）你的团队."
-  admin: "§6[Essence] ------- Essence Help - Administration ------"
-  seen: "§6[Essence] §e/seen <name> - Last seen player."
-  info: "§6[Essence] §e/info <name> - View player information."
-  reload: "§6[Essence] §e/reload - Reload Essence."
+  admin: "§6[Essence] ------- Essence 帮助 - 管理员命令 ------"
+  seen: "§6[Essence] §e/seen <name> - 查看某人最后退出的时间."
+  info: "§6[Essence] §e/info <name> - 查看某玩家信息."
+  reload: "§6[Essence] §e/reload - 重载Essence."
   help: "§6[Essence] --------------- Essence 帮助 ---------------"
   helpinventory: "§6[Essence] §e/es help inventory - 仓库命令."
   helpgamemode: "§6[Essence] §e/es help gamemode - 游戏模式命令."
@@ -96,7 +96,7 @@ help:
   helpstats: "§6[Essence] §e/es help stats - 管理你的统计."
   helpeconomy: "§6[Essence] §e/es help economy - 经济命令."
   helpteam: "§6[Essence] §e/es help team - 团队命令."
-  helpadmin: "§6[Essence] §e/es help admin - Administration."
+  helpadmin: "§6[Essence] §e/es help admin - 管理员命令."
 tprandom:
   searching: "§6[Essence] §e正在寻找可以传送的地方......"
   teleporting: "§2[Essence] §a传送中......"
@@ -223,8 +223,8 @@ kit:
   done: "§2[Essence] §a您现在有了 {{1}} 礼包."
 info:
   lastname: "§6[Essence] §eLast known name: {{1}}."
-  lastseen: "§6[Essence] §eLast logged in: {{1}}."
-  neverseen: "§6[Essence] §eLast logged in: Never."
+  lastseen: "§6[Essence] §e最后登录时间: {{1}}."
+  neverseen: "§6[Essence] §e最后登录时间: 从未."
 seen:
-  lastseen: "§6[Essence] §e{{1}} last logged in at {{2}}."
-  neverseen: "§6[Essence] §e{{1}} does not have a recorded last login date."
+  lastseen: "§6[Essence] §e{{1}} 最后登录在 {{2}}."
+  neverseen: "§6[Essence] §e{{1}} 没有记录最后的登录日期."
