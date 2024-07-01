@@ -54,6 +54,13 @@ public class MsgCommand implements CommandExecutor {
                         String[] repl = new String[] {commandSender.getName(), p.getName(), msg};
                         message.send("msg", "send", repl);
                         message.sendTo(p, "msg", "send", repl);
+
+                        if (this.plugin.msgHistory.containsKey(p)) {
+                            this.plugin.msgHistory.replace(p, commandSender);
+                        } else {
+                            this.plugin.msgHistory.put(p, commandSender);
+                        }
+
                         return true;
                     }
                 }

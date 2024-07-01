@@ -26,6 +26,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -59,6 +60,13 @@ public class Essence extends JavaPlugin {
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
      */
     public HashMap<String, String[]> teleportRequests = new HashMap<>();
+
+    /**
+     * Stores message history.
+     * CommandSender = The receiver.
+     * CommandSender = The sender.
+     */
+    public HashMap<CommandSender, CommandSender> msgHistory = new HashMap<>();
 
     /**
      * This function runs when Essence is enabled.
