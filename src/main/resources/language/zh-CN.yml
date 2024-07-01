@@ -233,6 +233,7 @@ kit:
   done: "§2[Essence] §a您现在有了 {{1}} 礼包."
 info:
   lastname: "§6[Essence] §e最后的已知玩家名: {{1}}."
+  uuid: "§6[Essence] §eUUID: {{1}}"
   lastseen: "§6[Essence] §e最后登录时间: {{1}}."
   neverseen: "§6[Essence] §e最后登录时间: 从未."
 seen:
