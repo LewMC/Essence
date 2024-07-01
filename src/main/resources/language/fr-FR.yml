@@ -7,15 +7,15 @@ about:
   version: "§6[Essence] §eVersion d'Essence {{1}} en cours."
   description: "§6[Essence] §eEssence est un plugin léger et personnalisable qui ajoute des chaînes, des maisons et bien plus encore."
   author: "§6[Essence] §eCréé par LewMC"
-  authorLang: "§6[Essence] §eTranslated into {{1}} by {{2}}."
+  authorLang: "§6[Essence] §eTraduit en {{1}} par {{2}}."
   issues: "§4[Essence] §cVeuillez signaler tout bug ou problème à github.com/lewmc/essence"
   more: "§6[Essence] §eUtilisez /es help pour plus de commandes."
 broadcast:
-  usage: "§4[Essence] §cUsage: /broadcast <message>"
+  usage: "§4[Essence] §cUtilisation: /broadcast <message>"
 economy:
   balance: "§6[Essence] §eYour balance is: {{1}}"
   insufficientfunds: "§4[Essence] §cInsufficient funds."
-  payusage: "§4[Essence] §cUsage: /pay <player> <amount>"
+  payusage: "§4[Essence] §cUtilisation: /pay <joueur> <montant>"
   sent: "§2[Essence] §aYou sent {{1}} to {{2}}"
   received: "§2[Essence] §aYou received {{1}} from {{2}}"
 generic:
@@ -138,9 +138,9 @@ teamhome:
 warp:
   notfound: "§4[Essence] §cWarp {{1}} does not exist. Use /warps for a list of warps."
   deleted: "§2[Essence] §aWarp {{1}} has been deleted."
-  usage: "§4[Essence] §cUsage: /warp <name> - use /warps for a list."
-  delusage: "§4[Essence] §cUsage: /delwarp <name>"
-  setusage: "§4[Essence] §cUsage: /setwarp <name>"
+  usage: "§4[Essence] §cUtilisation: /warp <nom> - utilisez /warps pour une liste."
+  delusage: "§4[Essence] §cUtilisation: /delwarp <nom>"
+  setusage: "§4[Essence] §cUtilisation: /setwarp <nom>"
   specialchars: "§4[Essence] §cWarps cannot contain special characters!"
   alreadyexists: "§4[Essence] §cA warp with this name already exists."
   created: "§2[Essence] §aCreated warp '{{1}}'."
@@ -153,7 +153,7 @@ teleport:
   toplayer: "§2[Essence] §aTeleporting {{1}} to {{2}}..."
   tocoord: "§2[Essence] §aTeleporting to {{1}}..."
   playertocoord: "§2[Essence] §aTeleporting {{1}} to {{2}}..."
-  usage: "§4[Essence] §cUsage: /tp <player> OR /tp <player> <player> OR /tp <x> <y> <z> OR /tp <player> <x> <y> <z>"
+  usage: "§4[Essence] §cUtilisation: /tp <joueur> OU /tp <joueur> <joueur> OU /tp <x> <y> <z> OU /tp <joueur> <x> <y> <z>"
   wait: "§6[Essence] §eTeleporting in {{1}} seconds..."
   tryagain: "§4[Essence] §cPlease wait {{1}} seconds before teleporting again."
   toggled: "§2[Essence] §aTeleportation requests {{1}}."
@@ -171,15 +171,15 @@ feed:
   serverfed: "§2[Essence] §aYou've been fed by a magical force."
   fedby: "§2[Essence] §aYou've been fed by {{1}}."
   beenfed: "§2[Essence] §aYou've been fed!"
-  usage: "§4[Essence] §cUsage: /feed <player>"
+  usage: "§4[Essence] §cUtilisation: /feed <joueur>"
 heal:
   healed: "§2[Essence] §aYou healed {{1}}."
   serverhealed: "§2[Essence] §aYou've been healed by a magical force."
   healedby: "§2[Essence] §aYou've been healed by {{1}}."
   beenhealed: "§2[Essence] §aYou've been healed!"
-  usage: "§4[Essence] §cUsage: /heal <player>"
+  usage: "§4[Essence] §cUtilisation: /heal <joueur>"
 gamemode:
-  usage: "§4[Essence] §cUsage: /gamemode <mode> [player]."
+  usage: "§4[Essence] §cUtilisation: /gamemode <mode> [joueur]."
   specify: "§4[Essence] §cPlease specify a gamemode (example: /gamemode creative)."
   done: "§2[Essence] §aSwitched to {{1}} mode."
   doneby: "§2[Essence] §aYou have been switched to {{1}} mode by {{2}}."
@@ -233,14 +233,15 @@ kit:
   done: "§2[Essence] §aYou now have the {{1}} kit."
 info:
   lastname: "§6[Essence] §eLast known name: {{1}}."
+  uuid: "§6[Essence] §eUUID: {{1}}"
   lastseen: "§6[Essence] §eLast logged in: {{1}}."
   neverseen: "§6[Essence] §eLast logged in: Never."
 seen:
   lastseen: "§6[Essence] §e{{1}} last logged in at {{2}}."
   neverseen: "§6[Essence] §e{{1}} does not have a recorded last login date."
 msg:
-  usage: "§4[Essence] §cUsage: /msg <player> <message>"
+  usage: "§4[Essence] §cUtilisation: /msg <joueur> <message>"
   send: "§6[§e{{1}} §6-> §e{{2}}§6] §f{{3}}"
 reply:
-  usage: "§4[Essence] §cUsage: /reply <message>"
+  usage: "§4[Essence] §cUtilisation: /reply <message>"
   none: "§4[Essence] §cYou don't have anyone to reply to!"

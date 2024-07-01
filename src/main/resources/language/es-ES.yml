@@ -233,6 +233,7 @@ kit:
   done: "§2[Essence] §aYou now have the {{1}} kit."
 info:
   lastname: "§6[Essence] §eLast known name: {{1}}."
+  uuid: "§6[Essence] §eUUID: {{1}}"
   lastseen: "§6[Essence] §eLast logged in: {{1}}."
   neverseen: "§6[Essence] §eLast logged in: Never."
 seen:
