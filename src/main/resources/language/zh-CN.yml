@@ -7,6 +7,7 @@ about:
   version: "§6[Essence] §e正在运行 Essence ，版本 {{1}}。"
   description: "§6[Essence] §eEssence 是一个轻量级、可定制的插件，它有home，warps等等。"
   author: "§6[Essence] §e制作者： LewMC  翻译作者：小任君呀（mcobs.fun）。"
+  authorLang: "§6[Essence] §eCreated by LewMC - Translated into {{1}} by {{2}}."
   issues: "§4[Essence] §c请将任何错误或问题报告给github.com/lewmc/Essence"
   more: "§6[Essence] §e使用 /es help 获得更多指令。"
 broadcast:
