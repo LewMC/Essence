@@ -64,14 +64,33 @@ public class MessageUtil {
     }
 
     /**
-     * Send a message to the user.
-     * @param player Player - The player to send the message to.
+     * Send a message to a user.
+     * @param cs CommandSender - The player to send the message to.
+     * @param group String - The group the message belongs to in the language file.
+     * @param message String - The message taken from the language file.
+     * @since 1.6.0
+     */
+    public void sendTo(CommandSender cs, String group, String message) {
+        message = this.GetMessage(message, group);
+        if (message != null) {
+            cs.sendMessage(message);
+        } else {
+            cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
+            this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
+            LogUtil log = new LogUtil(this.plugin);
+            log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-GB.yml");
+        }
+    }
+
+    /**
+     * Send a message to a user.
+     * @param cs CommandSender - The player to send the message to.
      * @param group String - The group the message belongs to in the language file.
      * @param message String - The message taken from the language file.
      * @param replace String[] - Text that should be put in place of {{X}} in the message.
      * @since 1.6.0
      */
-    public void sendTo(Player player, String group, String message, String[] replace) {
+    public void sendTo(CommandSender cs, String group, String message, String[] replace) {
         message = this.GetMessage(message, group);
         if (message != null) {
             int i = 1;
@@ -79,9 +98,9 @@ public class MessageUtil {
                 message = message.replace("{{"+i+"}}", item);
                 i++;
             }
-            player.sendMessage(message);
+            cs.sendMessage(message);
         } else {
-            player.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
+            cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             LogUtil log = new LogUtil(this.plugin);
             log.warn("Unable to send message '"+group+"."+message+"' to player, could not find key in en-GB.yml");
