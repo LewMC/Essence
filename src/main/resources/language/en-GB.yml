@@ -94,6 +94,7 @@ help:
   msg: "§6[Essence] §e/msg <name> <message> - Message a player."
   reply: "§6[Essence] §e/reply <message> - Reply to your last /msg."
   help: "§6[Essence] --------------- Essence Help ---------------"
+  helpchat: "§6[Essence] §e/es help chat - Chat commands."
   helpinventory: "§6[Essence] §e/es help inventory - Inventory commands."
   helpgamemode: "§6[Essence] §e/es help gamemode - Gamemode commands."
   helpteleport: "§6[Essence] §e/es help teleport - Teleport commands."
@@ -234,5 +235,6 @@ seen:
   neverseen: "§6[Essence] §e{{1}} does not have a recorded last login date."
 msg:
   usage: "§4[Essence] §cUsage: /msg <player> <message>"
+  send: "§6[§e{{1}} §6-> §e{{2}}§6] §f{{3}}"
 reply:
   usage: "§4[Essence] §cUsage: /reply <message>"

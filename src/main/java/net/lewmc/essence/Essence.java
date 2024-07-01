@@ -287,6 +287,8 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("back")) { this.getCommand("back").setExecutor(new BackCommand(this)); }
 
             if (command.isEnabled("broadcast")) { this.getCommand("broadcast").setExecutor(new BroadcastCommand(this)); }
+            if (command.isEnabled("msg")) { this.getCommand("msg").setExecutor(new MsgCommand(this)); }
+            if (command.isEnabled("reply")) { this.getCommand("reply").setExecutor(new ReplyCommand(this)); }
 
             if (command.isEnabled("pay")) { this.getCommand("pay").setExecutor(new PayCommand(this)); }
             if (command.isEnabled("balance")) { this.getCommand("balance").setExecutor(new BalanceCommand(this)); }

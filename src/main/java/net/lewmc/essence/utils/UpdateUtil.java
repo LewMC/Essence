@@ -91,6 +91,8 @@ public class UpdateUtil {
      * Updates Essence's language files.
      */
     public void UpdateLanguage() {
+        this.migrate();
+
         // en-GB
         File enGB = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "en-GB.yml");
         if (!enGB.exists()) {
@@ -114,8 +116,6 @@ public class UpdateUtil {
                 this.log.warn("Unable to update zh-CN language file: "+e);
             }
         }
-
-        this.migrate();
     }
 
     /**
@@ -126,6 +126,9 @@ public class UpdateUtil {
         if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
             FileUtil config = new FileUtil(this.plugin);
             config.load("config.yml");
+            if (config.exists("language/en-gb.yml")) {
+                config.delete("language/en-gb.yml");
+            }
             config.set("language", "en-GB");
             config.save();
             this.plugin.reloadConfig();

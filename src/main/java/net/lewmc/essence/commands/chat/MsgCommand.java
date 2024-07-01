@@ -3,10 +3,14 @@ package net.lewmc.essence.commands.chat;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 public class MsgCommand implements CommandExecutor {
     private final Essence plugin;
@@ -37,15 +41,25 @@ public class MsgCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("msg")) {
             MessageUtil message = new MessageUtil(commandSender, plugin);
             PermissionHandler permission = new PermissionHandler(commandSender, message);
+
             if (!permission.has("essence.chat.msg")) {
                 permission.not();
                 return true;
             }
 
-            if (args.length > 2) {
-                // TODO: IMPLEMENT
+            if (args.length > 1) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
+                        String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+                        String[] repl = new String[] {commandSender.getName(), p.getName(), msg};
+                        message.send("msg", "send", repl);
+                        message.sendTo(p, "msg", "send", repl);
+                        return true;
+                    }
+                }
+                message.send("generic", "playernotfound");
             } else {
-                message.PrivateMessage("msg","usage");
+                message.send("msg","usage");
             }
 
             return true;
