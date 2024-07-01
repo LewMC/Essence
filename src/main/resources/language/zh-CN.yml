@@ -1,7 +1,7 @@
 #Translate Essence!
 #https://crowdin.com/project/lewmc-essence
 meta:
-  language: 中国人
+  language: 中文
   author: Xiao Renjunya
 about:
   version: "§6[Essence] §e正在运行 Essence ，版本 {{1}}。"
