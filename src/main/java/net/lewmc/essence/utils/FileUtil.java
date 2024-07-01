@@ -106,7 +106,7 @@ public class FileUtil {
     public boolean delete(String path) {
         if (this.isOpen()) {
             try {
-                File file = new File(path);
+                File file = new File(this.plugin.getDataFolder(), this.parseFileName(path));
                 return file.delete();
             } catch (SecurityException e) {
                 this.log.severe("Failed to delete file " + path);

@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -90,12 +91,59 @@ public class UpdateUtil {
      * Updates Essence's language files.
      */
     public void UpdateLanguage() {
-        File languageFile = new File(this.plugin.getDataFolder(), File.separator + "language" + File.separator + "en-gb.yml");
+        this.migrate();
 
-        try {
-            ConfigUpdater.update(plugin, "language/en-gb.yml", languageFile);
-        } catch (IOException e) {
-            this.log.warn("Unable to update en-gb language file: "+e);
+        // en-GB
+        File enGB = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "en-GB.yml");
+        if (!enGB.exists()) {
+            this.plugin.saveResource("language/en-GB.yml", false);
+        } else {
+            try {
+                ConfigUpdater.update(plugin, "language/en-GB.yml", enGB);
+            } catch (IOException e) {
+                this.log.warn("Unable to update en-GB language file: "+e);
+            }
+        }
+
+        // zh-CN
+        File zhCN = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "zh-CN.yml");
+        if (!zhCN.exists()) {
+            this.plugin.saveResource("language/zh-CN.yml", false);
+        } else {
+            try {
+                ConfigUpdater.update(plugin, "language/zh-CN.yml", zhCN);
+            } catch (IOException e) {
+                this.log.warn("Unable to update zh-CN language file: "+e);
+            }
+        }
+
+        // fr-FR
+        File frFR = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "fr-FR.yml");
+        if (!frFR.exists()) {
+            this.plugin.saveResource("language/fr-FR.yml", false);
+        } else {
+            try {
+                ConfigUpdater.update(plugin, "language/fr-FR.yml", frFR);
+            } catch (IOException e) {
+                this.log.warn("Unable to update fr-FR language file: "+e);
+            }
+        }
+    }
+
+    /**
+     * Migrates old Essence files.
+     */
+    private void migrate() {
+        // Language.
+        if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
+            FileUtil config = new FileUtil(this.plugin);
+            config.load("config.yml");
+            if (config.exists("language/en-gb.yml")) {
+                config.delete("language/en-gb.yml");
+            }
+            config.set("language", "en-GB");
+            config.save();
+            this.plugin.reloadConfig();
         }
     }
 }

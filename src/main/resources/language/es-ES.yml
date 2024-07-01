@@ -1,12 +1,13 @@
 #Translate Essence!
 #https://crowdin.com/project/lewmc-essence
 meta:
-  language: Español
+  language: British English
   author: LewMC
 about:
   version: "§6[Essence] §eRunning Essence version {{1}}."
   description: "§6[Essence] §eEssence is a lightweight and customisable plugin that adds warps, homes, and more."
   author: "§6[Essence] §eCreated by LewMC"
+  authorLang: "§6[Essence] §eTranslated into {{1}} by {{2}}."
   issues: "§4[Essence] §cPlease report any bugs or issues to github.com/lewmc/essence"
   more: "§6[Essence] §eUse /es help for more commands."
 broadcast:
@@ -26,8 +27,10 @@ generic:
   missingpermission: "§4[Essence] §cYou don't have the required permission to run this command."
   nofolia: "§4[Essence] §cThis command cannot run on Folia-based server software."
   helpfolia: "§4[Essence] §cIf you'd like to help us add support for Folia please visit github.com/lewmc/essence"
+  reload: "§2[Essence] §aReloaded."
 other:
   respawnset: "§6[Essence] §eRespawn point set."
+  rule: "§a{{1}}"
 help:
   page: "§6[Essence] ----------------- Page {{1}}/{{2}} -----------------"
   inventory: "§6[Essence] --------- Essence Help - Inventory ---------"
@@ -84,13 +87,26 @@ help:
   teamtransfer: "§6[Essence] §e/team changeleader <name> - Change leader."
   teamkick: "§6[Essence] §e/team kick <name> - Kick a member from your team."
   teamdisband: "§6[Essence] §e/team disband - Disband (delete) your team."
+  admin: "§6[Essence] ------- Essence Help - Administration ------"
+  seen: "§6[Essence] §e/seen <name> - Last seen player."
+  info: "§6[Essence] §e/info <name> - View player information."
+  reload: "§6[Essence] §e/reload - Reload Essence."
+  chat: "§6[Essence] ------------ Essence Help - Chat -----------"
+  broadcast: "§6[Essence] §e/broadcast <message> - Broadcast a message"
+  msg: "§6[Essence] §e/msg <name> <message> - Message a player."
+  reply: "§6[Essence] §e/reply <message> - Reply to your last /msg."
+  misc: "§6[Essence] -------- Essence Help - Miscellaneous ------"
+  rules: "§6[Essence] §e/rules - View the server rules."
   help: "§6[Essence] --------------- Essence Help ---------------"
+  helpchat: "§6[Essence] §e/es help chat - Chat commands."
   helpinventory: "§6[Essence] §e/es help inventory - Inventory commands."
   helpgamemode: "§6[Essence] §e/es help gamemode - Gamemode commands."
   helpteleport: "§6[Essence] §e/es help teleport - Teleport commands."
   helpstats: "§6[Essence] §e/es help stats - Manage your stats."
   helpeconomy: "§6[Essence] §e/es help economy - Economy commands."
   helpteam: "§6[Essence] §e/es help team - Team commands."
+  helpadmin: "§6[Essence] §e/es help admin - Administration."
+  helpmisc: "§6[Essence] §e/es help misc - Miscellaneous."
 tprandom:
   searching: "§6[Essence] §eFinding somewhere to go..."
   teleporting: "§2[Essence] §aTeleporting..."
@@ -215,3 +231,17 @@ kit:
   nopermission: "§4[Essence] §cYou do not have access to this kit."
   notexist: "§4[Essence] §cThis kit does not exist."
   done: "§2[Essence] §aYou now have the {{1}} kit."
+info:
+  lastname: "§6[Essence] §eLast known name: {{1}}."
+  uuid: "§6[Essence] §eUUID: {{1}}"
+  lastseen: "§6[Essence] §eLast logged in: {{1}}."
+  neverseen: "§6[Essence] §eLast logged in: Never."
+seen:
+  lastseen: "§6[Essence] §e{{1}} last logged in at {{2}}."
+  neverseen: "§6[Essence] §e{{1}} does not have a recorded last login date."
+msg:
+  usage: "§4[Essence] §cUsage: /msg <player> <message>"
+  send: "§6[§e{{1}} §6-> §e{{2}}§6] §f{{3}}"
+reply:
+  usage: "§4[Essence] §cUsage: /reply <message>"
+  none: "§4[Essence] §cYou don't have anyone to reply to!"

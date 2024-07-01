@@ -33,13 +33,13 @@ public class EssenceTabCompleter implements TabCompleter {
         if (args.length == 1) {
             keys = new String[]{"help"};
         } else if (args.length == 2) {
-            keys = new String[]{"inventory", "gamemode", "teleport", "stats", "economy", "team"};
-        } else if (
-                args.length == 3 && (
-                args[1].equalsIgnoreCase("teleport") ||
-                args[1].equalsIgnoreCase("inventory")
-            )
-        ) {
+            keys = new String[]{"2", "chat", "inventory", "gamemode", "teleport", "stats", "economy", "team", "admin", "misc"};
+        } else if (args.length == 3 && args[1].equalsIgnoreCase("teleport")) {
+            keys = new String[]{"1", "2", "3"};
+        } else if (args.length == 3 && (
+                args[1].equalsIgnoreCase("inventory") ||
+                args[1].equalsIgnoreCase("team")
+        )) {
             keys = new String[]{"1", "2"};
         } else {
             keys = new String[]{};

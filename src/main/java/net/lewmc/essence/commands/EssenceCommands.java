@@ -1,11 +1,15 @@
 package net.lewmc.essence.commands;
 
+import net.lewmc.essence.utils.FileUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class EssenceCommands implements CommandExecutor {
     private final Essence plugin;
@@ -40,13 +44,29 @@ public class EssenceCommands implements CommandExecutor {
                 if ("help".equals(args[0])) {
                     HelpCommand helpCommand = new HelpCommand(message, args);
                     return helpCommand.runHelpCommand();
+                } else if ("reload".equals(args[0])) {
+                    PermissionHandler perms = new PermissionHandler(commandSender, message);
+                    if (perms.has("essence.admin.reload")) {
+                        this.plugin.reloadConfig();
+                        this.plugin.verbose = this.plugin.getConfig().getBoolean("verbose");
+                        message.send("generic", "reload");
+                        return true;
+                    } else {
+                        return perms.not();
+                    }
                 }
             } else {
-                message.PrivateMessage("about", "version", plugin.getDescription().getVersion());
-                message.PrivateMessage("about", "description");
-                message.PrivateMessage("about", "author");
-                message.PrivateMessage("about", "issues");
-                message.PrivateMessage("about", "more");
+                message.send("about", "version", new String[] { plugin.getDescription().getVersion() });
+                message.send("about", "description");
+                message.send("about", "author");
+                if (!Objects.equals(this.plugin.getConfig().getString("language"), "en-GB")) {
+                    FileUtil lang = new FileUtil(this.plugin);
+                    lang.load("language/"+this.plugin.getConfig().getString("language")+".yml");
+                    message.send("about", "authorLang", new String[] { lang.getString("meta.language"), lang.getString("meta.author") });
+                    lang.close();
+                }
+                message.send("about", "issues");
+                message.send("about", "more");
 
                 return true;
             }

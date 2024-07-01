@@ -6,7 +6,7 @@
 
     <groupId>net.lewmc</groupId>
     <artifactId>essence</artifactId>
-    <version>1.5.3</version>
+    <version>1.6.0</version>
     <packaging>jar</packaging>
 
     <name>Essence</name>
@@ -78,6 +78,10 @@
             <id>devmart-other</id>
             <url>https://nexuslite.gcnt.net/repos/other/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -108,6 +112,12 @@
             <artifactId>FoliaLib</artifactId>
             <version>0.3.4</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

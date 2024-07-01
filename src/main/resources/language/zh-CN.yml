@@ -1,12 +1,13 @@
 #Translate Essence!
 #https://crowdin.com/project/lewmc-essence
 meta:
-  language: 中国人
+  language: 中文
   author: Xiao Renjunya
 about:
   version: "§6[Essence] §e正在运行 Essence ，版本 {{1}}。"
   description: "§6[Essence] §eEssence 是一个轻量级、可定制的插件，它有home，warps等等。"
   author: "§6[Essence] §e制作者： LewMC  翻译作者：小任君呀（mcobs.fun）。"
+  authorLang: "§6[Essence] §e由 {{2}} 翻译成 {{1}}."
   issues: "§4[Essence] §c请将任何错误或问题报告给github.com/lewmc/Essence"
   more: "§6[Essence] §e使用 /es help 获得更多指令。"
 broadcast:
@@ -26,8 +27,10 @@ generic:
   missingpermission: "§4[Essence] §c你没有权限"
   nofolia: "§4[Essence] §c该命令不能在Folia端运行."
   helpfolia: "§4[Essence] §c如果您想帮助我们添加对Folia的支持，请访问 github.com/lewmc/essence"
+  reload: "§2[Essence] §a已重载配置."
 other:
   respawnset: "§6[Essence] §e重生点设置."
+  rule: "§a{{1}}"
 help:
   page: "§6[Essence] ----------------- 页 {{1}}/{{2}} -----------------"
   inventory: "§6[Essence] --------- Essence 帮助 - 库存 ---------"
@@ -84,13 +87,26 @@ help:
   teamtransfer: "§6[Essence] §e/team changeleader <name> - 变更领导者."
   teamkick: "§6[Essence] §e/team kick <name> - 提出团队中的一名成员."
   teamdisband: "§6[Essence] §e/team disband - 解散（删除）你的团队."
+  admin: "§6[Essence] ------- Essence 帮助 - 管理员命令 ------"
+  seen: "§6[Essence] §e/seen <name> - 查看某人最后退出的时间."
+  info: "§6[Essence] §e/info <name> - 查看某玩家信息."
+  reload: "§6[Essence] §e/reload - 重载Essence."
+  chat: "§6[Essence] ------------ Essence 帮助 - 聊天 -----------"
+  broadcast: "§6[Essence] §e/broadcast <message> - 广播消息"
+  msg: "§6[Essence] §e/msg <name> <message> - 给某玩家发消息."
+  reply: "§6[Essence] §e/reply <message> - 回复你最近的一次消息（/msg）."
+  misc: "§6[Essence] -------- Essence 帮助 - 杂项 ------"
+  rules: "§6[Essence] §e/rules - 查看服务器规则."
   help: "§6[Essence] --------------- Essence 帮助 ---------------"
+  helpchat: "§6[Essence] §e/es help chat - 聊天命令."
   helpinventory: "§6[Essence] §e/es help inventory - 仓库命令."
   helpgamemode: "§6[Essence] §e/es help gamemode - 游戏模式命令."
   helpteleport: "§6[Essence] §e/es help teleport - 传送命令."
   helpstats: "§6[Essence] §e/es help stats - 管理你的统计."
   helpeconomy: "§6[Essence] §e/es help economy - 经济命令."
   helpteam: "§6[Essence] §e/es help team - 团队命令."
+  helpadmin: "§6[Essence] §e/es help admin - 管理员命令."
+  helpmisc: "§6[Essence] §e/es help misc - 杂项."
 tprandom:
   searching: "§6[Essence] §e正在寻找可以传送的地方......"
   teleporting: "§2[Essence] §a传送中......"
@@ -215,3 +231,17 @@ kit:
   nopermission: "§4[Essence] §c您无权开启此礼包."
   notexist: "§4[Essence] §c该礼包不存在."
   done: "§2[Essence] §a您现在有了 {{1}} 礼包."
+info:
+  lastname: "§6[Essence] §e最后的已知玩家名: {{1}}."
+  uuid: "§6[Essence] §eUUID: {{1}}"
+  lastseen: "§6[Essence] §e最后登录时间: {{1}}."
+  neverseen: "§6[Essence] §e最后登录时间: 从未."
+seen:
+  lastseen: "§6[Essence] §e{{1}} 最后登录在 {{2}}."
+  neverseen: "§6[Essence] §e{{1}} 没有记录最后的登录日期."
+msg:
+  usage: "§4[Essence] §c用法: /msg <player> <message>"
+  send: "§6[§e{{1}} §6-> §e{{2}}§6] §f{{3}}"
+reply:
+  usage: "§4[Essence] §c用法: /reply <message>"
+  none: "§4[Essence] §c你没有人可以去回复!"

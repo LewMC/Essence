@@ -1,39 +1,35 @@
 package net.lewmc.essence;
 
 import com.tcoded.folialib.FoliaLib;
-import net.lewmc.essence.commands.KitCommand;
-import net.lewmc.essence.commands.TeamCommands;
+import net.lewmc.essence.commands.*;
+import net.lewmc.essence.commands.admin.*;
 import net.lewmc.essence.commands.chat.*;
 import net.lewmc.essence.commands.economy.BalanceCommand;
 import net.lewmc.essence.commands.economy.PayCommand;
 import net.lewmc.essence.commands.inventories.*;
-import net.lewmc.essence.commands.EssenceCommands;
-import net.lewmc.essence.commands.GamemodeCommands;
 import net.lewmc.essence.commands.stats.*;
 import net.lewmc.essence.commands.teleportation.*;
-import net.lewmc.essence.commands.teleportation.home.DelhomeCommand;
-import net.lewmc.essence.commands.teleportation.home.HomeCommand;
-import net.lewmc.essence.commands.teleportation.home.HomesCommand;
-import net.lewmc.essence.commands.teleportation.home.SethomeCommand;
-import net.lewmc.essence.commands.teleportation.home.team.DelthomeCommand;
-import net.lewmc.essence.commands.teleportation.home.team.SetthomeCommand;
-import net.lewmc.essence.commands.teleportation.home.team.ThomeCommand;
-import net.lewmc.essence.commands.teleportation.home.team.ThomesCommand;
+import net.lewmc.essence.commands.teleportation.home.*;
+import net.lewmc.essence.commands.teleportation.home.team.*;
 import net.lewmc.essence.commands.teleportation.tp.*;
-import net.lewmc.essence.commands.teleportation.warp.DelwarpCommand;
-import net.lewmc.essence.commands.teleportation.warp.SetwarpCommand;
-import net.lewmc.essence.commands.teleportation.warp.WarpCommand;
-import net.lewmc.essence.commands.teleportation.warp.WarpsCommand;
+import net.lewmc.essence.commands.teleportation.warp.*;
 import net.lewmc.essence.events.*;
 import net.lewmc.essence.tabcompleter.*;
 import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.UpdateUtil;
+import net.lewmc.essence.utils.economy.VaultEconomy;
+import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -51,11 +47,23 @@ public class Essence extends JavaPlugin {
     public boolean verbose;
 
     /**
+     * The Vault economy handler.
+     */
+    private Economy economy = null;
+
+    /**
      * Stores pending teleport requests.
      * String = The requested player's name.
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
      */
     public HashMap<String, String[]> teleportRequests = new HashMap<>();
+
+    /**
+     * Stores message history.
+     * CommandSender = The receiver.
+     * CommandSender = The sender.
+     */
+    public HashMap<CommandSender, CommandSender> msgHistory = new HashMap<>();
 
     /**
      * This function runs when Essence is enabled.
@@ -79,7 +87,8 @@ public class Essence extends JavaPlugin {
         this.log.info("Beginning startup...");
         this.log.info("");
         int pluginId = 20768; // <-- Replace with the id of your plugin!
-        new Metrics(this, pluginId);
+        Metrics metrics = new Metrics(this, pluginId);
+        metrics.addCustomChart(new SimplePie("language", () -> getConfig().getString("language")));
 
         this.verbose = this.getConfig().getBoolean("verbose");
 
@@ -90,20 +99,55 @@ public class Essence extends JavaPlugin {
             this.log.info("");
         }
 
-        checkForEssentials();
-        checkForPaper();
+        this.checkForEssentials();
+        this.checkForPaper();
 
-        initFileSystem();
-        loadCommands();
-        loadEventHandlers();
-        loadTabCompleters();
+        this.initFileSystem();
+        this.loadCommands();
+        this.loadEventHandlers();
+        this.loadTabCompleters();
+
+        if (!setupEconomy()) {
+            this.log.warn("Vault not found! Using local economy.");
+        }
 
         UpdateUtil update = new UpdateUtil(this);
         update.VersionCheck();
         update.UpdateConfig();
         update.UpdateLanguage();
 
+        this.checkLanguageSystem();
+
         this.log.info("Startup completed.");
+    }
+
+    /**
+     * Sets up Vault to use Essence's economy.
+     * @return boolean - If it could be setup correctly.
+     */
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        this.log.info("Vault found, setting up economy service...");
+
+        getServer().getServicesManager().register(Economy.class, new VaultEconomy(this), this, ServicePriority.Highest);
+
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            log.severe("No economy service provider found after registration!");
+            return false;
+        }
+
+        this.economy = rsp.getProvider();
+
+        if (this.economy == null) {
+            this.log.severe("Economy provider is null!");
+        }
+
+        this.log.info("");
+
+        return this.economy != null;
     }
 
     /**
@@ -147,10 +191,7 @@ public class Essence extends JavaPlugin {
     private void initFileSystem() {
         saveDefaultConfig();
 
-        File languageFile = new File(getDataFolder() + File.separator + "language" + File.separator + "en-gb.yml");
-        if (!languageFile.exists()) {
-            saveResource("language/en-gb.yml", false);
-        }
+        // Language files are in UpdateUtil!
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
         if (!statsFolder.exists() && !statsFolder.mkdirs()) {
@@ -177,6 +218,23 @@ public class Essence extends JavaPlugin {
         File kitsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "kits.yml");
         if (!kitsFile.exists()) {
             saveResource("data/kits.yml", false);
+        }
+
+        File rulesFile = new File(getDataFolder() + File.separator + "rules.txt");
+        if (!rulesFile.exists()) {
+            saveResource("rules.txt", false);
+        }
+    }
+
+    /**
+     * Checks the language system.
+     */
+    private void checkLanguageSystem() {
+        File setLang = new File(getDataFolder() + File.separator + "language" + File.separator + getConfig().getString("language") + ".yml");
+        if (!setLang.exists()) {
+            this.log.severe("Language file '"+getConfig().getString("language")+"' does not exist!");
+            this.log.severe("Please check the file and try again.");
+            getServer().getPluginManager().disablePlugin(this);
         }
     }
 
@@ -239,13 +297,23 @@ public class Essence extends JavaPlugin {
             if (command.isEnabled("back")) { this.getCommand("back").setExecutor(new BackCommand(this)); }
 
             if (command.isEnabled("broadcast")) { this.getCommand("broadcast").setExecutor(new BroadcastCommand(this)); }
+            if (command.isEnabled("msg")) { this.getCommand("msg").setExecutor(new MsgCommand(this)); }
+            if (command.isEnabled("reply")) { this.getCommand("reply").setExecutor(new ReplyCommand(this)); }
 
             if (command.isEnabled("pay")) { this.getCommand("pay").setExecutor(new PayCommand(this)); }
             if (command.isEnabled("balance")) { this.getCommand("balance").setExecutor(new BalanceCommand(this)); }
 
             if (command.isEnabled("team")) { this.getCommand("team").setExecutor(new TeamCommands(this)); }
+
+            if (command.isEnabled("seen")) { this.getCommand("seen").setExecutor(new SeenCommand(this)); }
+            if (command.isEnabled("info")) { this.getCommand("info").setExecutor(new InfoCommand(this)); }
+
+            if (command.isEnabled("rules")) { this.getCommand("rules").setExecutor(new RulesCommands(this)); }
         } catch (NullPointerException e) {
-            this.log.severe("LoadCommands: Unable to load Essence commands.");
+            this.log.severe("Unable to load Essence commands.");
+            this.log.severe(e.getMessage());
+            this.log.severe("");
+            this.log.severe(Arrays.toString(e.getStackTrace()));
             this.log.info("");
         }
     }
