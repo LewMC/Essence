@@ -43,7 +43,7 @@ public class PermissionHandler {
      */
     public boolean not() {
         this.message.send("generic", "missingpermission");
-        return false;
+        return true;
     }
 
     /**
