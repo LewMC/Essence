@@ -47,6 +47,10 @@ public class TpdenyCommand implements CommandExecutor {
         }
 
         if (command.getName().equalsIgnoreCase("tpdeny")) {
+            if (cmd.isDisabled("tpdeny")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.teleport.request.deny")) {
                 TeleportRequestUtil tpru = new TeleportRequestUtil(this.plugin);
                 tpru.deleteFromRequested(commandSender.getName());

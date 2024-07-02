@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.PermissionHandler;
-import net.lewmc.essence.utils.TeamUtil;
+import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -49,6 +46,11 @@ public class TeamCommands implements CommandExecutor {
         Player player = (Player) commandSender;
 
         if (command.getName().equalsIgnoreCase("team")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("team")) {
+                return cmd.disabled();
+            }
+
             if (args.length > 0) {
                 TeamUtil team = new TeamUtil(this.plugin, message);
                 if (args[0].equalsIgnoreCase("create")) {

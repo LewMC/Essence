@@ -46,6 +46,11 @@ public class PayCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("pay")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("pay")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.economy.pay")) {
                 if (args.length == 2) {
                     FileUtil senderDataFile = new FileUtil(this.plugin);

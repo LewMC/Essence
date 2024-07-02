@@ -49,6 +49,11 @@ public class WarpCommand implements CommandExecutor {
         TeleportUtil teleUtil = new TeleportUtil(this.plugin);
 
         if (command.getName().equalsIgnoreCase("warp")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("warp")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.warp.use")) {
                 int waitTime = plugin.getConfig().getInt("teleportation.warp.wait");
                 if (args.length > 0) {

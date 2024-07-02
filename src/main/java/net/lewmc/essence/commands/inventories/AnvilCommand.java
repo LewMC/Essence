@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.inventories;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
@@ -49,6 +50,11 @@ public class AnvilCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("anvil")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("anvil")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.inventory.anvil")) {
                 player.openAnvil(null, true);
                 return true;

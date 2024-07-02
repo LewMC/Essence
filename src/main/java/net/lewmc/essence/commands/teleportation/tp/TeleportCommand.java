@@ -49,6 +49,11 @@ public class TeleportCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("tp")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("tp")) {
+                return cmd.disabled();
+            }
+
             TeleportUtil tu = new TeleportUtil(this.plugin);
             TeleportUtil.Type type = tu.getTeleportType(args);
 

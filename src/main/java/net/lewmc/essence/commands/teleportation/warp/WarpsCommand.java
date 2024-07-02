@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation.warp;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.FileUtil;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -48,6 +45,11 @@ public class WarpsCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("warps")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("warps")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.warp.list")) {
                 FileUtil data = new FileUtil(this.plugin);
                 data.load("/data/warps.yml");

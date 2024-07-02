@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.inventories;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
@@ -50,7 +51,12 @@ public class TrashCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (command.getName().equalsIgnoreCase("trash") || command.getName().equalsIgnoreCase("disposal")) {
+        if (command.getName().equalsIgnoreCase("trash")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("trash")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.inventory.trash")) {
                 Inventory inventory = Bukkit.createInventory(player, 27, "Trash");
                 player.openInventory(inventory);

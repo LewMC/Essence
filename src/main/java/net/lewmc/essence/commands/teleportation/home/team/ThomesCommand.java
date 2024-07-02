@@ -57,6 +57,11 @@ public class ThomesCommand implements CommandExecutor {
         }
 
         if (command.getName().equalsIgnoreCase("thomes")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("thomes")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.home.team.list")) {
                 HomeUtil hu = new HomeUtil(this.plugin);
                 StringBuilder setHomes = hu.getTeamHomesList(team);

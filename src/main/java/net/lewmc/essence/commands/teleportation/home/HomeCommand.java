@@ -50,6 +50,11 @@ public class HomeCommand implements CommandExecutor {
         TeleportUtil teleUtil = new TeleportUtil(this.plugin);
 
         if (command.getName().equalsIgnoreCase("home")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("home")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.home.use")) {
                 int waitTime = plugin.getConfig().getInt("teleportation.home.wait");
                 if (!teleUtil.cooldownSurpassed(player, "home")) {

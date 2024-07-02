@@ -48,6 +48,10 @@ public class TptoggleCommand implements CommandExecutor {
         Player player = (Player) commandSender;
 
         if (command.getName().equalsIgnoreCase("tptoggle")) {
+            if (cmd.isDisabled("tptoggle")) {
+                return cmd.disabled();
+            }
+
             MessageUtil message = new MessageUtil(commandSender, this.plugin);
             PermissionHandler permission = new PermissionHandler(commandSender, message);
 

@@ -63,6 +63,11 @@ public class ThomeCommand implements CommandExecutor {
         }
 
         if (command.getName().equalsIgnoreCase("thome")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("thome")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.home.team.use")) {
 
                 int waitTime = plugin.getConfig().getInt("teleportation.home.wait");

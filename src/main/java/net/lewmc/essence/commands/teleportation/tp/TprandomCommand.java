@@ -66,6 +66,11 @@ public class TprandomCommand implements CommandExecutor {
         }
 
         if (command.getName().equalsIgnoreCase("tprandom")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("tprandom")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.teleport.random")) {
                 if (!this.teleUtil.cooldownSurpassed(player, "randomtp")) {
                     message.send("teleport", "tryagain", new String[] { String.valueOf(this.teleUtil.cooldownRemaining(player, "randomtp")) });

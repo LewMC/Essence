@@ -45,6 +45,11 @@ public class DelhomeCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("delhome")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("delhome")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.home.delete")) {
                 String name;
                 if (args.length == 0) {

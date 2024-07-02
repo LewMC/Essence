@@ -1,5 +1,6 @@
 package net.lewmc.essence.commands;
 
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.FileUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
@@ -40,6 +41,11 @@ public class EssenceCommands implements CommandExecutor {
         MessageUtil message = new MessageUtil(commandSender, plugin);
 
         if (command.getName().equalsIgnoreCase("essence")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("essence")) {
+                return cmd.disabled();
+            }
+
             if (args.length > 0) {
                 if ("help".equals(args[0])) {
                     HelpCommand helpCommand = new HelpCommand(message, args);
@@ -48,6 +54,7 @@ public class EssenceCommands implements CommandExecutor {
                     PermissionHandler perms = new PermissionHandler(commandSender, message);
                     if (perms.has("essence.admin.reload")) {
                         this.plugin.reloadConfig();
+                        this.plugin.disabledCommands = this.plugin.getConfig().getStringList("disabled-commands");
                         this.plugin.verbose = this.plugin.getConfig().getBoolean("verbose");
                         message.send("generic", "reload");
                         return true;

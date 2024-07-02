@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.stats;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.command.Command;
@@ -42,6 +43,11 @@ public class FeedCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("feed")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("feed")) {
+                return cmd.disabled();
+            }
+
             if (args.length > 0) {
                 return this.feedOther(permission, commandSender, message, args);
             } else {

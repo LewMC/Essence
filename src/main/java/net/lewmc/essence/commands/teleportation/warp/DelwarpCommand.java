@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands.teleportation.warp;
 
-import net.lewmc.essence.utils.FileUtil;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
+import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -47,6 +44,11 @@ public class DelwarpCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("delwarp")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("delwarp")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.warp.delete")) {
                 if (args.length == 0) {
                     message.send("warp", "delusage");

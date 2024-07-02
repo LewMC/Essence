@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.chat;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.Bukkit;
@@ -39,6 +40,11 @@ public class MsgCommand implements CommandExecutor {
         String[] args
     ) {
         if (command.getName().equalsIgnoreCase("msg")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("msg")) {
+                return cmd.disabled();
+            }
+
             MessageUtil message = new MessageUtil(commandSender, plugin);
             PermissionHandler permission = new PermissionHandler(commandSender, message);
 

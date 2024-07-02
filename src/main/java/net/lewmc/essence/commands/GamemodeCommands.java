@@ -1,5 +1,6 @@
 package net.lewmc.essence.commands;
 
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
@@ -50,6 +51,11 @@ public class GamemodeCommands implements CommandExecutor {
 
         Player player;
         if (command.getName().equalsIgnoreCase("gamemode")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("gamemode")) {
+                return cmd.disabled();
+            }
+
             GameMode gamemode;
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("creative")) { gamemode = GameMode.CREATIVE; }

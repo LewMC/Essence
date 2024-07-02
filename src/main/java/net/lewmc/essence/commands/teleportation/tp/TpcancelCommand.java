@@ -47,6 +47,10 @@ public class TpcancelCommand implements CommandExecutor {
         }
 
         if (command.getName().equalsIgnoreCase("tpcancel")) {
+            if (cmd.isDisabled("tpcancel")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.teleport.request.cancel")) {
                 TeleportRequestUtil tpru = new TeleportRequestUtil(this.plugin);
                 if (tpru.deleteFromRequester(commandSender.getName())) {

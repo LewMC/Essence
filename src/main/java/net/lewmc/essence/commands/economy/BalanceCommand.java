@@ -45,6 +45,11 @@ public class BalanceCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("balance")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("balance")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.economy.balance")) {
                 FileUtil data = new FileUtil(this.plugin);
                 data.load(data.playerDataFile(player));

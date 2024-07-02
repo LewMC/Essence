@@ -59,6 +59,11 @@ public class SetthomeCommand implements CommandExecutor {
         }
 
         if (command.getName().equalsIgnoreCase("setthome")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("setthome")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.home.team.create")) {
 
                 String name;

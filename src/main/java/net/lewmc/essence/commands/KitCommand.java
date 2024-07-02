@@ -52,6 +52,10 @@ public class KitCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("kit")) {
+            if (cmd.isDisabled("kit")) {
+                return cmd.disabled();
+            }
+
             if (args.length == 0) {
                 StringBuilder kits = new StringBuilder("No kits found.");
 

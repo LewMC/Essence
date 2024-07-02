@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.stats;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.Bukkit;
@@ -43,6 +44,11 @@ public class HealCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("heal")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("heal")) {
+                return cmd.disabled();
+            }
+
             if (args.length > 0) {
                 return this.healOther(permission, commandSender, message, args);
             } else {

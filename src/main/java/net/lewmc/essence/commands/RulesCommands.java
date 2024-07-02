@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
@@ -39,6 +40,11 @@ public class RulesCommands implements CommandExecutor {
         String[] args
     ) {
         if (command.getName().equalsIgnoreCase("rules")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("rules")) {
+                return cmd.disabled();
+            }
+
             MessageUtil message = new MessageUtil(commandSender, plugin);
             PermissionHandler perms = new PermissionHandler(commandSender, message);
             if (perms.has("essence.rules")) {

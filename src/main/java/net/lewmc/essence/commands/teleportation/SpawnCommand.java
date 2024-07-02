@@ -48,6 +48,11 @@ public class SpawnCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("spawn")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("spawn")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.spawn")) {
 
                 int waitTime = plugin.getConfig().getInt("teleportation.spawn.wait");

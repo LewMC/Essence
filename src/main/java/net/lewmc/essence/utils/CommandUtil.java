@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -23,20 +22,28 @@ public class CommandUtil {
     }
 
     /**
-     * Checks if a command is enabled.
+     * Checks if a command is disabled.
      * @param command String - the command to check.
      * @return Boolean - if the command is enabled.
      */
-    public boolean isEnabled(String command) {
-        List<String> disabledCommands = this.plugin.getConfig().getStringList("disabled-commands");
-
-        for (String key : disabledCommands) {
+    public boolean isDisabled(String command) {
+        for (String key : this.plugin.disabledCommands) {
             if (Objects.equals(key, command)) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
+    }
+
+    public boolean disabled() {
+        if (this.plugin.verbose) {
+            LogUtil log = new LogUtil(this.plugin);
+            log.warn("Attempted to execute disabled command.");
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**

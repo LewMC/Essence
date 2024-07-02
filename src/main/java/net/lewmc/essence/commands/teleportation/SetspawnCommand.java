@@ -46,6 +46,11 @@ public class SetspawnCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("setspawn")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("setspawn")) {
+                return cmd.disabled();
+            }
+
             if (permission.has("essence.spawn.set")) {
                 Location loc = player.getLocation();
                 FileUtil spawnFile = new FileUtil(this.plugin);
