@@ -90,9 +90,6 @@ public class Essence extends JavaPlugin {
         this.log.info("");
         this.log.info("Beginning startup...");
         this.log.info("");
-        int pluginId = 20768; // <-- Replace with the id of your plugin!
-        Metrics metrics = new Metrics(this, pluginId);
-        metrics.addCustomChart(new SimplePie("language", () -> getConfig().getString("language")));
 
         this.verbose = this.getConfig().getBoolean("verbose");
 
@@ -141,6 +138,15 @@ public class Essence extends JavaPlugin {
         }
 
         System.setProperty("ESSENCE_LOADED", "TRUE");
+
+        int pluginId = 20768;
+        Metrics metrics = new Metrics(this, pluginId);
+        metrics.addCustomChart(new SimplePie("language", () -> getConfig().getString("language")));
+        if (economy == null) {
+            metrics.addCustomChart(new SimplePie("economy_enabled", () -> "false"));
+        } else {
+            metrics.addCustomChart(new SimplePie("economy_enabled", () -> "true"));
+        }
     }
 
     /**
