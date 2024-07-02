@@ -31,6 +31,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * The main Essence class.
@@ -56,14 +58,14 @@ public class Essence extends JavaPlugin {
      * String = The requested player's name.
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
      */
-    public HashMap<String, String[]> teleportRequests = new HashMap<>();
+    public Map<String, String[]> teleportRequests = new HashMap<>();
 
     /**
      * Stores message history.
      * CommandSender = The receiver.
      * CommandSender = The sender.
      */
-    public HashMap<CommandSender, CommandSender> msgHistory = new HashMap<>();
+    public Map<CommandSender, CommandSender> msgHistory = new HashMap<>();
 
     /**
      * This function runs when Essence is enabled.
@@ -119,6 +121,22 @@ public class Essence extends JavaPlugin {
         this.checkLanguageSystem();
 
         this.log.info("Startup completed.");
+
+        if (Objects.equals(System.getProperty("ESSENCE_LOADED", ""), "TRUE")) {
+            this.log.severe("");
+            this.log.severe("WARNING: RELOAD DETECTED!");
+            this.log.severe("");
+            this.log.severe("This may cause issues with Essence and your server overall.");
+            this.log.severe("We HIGHLY recommend you restart your server instead of reloading.");
+            this.log.severe("If you are reloading datapacks use /minecraft:reload instead.");
+            this.log.severe("");
+            this.log.severe("We will not provide support for any issues when plugin reloaders are used.");
+            this.log.severe("");
+            this.log.severe("More info: https://madelinemiller.dev/blog/problem-with-reload");
+            this.log.severe("");
+        }
+
+        System.setProperty("ESSENCE_LOADED", "TRUE");
     }
 
     /**
@@ -140,10 +158,6 @@ public class Essence extends JavaPlugin {
         }
 
         this.economy = rsp.getProvider();
-
-        if (this.economy == null) {
-            this.log.severe("Economy provider is null!");
-        }
 
         this.log.info("");
 
