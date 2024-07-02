@@ -88,7 +88,7 @@ public class SetwarpCommand implements CommandExecutor {
                 // Save the configuration to the file
                 warpsData.save();
 
-                message.PrivateMessage("warp", "created", args[0]);
+                message.send("warp", "created", new String[] { args[0] });
             } else {
                 permission.not();
             }

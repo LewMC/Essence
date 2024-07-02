@@ -52,7 +52,7 @@ public class BalanceCommand implements CommandExecutor {
                 double balance = data.getDouble("economy.balance");
                 data.close();
 
-                message.PrivateMessage("economy","balance", plugin.getConfig().getString("economy.symbol") + balance);
+                message.send("economy","balance", new String[] { plugin.getConfig().getString("economy.symbol") + balance });
                 return true;
             } else {
                 return permission.not();

@@ -81,16 +81,16 @@ public class KitCommand implements CommandExecutor {
 
                 kitData.close();
 
-                message.PrivateMessage("kit", "select", kits.toString());
+                message.send("kit", "select", new String[] { kits.toString() });
             } else {
                 KitUtil kit = new KitUtil(this.plugin, player);
 
                 if (kit.giveKit(args[0]) == 0) {
-                    message.PrivateMessage("kit", "done", args[0]);
+                    message.send("kit", "done", new String[] { args[0] });
                 } else if (kit.giveKit(args[0]) == 1) {
-                    message.PrivateMessage("kit", "nopermission");
+                    message.send("kit", "nopermission");
                 } else if (kit.giveKit(args[0]) == 2) {
-                    message.PrivateMessage("kit", "notexist");
+                    message.send("kit", "notexist");
                 }
             }
             return true;

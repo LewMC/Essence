@@ -167,7 +167,7 @@ public class TeleportUtil {
         FoliaLib flib = new FoliaLib(this.plugin);
         if (location.getWorld() == null) {
             MessageUtil message = new MessageUtil(player, this.plugin);
-            message.PrivateMessage("generic","exception");
+            message.send("generic","exception");
             this.log.severe("Unable to locate world in universe.");
             this.log.severe("Details: {\"error\": \"WORLD_IS_NULL\", \"caught\": \"TeleportUtil.java\", \"submitted\": \"null\", \"found\": \"null\"}.");
             return;

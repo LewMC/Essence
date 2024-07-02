@@ -50,7 +50,7 @@ public class TpacceptCommand implements CommandExecutor {
             if (permission.has("essence.teleport.request.accept")) {
                 TeleportRequestUtil tpru = new TeleportRequestUtil(plugin);
                 if (!tpru.acceptRequest(commandSender.getName())) {
-                    message.PrivateMessage("teleport", "acceptnone");
+                    message.send("teleport", "acceptnone");
                 }
                 return true;
             } else {

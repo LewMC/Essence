@@ -48,11 +48,11 @@ public class HomesCommand implements CommandExecutor {
                 StringBuilder setHomes = hu.getHomesList(player);
 
                 if (setHomes == null) {
-                    message.PrivateMessage("home", "noneset");
+                    message.send("home", "noneset");
                     return true;
                 }
 
-                message.PrivateMessage("home", "list", setHomes.toString());
+                message.send("home", "list", new String[] { setHomes.toString() });
             } else {
                 permission.not();
             }

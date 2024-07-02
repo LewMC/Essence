@@ -53,7 +53,7 @@ public class WarpCommand implements CommandExecutor {
                 int waitTime = plugin.getConfig().getInt("teleportation.warp.wait");
                 if (args.length > 0) {
                     if (!teleUtil.cooldownSurpassed(player, "warp")) {
-                        message.PrivateMessage("teleport", "tryagain", String.valueOf(teleUtil.cooldownRemaining(player, "warp")));
+                        message.send("teleport", "tryagain", new String[] { String.valueOf(teleUtil.cooldownRemaining(player, "warp")) });
                         return true;
                     }
 
@@ -61,13 +61,13 @@ public class WarpCommand implements CommandExecutor {
                     config.load("data/warps.yml");
 
                     if (config.get("warps." + args[0].toLowerCase()) == null) {
-                        message.PrivateMessage("warp", "notfound", args[0].toLowerCase());
+                        message.send("warp", "notfound", new String[] { args[0].toLowerCase() });
                         return true;
                     }
 
                     if (config.getString("warps." + args[0].toLowerCase()+".world") == null) {
                         config.close();
-                        message.PrivateMessage("generic", "exception");
+                        message.send("generic", "exception");
                         this.log.warn("Player "+player+" attempted to warp to "+args[0].toLowerCase()+" but couldn't due to an error.");
                         this.log.warn("Error: world is null, please check configuration file.");
                         return true;
@@ -94,11 +94,11 @@ public class WarpCommand implements CommandExecutor {
                     );
 
                     config.close();
-                    message.PrivateMessage("warp", "teleporting", args[0], waitTime+"");
+                    message.send("warp", "teleporting", new String[] { args[0], waitTime+"" });
 
                     return true;
                 } else {
-                    message.PrivateMessage("warp", "usage");
+                    message.send("warp", "usage");
                 }
             } else {
                 permission.not();

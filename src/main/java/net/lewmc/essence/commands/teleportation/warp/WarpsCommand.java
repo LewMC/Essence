@@ -56,7 +56,7 @@ public class WarpsCommand implements CommandExecutor {
 
                 if (keys == null || Objects.equals(keys.toString(), "[]")) {
                     data.close();
-                    message.PrivateMessage("warp", "noneset");
+                    message.send("warp", "noneset");
                     return true;
                 }
 
@@ -72,7 +72,7 @@ public class WarpsCommand implements CommandExecutor {
                     i++;
                 }
                 data.close();
-                message.PrivateMessage("warp", "list", warps.toString());
+                message.send("warp", "list", new String[] { warps.toString() });
             } else {
                 permission.not();
             }

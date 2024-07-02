@@ -53,7 +53,7 @@ public class HomeCommand implements CommandExecutor {
             if (permission.has("essence.home.use")) {
                 int waitTime = plugin.getConfig().getInt("teleportation.home.wait");
                 if (!teleUtil.cooldownSurpassed(player, "home")) {
-                    message.PrivateMessage("teleport", "tryagain", String.valueOf(teleUtil.cooldownRemaining(player, "home")));
+                    message.send("teleport", "tryagain", new String[] { String.valueOf(teleUtil.cooldownRemaining(player, "home")) });
                     return true;
                 }
 
@@ -68,7 +68,7 @@ public class HomeCommand implements CommandExecutor {
                     chatHomeName = args[0].toLowerCase();
                     if (playerData.get(homeName) == null) {
                         playerData.close();
-                        message.PrivateMessage("home", "notfound", args[0].toLowerCase());
+                        message.send("home", "notfound", new String[] { args[0].toLowerCase() });
                         return true;
                     }
                 } else {
@@ -82,21 +82,21 @@ public class HomeCommand implements CommandExecutor {
                             StringBuilder setHomes = hu.getHomesList(player);
 
                             if (setHomes == null) {
-                                message.PrivateMessage("home", "noneset");
+                                message.send("home", "noneset");
                                 return true;
                             }
 
-                            message.PrivateMessage("home", "list", setHomes.toString());
+                            message.send("home", "list", new String[] { setHomes.toString() });
                             return true;
                         } else {
-                            message.PrivateMessage("home", "notfound", "home");
+                            message.send("home", "notfound", new String[] { "home" });
                         }
                     }
                 }
 
                 if (playerData.get(homeName) == null) {
                     playerData.close();
-                    message.PrivateMessage("generic", "exception");
+                    message.send("generic", "exception");
                     this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: Unable to load from configuration file, please check configuration file.");
                     return true;
@@ -104,7 +104,7 @@ public class HomeCommand implements CommandExecutor {
 
                 if (playerData.getString(homeName + ".world") == null) {
                     playerData.close();
-                    message.PrivateMessage("generic", "exception");
+                    message.send("generic", "exception");
                     this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: world is null, please check configuration file.");
                     return true;
@@ -132,12 +132,12 @@ public class HomeCommand implements CommandExecutor {
                 );
                 playerData.close();
 
-                message.PrivateMessage("home", "teleporting", chatHomeName, waitTime + "");
-
+                message.send("home", "teleporting", new String[] { chatHomeName, waitTime + "" });
+                return true;
             } else {
-                permission.not();
+                return permission.not();
             }
         }
-        return true;
+        return false;
     }
 }

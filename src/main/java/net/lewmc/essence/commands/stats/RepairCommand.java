@@ -55,12 +55,12 @@ public class RepairCommand implements CommandExecutor {
                         Damageable damageableMeta = (Damageable) itemInHand.getItemMeta();
                         damageableMeta.setDamage(0);
                         itemInHand.setItemMeta(damageableMeta);
-                        message.PrivateMessage("repair","done");
+                        message.send("repair","done");
                     } else {
-                        message.PrivateMessage("repair", "invalidtype");
+                        message.send("repair", "invalidtype");
                     }
                 } else {
-                    message.PrivateMessage("repair", "invalidtype");
+                    message.send("repair", "invalidtype");
                 }
             } else {
                 permission.not();

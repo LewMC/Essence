@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class TeleportCommand implements CommandExecutor {
     private final Essence plugin;
     private final LogUtil log;
+    private MessageUtil message;
 
     /**
      * Constructor for the TeleportCommand class.
@@ -37,13 +38,14 @@ public class TeleportCommand implements CommandExecutor {
         @NotNull String s,
         String[] args
     ) {
+        this.message = new MessageUtil(commandSender, plugin);
+
         Player player = null;
 
         if (!console(commandSender)) {
             player = (Player) commandSender;
         }
 
-        MessageUtil message = new MessageUtil(commandSender, plugin);
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("tp")) {
@@ -60,6 +62,10 @@ public class TeleportCommand implements CommandExecutor {
                     LocationUtil locationUtil = new LocationUtil(this.plugin);
                     locationUtil.UpdateLastLocation(player);
 
+                    if (this.isNull(player)) {
+                        return true;
+                    }
+
                     double x = Double.parseDouble(args[0]);
                     double y = Double.parseDouble(args[1]);
                     double z = Double.parseDouble(args[2]);
@@ -67,7 +73,7 @@ public class TeleportCommand implements CommandExecutor {
                     TeleportUtil tp = new TeleportUtil(this.plugin);
                     tp.doTeleport(player, location, 0);
 
-                    message.PrivateMessage("teleport", "tocoord", x+", "+y+", "+z);
+                    message.send("teleport", "tocoord", new String[] { x+", "+y+", "+z });
                 } else {
                     return permission.not();
                 }
@@ -79,6 +85,10 @@ public class TeleportCommand implements CommandExecutor {
                         LocationUtil locationUtil = new LocationUtil(this.plugin);
                         locationUtil.UpdateLastLocation(player);
 
+                        if (this.isNull(player)) {
+                            return true;
+                        }
+
                         double x = Double.parseDouble(args[1]);
                         double y = Double.parseDouble(args[2]);
                         double z = Double.parseDouble(args[3]);
@@ -87,7 +97,7 @@ public class TeleportCommand implements CommandExecutor {
                     } else {
                         Player playerToTeleport = this.plugin.getServer().getPlayer(args[0]);
                         if (playerToTeleport == null) {
-                            message.PrivateMessage("generic", "playernotfound");
+                            message.send("generic", "playernotfound");
                             return true;
                         }
 
@@ -101,7 +111,7 @@ public class TeleportCommand implements CommandExecutor {
                         TeleportUtil tp = new TeleportUtil(this.plugin);
                         tp.doTeleport(playerToTeleport, location, 0);
 
-                        message.PrivateMessage("teleport", "playertocoord", playerToTeleport.getName(), x+", "+y+", "+z);
+                        message.send("teleport", "playertocoord", new String[] { playerToTeleport.getName(), x+", "+y+", "+z });
                     }
                 } else {
                     return permission.not();
@@ -118,7 +128,7 @@ public class TeleportCommand implements CommandExecutor {
                             LocationUtil locationUtil = new LocationUtil(this.plugin);
                             locationUtil.UpdateLastLocation(player);
 
-                            message.PrivateMessage("teleport", "to", p.getName());
+                            message.send("teleport", "to", new String[] { p.getName() });
 
                             TeleportUtil tp = new TeleportUtil(this.plugin);
                             tp.doTeleport(player, p.getLocation(), 0);
@@ -128,7 +138,7 @@ public class TeleportCommand implements CommandExecutor {
                 } else {
                     return permission.not();
                 }
-                message.PrivateMessage("generic", "playernotfound");
+                message.send("generic", "playernotfound");
                 return true;
             } else if (type == TeleportUtil.Type.PLAYER_TO_PLAYER) {
                 if (permission.has("essence.teleport.other") && permission.has("essence.teleport.player")) {
@@ -145,23 +155,22 @@ public class TeleportCommand implements CommandExecutor {
                     }
 
                     if (player1 == null || player2 == null) {
-                        message.PrivateMessage("generic", "playernotfound");
-                        return true;
+                        message.send("generic", "playernotfound");
                     } else {
                         LocationUtil locationUtil = new LocationUtil(this.plugin);
                         locationUtil.UpdateLastLocation(player);
 
-                        message.PrivateMessage("teleport", "toplayer", player1.getName(), player2.getName());
+                        message.send("teleport", "toplayer", new String[] { player1.getName(), player2.getName() });
 
                         TeleportUtil tp = new TeleportUtil(this.plugin);
                         tp.doTeleport(player1, player2.getLocation(), 0);
-                        return true;
                     }
+                    return true;
                 } else {
                     return permission.not();
                 }
             } else {
-                message.PrivateMessage("teleport", "usage");
+                message.send("teleport", "usage");
             }
             return true;
         }
@@ -169,7 +178,27 @@ public class TeleportCommand implements CommandExecutor {
         return false;
     }
 
+    /**
+     * Checks if the command sender is the console.
+     * @param commandSender CommandSender - The command sender.
+     * @return boolean - If the command sender is the console.
+     */
     public boolean console(CommandSender commandSender) {
         return !(commandSender instanceof Player);
+    }
+
+    /**
+     * Checks if a player is null.
+     * @param player Player - The player to check.
+     * @return boolean - If the player is null.
+     */
+    private boolean isNull(Player player) {
+        if (player == null) {
+            this.message.send("generic", "exception");
+            this.log.severe("Unable to complete teleportation, player is null.");
+            return true;
+        } else {
+            return false;
+        }
     }
 }

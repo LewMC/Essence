@@ -49,7 +49,7 @@ public class DelwarpCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("delwarp")) {
             if (permission.has("essence.warp.delete")) {
                 if (args.length == 0) {
-                    message.PrivateMessage("warp", "delusage");
+                    message.send("warp", "delusage");
                     return true;
                 }
                 FileUtil config = new FileUtil(this.plugin);
@@ -59,14 +59,14 @@ public class DelwarpCommand implements CommandExecutor {
 
                 if (config.get("warps."+warpName) == null) {
                     config.close();
-                    message.PrivateMessage("warp", "notfound", warpName);
+                    message.send("warp", "notfound", new String[] { warpName });
                     return true;
                 }
 
                 if (config.remove("warps."+warpName)) {
-                    message.PrivateMessage("warp", "deleted", warpName);
+                    message.send("warp", "deleted", new String[] { warpName });
                 } else {
-                    message.PrivateMessage("generic", "exception");
+                    message.send("generic", "exception");
                 }
 
                 config.save();

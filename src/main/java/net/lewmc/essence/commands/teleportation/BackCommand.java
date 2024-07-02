@@ -53,7 +53,7 @@ public class BackCommand implements CommandExecutor {
                 playerData.load(playerData.playerDataFile(player));
 
                 if (playerData.get("last-location") == null) {
-                    message.PrivateMessage("back", "cant");
+                    message.send("back", "cant");
                     return true;
                 }
 
@@ -74,7 +74,7 @@ public class BackCommand implements CommandExecutor {
 
                 playerData.close();
 
-                message.PrivateMessage("back", "going");
+                message.send("back", "going");
 
             } else {
                 permission.not();

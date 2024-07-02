@@ -60,14 +60,14 @@ public class DelhomeCommand implements CommandExecutor {
 
                 if (config.get("homes."+homeName) == null) {
                     config.close();
-                    message.PrivateMessage("home", "notfound", name);
+                    message.send("home", "notfound", new String[] { name });
                     return true;
                 }
 
                 if (config.remove("homes."+homeName)) {
-                    message.PrivateMessage("home", "deleted", homeName);
+                    message.send("home", "deleted", new String[] { homeName });
                 } else {
-                    message.PrivateMessage("generic", "exception");
+                    message.send("generic", "exception");
                 }
 
                 config.save();

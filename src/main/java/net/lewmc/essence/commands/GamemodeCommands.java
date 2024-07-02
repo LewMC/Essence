@@ -72,7 +72,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 2) {
                 player = Bukkit.getPlayer(args[1]);
                 if (player == null) {
-                    message.PrivateMessage("generic", "playernotfound");
+                    message.send("generic", "playernotfound");
                     return true;
                 }
             } else {
@@ -91,7 +91,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 1) {
                 player = Bukkit.getPlayer(args[0]);
                 if (player == null) {
-                    message.PrivateMessage("generic", "playernotfound");
+                    message.send("generic", "playernotfound");
                     return true;
                 }
             } else {
@@ -110,7 +110,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 1) {
                 player = Bukkit.getPlayer(args[0]);
                 if (player == null) {
-                    message.PrivateMessage("generic", "playernotfound");
+                    message.send("generic", "playernotfound");
                     return true;
                 }
             } else {
@@ -133,7 +133,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 1) {
                 player = Bukkit.getPlayer(args[0]);
                 if (player == null) {
-                    message.PrivateMessage("generic", "playernotfound");
+                    message.send("generic", "playernotfound");
                     return true;
                 }
             } else {
@@ -152,7 +152,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 1) {
                 player = Bukkit.getPlayer(args[0]);
                 if (player == null) {
-                    message.PrivateMessage("generic", "playernotfound");
+                    message.send("generic", "playernotfound");
                     return true;
                 }
             } else {
@@ -170,7 +170,7 @@ public class GamemodeCommands implements CommandExecutor {
     }
 
     public boolean noModeSet() {
-        this.message.PrivateMessage("gamemode", "specify");
+        this.message.send("gamemode", "specify");
         return true;
     }
 

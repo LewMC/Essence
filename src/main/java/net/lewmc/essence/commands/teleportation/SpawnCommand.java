@@ -54,7 +54,7 @@ public class SpawnCommand implements CommandExecutor {
                 TeleportUtil teleUtil = new TeleportUtil(this.plugin);
 
                 if (!teleUtil.cooldownSurpassed(player, "spawn")) {
-                    message.PrivateMessage("teleport", "tryagain", String.valueOf(teleUtil.cooldownRemaining(player, "spawn")));
+                    message.send("teleport", "tryagain", new String[] { String.valueOf(teleUtil.cooldownRemaining(player, "spawn")) });
                     return true;
                 }
 
@@ -66,7 +66,7 @@ public class SpawnCommand implements CommandExecutor {
                     if (permission.has("essence.spawn.other")) {
                         spawnName = args[0];
                     } else {
-                        message.PrivateMessage("spawn", "worldnoperms");
+                        message.send("spawn", "worldnoperms");
                         return true;
                     }
                 } else {
@@ -85,8 +85,7 @@ public class SpawnCommand implements CommandExecutor {
 
                 if (spawnData.get("spawn."+spawnName) == null) {
                     if (this.plugin.verbose) {
-                        LogUtil log = new LogUtil(this.plugin);
-                        log.warn("Spawn not implicitly set for world '"+spawnName+"', grabbing vanilla spawnpoint.");
+                        this.log.warn("Spawn not implicitly set for world '"+spawnName+"', grabbing vanilla spawnpoint.");
                     }
                     if (Bukkit.getServer().getWorld(spawnName) != null) {
                         teleportLocation = new Location(
@@ -98,13 +97,12 @@ public class SpawnCommand implements CommandExecutor {
                                 Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch()
                         );
                     } else {
-                        message.PrivateMessage("spawn", "notexist");
+                        message.send("spawn", "notexist");
                         return true;
                     }
                 } else {
                     if (this.plugin.verbose) {
-                        LogUtil log = new LogUtil(this.plugin);
-                        log.info("Spawn implicitly set for world '"+spawnName+"'.");
+                        this.log.info("Spawn implicitly set for world '"+spawnName+"'.");
                     }
                     LocationUtil locationUtil = new LocationUtil(this.plugin);
                     locationUtil.UpdateLastLocation(player);
@@ -125,7 +123,7 @@ public class SpawnCommand implements CommandExecutor {
                 }
 
                 if (waitTime > 0) {
-                    message.PrivateMessage("teleport", "wait", String.valueOf(waitTime));
+                    message.send("teleport", "wait", new String[] { String.valueOf(waitTime) });
                 }
 
                 teleUtil.setCooldown(player, "spawn");
@@ -134,7 +132,7 @@ public class SpawnCommand implements CommandExecutor {
 
                 spawnData.close();
 
-                message.PrivateMessage("spawn", "teleporting", String.valueOf(waitTime));
+                message.send("spawn", "teleporting", new String[] { String.valueOf(waitTime) });
 
             } else {
                 permission.not();

@@ -37,13 +37,13 @@ public class PlayerUtil {
         MessageUtil message = new MessageUtil(this.commandSender, this.plugin);
         if (permission.has("essence.gamemode."+gamemode.toString().toLowerCase())) {
             if (cs == player) {
-                message.PrivateMessage("gamemode", "done", gamemode.toString().toLowerCase());
+                message.send("gamemode", "done", new String[] { gamemode.toString().toLowerCase() });
                 player.setGameMode(gamemode);
                 return true;
             } else {
                 if (permission.has("essence.gamemode.other")) {
-                    message.PrivateMessage("gamemode", "doneother", player.getName(), gamemode.toString().toLowerCase());
-                    message.SendTo(player, "gamemode", "doneby", gamemode.toString().toLowerCase(), cs.getName());
+                    message.send("gamemode", "doneother", new String[] { player.getName(), gamemode.toString().toLowerCase() });
+                    message.sendTo(player, "gamemode", "doneby", new String[] { gamemode.toString().toLowerCase(), cs.getName() });
                     player.setGameMode(gamemode);
                     return true;
                 } else {
@@ -154,18 +154,5 @@ public class PlayerUtil {
 
         playerFile.save();
         return true;
-    }
-
-    /**
-     * Gets the last time the player was online.
-     * @param player Player - The player to check.
-     * @return String - The last time the player was seen.
-     */
-    public String getLastSeen(Player player) {
-        FileUtil playerFile = new FileUtil(this.plugin);
-        playerFile.load(playerFile.playerDataFile(player));
-        String last = playerFile.getString("user.last-seen");
-        playerFile.close();
-        return last;
     }
 }

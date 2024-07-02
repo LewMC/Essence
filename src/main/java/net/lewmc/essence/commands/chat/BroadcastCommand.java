@@ -47,9 +47,9 @@ public class BroadcastCommand implements CommandExecutor {
                 for (String arg : args) {
                     broadcastMessage.append(arg).append(" ");
                 }
-                message.BroadcastMessage(broadcastMessage.toString());
+                message.broadcast(broadcastMessage.toString());
             } else {
-                message.PrivateMessage("broadcast","usage");
+                message.send("broadcast","usage");
             }
 
             return true;

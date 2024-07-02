@@ -40,6 +40,6 @@ public class PlayerBedEnter implements Listener {
         playerData.save();
 
         MessageUtil messageUtil = new MessageUtil(event.getPlayer(), this.plugin);
-        messageUtil.PrivateMessage("other", "respawnset");
+        messageUtil.send("other", "respawnset");
     }
 }

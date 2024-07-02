@@ -91,7 +91,7 @@ public class SethomeCommand implements CommandExecutor {
                 // Save the configuration to the file
                 playerData.save();
 
-                message.PrivateMessage("home", "created", name);
+                message.send("home", "created", new String[] { name });
             } else {
                 permission.not();
             }

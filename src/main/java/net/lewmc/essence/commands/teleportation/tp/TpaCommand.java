@@ -50,23 +50,23 @@ public class TpaCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("tpa")) {
             if (permission.has("essence.teleport.request.send")) {
                 if (args.length == 0) {
-                    message.PrivateMessage("teleport", "userrequired");
+                    message.send("teleport", "userrequired");
                 } else {
                     Player playerToRequest = this.plugin.getServer().getPlayer(args[0]);
                     if (playerToRequest == null) {
-                        message.PrivateMessage("generic", "playernotfound");
+                        message.send("generic", "playernotfound");
                         return true;
                     }
 
                     if (playerToRequest.getName().equals(commandSender.getName())) {
-                        message.PrivateMessage("generic", "cantyourself");
+                        message.send("generic", "cantyourself");
                         return true;
                     }
 
                     FileUtil playerData = new FileUtil(this.plugin);
                     playerData.load(playerData.playerDataFile(playerToRequest));
                     if (!playerData.getBoolean("user.accepting-teleport-requests")) {
-                        message.PrivateMessage("teleport", "requestsdisabled", playerToRequest.getName());
+                        message.send("teleport", "requestsdisabled", new String[] { playerToRequest.getName() });
                         return true;
                     }
                     playerData.close();
@@ -74,9 +74,9 @@ public class TpaCommand implements CommandExecutor {
                     TeleportRequestUtil tpru = new TeleportRequestUtil(this.plugin);
                     tpru.createRequest(commandSender.getName(), playerToRequest.getName(), false);
 
-                    message.PrivateMessage("teleport", "requestsent");
-                    message.SendTo(playerToRequest, "teleport", "requested", commandSender.getName());
-                    message.SendTo(playerToRequest, "teleport", "acceptdeny");
+                    message.send("teleport", "requestsent");
+                    message.sendTo(playerToRequest, "teleport", "requested", new String[] { commandSender.getName() });
+                    message.sendTo(playerToRequest, "teleport", "acceptdeny");
 
                 }
                 return true;
