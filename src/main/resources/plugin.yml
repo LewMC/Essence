@@ -17,58 +17,72 @@ commands:
     description: Change your gamemode.
     usage: /<command> <mode>
     aliases: ['gm']
+    permission: essence.gamemode.*
   gms:
     description: Switch to survival mode.
     usage: /<command>
     aliases: []
+    permission: essence.gamemode.survival
   gmc:
     description: Switch to creative mode.
     usage: /<command>
     aliases: []
+    permission: essence.gamemode.creative
   gma:
     description: Switch to adventure mode.
     usage: /<command>
     aliases: []
+    permission: essence.gamemode.adventure
   gmsp:
     description: Switch to spectator mode.
     usage: /<command>
     aliases: []
+    permission: essence.gamemode.spectator
   anvil:
     description: Open an anvil.
     usage: /<command>
     aliases: []
+    permission: essence.inventory.anvil
   cartography:
     description: Open a cartography table.
     usage: /<command>
     aliases: []
+    permission: essence.inventory.cartography
   craft:
     description: Open a crafting table.
     usage: /<command>
     aliases: ['workbench']
+    permission: essence.inventory.craft
   enderchest:
     description: Open your ender chest.
     usage: /<command>
     aliases: ['echest']
+    permission: essence.inventory.enderchest
   grindstone:
     description: Open a grindstone.
     usage: /<command>
     aliases: []
+    permission: essence.inventory.grindstone
   loom:
     description: Open a loom.
     usage: /<command>
     aliases: []
+    permission: essence.inventory.loom
   smithing:
     description: Open a smithing table.
     usage: /<command>
     aliases: []
+    permission: essence.inventory.smithing
   stonecutter:
     description: Open a stonecutter.
     usage: /<command>
     aliases: []
+    permission: essence.inventory.stonecutter
   trash:
     description: Open a disposal menu.
     usage: /<command>
     aliases: ['disposal','garbage']
+    permission: essence.inventory.trash
   tp:
     description: Teleport to a player or coordinates.
     usage: /<command> <player> OR /<command> <x> <y> <z>
@@ -77,78 +91,97 @@ commands:
     description: Teleport to a preset warp.
     usage: /<command> <name>
     aliases: []
+    permission: essence.warp.use
   warps:
     description: View a list of warps.
     usage: /<command>
     aliases: []
+    permission: essence.warp.list
   setwarp:
     description: Create a warp.
     usage: /<command> <name>
     aliases: []
+    permission: essence.warp.create
   delwarp:
     description: Delete a warp.
     usage: /<command> <name>
     aliases: []
+    permission: essence.warp.delete
   home:
     description: Teleport to a preset home.
     usage: /<command> [name]
     aliases: []
+    permission: essence.home.use
   homes:
     description: View a list of homes.
     usage: /<command>
     aliases: []
+    permission: essence.home.list
   sethome:
     description: Create a home.
     usage: /<command> <name>
     aliases: []
+    permission: essence.home.create
   delhome:
     description: Delete a home.
     usage: /<command> <name>
     aliases: []
+    permission: essence.home.delete
   thome:
     description: Teleport to a team home.
     usage: /<command> [name]
     aliases: ['teamhome','ghome','grouphome']
+    permission: essence.home.team.use
   thomes:
     description: View a list of team homes.
     usage: /<command>
     aliases: ['teamhomes','ghomes','grouphomes']
+    permission: essence.home.team.list
   setthome:
     description: Create a team home.
     usage: /<command> <name>
     aliases: ['setteamhome','setghome','setgrouphome']
+    permission: essence.home.team.create
   delthome:
     description: Delete a team home.
     usage: /<command> <name>
     aliases: ['delteamhome','delghome','delgrouphome']
+    permission: essence.home.team.delete
   heal:
     description: Heal yourself or someone else.
     usage: /<command> [user]
     aliases: []
+    permission: essence.stats.heal
   feed:
     description: Feed yourself or someone else.
     usage: /<command> [user]
     aliases: []
+    permission: essence.stats.feed
   broadcast:
     description: Broadcast a message to all online players.
     usage: /<command> <message>
     aliases: []
+    permission: essence.chat.broadcast
   back:
     description: Go back to your last location before teleporting.
     usage: /<command>
     aliases: []
+    permission: essence.teleport.back
   pay:
     description: Pay someone.
     usage: /<command> <user> <amount>
     aliases: []
+    permission: essence.economy.pay
   balance:
     description: See your current balance.
     usage: /<command>
     aliases: ['bal']
+    permission: essence.economy.balance
   tprandom:
     description: Teleport to a random location.
     usage: /<command>
     aliases: ['tpr', 'rtp']
+    permission: essence.teleport.random
   team:
     description: Manage teams.
     usage: /<command>
@@ -157,14 +190,17 @@ commands:
     description: Set the spawn.
     usage: /<command>
     aliases: ['spawnset']
+    permission: essence.spawn.set
   spawn:
     description: Teleport to spawn.
     usage: /<command> [world]
     aliases: ['spawnpoint','world']
+    permission: essence.spawn
   repair:
     description: Repair the item in your hand.
     usage: /<command>
     aliases: ['fix']
+    permission: essence.stats.repair
   kit:
     description: Get kits.
     usage: /<command>
@@ -173,42 +209,54 @@ commands:
     description: Request to teleport to a player.
     usage: /tpa <user>
     aliases: ['tprequest']
+    permission: essence.teleport.request.send
   tpaccept:
     description: Accept a teleportation request.
     usage: /tpaccept
+    permission: essence.teleport.request.accept
   tpdeny:
     description: Deny a teleportation request.
     usage: /tpdeny
     aliases: ['tpdecline']
+    permission: essence.teleport.request.deny
   tpahere:
     description: Request a player to teleport to you.
     usage: /tpahere
+    permission: essence.teleport.request.here
   tptoggle:
     description: Toggle receiving teleport requests.
     usage: /tptoggle
     aliases: ['toggletp']
+    permission: essence.teleport.request.toggle
   tpcancel:
     description: Cancel a teleport request.
     usage: /tpcancel
     aliases: ['canceltp']
+    permission: essence.teleport.request.cancel
   seen:
     description: See when a player was last online.
     usage: /seen <user>
+    aliases: ['pseen','playerseen']
+    permission: essence.admin.seen
   info:
     description: See information about a player.
     usage: /info <user>
     aliases: ['pinfo','playerinfo']
+    permission: essence.admin.info
   msg:
     description: Send a private message to another player.
     usage: /msg <user> <message>
     aliases: ['message', 'pm']
+    permission: essence.chat.msg
   reply:
     description: Reply to the last private message sent to you.
     usage: /reply <message>
     aliases: ['r']
+    permission: essence.chat.reply
   rules:
     description: Displays the server rules.
     usage: /rules
+    permission: essence.rules
 permissions:
   essence.*:
     description: Access to all essence commands.
