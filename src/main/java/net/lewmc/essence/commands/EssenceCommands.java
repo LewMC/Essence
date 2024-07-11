@@ -10,6 +10,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 
 public class EssenceCommands implements CommandExecutor {
@@ -58,6 +61,24 @@ public class EssenceCommands implements CommandExecutor {
                         this.plugin.verbose = this.plugin.getConfig().getBoolean("verbose");
                         message.send("generic", "reload");
                         return true;
+                    } else {
+                        return perms.not();
+                    }
+                } else if ("import".equals(args[0])) {
+                    PermissionHandler perms = new PermissionHandler(commandSender, message);
+                    if (perms.has("essence.admin.import")) {
+                        if (args.length > 1) {
+                            if (args[1].equalsIgnoreCase("essentials")) {}
+                            else if (args[1].equalsIgnoreCase("huskhomes")) {}
+                            else {
+                                message.send("import", "unsupported", new String[]{args[1]});
+                                message.send("import", "list");
+                                return true;
+                            }
+                        } else {
+                            message.send("import", "list");
+                            return true;
+                        }
                     } else {
                         return perms.not();
                     }

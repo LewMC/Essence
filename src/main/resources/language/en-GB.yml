@@ -246,3 +246,6 @@ msg:
 reply:
   usage: "§4[Essence] §cUsage: /reply <message>"
   none: "§4[Essence] §cYou don't have anyone to reply to!"
+import:
+  list: "§6[Essence] §ePlease select an option: 'Essentials', 'HuskHomes'."
+  unsupported: "§4[Essence] §cSorry, Essence doesn't support importing data from '{{1}}'"
