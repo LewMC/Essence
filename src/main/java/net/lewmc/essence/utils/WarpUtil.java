@@ -48,6 +48,13 @@ public class WarpUtil {
         return warps;
     }
 
+    /**
+     * Creates a new warp.
+     * @param warpName String - The name of the warp.
+     * @param playerUUID UUID - Owner's UUID.
+     * @param loc Location - The location of the warp.
+     * @return boolean - If the operation was successful.
+     */
     public boolean create(String warpName, UUID playerUUID, Location loc) {
         FileUtil warpsData = new FileUtil(this.plugin);
         warpsData.load("data/warps.yml");
