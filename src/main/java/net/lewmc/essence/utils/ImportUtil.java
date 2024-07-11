@@ -64,24 +64,22 @@ public class ImportUtil {
 
                 for (String home : homes) {
                     HomeUtil homeUtil = new HomeUtil(this.plugin);
+
+                    Location loc = new Location(
+                            this.plugin.getServer().getWorld(file.getString("homes."+home+".world-name")),
+                            file.getDouble("homes."+home+".x"),
+                            file.getDouble("homes."+home+".y"),
+                            file.getDouble("homes."+home+".z"),
+                            (float) file.getDouble("homes."+home+".yaw"),
+                            (float) file.getDouble("homes."+home+".pitch")
+                    );
+
+                    homeUtil.create(
+                            home,
+                            this.plugin.getServer().getPlayer(file.getString("last-account-name")),
+                            loc
+                    );
                 }
-                WarpUtil warp = new WarpUtil(this.plugin);
-
-                Location loc = new Location(
-                        plugin.getServer().getWorld(file.getString("world-name")),
-                        file.getDouble("x"),
-                        file.getDouble("y"),
-                        file.getDouble("z"),
-                        (float) file.getDouble("yaw"),
-                        (float) file.getDouble("pitch")
-                );
-
-                warp.create(
-                        file.getString("name"),
-                        UUID.fromString(file.getString("lastowner")),
-                        loc
-                );
-
                 file.close();
             }
         } else {
