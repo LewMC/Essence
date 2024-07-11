@@ -10,6 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class TeleportCommand implements CommandExecutor {
     private final Essence plugin;
     private final LogUtil log;
@@ -71,9 +73,37 @@ public class TeleportCommand implements CommandExecutor {
                         return true;
                     }
 
-                    double x = Double.parseDouble(args[0]);
-                    double y = Double.parseDouble(args[1]);
-                    double z = Double.parseDouble(args[2]);
+                    double x;
+                    double y;
+                    double z;
+
+                    try {
+                        assert player != null;
+                        if (Objects.equals(args[0], "~")) {
+                            x = player.getLocation().getX();
+                        } else {
+                            x = Double.parseDouble(args[0]);
+                        }
+
+                        if (Objects.equals(args[1], "~")) {
+                            y = player.getLocation().getY();
+                        } else {
+                            y = Double.parseDouble(args[1]);
+                        }
+
+                        if (Objects.equals(args[2], "~")) {
+                            z = player.getLocation().getZ();
+                        } else {
+                            z = Double.parseDouble(args[2]);
+                        }
+                    } catch (NullPointerException e) {
+                        message.send("generic", "exception");
+                        this.log.severe(e.getMessage());
+                        return true;
+                    } catch (NumberFormatException e) {
+                        message.send("generic", "numberformaterror");
+                        return true;
+                    }
                     Location location = new Location(player.getWorld(), x, y, z);
                     TeleportUtil tp = new TeleportUtil(this.plugin);
                     tp.doTeleport(player, location, 0);
@@ -94,9 +124,38 @@ public class TeleportCommand implements CommandExecutor {
                             return true;
                         }
 
-                        double x = Double.parseDouble(args[1]);
-                        double y = Double.parseDouble(args[2]);
-                        double z = Double.parseDouble(args[3]);
+                        double x;
+                        double y;
+                        double z;
+
+                        try {
+                            assert player != null;
+                            if (Objects.equals(args[1], "~")) {
+                                x = player.getLocation().getX();
+                            } else {
+                                x = Double.parseDouble(args[1]);
+                            }
+
+                            if (Objects.equals(args[2], "~")) {
+                                y = player.getLocation().getY();
+                            } else {
+                                y = Double.parseDouble(args[2]);
+                            }
+
+                            if (Objects.equals(args[3], "~")) {
+                                z = player.getLocation().getZ();
+                            } else {
+                                z = Double.parseDouble(args[3]);
+                            }
+                        } catch (NullPointerException e) {
+                            message.send("generic", "exception");
+                            this.log.severe(e.getMessage());
+                            return true;
+                        } catch (NumberFormatException e) {
+                            message.send("generic", "numberformaterror");
+                            return true;
+                        }
+
                         Location location = new Location(player.getWorld(), x, y, z);
                         player.teleport(location);
                     } else {
@@ -109,9 +168,37 @@ public class TeleportCommand implements CommandExecutor {
                         LocationUtil locationUtil = new LocationUtil(this.plugin);
                         locationUtil.UpdateLastLocation(playerToTeleport);
 
-                        double x = Double.parseDouble(args[1]);
-                        double y = Double.parseDouble(args[2]);
-                        double z = Double.parseDouble(args[3]);
+                        double x;
+                        double y;
+                        double z;
+
+                        try {
+                            if (Objects.equals(args[1], "~")) {
+                                x = playerToTeleport.getLocation().getX();
+                            } else {
+                                x = Double.parseDouble(args[1]);
+                            }
+
+                            if (Objects.equals(args[2], "~")) {
+                                y = playerToTeleport.getLocation().getY();
+                            } else {
+                                y = Double.parseDouble(args[2]);
+                            }
+
+                            if (Objects.equals(args[3], "~")) {
+                                z = playerToTeleport.getLocation().getZ();
+                            } else {
+                                z = Double.parseDouble(args[3]);
+                            }
+                        } catch (NullPointerException e) {
+                            message.send("generic", "exception");
+                            this.log.severe(e.getMessage());
+                            return true;
+                        } catch (NumberFormatException e) {
+                            message.send("generic", "numberformaterror");
+                            return true;
+                        }
+
                         Location location = new Location(playerToTeleport.getWorld(), x, y, z);
                         TeleportUtil tp = new TeleportUtil(this.plugin);
                         tp.doTeleport(playerToTeleport, location, 0);
