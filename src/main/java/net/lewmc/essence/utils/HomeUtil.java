@@ -1,10 +1,12 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * /homes command helper utility.
@@ -121,5 +123,33 @@ public class HomeUtil {
         }
 
         return homes;
+    }
+
+    /**
+     * Creates a new home
+     * @param homeName String - The name of the home.
+     * @param player Player - The player.
+     * @param loc Location - The location for the home.
+     * @return boolean - If the operation was successful.
+     */
+    public boolean create(String homeName, Player player, Location loc) {
+        FileUtil playerData = new FileUtil(this.plugin);
+        playerData.load(playerData.playerDataFile(player));
+
+        if (playerData.get(homeName) != null) {
+            playerData.close();
+            MessageUtil message = new MessageUtil(player, this.plugin);
+            message.send("home", "alreadyexists");
+            return false;
+        }
+
+        playerData.set(homeName + ".world", loc.getWorld().getName());
+        playerData.set(homeName + ".X", loc.getX());
+        playerData.set(homeName + ".Y", loc.getY());
+        playerData.set(homeName + ".Z", loc.getZ());
+        playerData.set(homeName + ".yaw", loc.getYaw());
+        playerData.set(homeName + ".pitch", loc.getPitch());
+
+        return playerData.save();
     }
 }

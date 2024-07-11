@@ -69,12 +69,6 @@ public class SetwarpCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (warpsData.get("warps." + warpName) != null) {
-                    warpsData.close();
-                    message.send("warp", "alreadyexists");
-                    return true;
-                }
-
                 WarpUtil wu = new WarpUtil(this.plugin);
                 int warpLimit = permission.getWarpsLimit(player);
                 if (wu.getWarpCount(player) >= warpLimit && warpLimit != -1) {
@@ -82,12 +76,14 @@ public class SetwarpCommand implements CommandExecutor {
                     return true;
                 }
 
-                wu.create(warpName, player.getUniqueId(), loc);
+                if (wu.create(warpName, player.getUniqueId(), loc)) {
+                    message.send("warp", "created", new String[] { args[0] });
+                } else {
+                    message.send("warp", "cantcreate", new String[] { args[0] });
+                }
 
                 // Save the configuration to the file
                 warpsData.close();
-
-                message.send("warp", "created", new String[] { args[0] });
             } else {
                 permission.not();
             }

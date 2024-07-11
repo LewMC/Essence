@@ -59,6 +59,13 @@ public class WarpUtil {
         FileUtil warpsData = new FileUtil(this.plugin);
         warpsData.load("data/warps.yml");
 
+        if (warpsData.get("warps." + warpName) != null) {
+            warpsData.close();
+            MessageUtil message = new MessageUtil(this.plugin.getServer().getPlayer(playerUUID), this.plugin);
+            message.send("warp", "alreadyexists");
+            return true;
+        }
+
         warpsData.set("warps."+warpName+".creator", playerUUID.toString());
         warpsData.set("warps."+warpName+".world", loc.getWorld().getName());
         warpsData.set("warps."+warpName+".X", loc.getX());
