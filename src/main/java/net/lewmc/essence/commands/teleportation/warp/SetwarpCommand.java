@@ -82,16 +82,10 @@ public class SetwarpCommand implements CommandExecutor {
                     return true;
                 }
 
-                warpsData.set("warps."+warpName+".creator", player.getUniqueId().toString());
-                warpsData.set("warps."+warpName+".world", loc.getWorld().getName());
-                warpsData.set("warps."+warpName+".X", loc.getX());
-                warpsData.set("warps."+warpName+".Y", loc.getY());
-                warpsData.set("warps."+warpName+".Z", loc.getZ());
-                warpsData.set("warps."+warpName+".yaw", loc.getYaw());
-                warpsData.set("warps."+warpName+".pitch", loc.getPitch());
+                wu.create(warpName, player.getUniqueId(), loc);
 
                 // Save the configuration to the file
-                warpsData.save();
+                warpsData.close();
 
                 message.send("warp", "created", new String[] { args[0] });
             } else {

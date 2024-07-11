@@ -1,10 +1,12 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * The warp utility.
@@ -44,5 +46,20 @@ public class WarpUtil {
         }
 
         return warps;
+    }
+
+    public boolean create(String warpName, UUID playerUUID, Location loc) {
+        FileUtil warpsData = new FileUtil(this.plugin);
+        warpsData.load("data/warps.yml");
+
+        warpsData.set("warps."+warpName+".creator", playerUUID.toString());
+        warpsData.set("warps."+warpName+".world", loc.getWorld().getName());
+        warpsData.set("warps."+warpName+".X", loc.getX());
+        warpsData.set("warps."+warpName+".Y", loc.getY());
+        warpsData.set("warps."+warpName+".Z", loc.getZ());
+        warpsData.set("warps."+warpName+".yaw", loc.getYaw());
+        warpsData.set("warps."+warpName+".pitch", loc.getPitch());
+
+        return warpsData.save();
     }
 }
