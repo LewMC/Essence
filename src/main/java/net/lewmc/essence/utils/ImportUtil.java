@@ -2,6 +2,7 @@ package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.io.File;
 import java.util.Set;
@@ -21,7 +22,11 @@ public class ImportUtil {
         this.plugin = plugin;
     }
 
-    public boolean EssentialsWarps() {
+    /**
+     * Imports warps from EssentialsX.
+     * @return boolean - If the process was successful.
+     */
+    public boolean essentialsWarps() {
         File dir = new File(this.plugin.getServer().getPluginsFolder()+"/Essentials/warps");
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
@@ -30,20 +35,23 @@ public class ImportUtil {
                 file.loadNoReformat(child);
                 WarpUtil warp = new WarpUtil(this.plugin);
 
-                Location loc = new Location(
-                        plugin.getServer().getWorld(file.getString("world-name")),
-                        file.getDouble("x"),
-                        file.getDouble("y"),
-                        file.getDouble("z"),
-                        (float) file.getDouble("yaw"),
-                        (float) file.getDouble("pitch")
-                );
+                if (file.getString("x") != null) {
 
-                warp.create(
-                        file.getString("name"),
-                        UUID.fromString(file.getString("lastowner")),
-                        loc
-                );
+                    Location loc = new Location(
+                            plugin.getServer().getWorld(file.getString("world-name")),
+                            file.getDouble("x"),
+                            file.getDouble("y"),
+                            file.getDouble("z"),
+                            (float) file.getDouble("yaw"),
+                            (float) file.getDouble("pitch")
+                    );
+
+                    warp.create(
+                            file.getString("name"),
+                            UUID.fromString(file.getString("lastowner")),
+                            loc
+                    );
+                }
 
                 file.close();
             }
@@ -53,7 +61,11 @@ public class ImportUtil {
         return true;
     }
 
-    public boolean EssentialsHomes() {
+    /**
+     * Imports homes from EssentialsX.
+     * @return boolean - If the process was successful.
+     */
+    public boolean essentialsHomes() {
         File dir = new File(this.plugin.getServer().getPluginsFolder()+"/Essentials/userdata");
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
@@ -65,20 +77,23 @@ public class ImportUtil {
                 for (String home : homes) {
                     HomeUtil homeUtil = new HomeUtil(this.plugin);
 
-                    Location loc = new Location(
-                            this.plugin.getServer().getWorld(file.getString("homes."+home+".world-name")),
-                            file.getDouble("homes."+home+".x"),
-                            file.getDouble("homes."+home+".y"),
-                            file.getDouble("homes."+home+".z"),
-                            (float) file.getDouble("homes."+home+".yaw"),
-                            (float) file.getDouble("homes."+home+".pitch")
-                    );
+                    if (file.getString("homes."+home) != null) {
 
-                    homeUtil.create(
-                            home,
-                            this.plugin.getServer().getPlayer(file.getString("last-account-name")),
-                            loc
-                    );
+                        Location loc = new Location(
+                                this.plugin.getServer().getWorld(file.getString("homes." + home + ".world-name")),
+                                file.getDouble("homes." + home + ".x"),
+                                file.getDouble("homes." + home + ".y"),
+                                file.getDouble("homes." + home + ".z"),
+                                (float) file.getDouble("homes." + home + ".yaw"),
+                                (float) file.getDouble("homes." + home + ".pitch")
+                        );
+
+                        homeUtil.create(
+                                home,
+                                this.plugin.getServer().getPlayer(file.getString("last-account-name")),
+                                loc
+                        );
+                    }
                 }
                 file.close();
             }
@@ -88,19 +103,40 @@ public class ImportUtil {
         return true;
     }
 
-    public boolean EssentialsSpawns() {
-        return false;
-    }
+    /**
+     * Imports spawns from EssentialsX.
+     * @return boolean - If the process was successful.
+     */
+    public boolean essentialsSpawns() {
+        boolean success = false;
+        FileUtil file = new FileUtil(this.plugin);
+        file.loadNoReformat(new File(this.plugin.getServer().getPluginsFolder() + "/Essentials/spawn.yml"));
+        Set<String> spawns = file.getKeys("spawns", false);
 
-    public boolean HuskWarps() {
-        return false;
-    }
+        for (String esxName : spawns) {
+            if (file.getString("spawns." + esxName) != null) {
+                FileUtil spawnFile = new FileUtil(this.plugin);
 
-    public boolean HuskHomes() {
-        return false;
-    }
 
-    public boolean HuskSpawns() {
-        return false;
+                spawnFile.load("data/spawns.yml");
+
+                World world = this.plugin.getServer().getWorld(file.getString("spawns." + esxName + ".world-name"));
+
+                if (world != null) {
+                    String essName = world.getName();
+                    if (spawnFile.get("spawn."+essName) == null) {
+                        spawnFile.set("spawn." + essName + ".X", file.getDouble("spawns." + esxName + ".x"));
+                        spawnFile.set("spawn." + essName + ".Y", file.getDouble("spawns." + esxName + ".y"));
+                        spawnFile.set("spawn." + essName + ".Z", file.getDouble("spawns." + esxName + ".z"));
+                        spawnFile.set("spawn." + essName + ".yaw", file.getDouble("spawns." + esxName + ".yaw"));
+                        spawnFile.set("spawn." + essName + ".pitch", file.getDouble("spawns." + esxName + ".pitch"));
+                    }
+                }
+
+                success = spawnFile.save();
+            }
+        }
+        file.close();
+        return success;
     }
 }

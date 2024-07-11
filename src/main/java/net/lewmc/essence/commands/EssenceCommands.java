@@ -7,9 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Objects;
 
 public class EssenceCommands implements CommandExecutor {
@@ -51,76 +48,9 @@ public class EssenceCommands implements CommandExecutor {
                     HelpCommand helpCommand = new HelpCommand(message, args);
                     return helpCommand.runHelpCommand();
                 } else if ("reload".equals(args[0])) {
-                    PermissionHandler perms = new PermissionHandler(commandSender, message);
-                    if (perms.has("essence.admin.reload")) {
-                        this.plugin.reloadConfig();
-                        this.plugin.disabledCommands = this.plugin.getConfig().getStringList("disabled-commands");
-                        this.plugin.verbose = this.plugin.getConfig().getBoolean("verbose");
-                        message.send("generic", "reload");
-                        return true;
-                    } else {
-                        return perms.not();
-                    }
+                    return this.reloadCommand(commandSender, message);
                 } else if ("import".equals(args[0])) {
-                    PermissionHandler perms = new PermissionHandler(commandSender, message);
-                    if (perms.has("essence.admin.import")) {
-                        if (args.length > 1) {
-                            if (args[1].equalsIgnoreCase("essentials")) {
-                                ImportUtil imp = new ImportUtil(this.plugin);
-                                if (imp.EssentialsWarps()) {
-                                    message.send("import", "importedwarps", new String[]{"Essentials"});
-                                } else {
-                                    message.send("import", "unabletoimport", new String[]{"warps", "Essentials"});
-                                }
-
-                                if (imp.EssentialsHomes()) {
-                                    message.send("import", "importedhomes", new String[]{"Essentials"});
-                                } else {
-                                    message.send("import", "unabletoimport", new String[]{"homes", "Essentials"});
-                                }
-
-                                if (imp.EssentialsSpawns()) {
-                                    message.send("import", "importedspawns", new String[]{"Essentials"});
-                                } else {
-                                    message.send("import", "unabletoimport", new String[]{"spawns", "Essentials"});
-                                }
-
-                                message.send("import", "done");
-                            }
-                            else if (args[1].equalsIgnoreCase("huskhomes")) {
-                                ImportUtil imp = new ImportUtil(this.plugin);
-                                if (imp.HuskWarps()) {
-                                    message.send("import", "importedwarps", new String[]{"HuskHomes"});
-                                } else {
-                                    message.send("import", "unabletoimport", new String[]{"warps", "HuskHomes"});
-                                }
-
-                                if (imp.HuskHomes()) {
-                                    message.send("import", "importedhomes", new String[]{"HuskHomes"});
-                                } else {
-                                    message.send("import", "unabletoimport", new String[]{"homes", "HuskHomes"});
-                                }
-
-                                if (imp.HuskSpawns()) {
-                                    message.send("import", "importedspawns", new String[]{"HuskHomes"});
-                                } else {
-                                    message.send("import", "unabletoimport", new String[]{"spawns", "HuskHomes"});
-                                }
-
-                                message.send("import", "done");
-                            }
-                            else {
-                                message.send("import", "unsupported", new String[]{args[1]});
-                                message.send("import", "list");
-                                return true;
-                            }
-                        } else {
-                            message.send("import", "list");
-                            return true;
-                        }
-                    } else {
-                        return perms.not();
-                    }
+                    return this.importCommand(args, message, commandSender);
                 }
             } else {
                 message.send("about", "version", new String[] { plugin.getDescription().getVersion() });
@@ -140,5 +70,71 @@ public class EssenceCommands implements CommandExecutor {
         }
 
         return false;
+    }
+
+    /**
+     * Reloads Essence's configuration (experimental).
+     * @param commandSender CommandSender - The entity that sent the command.
+     * @param message MessageUtil - The message utility.
+     * @return boolean - If the operation was successful.
+     */
+    private boolean reloadCommand(CommandSender commandSender, MessageUtil message) {
+        PermissionHandler perms = new PermissionHandler(commandSender, message);
+        if (perms.has("essence.admin.reload")) {
+            this.plugin.reloadConfig();
+            this.plugin.disabledCommands = this.plugin.getConfig().getStringList("disabled-commands");
+            this.plugin.verbose = this.plugin.getConfig().getBoolean("verbose");
+            message.send("generic", "reload");
+            return true;
+        } else {
+            return perms.not();
+        }
+    }
+
+    /**
+     * Imports homes, warps, and spawns from other plugins.
+     * @param args String[] - List of command arguments.
+     * @param message MessageUtil - The message utility.
+     * @param commandSender CommandSender - The entity that sent the command.
+     * @return boolean - If the operation was successful.
+     */
+    private boolean importCommand(String[] args, MessageUtil message, CommandSender commandSender) {
+        PermissionHandler perms = new PermissionHandler(commandSender, message);
+        if (perms.has("essence.admin.import")) {
+            if (args.length > 1) {
+                if (args[1].equalsIgnoreCase("essentials")) {
+                    ImportUtil imp = new ImportUtil(this.plugin);
+                    if (imp.essentialsWarps()) {
+                        message.send("import", "importedwarps", new String[]{"Essentials"});
+                    } else {
+                        message.send("import", "unabletoimport", new String[]{"warps", "Essentials"});
+                    }
+
+                    if (imp.essentialsHomes()) {
+                        message.send("import", "importedhomes", new String[]{"Essentials"});
+                    } else {
+                        message.send("import", "unabletoimport", new String[]{"homes", "Essentials"});
+                    }
+
+                    if (imp.essentialsSpawns()) {
+                        message.send("import", "importedspawns", new String[]{"Essentials"});
+                    } else {
+                        message.send("import", "unabletoimport", new String[]{"spawns", "Essentials"});
+                    }
+
+                    message.send("import", "done");
+                    return true;
+                } else {
+                    message.send("import", "unsupported", new String[]{args[1]});
+                    message.send("import", "list");
+                    return true;
+                }
+            } else {
+                message.send("import", "list");
+                return true;
+            }
+        } else {
+            return perms.not();
+        }
     }
 }

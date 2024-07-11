@@ -250,7 +250,7 @@ reply:
   usage: "§4[Essence] §cUsage: /reply <message>"
   none: "§4[Essence] §cYou don't have anyone to reply to!"
 import:
-  list: "§6[Essence] §ePlease select an option: 'Essentials', 'HuskHomes'."
+  list: "§6[Essence] §ePlease select an option: 'Essentials'."
   unsupported: "§4[Essence] §cSorry, Essence doesn't support importing data from '{{1}}'"
   importedwarps: "§2[Essence] §aSuccessfully imported warps from {{1}}."
   importedhomes: "§2[Essence] §aSuccessfully imported homes from {{1}}."
