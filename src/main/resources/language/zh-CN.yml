@@ -28,7 +28,7 @@ generic:
   nofolia: "§4[Essence] §c该命令不能在Folia端运行."
   helpfolia: "§4[Essence] §c如果您想帮助我们添加对Folia的支持，请访问 github.com/lewmc/essence"
   reload: "§2[Essence] §a已重载配置."
-  numberformaterror: "§4[Essence] §cEssence encountered an issue whilst converting the format of a number. Please check the command you sent is correct and try again."
+  numberformaterror: "§4[Essence] §cEssence在转换数字格式时遇到问题。请检查您发送的命令是否正确，然后重试."
 other:
   respawnset: "§6[Essence] §e重生点设置."
   rule: "§a{{1}}"
