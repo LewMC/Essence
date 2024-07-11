@@ -31,7 +31,9 @@ public class EssenceTabCompleter implements TabCompleter {
     ) {
         String[] keys;
         if (args.length == 1) {
-            keys = new String[]{"help"};
+            keys = new String[]{"help", "reload", "import"};
+        } else if (args.length == 2 && args[1].equalsIgnoreCase("import")) {
+            keys = new String[]{"Essentials", "HuskHomes"};
         } else if (args.length == 2) {
             keys = new String[]{"2", "chat", "inventory", "gamemode", "teleport", "stats", "economy", "team", "admin", "misc"};
         } else if (args.length == 3 && args[1].equalsIgnoreCase("teleport")) {

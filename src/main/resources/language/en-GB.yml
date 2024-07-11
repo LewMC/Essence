@@ -20,6 +20,7 @@ economy:
   received: "§2[Essence] §aYou received {{1}} from {{2}}"
 generic:
   blankmessage: "§6[Essence]"
+  done: "§2[Essence] §aDone."
   playernotfound: "§4[Essence] §cPlayer could not be found."
   cantyourself: "§4[Essence] §cYou can't do that to yourself!"
   exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this command, please see console for details."
@@ -249,3 +250,7 @@ reply:
 import:
   list: "§6[Essence] §ePlease select an option: 'Essentials', 'HuskHomes'."
   unsupported: "§4[Essence] §cSorry, Essence doesn't support importing data from '{{1}}'"
+  importedwarps: "§2[Essence] §aSuccessfully imported warps from {{1}}."
+  importedhomes: "§2[Essence] §aSuccessfully imported homes from {{1}}."
+  importedspawns: "§2[Essence] §aSuccessfully imported spawns from {{1}}."
+  unabletoimport: "§4[Essence] §cUnable to import {{1}} from {{2}}."

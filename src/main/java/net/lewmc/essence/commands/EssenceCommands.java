@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands;
 
-import net.lewmc.essence.utils.CommandUtil;
-import net.lewmc.essence.utils.FileUtil;
-import net.lewmc.essence.utils.MessageUtil;
+import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -68,8 +65,50 @@ public class EssenceCommands implements CommandExecutor {
                     PermissionHandler perms = new PermissionHandler(commandSender, message);
                     if (perms.has("essence.admin.import")) {
                         if (args.length > 1) {
-                            if (args[1].equalsIgnoreCase("essentials")) {}
-                            else if (args[1].equalsIgnoreCase("huskhomes")) {}
+                            if (args[1].equalsIgnoreCase("essentials")) {
+                                ImportUtil imp = new ImportUtil(this.plugin);
+                                if (imp.EssentialsWarps()) {
+                                    message.send("import", "importedwarps", new String[]{"Essentials"});
+                                } else {
+                                    message.send("import", "unabletoimport", new String[]{"warps", "Essentials"});
+                                }
+
+                                if (imp.EssentialsHomes()) {
+                                    message.send("import", "importedhomes", new String[]{"Essentials"});
+                                } else {
+                                    message.send("import", "unabletoimport", new String[]{"homes", "Essentials"});
+                                }
+
+                                if (imp.EssentialsSpawns()) {
+                                    message.send("import", "importedspawns", new String[]{"Essentials"});
+                                } else {
+                                    message.send("import", "unabletoimport", new String[]{"spawns", "Essentials"});
+                                }
+
+                                message.send("import", "done");
+                            }
+                            else if (args[1].equalsIgnoreCase("huskhomes")) {
+                                ImportUtil imp = new ImportUtil(this.plugin);
+                                if (imp.HuskWarps()) {
+                                    message.send("import", "importedwarps", new String[]{"HuskHomes"});
+                                } else {
+                                    message.send("import", "unabletoimport", new String[]{"warps", "HuskHomes"});
+                                }
+
+                                if (imp.HuskHomes()) {
+                                    message.send("import", "importedhomes", new String[]{"HuskHomes"});
+                                } else {
+                                    message.send("import", "unabletoimport", new String[]{"homes", "HuskHomes"});
+                                }
+
+                                if (imp.HuskSpawns()) {
+                                    message.send("import", "importedspawns", new String[]{"HuskHomes"});
+                                } else {
+                                    message.send("import", "unabletoimport", new String[]{"spawns", "HuskHomes"});
+                                }
+
+                                message.send("import", "done");
+                            }
                             else {
                                 message.send("import", "unsupported", new String[]{args[1]});
                                 message.send("import", "list");
