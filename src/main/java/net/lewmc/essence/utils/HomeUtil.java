@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * /homes command helper utility.
@@ -95,7 +94,13 @@ public class HomeUtil {
         FileUtil dataUtil = new FileUtil(this.plugin);
         dataUtil.load(dataUtil.playerDataFile(player));
 
-        return dataUtil.getKeys("homes", false).size();
+        Set<String> homes = dataUtil.getKeys("homes", false);
+
+        if (homes == null) {
+            return 0;
+        } else {
+            return homes.size();
+        }
     }
 
     /**
@@ -143,12 +148,12 @@ public class HomeUtil {
             return false;
         }
 
-        playerData.set(homeName + ".world", loc.getWorld().getName());
-        playerData.set(homeName + ".X", loc.getX());
-        playerData.set(homeName + ".Y", loc.getY());
-        playerData.set(homeName + ".Z", loc.getZ());
-        playerData.set(homeName + ".yaw", loc.getYaw());
-        playerData.set(homeName + ".pitch", loc.getPitch());
+        playerData.set("homes." + homeName + ".world", loc.getWorld().getName());
+        playerData.set("homes." + homeName + ".X", loc.getX());
+        playerData.set("homes." + homeName + ".Y", loc.getY());
+        playerData.set("homes." + homeName + ".Z", loc.getZ());
+        playerData.set("homes." + homeName + ".yaw", loc.getYaw());
+        playerData.set("homes." + homeName + ".pitch", loc.getPitch());
 
         return playerData.save();
     }
