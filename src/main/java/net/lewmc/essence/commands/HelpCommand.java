@@ -42,7 +42,7 @@ public class HelpCommand {
                     if (!cu.isDisabled("loom")) { this.message.send("help", "loom"); } else { blank++; }
                     if (!cu.isDisabled("smithing")) { this.message.send("help", "smithing"); } else { blank++; }
                     if (!cu.isDisabled("stonecutter")) { this.message.send("help", "stonecutter"); } else { blank++; }
-                    if (!cu.isDisabled("echest")) { this.message.send("help", "echest"); } else { blank++; }
+                    if (!cu.isDisabled("enderchest")) { this.message.send("help", "echest"); } else { blank++; }
                     this.blank(blank);
                     this.message.send("help", "page", new String[] { "1", "2" });
                 } else if (args[2].equals("2")) {
