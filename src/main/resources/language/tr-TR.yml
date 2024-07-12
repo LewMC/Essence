@@ -22,6 +22,7 @@ generic:
   blankmessage: "§6[Essence]"
   done: "§2[Essence] §aDone."
   playernotfound: "§4[Essence] §cPlayer could not be found."
+  commanddisabled: "§4[Essence] §cThis command is disabled."
   cantyourself: "§4[Essence] §cYou can't do that to yourself!"
   exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this command, please see console for details."
   configexception: "§4[Essence] §cEssence encountered an issue whilst trying to process a configuration file, please see console for details."
