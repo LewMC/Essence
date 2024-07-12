@@ -122,7 +122,7 @@ public class EssenceCommands implements CommandExecutor {
                         message.send("import", "unabletoimport", new String[]{"spawns", "Essentials"});
                     }
 
-                    message.send("import", "done");
+                    message.send("generic", "done");
                     return true;
                 } else {
                     message.send("import", "unsupported", new String[]{args[1]});

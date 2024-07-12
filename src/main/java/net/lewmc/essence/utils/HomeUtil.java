@@ -23,7 +23,7 @@ public class HomeUtil {
 
     /**
      * Gets a list of homes.
-     * @param player Player - The player who's homes to list.
+     * @param player Player - The player whose homes to list.
      * @return StringBuilder|null - List of homes or null.
      */
     public StringBuilder getHomesList(Player player) {
@@ -55,7 +55,7 @@ public class HomeUtil {
 
     /**
      * Gets a list of team homes.
-     * @param team String - The team who's homes to list.
+     * @param team String - The team whose homes to list.
      * @return StringBuilder|null - List of homes or null.
      */
     public StringBuilder getTeamHomesList(String team) {
