@@ -71,8 +71,6 @@ public class SethomeCommand implements CommandExecutor {
                     return true;
                 }
 
-                String homeName = "homes." + name.toLowerCase();
-
                 HomeUtil hu = new HomeUtil(this.plugin);
                 int homeLimit = permission.getHomesLimit(player);
                 if (hu.getHomeCount(player) >= homeLimit && homeLimit != -1) {
@@ -80,7 +78,7 @@ public class SethomeCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (hu.create(homeName, player, loc)) {
+                if (hu.create(name.toLowerCase(), player, loc)) {
                     message.send("home", "created", new String[] { name });
                 } else {
                     message.send("home", "cantcreate", new String[] { name });

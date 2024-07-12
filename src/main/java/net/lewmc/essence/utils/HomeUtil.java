@@ -138,6 +138,11 @@ public class HomeUtil {
      * @return boolean - If the operation was successful.
      */
     public boolean create(String homeName, Player player, Location loc) {
+        LogUtil log = new LogUtil(this.plugin);
+        log.info("NAME: "+homeName);
+        log.info("PLAYER: "+player);
+        log.info("LOCATION: "+loc);
+
         FileUtil playerData = new FileUtil(this.plugin);
         playerData.load(playerData.playerDataFile(player));
 
