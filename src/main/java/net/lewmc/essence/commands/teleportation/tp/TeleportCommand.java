@@ -53,7 +53,7 @@ public class TeleportCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("tp")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("tp")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             TeleportUtil tu = new TeleportUtil(this.plugin);

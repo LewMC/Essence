@@ -53,7 +53,7 @@ public class KitCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("kit")) {
             if (cmd.isDisabled("kit")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (args.length == 0) {

@@ -47,7 +47,7 @@ public class BalanceCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("balance")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("balance")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.economy.balance")) {

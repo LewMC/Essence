@@ -48,11 +48,12 @@ public class TptoggleCommand implements CommandExecutor {
         Player player = (Player) commandSender;
 
         if (command.getName().equalsIgnoreCase("tptoggle")) {
+            MessageUtil message = new MessageUtil(commandSender, this.plugin);
+
             if (cmd.isDisabled("tptoggle")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
-            MessageUtil message = new MessageUtil(commandSender, this.plugin);
             PermissionHandler permission = new PermissionHandler(commandSender, message);
 
             if (permission.has("essence.teleport.request.toggle")) {

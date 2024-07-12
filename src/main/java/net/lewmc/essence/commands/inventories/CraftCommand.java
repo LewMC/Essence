@@ -52,7 +52,7 @@ public class CraftCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("craft")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("craft")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.inventory.craft")) {

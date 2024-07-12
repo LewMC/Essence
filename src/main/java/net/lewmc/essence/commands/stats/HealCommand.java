@@ -46,7 +46,7 @@ public class HealCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("heal")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("heal")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (args.length > 0) {

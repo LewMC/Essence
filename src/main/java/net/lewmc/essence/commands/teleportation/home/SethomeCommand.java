@@ -48,7 +48,7 @@ public class SethomeCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("sethome")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("sethome")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.home.create")) {

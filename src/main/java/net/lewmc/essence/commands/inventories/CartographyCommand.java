@@ -52,7 +52,7 @@ public class CartographyCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("cartography")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("cartography")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.inventory.cartography")) {

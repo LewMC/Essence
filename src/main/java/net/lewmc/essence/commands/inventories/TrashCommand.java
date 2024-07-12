@@ -54,7 +54,7 @@ public class TrashCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("trash")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("trash")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.inventory.trash")) {

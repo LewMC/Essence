@@ -41,11 +41,11 @@ public class MsgCommand implements CommandExecutor {
     ) {
         if (command.getName().equalsIgnoreCase("msg")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
+            MessageUtil message = new MessageUtil(commandSender, plugin);
             if (cmd.isDisabled("msg")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
-            MessageUtil message = new MessageUtil(commandSender, plugin);
             PermissionHandler permission = new PermissionHandler(commandSender, message);
 
             if (!permission.has("essence.chat.msg")) {

@@ -48,7 +48,7 @@ public class TeamCommands implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("team")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("team")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (args.length > 0) {

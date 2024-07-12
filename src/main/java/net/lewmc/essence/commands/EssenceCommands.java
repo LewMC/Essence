@@ -40,7 +40,7 @@ public class EssenceCommands implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("essence")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("essence")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (args.length > 0) {

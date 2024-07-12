@@ -53,7 +53,7 @@ public class GamemodeCommands implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("gamemode")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("gamemode")) {
-                return cmd.disabled();
+                return cmd.disabled(this.message);
             }
 
             GameMode gamemode;

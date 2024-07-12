@@ -38,16 +38,21 @@ public class CommandUtil {
 
     /**
      * Responds to disabled command usage.
+     * @param msg MessageUtil - The message utility.
      * @return boolean - Verbose mode (false) or not (true)
      */
-    public boolean disabled() {
+    public boolean disabled(MessageUtil msg) {
         if (this.plugin.verbose) {
             LogUtil log = new LogUtil(this.plugin);
             log.warn("Attempted to execute disabled command.");
             return false;
-        } else {
-            return true;
         }
+
+        if (this.plugin.disabledCommandsFeedback) {
+            msg.send("generic", "commanddisabled");
+        }
+
+        return true;
     }
 
     /**

@@ -52,7 +52,7 @@ public class EnderchestCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("enderchest")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("enderchest")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.inventory.enderchest")) {

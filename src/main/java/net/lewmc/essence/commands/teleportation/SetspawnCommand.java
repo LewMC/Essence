@@ -48,7 +48,7 @@ public class SetspawnCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("setspawn")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("setspawn")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.spawn.set")) {

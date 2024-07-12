@@ -52,7 +52,7 @@ public class GrindstoneCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("grindstone")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("grindstone")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.inventory.grindstone")) {

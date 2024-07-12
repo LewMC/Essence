@@ -52,7 +52,7 @@ public class SmithingCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("smithing")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("smithing")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.inventory.smithing")) {

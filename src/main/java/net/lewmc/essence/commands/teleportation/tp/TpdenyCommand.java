@@ -48,7 +48,7 @@ public class TpdenyCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("tpdeny")) {
             if (cmd.isDisabled("tpdeny")) {
-                return cmd.disabled();
+                return cmd.disabled(msg);
             }
 
             if (permission.has("essence.teleport.request.deny")) {

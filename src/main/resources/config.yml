@@ -58,6 +58,9 @@ language: en-GB
 disabled-commands:
   - example
 
+# Should disabled commands tell users they're disabled when they're executed?
+disabled-commands-feedback: true
+
 # VERBOSE
 # Outputs more information to the console. If you're having issues, enable this.
 # Warning: Creates a lot of console spam.

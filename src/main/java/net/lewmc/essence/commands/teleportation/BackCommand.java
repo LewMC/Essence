@@ -50,7 +50,7 @@ public class BackCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("back")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("back")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.teleport.back")) {

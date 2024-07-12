@@ -68,7 +68,7 @@ public class TprandomCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("tprandom")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("tprandom")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.teleport.random")) {

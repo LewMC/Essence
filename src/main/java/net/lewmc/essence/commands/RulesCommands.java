@@ -41,11 +41,11 @@ public class RulesCommands implements CommandExecutor {
     ) {
         if (command.getName().equalsIgnoreCase("rules")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
+            MessageUtil message = new MessageUtil(commandSender, plugin);
             if (cmd.isDisabled("rules")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
-            MessageUtil message = new MessageUtil(commandSender, plugin);
             PermissionHandler perms = new PermissionHandler(commandSender, message);
             if (perms.has("essence.rules")) {
                 try (BufferedReader br = new BufferedReader(new FileReader(this.plugin.getDataFolder() + File.separator + "rules.txt"))) {

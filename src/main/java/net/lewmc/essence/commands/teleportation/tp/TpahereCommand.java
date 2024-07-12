@@ -49,7 +49,7 @@ public class TpahereCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("tpahere")) {
             if (cmd.isDisabled("tpahere")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.teleport.request.here")) {

@@ -44,6 +44,7 @@ public class Essence extends JavaPlugin {
      * The config.yml's verbose value is stored here.
      */
     public boolean verbose;
+    public boolean disabledCommandsFeedback;
 
     /**
      * The Vault economy handler.

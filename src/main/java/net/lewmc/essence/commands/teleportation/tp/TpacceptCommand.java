@@ -48,7 +48,7 @@ public class TpacceptCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("tpaccept")) {
             if (cmd.isDisabled("tpaccept")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.teleport.request.accept")) {

@@ -52,7 +52,7 @@ public class StonecutterCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("stonecutter")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("stonecutter")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.inventory.stonecutter")) {

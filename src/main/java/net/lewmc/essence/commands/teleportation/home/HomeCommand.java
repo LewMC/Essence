@@ -52,7 +52,7 @@ public class HomeCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("home")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("home")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.home.use")) {

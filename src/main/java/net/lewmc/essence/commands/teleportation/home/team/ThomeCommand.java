@@ -65,7 +65,7 @@ public class ThomeCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("thome")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("thome")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.home.team.use")) {

@@ -39,11 +39,11 @@ public class ReplyCommand implements CommandExecutor {
     ) {
         if (command.getName().equalsIgnoreCase("reply")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
+            MessageUtil message = new MessageUtil(commandSender, plugin);
             if (cmd.isDisabled("reply")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
-            MessageUtil message = new MessageUtil(commandSender, plugin);
             PermissionHandler permission = new PermissionHandler(commandSender, message);
             if (!permission.has("essence.chat.reply")) {
                 return permission.not();

@@ -45,7 +45,7 @@ public class HomesCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("homes")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("homes")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.home.list")) {

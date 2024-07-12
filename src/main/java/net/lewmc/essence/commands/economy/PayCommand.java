@@ -48,7 +48,7 @@ public class PayCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("pay")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("pay")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.economy.pay")) {

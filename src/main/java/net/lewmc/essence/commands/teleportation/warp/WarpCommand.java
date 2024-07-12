@@ -51,7 +51,7 @@ public class WarpCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("warp")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("warp")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.warp.use")) {

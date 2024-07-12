@@ -46,7 +46,7 @@ public class DelwarpCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("delwarp")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("delwarp")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.warp.delete")) {

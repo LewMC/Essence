@@ -48,7 +48,7 @@ public class SetwarpCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("setwarp")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("setwarp")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.warp.create")) {

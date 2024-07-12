@@ -50,7 +50,7 @@ public class SpawnCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("spawn")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("spawn")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.spawn")) {

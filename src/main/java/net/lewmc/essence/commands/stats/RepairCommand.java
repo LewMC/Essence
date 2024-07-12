@@ -50,7 +50,7 @@ public class RepairCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("repair")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("repair")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.stats.repair")) {

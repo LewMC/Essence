@@ -49,7 +49,7 @@ public class TpaCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("tpa")) {
             if (cmd.isDisabled("tpa")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (permission.has("essence.teleport.request.send")) {

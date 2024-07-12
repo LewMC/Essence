@@ -45,7 +45,7 @@ public class FeedCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("feed")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("feed")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
             if (args.length > 0) {

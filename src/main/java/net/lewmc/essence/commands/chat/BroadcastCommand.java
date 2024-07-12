@@ -36,12 +36,13 @@ public class BroadcastCommand implements CommandExecutor {
         String[] args
     ) {
         if (command.getName().equalsIgnoreCase("broadcast")) {
+            MessageUtil message = new MessageUtil(commandSender, plugin);
+
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("broadcast")) {
-                return cmd.disabled();
+                return cmd.disabled(message);
             }
 
-            MessageUtil message = new MessageUtil(commandSender, plugin);
             PermissionHandler permission = new PermissionHandler(commandSender, message);
             if (!permission.has("essence.chat.broadcast")) {
                 permission.not();
