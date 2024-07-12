@@ -90,12 +90,16 @@ public class HelpCommand {
                     this.blank(blank);
                     this.message.send("help", "page", new String[] { "2", "3" });
                 } else if (args[2].equals("3")) {
-                    int blank = 4;
+                    int blank = 0;
                     this.message.send("help", "teleport");
                     if (!cu.isDisabled("setspawn")) { this.message.send("help", "setspawn"); } else { blank++; }
                     if (!cu.isDisabled("spawn")) { this.message.send("help", "spawn"); } else { blank++; }
                     if (!cu.isDisabled("world")) { this.message.send("help", "world"); } else { blank++; }
                     if (!cu.isDisabled("tprandom")) { this.message.send("help", "tpr"); } else { blank++; }
+                    if (!cu.isDisabled("thome")) { this.message.send("help", "thome"); } else { blank++; }
+                    if (!cu.isDisabled("thomes")) { this.message.send("help", "thomes"); } else { blank++; }
+                    if (!cu.isDisabled("setthome")) { this.message.send("help", "setthome"); } else { blank++; }
+                    if (!cu.isDisabled("delthome")) { this.message.send("help", "delthome"); } else { blank++; }
                     this.blank(blank);
                     this.message.send("help", "page", new String[] { "3", "3" });
                 }
@@ -130,9 +134,10 @@ public class HelpCommand {
                 this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("misc".equalsIgnoreCase(args[1])) {
-                int blank = 7;
+                int blank = 6;
                 this.message.send("help", "misc");
                 if (!cu.isDisabled("rules")) { this.message.send("help", "rules"); } else { blank++; }
+                if (!cu.isDisabled("kit")) { this.message.send("help", "kit"); } else { blank++; }
                 this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("team".equalsIgnoreCase(args[1]) && !cu.isDisabled("team")) {
@@ -148,9 +153,14 @@ public class HelpCommand {
                     this.message.send("help", "teamkick");
                     this.message.send("help", "page", new String[] { "1", "2" });
                 } else if (args[2].equals("2")) {
+                    int blank = 3;
                     this.message.send("help", "team");
                     this.message.send("help", "teamdisband");
-                    this.blank(7);
+                    if (!cu.isDisabled("thome")) { this.message.send("help", "thome"); } else { blank++; }
+                    if (!cu.isDisabled("thomes")) { this.message.send("help", "thomes"); } else { blank++; }
+                    if (!cu.isDisabled("setthome")) { this.message.send("help", "setthome"); } else { blank++; }
+                    if (!cu.isDisabled("delthome")) { this.message.send("help", "delthome"); } else { blank++; }
+                    this.blank(blank);
                     this.message.send("help", "page", new String[] { "2", "2" });
                 }
             } else if ("2".equalsIgnoreCase(args[1])) {
