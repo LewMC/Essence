@@ -20,6 +20,7 @@ economy:
   received: "§2[Essence] §aYou received {{1}} from {{2}}"
 generic:
   blankmessage: "§6[Essence]"
+  done: "§2[Essence] §aDone."
   playernotfound: "§4[Essence] §cPlayer could not be found."
   cantyourself: "§4[Essence] §cYou can't do that to yourself!"
   exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this command, please see console for details."
@@ -125,6 +126,7 @@ home:
   specialchars: "§4[Essence] §cHomes cannot contain special characters!"
   alreadyexists: "§4[Essence] §cA home with this name already exists."
   created: "§2[Essence] §aCreated home '{{1}}'."
+  cantcreate: "§4[Essence] §cUnable to create home '{{1}}'."
   hitlimit: "§4[Essence] §cYou can't create any more homes."
 teamhome:
   notfound: "§4[Essence] §cTeam home {{1}} does not exist. Use /homes for a list of homes."
@@ -145,6 +147,7 @@ warp:
   specialchars: "§4[Essence] §cWarps cannot contain special characters!"
   alreadyexists: "§4[Essence] §cA warp with this name already exists."
   created: "§2[Essence] §aCreated warp '{{1}}'."
+  cantcreate: "§4[Essence] §cUnable to create warp '{{1}}'."
   teleporting: "§2[Essence] §aWarping to '{{1}}' in {{2}} seconds..."
   noneset: "§4[Essence] §cThere are no warps set."
   list: "§6[Essence] §eWarps: {{1}}"
@@ -246,3 +249,10 @@ msg:
 reply:
   usage: "§4[Essence] §cUsage: /reply <message>"
   none: "§4[Essence] §cYou don't have anyone to reply to!"
+import:
+  list: "§6[Essence] §ePlease select an option: 'Essentials'."
+  unsupported: "§4[Essence] §cSorry, Essence doesn't support importing data from '{{1}}'"
+  importedwarps: "§2[Essence] §aSuccessfully imported warps from {{1}}."
+  importedhomes: "§2[Essence] §aSuccessfully imported homes from {{1}}."
+  importedspawns: "§2[Essence] §aSuccessfully imported spawns from {{1}}."
+  unabletoimport: "§4[Essence] §cUnable to import {{1}} from {{2}}."
