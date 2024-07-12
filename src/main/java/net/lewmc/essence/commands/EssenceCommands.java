@@ -45,7 +45,7 @@ public class EssenceCommands implements CommandExecutor {
 
             if (args.length > 0) {
                 if ("help".equals(args[0])) {
-                    HelpCommand helpCommand = new HelpCommand(message, args);
+                    HelpCommand helpCommand = new HelpCommand(this.plugin, message, args);
                     return helpCommand.runHelpCommand();
                 } else if ("reload".equals(args[0])) {
                     return this.reloadCommand(commandSender, message);
