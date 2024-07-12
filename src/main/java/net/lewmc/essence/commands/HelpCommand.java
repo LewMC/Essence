@@ -1,5 +1,7 @@
 package net.lewmc.essence.commands;
 
+import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 
 /**
@@ -8,13 +10,16 @@ import net.lewmc.essence.utils.MessageUtil;
 public class HelpCommand {
     private final MessageUtil message;
     private final String[] args;
+    private final Essence plugin;
 
     /**
      * Constructor for the HelpCommand class.
+     * @param plugin Essence - Reference to main plugin class.
      * @param message MessageUtil - Instance of the MessageUtil class.
      * @param args String[] - Array of command arguments.
      */
-    public HelpCommand(MessageUtil message, String[] args) {
+    public HelpCommand(Essence plugin, MessageUtil message, String[] args) {
+        this.plugin = plugin;
         this.message = message;
         this.args = args;
     }
@@ -24,98 +29,113 @@ public class HelpCommand {
      * @return If the command was executed correctly.
      */
     public boolean runHelpCommand() {
+        CommandUtil cu = new CommandUtil(this.plugin);
         if (args.length > 1) {
             if ("inventory".equalsIgnoreCase(args[1])) {
                 if (args.length < 3 || args[2].equals("1")) {
+                    int blank = 0;
                     this.message.send("help", "inventory");
-                    this.message.send("help", "anvil");
-                    this.message.send("help", "cartography");
-                    this.message.send("help", "craft");
-                    this.message.send("help", "grindstone");
-                    this.message.send("help", "loom");
-                    this.message.send("help", "smithing");
-                    this.message.send("help", "stonecutter");
-                    this.message.send("help", "echest");
+                    if (!cu.isDisabled("anvil")) { this.message.send("help", "anvil"); } else { blank++; }
+                    if (!cu.isDisabled("cartography")) { this.message.send("help", "cartography"); } else { blank++; }
+                    if (!cu.isDisabled("craft")) { this.message.send("help", "craft"); } else { blank++; }
+                    if (!cu.isDisabled("grindstone")) { this.message.send("help", "grindstone"); } else { blank++; }
+                    if (!cu.isDisabled("loom")) { this.message.send("help", "loom"); } else { blank++; }
+                    if (!cu.isDisabled("smithing")) { this.message.send("help", "smithing"); } else { blank++; }
+                    if (!cu.isDisabled("stonecutter")) { this.message.send("help", "stonecutter"); } else { blank++; }
+                    if (!cu.isDisabled("echest")) { this.message.send("help", "echest"); } else { blank++; }
+                    this.blank(blank);
                     this.message.send("help", "page", new String[] { "1", "2" });
                 } else if (args[2].equals("2")) {
+                    int blank = 7;
                     this.message.send("help", "inventory");
-                    this.message.send("help", "trash");
-                    this.blank(7);
+                    if (!cu.isDisabled("trash")) { this.message.send("help", "trash"); } else { blank++; }
+                    this.blank(blank);
                     this.message.send("help", "page", new String[] { "2", "2" });
                 }
             } else if ("gamemode".equalsIgnoreCase(args[1])) {
+                int blank = 3;
                 this.message.send("help", "gamemode");
-                this.message.send("help", "gmc");
-                this.message.send("help", "gms");
-                this.message.send("help", "gma");
-                this.message.send("help", "gmsp");
-                this.blank(4);
+                if (!cu.isDisabled("gamemode")) { this.message.send("help", "gm"); } else { blank++; }
+                if (!cu.isDisabled("gmc")) { this.message.send("help", "gmc"); } else { blank++; }
+                if (!cu.isDisabled("gms")) { this.message.send("help", "gms"); } else { blank++; }
+                if (!cu.isDisabled("gma")) { this.message.send("help", "gma"); } else { blank++; }
+                if (!cu.isDisabled("gmsp")) { this.message.send("help", "gmsp"); } else { blank++; }
+                this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("teleport".equalsIgnoreCase(args[1])) {
                 if (args.length < 3 || args[2].equals("1")) {
+                    int blank = 0;
                     this.message.send("help", "teleport");
-                    this.message.send("help", "tp");
-                    this.message.send("help", "tpa");
-                    this.message.send("help", "tpaccept");
-                    this.message.send("help", "tpdeny");
-                    this.message.send("help", "tpahere");
-                    this.message.send("help", "tptoggle");
-                    this.message.send("help", "tpcancel");
-                    this.message.send("help", "warp");
+                    if (!cu.isDisabled("tp")) { this.message.send("help", "tp"); } else { blank++; }
+                    if (!cu.isDisabled("tpa")) { this.message.send("help", "tpa"); } else { blank++; }
+                    if (!cu.isDisabled("tpaccept")) { this.message.send("help", "tpaccept"); } else { blank++; }
+                    if (!cu.isDisabled("tpdeny")) { this.message.send("help", "tpdeny"); } else { blank++; }
+                    if (!cu.isDisabled("tpahere")) { this.message.send("help", "tpahere"); } else { blank++; }
+                    if (!cu.isDisabled("tptoggle")) { this.message.send("help", "tptoggle"); } else { blank++; }
+                    if (!cu.isDisabled("tpcancel")) { this.message.send("help", "tpcancel"); } else { blank++; }
+                    if (!cu.isDisabled("warp")) { this.message.send("help", "warp"); } else { blank++; }
+                    this.blank(blank);
                     this.message.send("help", "page", new String[] { "1", "3" });
                 } else if (args[2].equals("2")) {
+                    int blank = 0;
                     this.message.send("help", "teleport");
-                    this.message.send("help", "warps");
-                    this.message.send("help", "setwarp");
-                    this.message.send("help", "delwarp");
-                    this.message.send("help", "home");
-                    this.message.send("help", "homes");
-                    this.message.send("help", "sethome");
-                    this.message.send("help", "delhome");
-                    this.message.send("help", "back");
+                    if (!cu.isDisabled("warps")) { this.message.send("help", "warps"); } else { blank++; }
+                    if (!cu.isDisabled("setwarp")) { this.message.send("help", "setwarp"); } else { blank++; }
+                    if (!cu.isDisabled("delwarp")) { this.message.send("help", "delwarp"); } else { blank++; }
+                    if (!cu.isDisabled("home")) { this.message.send("help", "home"); } else { blank++; }
+                    if (!cu.isDisabled("homes")) { this.message.send("help", "homes"); } else { blank++; }
+                    if (!cu.isDisabled("sethome")) { this.message.send("help", "sethome"); } else { blank++; }
+                    if (!cu.isDisabled("delhome")) { this.message.send("help", "delhome"); } else { blank++; }
+                    if (!cu.isDisabled("back")) { this.message.send("help", "back"); } else { blank++; }
+                    this.blank(blank);
                     this.message.send("help", "page", new String[] { "2", "3" });
                 } else if (args[2].equals("3")) {
+                    int blank = 4;
                     this.message.send("help", "teleport");
-                    this.message.send("help", "setspawn");
-                    this.message.send("help", "spawn");
-                    this.message.send("help", "world");
-                    this.message.send("help", "tpr");
-                    this.blank(4);
+                    if (!cu.isDisabled("setspawn")) { this.message.send("help", "setspawn"); } else { blank++; }
+                    if (!cu.isDisabled("spawn")) { this.message.send("help", "spawn"); } else { blank++; }
+                    if (!cu.isDisabled("world")) { this.message.send("help", "world"); } else { blank++; }
+                    if (!cu.isDisabled("tprandom")) { this.message.send("help", "tpr"); } else { blank++; }
+                    this.blank(blank);
                     this.message.send("help", "page", new String[] { "3", "3" });
                 }
             } else if ("stats".equalsIgnoreCase(args[1])) {
+                int blank = 5;
                 this.message.send("help", "stats");
-                this.message.send("help", "feed");
-                this.message.send("help", "heal");
-                this.message.send("help", "repair");
-                this.blank(5);
+                if (!cu.isDisabled("feed")) { this.message.send("help", "feed"); } else { blank++; }
+                if (!cu.isDisabled("heal")) { this.message.send("help", "heal"); } else { blank++; }
+                if (!cu.isDisabled("repair")) { this.message.send("help", "repair"); } else { blank++; }
+                this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("economy".equalsIgnoreCase(args[1])) {
+                int blank = 6;
                 this.message.send("help", "economy");
-                this.message.send("help", "pay");
-                this.message.send("help", "bal");
-                this.blank(6);
+                if (!cu.isDisabled("pay")) { this.message.send("help", "pay"); } else { blank++; }
+                if (!cu.isDisabled("balance")) { this.message.send("help", "bal"); } else { blank++; }
+                this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("admin".equalsIgnoreCase(args[1])) {
+                int blank = 6;
                 this.message.send("help", "admin");
-                this.message.send("help", "info");
-                this.message.send("help", "seen");
-                this.message.send("help", "reload");
-                this.blank(5);
+                if (!cu.isDisabled("info")) { this.message.send("help", "info"); } else { blank++; }
+                if (!cu.isDisabled("seen")) { this.message.send("help", "seen"); } else { blank++; }
+                this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("chat".equalsIgnoreCase(args[1])) {
+                int blank = 5;
                 this.message.send("help", "chat");
-                this.message.send("help", "broadcast");
-                this.message.send("help", "msg");
-                this.message.send("help", "reply");
-                this.blank(5);
+                if (!cu.isDisabled("broadcast")) { this.message.send("help", "broadcast"); } else { blank++; }
+                if (!cu.isDisabled("msg")) { this.message.send("help", "msg"); } else { blank++; }
+                if (!cu.isDisabled("reply")) { this.message.send("help", "reply"); } else { blank++; }
+                this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("misc".equalsIgnoreCase(args[1])) {
+                int blank = 7;
                 this.message.send("help", "misc");
-                this.message.send("help", "rules");
-                this.blank(7);
+                if (!cu.isDisabled("rules")) { this.message.send("help", "rules"); } else { blank++; }
+                this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
-            } else if ("team".equalsIgnoreCase(args[1])) {
+            } else if ("team".equalsIgnoreCase(args[1]) && !cu.isDisabled("team")) {
                 if (args.length < 3 || args[2].equals("1")) {
                     this.message.send("help", "team");
                     this.message.send("help", "teamcreate");
@@ -142,6 +162,7 @@ public class HelpCommand {
                 this.message.send("help", "nochapter");
             }
         } else {
+            int blank = 0;
             this.message.send("help", "help");
             this.message.send("help", "helpchat");
             this.message.send("help", "helpinventory");
@@ -149,9 +170,14 @@ public class HelpCommand {
             this.message.send("help", "helpteleport");
             this.message.send("help", "helpstats");
             this.message.send("help", "helpeconomy");
-            this.message.send("help", "helpteam");
+            if (!cu.isDisabled("team")) { this.message.send("help", "helpteam"); } else { blank++; }
             this.message.send("help", "helpadmin");
-            this.message.send("help", "page", new String[] { "1", "2" });
+            if (blank != 0) {
+                this.message.send("help", "helpmisc");
+                this.message.send("help", "page", new String[] { "1", "1" });
+            } else {
+                this.message.send("help", "page", new String[]{"1", "2"});
+            }
         }
         return true;
     }
