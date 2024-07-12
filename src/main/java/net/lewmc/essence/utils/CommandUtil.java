@@ -36,6 +36,10 @@ public class CommandUtil {
         return false;
     }
 
+    /**
+     * Responds to disabled command usage.
+     * @return boolean - Verbose mode (false) or not (true)
+     */
     public boolean disabled() {
         if (this.plugin.verbose) {
             LogUtil log = new LogUtil(this.plugin);
