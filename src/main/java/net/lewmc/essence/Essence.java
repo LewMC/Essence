@@ -44,6 +44,10 @@ public class Essence extends JavaPlugin {
      * The config.yml's verbose value is stored here.
      */
     public boolean verbose;
+
+    /**
+     * The config.yml's disabled-commands-feedback value is stored here.
+     */
     public boolean disabledCommandsFeedback;
 
     /**
@@ -93,6 +97,7 @@ public class Essence extends JavaPlugin {
         this.log.info("");
 
         this.verbose = this.getConfig().getBoolean("verbose");
+        this.disabledCommandsFeedback = this.getConfig().getBoolean("disabled-commands-feedback");
 
         if (!Bukkit.getOnlineMode()) {
             this.log.severe(">> Your server is running in offline mode.");

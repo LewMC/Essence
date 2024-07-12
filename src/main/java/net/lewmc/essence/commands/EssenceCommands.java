@@ -83,6 +83,7 @@ public class EssenceCommands implements CommandExecutor {
         if (perms.has("essence.admin.reload")) {
             this.plugin.reloadConfig();
             this.plugin.disabledCommands = this.plugin.getConfig().getStringList("disabled-commands");
+            this.plugin.disabledCommandsFeedback = this.plugin.getConfig().getBoolean("disabled-commands-feedback");
             this.plugin.verbose = this.plugin.getConfig().getBoolean("verbose");
             message.send("generic", "reload");
             return true;

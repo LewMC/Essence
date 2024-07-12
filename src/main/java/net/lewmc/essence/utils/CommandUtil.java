@@ -42,14 +42,14 @@ public class CommandUtil {
      * @return boolean - Verbose mode (false) or not (true)
      */
     public boolean disabled(MessageUtil msg) {
+        if (this.plugin.disabledCommandsFeedback) {
+            msg.send("generic", "commanddisabled");
+        }
+
         if (this.plugin.verbose) {
             LogUtil log = new LogUtil(this.plugin);
             log.warn("Attempted to execute disabled command.");
             return false;
-        }
-
-        if (this.plugin.disabledCommandsFeedback) {
-            msg.send("generic", "commanddisabled");
         }
 
         return true;
