@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
@@ -22,7 +23,7 @@ public class HomeUtil {
 
     /**
      * Gets a list of homes.
-     * @param player Player - The player who's homes to list.
+     * @param player Player - The player whose homes to list.
      * @return StringBuilder|null - List of homes or null.
      */
     public StringBuilder getHomesList(Player player) {
@@ -54,7 +55,7 @@ public class HomeUtil {
 
     /**
      * Gets a list of team homes.
-     * @param team String - The team who's homes to list.
+     * @param team String - The team whose homes to list.
      * @return StringBuilder|null - List of homes or null.
      */
     public StringBuilder getTeamHomesList(String team) {
@@ -93,7 +94,13 @@ public class HomeUtil {
         FileUtil dataUtil = new FileUtil(this.plugin);
         dataUtil.load(dataUtil.playerDataFile(player));
 
-        return dataUtil.getKeys("homes", false).size();
+        Set<String> homes = dataUtil.getKeys("homes", false);
+
+        if (homes == null) {
+            return 0;
+        } else {
+            return homes.size();
+        }
     }
 
     /**
@@ -121,5 +128,33 @@ public class HomeUtil {
         }
 
         return homes;
+    }
+
+    /**
+     * Creates a new home
+     * @param homeName String - The name of the home.
+     * @param player Player - The player.
+     * @param loc Location - The location for the home.
+     * @return boolean - If the operation was successful.
+     */
+    public boolean create(String homeName, Player player, Location loc) {
+        FileUtil playerData = new FileUtil(this.plugin);
+        playerData.load(playerData.playerDataFile(player));
+
+        if (playerData.get(homeName) != null) {
+            playerData.close();
+            MessageUtil message = new MessageUtil(player, this.plugin);
+            message.send("home", "alreadyexists");
+            return false;
+        }
+
+        playerData.set("homes." + homeName + ".world", loc.getWorld().getName());
+        playerData.set("homes." + homeName + ".X", loc.getX());
+        playerData.set("homes." + homeName + ".Y", loc.getY());
+        playerData.set("homes." + homeName + ".Z", loc.getZ());
+        playerData.set("homes." + homeName + ".yaw", loc.getYaw());
+        playerData.set("homes." + homeName + ".pitch", loc.getPitch());
+
+        return playerData.save();
     }
 }

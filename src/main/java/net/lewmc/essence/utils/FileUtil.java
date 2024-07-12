@@ -99,6 +99,37 @@ public class FileUtil {
     }
 
     /**
+     * Opens a configuration file from root (without checking format).
+     * @param file File - Instance of the file.
+     * @return boolean - If the operation was successful
+     */
+    public boolean loadNoReformat(File file) {
+        if (!this.isOpen()) {
+            this.config = new YamlConfiguration();
+            try {
+                if (file.exists()) {
+                    this.config.load(file);
+                    this.file = file;
+                    if (this.plugin.verbose) {
+                        this.log.info("Opened file at "+file);
+                    }
+                    return true;
+                } else {
+                    this.log.warn("Unable to open file at '" + file.getAbsolutePath() + "'.");
+                    return false;
+                }
+            } catch (IOException | InvalidConfigurationException e) {
+                this.log.severe("Failed to read file " + file.getAbsolutePath());
+                this.log.severe(e.getMessage());
+                return false;
+            }
+        } else {
+            this.log.warn("Tried to open a file when another file was already open.");
+            return false;
+        }
+    }
+
+    /**
      * Deletes a file.
      * @param path String - The path of the file
      * @return boolean - If the operation was successful
