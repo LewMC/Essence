@@ -68,8 +68,6 @@ public class JoinEvent implements Listener {
                 log.severe("Unable to create player data.");
             }
         }
-
-        playerFile.close();
     }
 
     /**
@@ -100,7 +98,7 @@ public class JoinEvent implements Listener {
                 WorldCreator creator = new WorldCreator(spawnName);
                 creator.createWorld();
             }
-            if (Bukkit.getServer().getWorld(spawnName) != null) {
+            if (Bukkit.getServer().getWorld(spawnName) != null && Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null) {
                 TeleportUtil tp = new TeleportUtil(plugin);
                 tp.doTeleport(
                         event.getPlayer(),
@@ -144,7 +142,7 @@ public class JoinEvent implements Listener {
      */
     private void firstJoin(PlayerJoinEvent event, LogUtil log) {
         KitUtil kit = new KitUtil(this.plugin, event.getPlayer());
-        if (this.plugin.getConfig().get("spawn-kits") != null && !Objects.equals(this.plugin.getConfig().getString("spawn-kits"), "false")) {
+        if (this.plugin.getConfig().getList("spawn-kits") != null && !Objects.equals(this.plugin.getConfig().getString("spawn-kits"), "false")) {
             for (Object giveKit : this.plugin.getConfig().getList("spawn-kits")) {
                 log.info("Giving player '"+event.getPlayer().getName()+"' spawn kit '"+giveKit+"'");
                 kit.giveKit(giveKit.toString());
