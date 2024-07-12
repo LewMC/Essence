@@ -82,7 +82,6 @@ public class SetwarpCommand implements CommandExecutor {
                     message.send("warp", "cantcreate", new String[] { args[0] });
                 }
 
-                // Save the configuration to the file
                 warpsData.close();
             } else {
                 permission.not();
