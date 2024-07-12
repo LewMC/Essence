@@ -20,6 +20,7 @@ economy:
   received: "§2[Essence] §a你从 {{2}} 收到了{{1}}"
 generic:
   blankmessage: "§6[Essence]"
+  done: "§2[Essence] §aDone."
   playernotfound: "§4[Essence] §c找不到玩家."
   cantyourself: "§4[Essence] §c你不能对自己那样做!"
   exception: "§4[Essence] §cEssence 在试图处理此问题时遇到问题 请查阅控制台了解详细信息."
@@ -125,6 +126,7 @@ home:
   specialchars: "§4[Essence] §c设置家不能包含特殊字符!"
   alreadyexists: "§4[Essence] §c这个名字的家已经存在."
   created: "§2[Essence] §a已创建 '{{1}}'."
+  cantcreate: "§4[Essence] §cUnable to create home '{{1}}'."
   hitlimit: "§4[Essence] §c你不能再创建更多的家了."
 teamhome:
   notfound: "§4[Essence] §c团队基地 {{1}} 已不存在. 使用 /homes 查看更多的家."
@@ -145,6 +147,7 @@ warp:
   specialchars: "§4[Essence] §c传送点不能包含特殊字符!"
   alreadyexists: "§4[Essence] §c这个名称的传送点已经存在."
   created: "§2[Essence] §a已创建 '{{1}}'."
+  cantcreate: "§4[Essence] §cUnable to create warp '{{1}}'."
   teleporting: "§2[Essence] §a将在 '{{2}}' 秒内传送至 {{1}} ......"
   noneset: "§4[Essence] §c没有传送点."
   list: "§6[Essence] §e传送点: {{1}}"
@@ -246,3 +249,10 @@ msg:
 reply:
   usage: "§4[Essence] §c用法: /reply <message>"
   none: "§4[Essence] §c你没有人可以去回复!"
+import:
+  list: "§6[Essence] §ePlease select an option: 'Essentials'."
+  unsupported: "§4[Essence] §cSorry, Essence doesn't support importing data from '{{1}}'"
+  importedwarps: "§2[Essence] §aSuccessfully imported warps from {{1}}."
+  importedhomes: "§2[Essence] §aSuccessfully imported homes from {{1}}."
+  importedspawns: "§2[Essence] §aSuccessfully imported spawns from {{1}}."
+  unabletoimport: "§4[Essence] §cUnable to import {{1}} from {{2}}."
