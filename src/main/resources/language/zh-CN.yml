@@ -22,6 +22,7 @@ generic:
   blankmessage: "§6[Essence]"
   done: "§2[Essence] §aDone."
   playernotfound: "§4[Essence] §c找不到玩家."
+  commanddisabled: "§4[Essence] §cThis command is disabled."
   cantyourself: "§4[Essence] §c你不能对自己那样做!"
   exception: "§4[Essence] §cEssence 在试图处理此问题时遇到问题 请查阅控制台了解详细信息."
   configexception: "§4[Essence] §cEssence 在尝试处理时遇到问题 配置文件, 请查阅控制台了解详细信息."
