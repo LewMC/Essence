@@ -17,6 +17,13 @@ motd:
     §2§lWelcome to the server!
     §aYou can change this message in Essence's config.yml
 
+# BROADCASTS
+# These are some predefined broadcasts that fire at specific times.
+broadcasts:
+  first-join: "§a{{player}} joined the server for the first time!"
+  join: "§e{{player}} joined the server!"
+  leave: "§c{{player}} left the server!"
+
 # SPAWN KITS
 # Players are given these kits when they first join the server.
 # Set to "false" to disable this feature.

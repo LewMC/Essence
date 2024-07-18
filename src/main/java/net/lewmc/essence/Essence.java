@@ -24,6 +24,7 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -373,5 +374,6 @@ public class Essence extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerDamageEvent(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new RespawnEvent(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerBedEnter(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new LeaveEvent(this), this);
     }
 }
