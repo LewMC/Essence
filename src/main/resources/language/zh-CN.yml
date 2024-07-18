@@ -93,8 +93,8 @@ help:
   teamdisband: "§6[Essence] §e/team disband - 解散（删除）你的团队."
   thome: "§6[Essence] §e/thome - 传送到一个团队基地."
   thomes: "§6[Essence] §e/thomes - 查看所有团队基地."
-  setthome: "§6[Essence] §e/setthome - Set a team home."
-  delthome: "§6[Essence] §e/delthome - Delete a team home."
+  setthome: "§6[Essence] §e/setthome - 设置团队基地."
+  delthome: "§6[Essence] §e/delthome - 删除一个团队基地."
   admin: "§6[Essence] ------- Essence 帮助 - 管理员命令 ------"
   seen: "§6[Essence] §e/seen <name> - 查看某人最后退出的时间."
   info: "§6[Essence] §e/info <name> - 查看某玩家信息."
@@ -176,6 +176,8 @@ teleport:
   canceldone: "§2[Essence] §a取消了待处理的传送请求."
   cancelnone: "§4[Essence] §c你没有待处理的传送请求需要取消."
   requestsdisabled: "§4[Essence] §c{{1}} 已禁用传送请求."
+  movetocancel: "§6[Essence] §eMove to cancel teleportation."
+  cancelled: "§4[Essence] §cTeleportation cancelled."
 feed:
   fed: "§2[Essence] §a你将 {{1}} 喂饱了."
   serverfed: "§2[Essence] §a你被一种神奇的力量喂饱了."
@@ -230,7 +232,7 @@ team:
   disallowedhomes: "§4[Essence] §c你的团队已禁用了团队基地."
 spawn:
   set: "§2[Essence] §a出生点设置."
-  teleporting: "§2[Essence] §a {{1}} 秒后传送......"
+  teleporting: "§2[Essence] §aTeleporting in {{1}} seconds..."
   notexist: "§4[Essence] §c所请求的世界要么不存在，要么未加载."
   worldnoperms: "§4[Essence] §c你没有改变世界的权限."
 repair:
