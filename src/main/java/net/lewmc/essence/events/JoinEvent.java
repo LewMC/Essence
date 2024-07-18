@@ -31,6 +31,8 @@ public class JoinEvent implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        this.playerJoinMessage(event);
+
         LogUtil log = new LogUtil(this.plugin);
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getPlayer().getName());
@@ -158,9 +160,22 @@ public class JoinEvent implements Listener {
         if (plugin.getConfig().getString("motd.message") != null) {
             String message = plugin.getConfig().getString("motd.message");
             if (message != null) {
-                TagUtil tag = new TagUtil(plugin);
+                TagUtil tag = new TagUtil(plugin, event.getPlayer());
                 event.getPlayer().sendMessage(tag.doReplacement(message));
             }
+        }
+    }
+
+    /**
+     * Displays the player join message.
+     * @param event PlayerJoinEvent - The event
+     */
+    private void playerJoinMessage(PlayerJoinEvent event) {
+        TagUtil tag = new TagUtil(this.plugin, event.getPlayer());
+        if (event.getPlayer().hasPlayedBefore()) {
+            event.setJoinMessage(tag.doReplacement(this.plugin.getConfig().getString("broadcasts.join")));
+        } else {
+            event.setJoinMessage(tag.doReplacement(this.plugin.getConfig().getString("broadcasts.first-join")));
         }
     }
 }
