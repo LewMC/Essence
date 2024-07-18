@@ -176,6 +176,8 @@ teleport:
   canceldone: "§2[Essence] §a取消了待处理的传送请求."
   cancelnone: "§4[Essence] §c你没有待处理的传送请求需要取消."
   requestsdisabled: "§4[Essence] §c{{1}} 已禁用传送请求."
+  movetocancel: "§6[Essence] §eMove to cancel teleportation."
+  cancelled: "§4[Essence] §cTeleportation cancelled."
 feed:
   fed: "§2[Essence] §a你将 {{1}} 喂饱了."
   serverfed: "§2[Essence] §a你被一种神奇的力量喂饱了."
@@ -230,7 +232,7 @@ team:
   disallowedhomes: "§4[Essence] §c你的团队已禁用了团队基地."
 spawn:
   set: "§2[Essence] §a出生点设置."
-  teleporting: "§2[Essence] §a {{1}} 秒后传送......"
+  teleporting: "§2[Essence] §aTeleporting in {{1}} seconds..."
   notexist: "§4[Essence] §c所请求的世界要么不存在，要么未加载."
   worldnoperms: "§4[Essence] §c你没有改变世界的权限."
 repair:
