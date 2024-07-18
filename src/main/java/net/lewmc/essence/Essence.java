@@ -139,9 +139,11 @@ public class Essence extends JavaPlugin {
             this.log.severe("");
             this.log.severe("WARNING: RELOAD DETECTED!");
             this.log.severe("");
-            this.log.severe("This may cause issues with Essence and your server overall.");
-            this.log.severe("We HIGHLY recommend you restart your server instead of reloading.");
+            this.log.severe("This may cause issues with Essence, other plugins, and your server overall.");
+            this.log.severe("These issues include breaking permissions and other crashing exceptions.");
             this.log.severe("If you are reloading datapacks use /minecraft:reload instead.");
+            this.log.severe("");
+            this.log.severe("WE HIGHLY RECOMMEND RESTARTING YOUR SERVER.");
             this.log.severe("");
             this.log.severe("We will not provide support for any issues when plugin reloaders are used.");
             this.log.severe("");
