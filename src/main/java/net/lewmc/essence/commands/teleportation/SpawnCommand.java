@@ -127,17 +127,13 @@ public class SpawnCommand implements CommandExecutor {
                     );
                 }
 
-                if (waitTime > 0) {
-                    message.send("teleport", "wait", new String[] { String.valueOf(waitTime) });
-                }
-
                 teleUtil.setCooldown(player, "spawn");
+
+                message.send("spawn", "teleporting", new String[] { String.valueOf(waitTime) });
 
                 teleUtil.doTeleport(player, teleportLocation, waitTime);
 
                 spawnData.close();
-
-                message.send("spawn", "teleporting", new String[] { String.valueOf(waitTime) });
 
             } else {
                 permission.not();

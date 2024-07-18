@@ -24,7 +24,6 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -62,6 +61,12 @@ public class Essence extends JavaPlugin {
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
      */
     public Map<String, String[]> teleportRequests = new HashMap<>();
+
+    /**
+     * Stores pending teleports.
+     * UUID = The requested player's UUID.
+     */
+    public List<UUID> teleportingPlayers = new ArrayList<>();
 
     /**
      * Stores message history.
@@ -375,5 +380,6 @@ public class Essence extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new RespawnEvent(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerBedEnter(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new LeaveEvent(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerMove(this), this);
     }
 }

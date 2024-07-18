@@ -125,6 +125,8 @@ public class HomeCommand implements CommandExecutor {
                     creator.createWorld();
                 }
 
+                message.send("home", "teleporting", new String[] { chatHomeName, waitTime + "" });
+
                 teleUtil.doTeleport(
                         player,
                         Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString(homeName + ".world"))),
@@ -137,7 +139,6 @@ public class HomeCommand implements CommandExecutor {
                 );
                 playerData.close();
 
-                message.send("home", "teleporting", new String[] { chatHomeName, waitTime + "" });
                 return true;
             } else {
                 return permission.not();

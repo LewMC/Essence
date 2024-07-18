@@ -46,7 +46,7 @@ teleportation:
   randomtp:
     cooldown: 60
   spawn:
-    wait: 0
+    wait: 3
     cooldown: 10
     main-spawn-world: world
     always-spawn: false

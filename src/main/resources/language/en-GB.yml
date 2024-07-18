@@ -176,6 +176,8 @@ teleport:
   canceldone: "§2[Essence] §aCancelled pending teleport requests."
   cancelnone: "§4[Essence] §cYou have no pending teleport requests to cancel."
   requestsdisabled: "§4[Essence] §c{{1}} has teleportation requests disabled."
+  movetocancel: "§6[Essence] §eMove to cancel teleportation."
+  cancelled: "§4[Essence] §cTeleportation cancelled."
 feed:
   fed: "§2[Essence] §aYou fed {{1}}."
   serverfed: "§2[Essence] §aYou've been fed by a magical force."
@@ -230,7 +232,7 @@ team:
   disallowedhomes: "§4[Essence] §cYour team has disabled team homes."
 spawn:
   set: "§2[Essence] §aSpawn set."
-  teleporting: "§2[Essence] §aTeleporting in {{1}} seconds......"
+  teleporting: "§2[Essence] §aTeleporting in {{1}} seconds..."
   notexist: "§4[Essence] §cThe world requested either does not exist or could not be loaded."
   worldnoperms: "§4[Essence] §cYou do not have permission to change worlds."
 repair:

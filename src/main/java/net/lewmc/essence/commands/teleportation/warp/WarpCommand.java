@@ -87,6 +87,8 @@ public class WarpCommand implements CommandExecutor {
                         creator.createWorld();
                     }
 
+                    message.send("warp", "teleporting", new String[] { args[0], waitTime+"" });
+
                     teleUtil.doTeleport(
                             player,
                             Bukkit.getServer().getWorld(Objects.requireNonNull(config.getString("warps." + args[0].toLowerCase()+".world"))),
@@ -99,7 +101,6 @@ public class WarpCommand implements CommandExecutor {
                     );
 
                     config.close();
-                    message.send("warp", "teleporting", new String[] { args[0], waitTime+"" });
 
                     return true;
                 } else {
