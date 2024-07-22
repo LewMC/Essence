@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +46,11 @@ public class SetspawnCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("setspawn")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("setspawn")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.spawn.set")) {
                 Location loc = player.getLocation();
                 FileUtil spawnFile = new FileUtil(this.plugin);
@@ -64,7 +68,7 @@ public class SetspawnCommand implements CommandExecutor {
                 // Save the configuration to the file
                 spawnFile.save();
 
-                message.PrivateMessage("spawn", "set");
+                message.send("spawn", "set");
             } else {
                 permission.not();
             }

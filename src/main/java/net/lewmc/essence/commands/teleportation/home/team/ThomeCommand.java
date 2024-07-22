@@ -53,21 +53,26 @@ public class ThomeCommand implements CommandExecutor {
         String team = tu.getPlayerTeam(player.getUniqueId());
 
         if (team == null) {
-            message.PrivateMessage("team", "noteam");
+            message.send("team", "noteam");
             return true;
         }
 
         if (!tu.getRule(team, "allow-team-homes")) {
-            message.PrivateMessage("team", "disallowedhomes");
+            message.send("team", "disallowedhomes");
             return true;
         }
 
         if (command.getName().equalsIgnoreCase("thome")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("thome")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.home.team.use")) {
 
                 int waitTime = plugin.getConfig().getInt("teleportation.home.wait");
                 if (!teleUtil.cooldownSurpassed(player, "home")) {
-                    message.PrivateMessage("teleport", "tryagain", String.valueOf(teleUtil.cooldownRemaining(player, "home")));
+                    message.send("teleport", "tryagain", new String[] { String.valueOf(teleUtil.cooldownRemaining(player, "home")) });
                     return true;
                 }
 
@@ -82,7 +87,7 @@ public class ThomeCommand implements CommandExecutor {
                     chatHomeName = args[0].toLowerCase();
                     if (dataUtil.get(homeName) == null) {
                         dataUtil.close();
-                        message.PrivateMessage("teamhome", "notfound", args[0].toLowerCase());
+                        message.send("teamhome", "notfound", new String[] { args[0].toLowerCase() });
                         return true;
                     }
                 } else {
@@ -96,21 +101,21 @@ public class ThomeCommand implements CommandExecutor {
                             StringBuilder setHomes = hu.getTeamHomesList(team);
 
                             if (setHomes == null) {
-                                message.PrivateMessage("teamhome", "noneset");
+                                message.send("teamhome", "noneset");
                                 return true;
                             }
 
-                            message.PrivateMessage("teamhome", "list", setHomes.toString());
+                            message.send("teamhome", "list", new String[] { setHomes.toString() });
                             return true;
                         } else {
-                            message.PrivateMessage("teamhome", "notfound", "home");
+                            message.send("teamhome", "notfound", new String[] { "home" });
                         }
                     }
                 }
 
                 if (dataUtil.get(homeName) == null) {
                     dataUtil.close();
-                    message.PrivateMessage("generic", "exception");
+                    message.send("generic", "exception");
                     this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: Unable to load from configuration file, please check configuration file.");
                     return true;
@@ -118,7 +123,7 @@ public class ThomeCommand implements CommandExecutor {
 
                 if (dataUtil.getString(homeName + ".world") == null) {
                     dataUtil.close();
-                    message.PrivateMessage("generic", "exception");
+                    message.send("generic", "exception");
                     this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: world is null, please check configuration file.");
                     return true;
@@ -146,12 +151,12 @@ public class ThomeCommand implements CommandExecutor {
                 );
                 dataUtil.close();
 
-                message.PrivateMessage("teamhome", "teleporting", chatHomeName, waitTime + "");
-
+                message.send("teamhome", "teleporting", new String[] { chatHomeName, waitTime + "" });
+                return true;
             } else {
-                permission.not();
+                return permission.not();
             }
         }
-        return true;
+        return false;
     }
 }

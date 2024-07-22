@@ -46,6 +46,11 @@ public class SetwarpCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("setwarp")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("setwarp")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.warp.create")) {
                 if (args.length == 0) {
                     message.send("warp", "setusage");
@@ -64,12 +69,6 @@ public class SetwarpCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (warpsData.get("warps." + warpName) != null) {
-                    warpsData.close();
-                    message.send("warp", "alreadyexists");
-                    return true;
-                }
-
                 WarpUtil wu = new WarpUtil(this.plugin);
                 int warpLimit = permission.getWarpsLimit(player);
                 if (wu.getWarpCount(player) >= warpLimit && warpLimit != -1) {
@@ -77,18 +76,13 @@ public class SetwarpCommand implements CommandExecutor {
                     return true;
                 }
 
-                warpsData.set("warps."+warpName+".creator", player.getUniqueId().toString());
-                warpsData.set("warps."+warpName+".world", loc.getWorld().getName());
-                warpsData.set("warps."+warpName+".X", loc.getX());
-                warpsData.set("warps."+warpName+".Y", loc.getY());
-                warpsData.set("warps."+warpName+".Z", loc.getZ());
-                warpsData.set("warps."+warpName+".yaw", loc.getYaw());
-                warpsData.set("warps."+warpName+".pitch", loc.getPitch());
+                if (wu.create(warpName, player.getUniqueId(), loc)) {
+                    message.send("warp", "created", new String[] { args[0] });
+                } else {
+                    message.send("warp", "cantcreate", new String[] { args[0] });
+                }
 
-                // Save the configuration to the file
-                warpsData.save();
-
-                message.PrivateMessage("warp", "created", args[0]);
+                warpsData.close();
             } else {
                 permission.not();
             }

@@ -47,10 +47,14 @@ public class TpacceptCommand implements CommandExecutor {
         }
 
         if (command.getName().equalsIgnoreCase("tpaccept")) {
+            if (cmd.isDisabled("tpaccept")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.teleport.request.accept")) {
                 TeleportRequestUtil tpru = new TeleportRequestUtil(plugin);
                 if (!tpru.acceptRequest(commandSender.getName())) {
-                    message.PrivateMessage("teleport", "acceptnone");
+                    message.send("teleport", "acceptnone");
                 }
                 return true;
             } else {

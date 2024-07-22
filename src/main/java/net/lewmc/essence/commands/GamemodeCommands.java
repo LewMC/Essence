@@ -1,5 +1,6 @@
 package net.lewmc.essence.commands;
 
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
@@ -50,6 +51,11 @@ public class GamemodeCommands implements CommandExecutor {
 
         Player player;
         if (command.getName().equalsIgnoreCase("gamemode")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("gamemode")) {
+                return cmd.disabled(this.message);
+            }
+
             GameMode gamemode;
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("creative")) { gamemode = GameMode.CREATIVE; }
@@ -72,7 +78,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 2) {
                 player = Bukkit.getPlayer(args[1]);
                 if (player == null) {
-                    message.PrivateMessage("generic", "playernotfound");
+                    message.send("generic", "playernotfound");
                     return true;
                 }
             } else {
@@ -91,7 +97,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 1) {
                 player = Bukkit.getPlayer(args[0]);
                 if (player == null) {
-                    message.PrivateMessage("generic", "playernotfound");
+                    message.send("generic", "playernotfound");
                     return true;
                 }
             } else {
@@ -110,7 +116,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 1) {
                 player = Bukkit.getPlayer(args[0]);
                 if (player == null) {
-                    message.PrivateMessage("generic", "playernotfound");
+                    message.send("generic", "playernotfound");
                     return true;
                 }
             } else {
@@ -133,7 +139,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 1) {
                 player = Bukkit.getPlayer(args[0]);
                 if (player == null) {
-                    message.PrivateMessage("generic", "playernotfound");
+                    message.send("generic", "playernotfound");
                     return true;
                 }
             } else {
@@ -152,7 +158,7 @@ public class GamemodeCommands implements CommandExecutor {
             if (args.length == 1) {
                 player = Bukkit.getPlayer(args[0]);
                 if (player == null) {
-                    message.PrivateMessage("generic", "playernotfound");
+                    message.send("generic", "playernotfound");
                     return true;
                 }
             } else {
@@ -170,7 +176,7 @@ public class GamemodeCommands implements CommandExecutor {
     }
 
     public boolean noModeSet() {
-        this.message.PrivateMessage("gamemode", "specify");
+        this.message.send("gamemode", "specify");
         return true;
     }
 

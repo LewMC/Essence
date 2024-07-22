@@ -48,16 +48,21 @@ public class DelthomeCommand implements CommandExecutor {
         String team = tu.getPlayerTeam(player.getUniqueId());
 
         if (team == null) {
-            message.PrivateMessage("team", "noteam");
+            message.send("team", "noteam");
             return true;
         }
 
         if (!tu.getRule(team, "allow-team-homes")) {
-            message.PrivateMessage("team", "disallowedhomes");
+            message.send("team", "disallowedhomes");
             return true;
         }
 
         if (command.getName().equalsIgnoreCase("delthome")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("delthome")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.home.team.delete")) {
                 String name;
                 if (args.length == 0) {
@@ -73,14 +78,14 @@ public class DelthomeCommand implements CommandExecutor {
 
                 if (dataUtil.get("homes."+homeName) == null) {
                     dataUtil.close();
-                    message.PrivateMessage("teamhome", "notfound", name);
+                    message.send("teamhome", "notfound", new String[] { name });
                     return true;
                 }
 
                 if (dataUtil.remove("homes."+homeName)) {
-                    message.PrivateMessage("teamhome", "deleted", homeName);
+                    message.send("teamhome", "deleted", new String[] { homeName });
                 } else {
-                    message.PrivateMessage("generic", "exception");
+                    message.send("generic", "exception");
                 }
 
                 dataUtil.save();

@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.inventories;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
@@ -48,7 +49,12 @@ public class EnderchestCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (command.getName().equalsIgnoreCase("enderchest") || command.getName().equalsIgnoreCase("echest")) {
+        if (command.getName().equalsIgnoreCase("enderchest")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("enderchest")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.inventory.enderchest")) {
                 player.openInventory(player.getEnderChest());
                 return true;

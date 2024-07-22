@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.admin;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.FileUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
@@ -43,6 +44,11 @@ public class InfoCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("info")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("info")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.playerinfo.info")) {
                 if (args.length == 1) {
                     OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);

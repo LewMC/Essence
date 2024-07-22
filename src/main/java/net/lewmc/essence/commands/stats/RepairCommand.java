@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.stats;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
@@ -47,6 +48,11 @@ public class RepairCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("repair")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("repair")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.stats.repair")) {
                 ItemStack itemInHand = player.getInventory().getItemInMainHand();
 
@@ -55,12 +61,12 @@ public class RepairCommand implements CommandExecutor {
                         Damageable damageableMeta = (Damageable) itemInHand.getItemMeta();
                         damageableMeta.setDamage(0);
                         itemInHand.setItemMeta(damageableMeta);
-                        message.PrivateMessage("repair","done");
+                        message.send("repair","done");
                     } else {
-                        message.PrivateMessage("repair", "invalidtype");
+                        message.send("repair", "invalidtype");
                     }
                 } else {
-                    message.PrivateMessage("repair", "invalidtype");
+                    message.send("repair", "invalidtype");
                 }
             } else {
                 permission.not();

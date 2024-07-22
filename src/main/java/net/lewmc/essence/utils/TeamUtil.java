@@ -33,7 +33,7 @@ public class TeamUtil {
     public void CreateNewTeam(String name, UUID leader) {
         SecurityUtil su = new SecurityUtil();
         if (su.hasSpecialCharacters(name)) {
-            message.PrivateMessage("team", "specialchars");
+            message.send("team", "specialchars");
             return;
         }
 
@@ -57,14 +57,14 @@ public class TeamUtil {
                 playerDataFile.set("user.team", name);
                 playerDataFile.save();
 
-                message.PrivateMessage("team", "created", name);
+                message.send("team", "created", new String[] { name });
             } else {
-                message.PrivateMessage("generic", "exception");
+                message.send("generic", "exception");
                 LogUtil log = new LogUtil(this.plugin);
                 log.warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
             }
         } else {
-            message.PrivateMessage("team", "exists");
+            message.send("team", "exists");
         }
     }
 
@@ -81,9 +81,9 @@ public class TeamUtil {
             requests.add(player.toString());
             teamsFile.set("members.requests", requests);
             teamsFile.save();
-            message.PrivateMessage("team", "requested", team);
+            message.send("team", "requested", new String[] { team });
         } else {
-            message.PrivateMessage("team", "notfound");
+            message.send("team", "notfound");
         }
     }
 
@@ -117,7 +117,7 @@ public class TeamUtil {
 
             return requestList.toString();
         } else {
-            message.PrivateMessage("team", "notfound");
+            message.send("team", "notfound");
             return "";
         }
     }
@@ -432,34 +432,6 @@ public class TeamUtil {
         teamData.save();
 
         return result;
-    }
-
-    /**
-     * Sets a rule for a team.
-     * @param team String - Team name.
-     * @param rule String - Rule to set.
-     * @param value String - Value of a rule (must be "true" or "false")
-     * @return boolean - if the operation was successful.
-     * @deprecated Use setRule(String, String, boolean) instead.
-     */
-    @Deprecated
-    public boolean setRule(String team, String rule, String value) {
-        boolean booleanValue;
-        if (value.equalsIgnoreCase("true")) {
-            booleanValue = true;
-        } else if (value.equalsIgnoreCase("false")) {
-            booleanValue = false;
-        } else {
-            return false;
-        }
-
-        FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("data/teams/"+team+".yml");
-
-        teamData.set("rules."+rule, booleanValue);
-        teamData.save();
-
-        return true;
     }
 
     /**

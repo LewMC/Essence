@@ -114,7 +114,7 @@ public class TeleportUtil {
             lastEvent = LocalDateTime.parse(Objects.requireNonNull(last));
         } catch (DateTimeException e) {
             this.log.warn("DateTimeException: "+e);
-            this.log.warn("Unable to calculate cooldown, the field may be missing or corrupted. Resetting...");
+            this.log.warn("Unable to calculate cooldown, the field may be missing or corrupted.");
             return 0;
         }
 
@@ -165,21 +165,33 @@ public class TeleportUtil {
      */
     public void doTeleport(Player player, Location location, int delay) {
         FoliaLib flib = new FoliaLib(this.plugin);
+        MessageUtil message = new MessageUtil(player, this.plugin);
         if (location.getWorld() == null) {
-            MessageUtil message = new MessageUtil(player, this.plugin);
-            message.PrivateMessage("generic","exception");
+            message.send("generic","exception");
             this.log.severe("Unable to locate world in universe.");
             this.log.severe("Details: {\"error\": \"WORLD_IS_NULL\", \"caught\": \"TeleportUtil.java\", \"submitted\": \"null\", \"found\": \"null\"}.");
             return;
         }
 
+        if (delay > 0) {
+            message.send("teleport", "movetocancel");
+        }
+        this.setTeleportStatus(player, true);
         if (flib.isFolia()) {
-            flib.getImpl().runAtEntityLater(player, () -> player.teleportAsync(location), delay * 20L);
+            flib.getImpl().runAtEntityLater(player, () -> {
+                if (teleportIsValid(player)) {
+                    player.teleportAsync(location);
+                    setTeleportStatus(player, false);
+                }
+            }, delay * 20L);
         } else {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    player.teleport(location);
+                    if (teleportIsValid(player)) {
+                        player.teleport(location);
+                        setTeleportStatus(player, false);
+                    }
                 }
             }.runTaskLater(plugin, delay * 20L);
         }
@@ -208,5 +220,30 @@ public class TeleportUtil {
         }
 
         return Type.INVALID;
+    }
+
+    /**
+     * Sets a player's teleport status.
+     * @param player Player - The player to teleport.
+     * @param teleportInFuture boolean - Is the teleport happening in the future?
+     */
+    public void setTeleportStatus(Player player, boolean teleportInFuture) {
+        if (teleportInFuture) {
+            this.plugin.teleportingPlayers.add(player.getUniqueId());
+        } else {
+            this.plugin.teleportingPlayers.remove(player.getUniqueId());
+        }
+    }
+
+    /**
+     * Gets a player's teleport status.
+     * @param player Player - The player to teleport.
+     */
+    public boolean teleportIsValid(Player player) {
+        if (this.plugin.teleportingPlayers == null) {
+            return false;
+        } else {
+            return this.plugin.teleportingPlayers.contains(player.getUniqueId());
+        }
     }
 }

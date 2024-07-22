@@ -46,6 +46,11 @@ public class SethomeCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("sethome")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("sethome")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.home.create")) {
 
                 String name;
@@ -66,14 +71,6 @@ public class SethomeCommand implements CommandExecutor {
                     return true;
                 }
 
-                String homeName = "homes." + name.toLowerCase();
-
-                if (playerData.get(homeName) != null) {
-                    playerData.close();
-                    message.send("home", "alreadyexists");
-                    return true;
-                }
-
                 HomeUtil hu = new HomeUtil(this.plugin);
                 int homeLimit = permission.getHomesLimit(player);
                 if (hu.getHomeCount(player) >= homeLimit && homeLimit != -1) {
@@ -81,17 +78,11 @@ public class SethomeCommand implements CommandExecutor {
                     return true;
                 }
 
-                playerData.set(homeName + ".world", loc.getWorld().getName());
-                playerData.set(homeName + ".X", loc.getX());
-                playerData.set(homeName + ".Y", loc.getY());
-                playerData.set(homeName + ".Z", loc.getZ());
-                playerData.set(homeName + ".yaw", loc.getYaw());
-                playerData.set(homeName + ".pitch", loc.getPitch());
-
-                // Save the configuration to the file
-                playerData.save();
-
-                message.PrivateMessage("home", "created", name);
+                if (hu.create(name.toLowerCase(), player, loc)) {
+                    message.send("home", "created", new String[] { name });
+                } else {
+                    message.send("home", "cantcreate", new String[] { name });
+                }
             } else {
                 permission.not();
             }

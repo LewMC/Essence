@@ -1,10 +1,12 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * The warp utility.
@@ -44,5 +46,34 @@ public class WarpUtil {
         }
 
         return warps;
+    }
+
+    /**
+     * Creates a new warp.
+     * @param warpName String - The name of the warp.
+     * @param playerUUID UUID - Owner's UUID.
+     * @param loc Location - The location of the warp.
+     * @return boolean - If the operation was successful.
+     */
+    public boolean create(String warpName, UUID playerUUID, Location loc) {
+        FileUtil warpsData = new FileUtil(this.plugin);
+        warpsData.load("data/warps.yml");
+
+        if (warpsData.get("warps." + warpName) != null) {
+            warpsData.close();
+            MessageUtil message = new MessageUtil(this.plugin.getServer().getPlayer(playerUUID), this.plugin);
+            message.send("warp", "alreadyexists");
+            return false;
+        }
+
+        warpsData.set("warps."+warpName+".creator", playerUUID.toString());
+        warpsData.set("warps."+warpName+".world", loc.getWorld().getName());
+        warpsData.set("warps."+warpName+".X", loc.getX());
+        warpsData.set("warps."+warpName+".Y", loc.getY());
+        warpsData.set("warps."+warpName+".Z", loc.getZ());
+        warpsData.set("warps."+warpName+".yaw", loc.getYaw());
+        warpsData.set("warps."+warpName+".pitch", loc.getPitch());
+
+        return warpsData.save();
     }
 }

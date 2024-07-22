@@ -60,24 +60,29 @@ public class TprandomCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (this.flib.isFolia()) {
-            message.PrivateMessage("generic","nofolia");
-            message.PrivateMessage("generic","helpfolia");
+            message.send("generic","nofolia");
+            message.send("generic","helpfolia");
             return true;
         }
 
         if (command.getName().equalsIgnoreCase("tprandom")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("tprandom")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.teleport.random")) {
                 if (!this.teleUtil.cooldownSurpassed(player, "randomtp")) {
-                    message.PrivateMessage("teleport", "tryagain", String.valueOf(this.teleUtil.cooldownRemaining(player, "randomtp")));
+                    message.send("teleport", "tryagain", new String[] { String.valueOf(this.teleUtil.cooldownRemaining(player, "randomtp")) });
                     return true;
                 }
-                message.PrivateMessage("tprandom", "searching");
+                message.send("tprandom", "searching");
                 WorldBorder wb;
                 try {
                     wb = Objects.requireNonNull(Bukkit.getWorld(player.getWorld().getUID())).getWorldBorder();
                 } catch (NullPointerException e) {
                     this.log.warn("NullPointerException randomly teleporting: " + e);
-                    message.PrivateMessage("generic", "exception");
+                    message.send("generic", "exception");
                     return true;
                 }
 
@@ -100,9 +105,9 @@ public class TprandomCommand implements CommandExecutor {
         MessageUtil message = new MessageUtil(player, plugin);
 
         if (teleportLocation.getY() != -64) {
-            message.PrivateMessage("tprandom", "teleporting");
+            message.send("tprandom", "teleporting");
         } else {
-            message.PrivateMessage("tprandom", "nosafe");
+            message.send("tprandom", "nosafe");
             return;
         }
 
@@ -110,14 +115,14 @@ public class TprandomCommand implements CommandExecutor {
         if (this.flib.isFolia()) {
             flib.getImpl().runAtLocation(teleportLocation, wrappedTask -> {
                 if (!chunk.isLoaded()) {
-                    message.PrivateMessage("tprandom", "generating");
+                    message.send("tprandom", "generating");
                     chunk.load(true);
                 }
                 doTeleportation(player, teleportLocation);
             });
         } else {
             if (!chunk.isLoaded()) {
-                message.PrivateMessage("tprandom", "generating");
+                message.send("tprandom", "generating");
                 chunk.load(true);
             }
             doTeleportation(player, teleportLocation);

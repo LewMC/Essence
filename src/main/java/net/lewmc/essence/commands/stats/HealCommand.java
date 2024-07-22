@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.stats;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.Bukkit;
@@ -37,43 +38,71 @@ public class HealCommand implements CommandExecutor {
     ) {
         MessageUtil message = new MessageUtil(commandSender, plugin);
         if (!(commandSender instanceof Player) && args.length == 0) {
-            message.PrivateMessage("heal","usage");
+            message.send("heal","usage");
             return true;
         }
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("heal")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("heal")) {
+                return cmd.disabled(message);
+            }
+
             if (args.length > 0) {
-                if (permission.has("essence.stats.heal.other")) {
-                    String pName = args[0];
-                    Player p = Bukkit.getPlayer(pName);
-                    if (p != null) {
-                        message.PrivateMessage("heal", "healed", p.getName());
-                        if (!(commandSender instanceof Player)) {
-                            message.SendTo(p, "heal", "serverhealed");
-                        } else {
-                            message.SendTo(p, "heal", "healedby", commandSender.getName());
-                        }
-                        p.setHealth(20.0);
-                    } else {
-                        message.PrivateMessage("generic", "playernotfound");
-                    }
-                    return true;
-                } else {
-                    return permission.not();
-                }
+                return this.healOther(permission, commandSender, message, args);
             } else {
-                if (permission.has("essence.stats.heal")) {
-                    Player player = (Player) commandSender;
-                    player.setHealth(20.0);
-                    message.PrivateMessage("heal", "beenhealed");
-                    return true;
-                } else {
-                    return permission.not();
-                }
+                return this.healSelf(permission, commandSender, message);
             }
         }
 
         return true;
+    }
+
+    /**
+     * Heals the command sender.
+     * @param permission PermisionHandler - The permission system.
+     * @param sender CommandSender - The user to feed.
+     * @param message MessageUtil - The messaging system.
+     * @return boolean - If the operation was successful
+     */
+    private boolean healSelf(PermissionHandler permission, CommandSender sender, MessageUtil message) {
+        if (permission.has("essence.stats.heal")) {
+            Player player = (Player) sender;
+            player.setHealth(20.0);
+            message.send("heal", "beenhealed");
+            return true;
+        } else {
+            return permission.not();
+        }
+    }
+
+    /**
+     * Heals another user.
+     * @param permission PermisionHandler - The permission system.
+     * @param sender CommandSender - The user to feed.
+     * @param message MessageUtil - The messaging system.
+     * @param args String[] - List of command arguments.
+     * @return boolean - If the operation was successful
+     */
+    private boolean healOther(PermissionHandler permission, CommandSender sender, MessageUtil message, String[] args) {
+        if (permission.has("essence.stats.heal.other")) {
+            String pName = args[0];
+            Player p = Bukkit.getPlayer(pName);
+            if (p != null) {
+                message.send("heal", "healed", new String[] { p.getName() });
+                if (!(sender instanceof Player)) {
+                    message.sendTo(p, "heal", "serverhealed");
+                } else {
+                    message.sendTo(p, "heal", "healedby", new String[] { sender.getName() });
+                }
+                p.setHealth(20.0);
+            } else {
+                message.send("generic", "playernotfound");
+            }
+            return true;
+        } else {
+            return permission.not();
+        }
     }
 }

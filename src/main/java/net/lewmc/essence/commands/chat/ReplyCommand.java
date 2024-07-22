@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.chat;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.command.Command;
@@ -37,7 +38,12 @@ public class ReplyCommand implements CommandExecutor {
         String[] args
     ) {
         if (command.getName().equalsIgnoreCase("reply")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
             MessageUtil message = new MessageUtil(commandSender, plugin);
+            if (cmd.isDisabled("reply")) {
+                return cmd.disabled(message);
+            }
+
             PermissionHandler permission = new PermissionHandler(commandSender, message);
             if (!permission.has("essence.chat.reply")) {
                 return permission.not();

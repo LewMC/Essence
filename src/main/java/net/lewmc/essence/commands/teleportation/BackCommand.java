@@ -48,12 +48,17 @@ public class BackCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("back")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("back")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.teleport.back")) {
                 FileUtil playerData = new FileUtil(this.plugin);
                 playerData.load(playerData.playerDataFile(player));
 
                 if (playerData.get("last-location") == null) {
-                    message.PrivateMessage("back", "cant");
+                    message.send("back", "cant");
                     return true;
                 }
 
@@ -74,7 +79,7 @@ public class BackCommand implements CommandExecutor {
 
                 playerData.close();
 
-                message.PrivateMessage("back", "going");
+                message.send("back", "going");
 
             } else {
                 permission.not();

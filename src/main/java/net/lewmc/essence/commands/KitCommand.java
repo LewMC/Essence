@@ -52,6 +52,10 @@ public class KitCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("kit")) {
+            if (cmd.isDisabled("kit")) {
+                return cmd.disabled(message);
+            }
+
             if (args.length == 0) {
                 StringBuilder kits = new StringBuilder("No kits found.");
 
@@ -81,16 +85,16 @@ public class KitCommand implements CommandExecutor {
 
                 kitData.close();
 
-                message.PrivateMessage("kit", "select", kits.toString());
+                message.send("kit", "select", new String[] { kits.toString() });
             } else {
                 KitUtil kit = new KitUtil(this.plugin, player);
 
                 if (kit.giveKit(args[0]) == 0) {
-                    message.PrivateMessage("kit", "done", args[0]);
+                    message.send("kit", "done", new String[] { args[0] });
                 } else if (kit.giveKit(args[0]) == 1) {
-                    message.PrivateMessage("kit", "nopermission");
+                    message.send("kit", "nopermission");
                 } else if (kit.giveKit(args[0]) == 2) {
-                    message.PrivateMessage("kit", "notexist");
+                    message.send("kit", "notexist");
                 }
             }
             return true;

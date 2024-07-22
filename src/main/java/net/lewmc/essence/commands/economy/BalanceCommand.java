@@ -45,6 +45,11 @@ public class BalanceCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("balance")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("balance")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.economy.balance")) {
                 FileUtil data = new FileUtil(this.plugin);
                 data.load(data.playerDataFile(player));
@@ -52,7 +57,7 @@ public class BalanceCommand implements CommandExecutor {
                 double balance = data.getDouble("economy.balance");
                 data.close();
 
-                message.PrivateMessage("economy","balance", plugin.getConfig().getString("economy.symbol") + balance);
+                message.send("economy","balance", new String[] { plugin.getConfig().getString("economy.symbol") + balance });
                 return true;
             } else {
                 return permission.not();

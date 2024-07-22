@@ -31,6 +31,8 @@ public class JoinEvent implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        this.playerJoinMessage(event);
+
         LogUtil log = new LogUtil(this.plugin);
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getPlayer().getName());
@@ -68,8 +70,6 @@ public class JoinEvent implements Listener {
                 log.severe("Unable to create player data.");
             }
         }
-
-        playerFile.close();
     }
 
     /**
@@ -100,7 +100,7 @@ public class JoinEvent implements Listener {
                 WorldCreator creator = new WorldCreator(spawnName);
                 creator.createWorld();
             }
-            if (Bukkit.getServer().getWorld(spawnName) != null) {
+            if (Bukkit.getServer().getWorld(spawnName) != null && Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null) {
                 TeleportUtil tp = new TeleportUtil(plugin);
                 tp.doTeleport(
                         event.getPlayer(),
@@ -144,7 +144,7 @@ public class JoinEvent implements Listener {
      */
     private void firstJoin(PlayerJoinEvent event, LogUtil log) {
         KitUtil kit = new KitUtil(this.plugin, event.getPlayer());
-        if (this.plugin.getConfig().get("spawn-kits") != null && !Objects.equals(this.plugin.getConfig().getString("spawn-kits"), "false")) {
+        if (this.plugin.getConfig().getList("spawn-kits") != null && !Objects.equals(this.plugin.getConfig().getString("spawn-kits"), "false")) {
             for (Object giveKit : this.plugin.getConfig().getList("spawn-kits")) {
                 log.info("Giving player '"+event.getPlayer().getName()+"' spawn kit '"+giveKit+"'");
                 kit.giveKit(giveKit.toString());
@@ -160,9 +160,22 @@ public class JoinEvent implements Listener {
         if (plugin.getConfig().getString("motd.message") != null) {
             String message = plugin.getConfig().getString("motd.message");
             if (message != null) {
-                TagUtil tag = new TagUtil(plugin);
+                TagUtil tag = new TagUtil(plugin, event.getPlayer());
                 event.getPlayer().sendMessage(tag.doReplacement(message));
             }
+        }
+    }
+
+    /**
+     * Displays the player join message.
+     * @param event PlayerJoinEvent - The event
+     */
+    private void playerJoinMessage(PlayerJoinEvent event) {
+        TagUtil tag = new TagUtil(this.plugin, event.getPlayer());
+        if (event.getPlayer().hasPlayedBefore()) {
+            event.setJoinMessage(tag.doReplacement(this.plugin.getConfig().getString("broadcasts.join")));
+        } else {
+            event.setJoinMessage(tag.doReplacement(this.plugin.getConfig().getString("broadcasts.first-join")));
         }
     }
 }

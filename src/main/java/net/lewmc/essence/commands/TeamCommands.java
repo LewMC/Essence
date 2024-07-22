@@ -1,10 +1,7 @@
 package net.lewmc.essence.commands;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.PermissionHandler;
-import net.lewmc.essence.utils.TeamUtil;
+import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -49,6 +46,11 @@ public class TeamCommands implements CommandExecutor {
         Player player = (Player) commandSender;
 
         if (command.getName().equalsIgnoreCase("team")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("team")) {
+                return cmd.disabled(message);
+            }
+
             if (args.length > 0) {
                 TeamUtil team = new TeamUtil(this.plugin, message);
                 if (args[0].equalsIgnoreCase("create")) {
@@ -56,7 +58,7 @@ public class TeamCommands implements CommandExecutor {
                         if (args.length == 2) {
                             team.CreateNewTeam(args[1], player.getUniqueId());
                         } else {
-                            message.PrivateMessage("team", "namerequired");
+                            message.send("team", "namerequired");
                         }
                     } else {
                         return permission.not();
@@ -68,10 +70,10 @@ public class TeamCommands implements CommandExecutor {
                             if (playerTeam == null) {
                                 team.requestJoin(args[1], player.getUniqueId());
                             } else {
-                                message.PrivateMessage("team", "alreadyinteam", playerTeam);
+                                message.send("team", "alreadyinteam", new String[] { playerTeam });
                             }
                         } else {
-                            message.PrivateMessage("team", "namerequired");
+                            message.send("team", "namerequired");
                         }
                     } else {
                         return permission.not();
@@ -81,14 +83,14 @@ public class TeamCommands implements CommandExecutor {
                         String playerTeam = team.getPlayerTeam(player.getUniqueId());
                         if (playerTeam != null) {
                             if (team.isLeader(playerTeam, player.getUniqueId())) {
-                                message.PrivateMessage("team", "teamrequests", playerTeam, team.requestsToJoin(playerTeam));
-                                message.PrivateMessage("team", "howtoaccept");
-                                message.PrivateMessage("team", "howtodecline");
+                                message.send("team", "teamrequests", new String[] { playerTeam, team.requestsToJoin(playerTeam) });
+                                message.send("team", "howtoaccept");
+                                message.send("team", "howtodecline");
                             } else {
-                                message.PrivateMessage("team", "leaderrequired");
+                                message.send("team", "leaderrequired");
                             }
                         } else {
-                            message.PrivateMessage("team", "noteam");
+                            message.send("team", "noteam");
                         }
                     } else {
                         return permission.not();
@@ -98,20 +100,20 @@ public class TeamCommands implements CommandExecutor {
                         if (args.length > 1) {
                             String playerTeam = team.getPlayerTeam(player.getUniqueId());
                             if (!team.hasRequested(playerTeam, args[1])) {
-                                message.PrivateMessage("team", "usernotrequested", args[1], playerTeam);
+                                message.send("team", "usernotrequested", new String[] { args[1], playerTeam });
                                 return true;
                             }
                             if (team.isLeader(playerTeam, player.getUniqueId())) {
                                 if (team.acceptRequest(playerTeam, args[1])) {
-                                    message.PrivateMessage("team", "accepted", args[1]);
+                                    message.send("team", "accepted", new String[] { args[1] });
                                 } else {
-                                    message.PrivateMessage("generic", "exception");
+                                    message.send("generic", "exception");
                                 }
                             } else {
-                                message.PrivateMessage("team", "leaderrequired");
+                                message.send("team", "leaderrequired");
                             }
                         } else {
-                            message.PrivateMessage("team", "usernamerequired");
+                            message.send("team", "usernamerequired");
                         }
                     } else {
                         return permission.not();
@@ -121,20 +123,20 @@ public class TeamCommands implements CommandExecutor {
                         if (args.length > 1) {
                             String playerTeam = team.getPlayerTeam(player.getUniqueId());
                             if (!team.hasRequested(playerTeam, args[1])) {
-                                message.PrivateMessage("team", "usernotrequested", args[1], playerTeam);
+                                message.send("team", "usernotrequested", new String[] { args[1], playerTeam });
                                 return true;
                             }
                             if (team.isLeader(playerTeam, player.getUniqueId())) {
                                 if (team.declineRequest(playerTeam, args[1])) {
-                                    message.PrivateMessage("team", "declined", args[1]);
+                                    message.send("team", "declined", new String[] { args[1] });
                                 } else {
-                                    message.PrivateMessage("generic", "exception");
+                                    message.send("generic", "exception");
                                 }
                             } else {
-                                message.PrivateMessage("team", "leaderrequired");
+                                message.send("team", "leaderrequired");
                             }
                         } else {
-                            message.PrivateMessage("team", "usernamerequired");
+                            message.send("team", "usernamerequired");
                         }
                     } else {
                         return permission.not();
@@ -144,17 +146,17 @@ public class TeamCommands implements CommandExecutor {
                         String playerTeam = team.getPlayerTeam(player.getUniqueId());
                         if (playerTeam != null) {
                             if (team.isLeader(playerTeam, player.getUniqueId())) {
-                                message.PrivateMessage("team", "requiresdisband", playerTeam);
+                                message.send("team", "requiresdisband", new String[] { playerTeam });
                                 return true;
                             }
 
                             if (team.leave(playerTeam, player.getUniqueId())) {
-                                message.PrivateMessage("team", "left", playerTeam);
+                                message.send("team", "left", new String[] { playerTeam });
                             } else {
-                                message.PrivateMessage("generic", "exception");
+                                message.send("generic", "exception");
                             }
                         } else {
-                            message.PrivateMessage("team", "noteam");
+                            message.send("team", "noteam");
                         }
                     } else {
                         return permission.not();
@@ -163,27 +165,27 @@ public class TeamCommands implements CommandExecutor {
                     if (permission.has("essence.team.manage")) {
                         String playerTeam = team.getPlayerTeam(player.getUniqueId());
                         if (args.length <= 1) {
-                            message.PrivateMessage("team", "leadernamerequired");
+                            message.send("team", "leadernamerequired");
                             return true;
                         }
                         if (playerTeam != null) {
                             if (!team.isMember(playerTeam, args[1])) {
-                                message.PrivateMessage("team", "usernotmember", args[1], playerTeam);
+                                message.send("team", "usernotmember", new String[] { args[1], playerTeam });
                                 return true;
                             }
 
                             if (team.isLeader(playerTeam, player.getUniqueId())) {
                                 if (team.changeLeader(playerTeam, args[1], String.valueOf(player.getUniqueId()))) {
-                                    message.PrivateMessage("team", "leadertransfer", args[1], playerTeam);
+                                    message.send("team", "leadertransfer", new String[] { args[1], playerTeam });
                                 } else {
-                                    message.PrivateMessage("general", "exception");
+                                    message.send("general", "exception");
                                 }
                             } else {
-                                message.PrivateMessage("team", "leaderrequired");
+                                message.send("team", "leaderrequired");
                                 return true;
                             }
                         } else {
-                            message.PrivateMessage("team", "noteam");
+                            message.send("team", "noteam");
                         }
                     } else {
                         return permission.not();
@@ -192,26 +194,26 @@ public class TeamCommands implements CommandExecutor {
                     if (permission.has("essence.team.manage")) {
                         String playerTeam = team.getPlayerTeam(player.getUniqueId());
                         if (args.length <= 1) {
-                            message.PrivateMessage("team", "usernamerequired");
+                            message.send("team", "usernamerequired");
                             return true;
                         }
                         if (playerTeam != null) {
                             if (team.isLeader(playerTeam, player.getUniqueId())) {
                                 if (!team.isMember(playerTeam, args[1])) {
-                                    message.PrivateMessage("team", "usernotmember", args[1], playerTeam);
+                                    message.send("team", "usernotmember", new String[] { args[1], playerTeam });
                                     return true;
                                 }
                                 if (team.kick(playerTeam, args[1])) {
-                                    message.PrivateMessage("team", "kicked", args[1], playerTeam);
+                                    message.send("team", "kicked", new String[] { args[1], playerTeam });
                                 } else {
-                                    message.PrivateMessage("generic", "exception");
+                                    message.send("generic", "exception");
                                 }
                             } else {
-                                message.PrivateMessage("team", "leaderrequired");
+                                message.send("team", "leaderrequired");
                                 return true;
                             }
                         } else {
-                            message.PrivateMessage("team", "noteam");
+                            message.send("team", "noteam");
                         }
                     } else {
                         return permission.not();
@@ -222,16 +224,16 @@ public class TeamCommands implements CommandExecutor {
                         if (playerTeam != null) {
                             if (team.isLeader(playerTeam, player.getUniqueId())) {
                                 if (team.disband(playerTeam, player.getUniqueId().toString())) {
-                                    message.PrivateMessage("team", "disbanded", playerTeam);
+                                    message.send("team", "disbanded", new String[] { playerTeam });
                                 } else {
-                                    message.PrivateMessage("generic", "exception");
+                                    message.send("generic", "exception");
                                 }
                             } else {
-                                message.PrivateMessage("team", "leaderrequired");
+                                message.send("team", "leaderrequired");
                                 return true;
                             }
                         } else {
-                            message.PrivateMessage("team", "noteam");
+                            message.send("team", "noteam");
                         }
                     } else {
                         return permission.not();
@@ -249,31 +251,31 @@ public class TeamCommands implements CommandExecutor {
                                         } else if (args[2].equalsIgnoreCase("true")) {
                                             value = true;
                                         } else {
-                                            message.PrivateMessage("team", "malformed");
+                                            message.send("team", "malformed");
                                             return true;
                                         }
 
                                         if (team.setRule(playerTeam, args[1], value)) {
-                                            message.PrivateMessage("team", "rulechanged", args[1], args[2]);
+                                            message.send("team", "rulechanged", new String[] { args[1], args[2] } );
                                         } else {
-                                            message.PrivateMessage("team", "cantchangerule", args[1], args[2]);
+                                            message.send("team", "cantchangerule", new String[] { args[1], args[2] });
                                         }
                                     } else {
-                                        message.PrivateMessage("team", "rulevalue", args[1], String.valueOf(team.getRule(playerTeam, args[1])));
+                                        message.send("team", "rulevalue", new String[] { args[1], String.valueOf(team.getRule(playerTeam, args[1])) });
                                     }
                                 } else {
                                     if (args.length > 1) {
-                                        message.PrivateMessage("team", "rulenotfound", args[1]);
+                                        message.send("team", "rulenotfound", new String[] { args[1] });
                                     } else {
-                                        message.PrivateMessage("team", "rulemissing");
+                                        message.send("team", "rulemissing");
                                     }
                                 }
                             } else {
-                                message.PrivateMessage("team", "leaderrequired");
+                                message.send("team", "leaderrequired");
                                 return true;
                             }
                         } else {
-                            message.PrivateMessage("team", "noteam");
+                            message.send("team", "noteam");
                         }
                     } else {
                         return permission.not();
@@ -281,18 +283,18 @@ public class TeamCommands implements CommandExecutor {
                 } else {
                     if (permission.has("essence.team.list")) {
                         if (team.exists(args[0])) {
-                            message.PrivateMessage("team", "name", args[0]);
-                            message.PrivateMessage("team", "leader", team.getTeamLeader(args[0]));
-                            message.PrivateMessage("team", "members", team.getTeamMembers(args[0]));
+                            message.send("team", "name", new String[] { args[0] });
+                            message.send("team", "leader", new String[] { team.getTeamLeader(args[0]) });
+                            message.send("team", "members", new String[] { team.getTeamMembers(args[0]) });
                         } else {
-                            message.PrivateMessage("team", "malformed");
+                            message.send("team", "malformed");
                         }
                     } else {
-                        message.PrivateMessage("team", "malformed");
+                        message.send("team", "malformed");
                     }
                 }
             } else {
-                message.PrivateMessage("team", "malformed");
+                message.send("team", "malformed");
             }
         }
         return true;

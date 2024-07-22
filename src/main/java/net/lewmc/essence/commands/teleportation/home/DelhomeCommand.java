@@ -45,6 +45,11 @@ public class DelhomeCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("delhome")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("delhome")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.home.delete")) {
                 String name;
                 if (args.length == 0) {
@@ -60,14 +65,14 @@ public class DelhomeCommand implements CommandExecutor {
 
                 if (config.get("homes."+homeName) == null) {
                     config.close();
-                    message.PrivateMessage("home", "notfound", name);
+                    message.send("home", "notfound", new String[] { name });
                     return true;
                 }
 
                 if (config.remove("homes."+homeName)) {
-                    message.PrivateMessage("home", "deleted", homeName);
+                    message.send("home", "deleted", new String[] { homeName });
                 } else {
-                    message.PrivateMessage("generic", "exception");
+                    message.send("generic", "exception");
                 }
 
                 config.save();

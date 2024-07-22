@@ -1,6 +1,7 @@
 package net.lewmc.essence.commands.inventories;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
@@ -49,6 +50,11 @@ public class StonecutterCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("stonecutter")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("stonecutter")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.inventory.stonecutter")) {
                 player.openStonecutter(null, true);
                 return true;

@@ -1,5 +1,6 @@
 package net.lewmc.essence.commands.inventories;
 
+import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
@@ -48,7 +49,12 @@ public class CraftCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (command.getName().equalsIgnoreCase("craft") || command.getName().equalsIgnoreCase("workbench")) {
+        if (command.getName().equalsIgnoreCase("craft")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("craft")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.inventory.craft")) {
                 player.openWorkbench(null, true);
                 return true;

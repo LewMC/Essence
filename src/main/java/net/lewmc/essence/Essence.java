@@ -29,8 +29,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * The main Essence class.
@@ -47,6 +46,11 @@ public class Essence extends JavaPlugin {
     public boolean verbose;
 
     /**
+     * The config.yml's disabled-commands-feedback value is stored here.
+     */
+    public boolean disabledCommandsFeedback;
+
+    /**
      * The Vault economy handler.
      */
     private Economy economy = null;
@@ -56,14 +60,25 @@ public class Essence extends JavaPlugin {
      * String = The requested player's name.
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
      */
-    public HashMap<String, String[]> teleportRequests = new HashMap<>();
+    public Map<String, String[]> teleportRequests = new HashMap<>();
+
+    /**
+     * Stores pending teleports.
+     * UUID = The requested player's UUID.
+     */
+    public List<UUID> teleportingPlayers = new ArrayList<>();
 
     /**
      * Stores message history.
      * CommandSender = The receiver.
      * CommandSender = The sender.
      */
-    public HashMap<CommandSender, CommandSender> msgHistory = new HashMap<>();
+    public Map<CommandSender, CommandSender> msgHistory = new HashMap<>();
+
+    /**
+     * Stores which commands are disabled.
+     */
+    public List<String> disabledCommands;
 
     /**
      * This function runs when Essence is enabled.
@@ -86,11 +101,9 @@ public class Essence extends JavaPlugin {
         this.log.info("");
         this.log.info("Beginning startup...");
         this.log.info("");
-        int pluginId = 20768; // <-- Replace with the id of your plugin!
-        Metrics metrics = new Metrics(this, pluginId);
-        metrics.addCustomChart(new SimplePie("language", () -> getConfig().getString("language")));
 
         this.verbose = this.getConfig().getBoolean("verbose");
+        this.disabledCommandsFeedback = this.getConfig().getBoolean("disabled-commands-feedback");
 
         if (!Bukkit.getOnlineMode()) {
             this.log.severe(">> Your server is running in offline mode.");
@@ -98,6 +111,8 @@ public class Essence extends JavaPlugin {
             this.log.warn(">> Homes set in online mode may not work properly in offline mode.");
             this.log.info("");
         }
+
+        this.disabledCommands = this.getConfig().getStringList("disabled-commands");
 
         this.checkForEssentials();
         this.checkForPaper();
@@ -119,6 +134,33 @@ public class Essence extends JavaPlugin {
         this.checkLanguageSystem();
 
         this.log.info("Startup completed.");
+
+        if (Objects.equals(System.getProperty("ESSENCE_LOADED", ""), "TRUE")) {
+            this.log.severe("");
+            this.log.severe("WARNING: RELOAD DETECTED!");
+            this.log.severe("");
+            this.log.severe("This may cause issues with Essence, other plugins, and your server overall.");
+            this.log.severe("These issues include breaking permissions and other crashing exceptions.");
+            this.log.severe("If you are reloading datapacks use /minecraft:reload instead.");
+            this.log.severe("");
+            this.log.severe("WE HIGHLY RECOMMEND RESTARTING YOUR SERVER.");
+            this.log.severe("");
+            this.log.severe("We will not provide support for any issues when plugin reloaders are used.");
+            this.log.severe("");
+            this.log.severe("More info: https://madelinemiller.dev/blog/problem-with-reload");
+            this.log.severe("");
+        }
+
+        System.setProperty("ESSENCE_LOADED", "TRUE");
+
+        int pluginId = 20768;
+        Metrics metrics = new Metrics(this, pluginId);
+        metrics.addCustomChart(new SimplePie("language", () -> getConfig().getString("language")));
+        if (economy == null) {
+            metrics.addCustomChart(new SimplePie("economy_enabled", () -> "false"));
+        } else {
+            metrics.addCustomChart(new SimplePie("economy_enabled", () -> "true"));
+        }
     }
 
     /**
@@ -140,10 +182,6 @@ public class Essence extends JavaPlugin {
         }
 
         this.economy = rsp.getProvider();
-
-        if (this.economy == null) {
-            this.log.severe("Economy provider is null!");
-        }
 
         this.log.info("");
 
@@ -243,72 +281,70 @@ public class Essence extends JavaPlugin {
      */
     private void loadCommands() {
         try {
-            CommandUtil command = new CommandUtil(this);
-            
-            if (command.isEnabled("essence")) { this.getCommand("essence").setExecutor(new EssenceCommands(this)); }
+            this.getCommand("essence").setExecutor(new EssenceCommands(this));
 
-            if (command.isEnabled("gamemode")) { this.getCommand("gamemode").setExecutor(new GamemodeCommands(this)); }
-            if (command.isEnabled("gmc")) { this.getCommand("gmc").setExecutor(new GamemodeCommands(this)); }
-            if (command.isEnabled("gms")) { this.getCommand("gms").setExecutor(new GamemodeCommands(this)); }
-            if (command.isEnabled("gma")) { this.getCommand("gma").setExecutor(new GamemodeCommands(this)); }
-            if (command.isEnabled("gmsp")) { this.getCommand("gmsp").setExecutor(new GamemodeCommands(this)); }
+            this.getCommand("gamemode").setExecutor(new GamemodeCommands(this));
+            this.getCommand("gmc").setExecutor(new GamemodeCommands(this));
+            this.getCommand("gms").setExecutor(new GamemodeCommands(this));
+            this.getCommand("gma").setExecutor(new GamemodeCommands(this));
+            this.getCommand("gmsp").setExecutor(new GamemodeCommands(this));
 
-            if (command.isEnabled("anvil")) { this.getCommand("anvil").setExecutor(new AnvilCommand(this)); }
-            if (command.isEnabled("cartography")) { this.getCommand("cartography").setExecutor(new CartographyCommand(this)); }
-            if (command.isEnabled("craft")) { this.getCommand("craft").setExecutor(new CraftCommand(this)); }
-            if (command.isEnabled("enderchest")) { this.getCommand("enderchest").setExecutor(new EnderchestCommand(this)); }
-            if (command.isEnabled("grindstone")) { this.getCommand("grindstone").setExecutor(new GrindstoneCommand(this)); }
-            if (command.isEnabled("loom")) { this.getCommand("loom").setExecutor(new LoomCommand(this)); }
-            if (command.isEnabled("smithing")) { this.getCommand("smithing").setExecutor(new SmithingCommand(this)); }
-            if (command.isEnabled("stonecutter")) { this.getCommand("stonecutter").setExecutor(new StonecutterCommand(this)); }
-            if (command.isEnabled("trash")) { this.getCommand("trash").setExecutor(new TrashCommand(this)); }
-            if (command.isEnabled("kit")) { this.getCommand("kit").setExecutor(new KitCommand(this)); }
+            this.getCommand("anvil").setExecutor(new AnvilCommand(this));
+            this.getCommand("cartography").setExecutor(new CartographyCommand(this));
+            this.getCommand("craft").setExecutor(new CraftCommand(this));
+            this.getCommand("enderchest").setExecutor(new EnderchestCommand(this));
+            this.getCommand("grindstone").setExecutor(new GrindstoneCommand(this));
+            this.getCommand("loom").setExecutor(new LoomCommand(this));
+            this.getCommand("smithing").setExecutor(new SmithingCommand(this));
+            this.getCommand("stonecutter").setExecutor(new StonecutterCommand(this));
+            this.getCommand("trash").setExecutor(new TrashCommand(this));
+            this.getCommand("kit").setExecutor(new KitCommand(this));
 
-            if (command.isEnabled("feed")) { this.getCommand("feed").setExecutor(new FeedCommand(this)); }
-            if (command.isEnabled("heal")) { this.getCommand("heal").setExecutor(new HealCommand(this)); }
-            if (command.isEnabled("repair")) { this.getCommand("repair").setExecutor(new RepairCommand(this)); }
+            this.getCommand("feed").setExecutor(new FeedCommand(this));
+            this.getCommand("heal").setExecutor(new HealCommand(this));
+            this.getCommand("repair").setExecutor(new RepairCommand(this));
 
-            if (command.isEnabled("tp")) { this.getCommand("tp").setExecutor(new TeleportCommand(this)); }
-            if (command.isEnabled("tpa")) { this.getCommand("tpa").setExecutor(new TpaCommand(this)); }
-            if (command.isEnabled("tpaccept")) { this.getCommand("tpaccept").setExecutor(new TpacceptCommand(this)); }
-            if (command.isEnabled("tpdeny")) { this.getCommand("tpdeny").setExecutor(new TpdenyCommand(this)); }
-            if (command.isEnabled("tptoggle")) { this.getCommand("tptoggle").setExecutor(new TptoggleCommand(this)); }
-            if (command.isEnabled("tpahere")) { this.getCommand("tpahere").setExecutor(new TpahereCommand(this)); }
-            if (command.isEnabled("tpcancel")) { this.getCommand("tpcancel").setExecutor(new TpcancelCommand(this)); }
-            if (command.isEnabled("tprandom")) { this.getCommand("tprandom").setExecutor(new TprandomCommand(this)); }
+            this.getCommand("tp").setExecutor(new TeleportCommand(this));
+            this.getCommand("tpa").setExecutor(new TpaCommand(this));
+            this.getCommand("tpaccept").setExecutor(new TpacceptCommand(this));
+            this.getCommand("tpdeny").setExecutor(new TpdenyCommand(this));
+            this.getCommand("tptoggle").setExecutor(new TptoggleCommand(this));
+            this.getCommand("tpahere").setExecutor(new TpahereCommand(this));
+            this.getCommand("tpcancel").setExecutor(new TpcancelCommand(this));
+            this.getCommand("tprandom").setExecutor(new TprandomCommand(this));
 
-            if (command.isEnabled("home")) { this.getCommand("home").setExecutor(new HomeCommand(this)); }
-            if (command.isEnabled("homes")) { this.getCommand("homes").setExecutor(new HomesCommand(this)); }
-            if (command.isEnabled("sethome")) { this.getCommand("sethome").setExecutor(new SethomeCommand(this)); }
-            if (command.isEnabled("delhome")) { this.getCommand("delhome").setExecutor(new DelhomeCommand(this)); }
-            if (command.isEnabled("thome")) { this.getCommand("thome").setExecutor(new ThomeCommand(this)); }
-            if (command.isEnabled("thomes")) { this.getCommand("thomes").setExecutor(new ThomesCommand(this)); }
-            if (command.isEnabled("setthome")) { this.getCommand("setthome").setExecutor(new SetthomeCommand(this)); }
-            if (command.isEnabled("delthome")) { this.getCommand("delthome").setExecutor(new DelthomeCommand(this)); }
+            this.getCommand("home").setExecutor(new HomeCommand(this));
+            this.getCommand("homes").setExecutor(new HomesCommand(this));
+            this.getCommand("sethome").setExecutor(new SethomeCommand(this));
+            this.getCommand("delhome").setExecutor(new DelhomeCommand(this));
+            this.getCommand("thome").setExecutor(new ThomeCommand(this));
+            this.getCommand("thomes").setExecutor(new ThomesCommand(this));
+            this.getCommand("setthome").setExecutor(new SetthomeCommand(this));
+            this.getCommand("delthome").setExecutor(new DelthomeCommand(this));
 
-            if (command.isEnabled("warp")) { this.getCommand("warp").setExecutor(new WarpCommand(this)); }
-            if (command.isEnabled("warps")) { this.getCommand("warps").setExecutor(new WarpsCommand(this)); }
-            if (command.isEnabled("setwarp")) { this.getCommand("setwarp").setExecutor(new SetwarpCommand(this)); }
-            if (command.isEnabled("delwarp")) { this.getCommand("delwarp").setExecutor(new DelwarpCommand(this)); }
+            this.getCommand("warp").setExecutor(new WarpCommand(this));
+            this.getCommand("warps").setExecutor(new WarpsCommand(this));
+            this.getCommand("setwarp").setExecutor(new SetwarpCommand(this));
+            this.getCommand("delwarp").setExecutor(new DelwarpCommand(this));
 
-            if (command.isEnabled("spawn")) { this.getCommand("spawn").setExecutor(new SpawnCommand(this)); }
-            if (command.isEnabled("setspawn")) { this.getCommand("setspawn").setExecutor(new SetspawnCommand(this)); }
+            this.getCommand("spawn").setExecutor(new SpawnCommand(this));
+            this.getCommand("setspawn").setExecutor(new SetspawnCommand(this));
 
-            if (command.isEnabled("back")) { this.getCommand("back").setExecutor(new BackCommand(this)); }
+            this.getCommand("back").setExecutor(new BackCommand(this));
 
-            if (command.isEnabled("broadcast")) { this.getCommand("broadcast").setExecutor(new BroadcastCommand(this)); }
-            if (command.isEnabled("msg")) { this.getCommand("msg").setExecutor(new MsgCommand(this)); }
-            if (command.isEnabled("reply")) { this.getCommand("reply").setExecutor(new ReplyCommand(this)); }
+            this.getCommand("broadcast").setExecutor(new BroadcastCommand(this));
+            this.getCommand("msg").setExecutor(new MsgCommand(this));
+            this.getCommand("reply").setExecutor(new ReplyCommand(this));
 
-            if (command.isEnabled("pay")) { this.getCommand("pay").setExecutor(new PayCommand(this)); }
-            if (command.isEnabled("balance")) { this.getCommand("balance").setExecutor(new BalanceCommand(this)); }
+            this.getCommand("pay").setExecutor(new PayCommand(this));
+            this.getCommand("balance").setExecutor(new BalanceCommand(this));
 
-            if (command.isEnabled("team")) { this.getCommand("team").setExecutor(new TeamCommands(this)); }
+            this.getCommand("team").setExecutor(new TeamCommands(this));
 
-            if (command.isEnabled("seen")) { this.getCommand("seen").setExecutor(new SeenCommand(this)); }
-            if (command.isEnabled("info")) { this.getCommand("info").setExecutor(new InfoCommand(this)); }
+            this.getCommand("seen").setExecutor(new SeenCommand(this));
+            this.getCommand("info").setExecutor(new InfoCommand(this));
 
-            if (command.isEnabled("rules")) { this.getCommand("rules").setExecutor(new RulesCommands(this)); }
+            this.getCommand("rules").setExecutor(new RulesCommands(this));
         } catch (NullPointerException e) {
             this.log.severe("Unable to load Essence commands.");
             this.log.severe(e.getMessage());
@@ -345,5 +381,7 @@ public class Essence extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerDamageEvent(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new RespawnEvent(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerBedEnter(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new LeaveEvent(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerMove(this), this);
     }
 }

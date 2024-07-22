@@ -43,16 +43,21 @@ public class HomesCommand implements CommandExecutor {
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("homes")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("homes")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.home.list")) {
                 HomeUtil hu = new HomeUtil(this.plugin);
                 StringBuilder setHomes = hu.getHomesList(player);
 
                 if (setHomes == null) {
-                    message.PrivateMessage("home", "noneset");
+                    message.send("home", "noneset");
                     return true;
                 }
 
-                message.PrivateMessage("home", "list", setHomes.toString());
+                message.send("home", "list", new String[] { setHomes.toString() });
             } else {
                 permission.not();
             }

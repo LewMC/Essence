@@ -47,26 +47,31 @@ public class ThomesCommand implements CommandExecutor {
         String team = tu.getPlayerTeam(player.getUniqueId());
 
         if (team == null) {
-            message.PrivateMessage("team", "noteam");
+            message.send("team", "noteam");
             return true;
         }
 
         if (!tu.getRule(team, "allow-team-homes")) {
-            message.PrivateMessage("team", "disallowedhomes");
+            message.send("team", "disallowedhomes");
             return true;
         }
 
         if (command.getName().equalsIgnoreCase("thomes")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("thomes")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.home.team.list")) {
                 HomeUtil hu = new HomeUtil(this.plugin);
                 StringBuilder setHomes = hu.getTeamHomesList(team);
 
                 if (setHomes == null) {
-                    message.PrivateMessage("teamhome", "noneset");
+                    message.send("teamhome", "noneset");
                     return true;
                 }
 
-                message.PrivateMessage("teamhome", "list", setHomes.toString());
+                message.send("teamhome", "list", new String[] { setHomes.toString() });
             } else {
                 permission.not();
             }

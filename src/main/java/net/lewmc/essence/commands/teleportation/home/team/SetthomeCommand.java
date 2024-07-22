@@ -59,6 +59,11 @@ public class SetthomeCommand implements CommandExecutor {
         }
 
         if (command.getName().equalsIgnoreCase("setthome")) {
+            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (cmd.isDisabled("setthome")) {
+                return cmd.disabled(message);
+            }
+
             if (permission.has("essence.home.team.create")) {
 
                 String name;
@@ -105,7 +110,7 @@ public class SetthomeCommand implements CommandExecutor {
                 // Save the configuration to the file
                 dataUtil.save();
 
-                message.PrivateMessage("teamhome", "created", name);
+                message.send("teamhome", "created", new String[] { name });
             } else {
                 permission.not();
             }
