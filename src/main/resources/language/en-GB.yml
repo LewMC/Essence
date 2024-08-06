@@ -178,6 +178,7 @@ teleport:
   requestsdisabled: "§4[Essence] §c{{1}} has teleportation requests disabled."
   movetocancel: "§6[Essence] §eMove to cancel teleportation."
   cancelled: "§4[Essence] §cTeleportation cancelled."
+  exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this teleportation, please see console for details."
 feed:
   fed: "§2[Essence] §aYou fed {{1}}."
   serverfed: "§2[Essence] §aYou've been fed by a magical force."

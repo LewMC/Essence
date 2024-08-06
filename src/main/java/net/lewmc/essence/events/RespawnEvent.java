@@ -28,6 +28,7 @@ public class RespawnEvent implements Listener {
      */
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
+        LogUtil log = new LogUtil(this.plugin);
         MessageUtil message = new MessageUtil(event.getPlayer(), this.plugin);
 
         FileUtil config = new FileUtil(this.plugin);
@@ -46,7 +47,7 @@ public class RespawnEvent implements Listener {
             TeleportUtil tp = new TeleportUtil(plugin);
             tp.doTeleport(
                     event.getPlayer(),
-                    Bukkit.getServer().getWorld("user.last-sleep-location.world"),
+                    Bukkit.getServer().getWorld(playerData.getString("user.last-sleep-location.world")),
                     playerData.getDouble("user.last-sleep-location.X"),
                     playerData.getDouble("user.last-sleep-location.Y"),
                     playerData.getDouble("user.last-sleep-location.Z"),
@@ -64,7 +65,6 @@ public class RespawnEvent implements Listener {
         spawns.load("data/spawns.yml");
 
         if (spawns.get("spawn."+spawnName) == null) {
-            LogUtil log = new LogUtil(this.plugin);
             if (
                 Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null &&
                 Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY() >= 10
