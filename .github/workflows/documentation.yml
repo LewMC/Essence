@@ -33,4 +33,5 @@ jobs:
           javadoc-branch: javadoc
           java-version: 17
           target-folder: .
+          javadoc-source-folder: target/report/apidocs
           project: maven
