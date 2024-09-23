@@ -178,7 +178,7 @@ teleport:
   requestsdisabled: "§4[Essence] §c{{1}} 已禁用传送请求."
   movetocancel: "§6[Essence] §e移动来取消传送."
   cancelled: "§4[Essence] §c传送取消."
-  exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this teleportation, please see console for details."
+  exception: "§4[Essence] §cEssence 在尝试处理此传送时遇到问题，请参阅控制台了解详细信息."
 feed:
   fed: "§2[Essence] §a你将 {{1}} 喂饱了."
   serverfed: "§2[Essence] §a你被一种神奇的力量喂饱了."
