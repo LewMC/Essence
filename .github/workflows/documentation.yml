@@ -17,11 +17,11 @@ jobs:
       - name: Checkout Repository 📡
         uses: actions/checkout@v2
 
-      - name: Set up JDK 17 🔧
+      - name: Set up JDK 21 🔧
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Build with Maven 🏗️
         run: mvn -B package --file pom.xml
@@ -31,7 +31,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           javadoc-branch: javadoc
-          java-version: 17
+          java-version: '21'
           target-folder: .
           javadoc-source-folder: target/report/apidocs
           project: maven
