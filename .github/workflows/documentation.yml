@@ -26,12 +26,15 @@ jobs:
       - name: Build with Maven 🏗️
         run: mvn -B package --file pom.xml
 
+      - name: Verify Javadoc Generation 🕵️
+        run: ls -R target | grep "apidocs"
+
       - name: Deploy JavaDoc 🚀
         uses: MathieuSoysal/Javadoc-publisher.yml@v2.5.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           javadoc-branch: javadoc
           java-version: '21'
-          target-folder: .
+          target-folder: . # Change this based on your requirements
           javadoc-source-folder: target/report/apidocs
           project: maven
