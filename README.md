@@ -7,41 +7,30 @@
 
 [![Crowdin](https://badges.crowdin.net/lewmc-essence/localized.svg)](https://crowdin.com/project/lewmc-essence) [![Maven Build](https://github.com/LewMC/Essence/actions/workflows/maven.yml/badge.svg)](https://github.com/LewMC/Essence/actions/workflows/maven.yml)
 
-## Creating a local copy.
+## Build Process
 
-### Clone the repository.
+Install JDK 21 before continuing. Click [here](https://docs.oracle.com/en/java/javase/21/install/index.html) for documentation.
 
-Use the Git CLI to clone the repository from GitHub.
-
-```sh
-git clone https://github.com/lewmilburn/Essence
-```
-
-### Install Maven.
-
-You will need Maven to build the project to `./target`, you can install it at https://maven.apache.org/download.cgi.
-
-### Set Java 17 as your `JAVA_HOME` variable.
-
-You can validate this by running the command below and ensuring it returns Java 17.
+- You will also need Maven for the `mvn` command, which can be installed [here](https://maven.apache.org/download.cgi).
+- Make sure that your version of JDK 21 includes JavaDoc.
+  - For example, Eclipse Temurin JDK with Hotspot 21 includes this executable.
 
 ```sh
-java -version
+# Clone the repository and move into it.
+git clone https://github.com/dankfmemes/essence && cd essence
+
+# Perform a clean build (optional if you're rebuilding).
+mvn clean package -Dmaven.test.skip=true
+
+# Build the package with an explicit version target of 21.
+mvn -B package --file pom.xml -Dmaven.compiler.source=21 -Dmaven.compiler.target=21
 ```
-
-### Build the project.
-
-Navigate to the cloned repository and run:
-
-```sh
-mvn clean install
-```
-
-This will compile the project and package it into a JAR file in the `./target` directory.
 
 ## Contributing
 
 We welcome contributions from the community. Please fork the repository, make your changes, and submit a pull request.
+
+When adding new features for the next update, please merge them into the `next-update` branch. This helps us keep our CI Builds separate as `-SNAPSHOT` builds.
 
 ## Licensing
 
