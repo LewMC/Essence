@@ -11,6 +11,10 @@
 
 Install JDK 21 before continuing. Click [here](https://docs.oracle.com/en/java/javase/21/install/index.html) for documentation.
 
+- You will also need Maven for the `mvn` command, which can be installed [here](https://maven.apache.org/download.cgi).
+- Make sure that your version of JDK 21 includes JavaDoc.
+  - For example, Eclipse Temurin JDK with Hotspot 21 includes this executable.
+
 ```sh
 # Clone the repository and move into it.
 git clone https://github.com/dankfmemes/essence && cd essence
