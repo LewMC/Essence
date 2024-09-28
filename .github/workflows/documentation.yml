@@ -24,13 +24,11 @@ jobs:
           java-version: '21'
 
       - name: Build with Maven 🏗️
-        run: mvn clean package -DskipTests
+        run: |
+          mvn clean package -Dmaven.test.skip=true -X
 
-      - name: Display Target Directory Contents 🕵️
-        run: ls -R target
-
-      - name: Verify Javadoc Generation 🕵️
-        run: ls -R target | grep "apidocs"
+      - name: Display Maven Output 🕵️
+        run: cat target/site/javadoc/api/index.html
 
       - name: Deploy JavaDoc 🚀
         uses: MathieuSoysal/Javadoc-publisher.yml@v2.5.0
@@ -39,5 +37,5 @@ jobs:
           javadoc-branch: javadocs
           java-version: '21'
           target-folder: .
-          javadoc-source-folder: target/report/apidocs
+          javadoc-source-folder: target/site/javadoc/api
           project: maven
