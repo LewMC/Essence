@@ -7,6 +7,11 @@
 
 [![Crowdin](https://badges.crowdin.net/lewmc-essence/localized.svg)](https://crowdin.com/project/lewmc-essence) [![Maven Build](https://github.com/LewMC/Essence/actions/workflows/maven.yml/badge.svg)](https://github.com/LewMC/Essence/actions/workflows/maven.yml)
 
+# Contributing
+We welcome contributions from the community. Please fork the repository, make your changes, and submit a pull request.
+
+Please read [our contributor guide](CONTRIBUTING.md) before submitting any changes, thank you!
+
 ## Build Process
 
 Install JDK 21 before continuing. Click [here](https://docs.oracle.com/en/java/javase/21/install/index.html) for documentation.
@@ -26,12 +31,6 @@ mvn clean package -Dmaven.test.skip=true
 mvn -B package --file pom.xml -Dmaven.compiler.source=21 -Dmaven.compiler.target=21
 ```
 
-## Contributing
-
-We welcome contributions from the community. Please fork the repository, make your changes, and submit a pull request.
-
-When adding new features for the next update, please merge them into the `next-update` branch. This helps us keep our CI Builds separate as `-SNAPSHOT` builds.
-
-## Licensing
+# Licensing
 
 Essence is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for more information.
