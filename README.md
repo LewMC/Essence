@@ -30,6 +30,8 @@ mvn -B package --file pom.xml -Dmaven.compiler.source=21 -Dmaven.compiler.target
 
 We welcome contributions from the community. Please fork the repository, make your changes, and submit a pull request.
 
+When adding new features for the next update, please merge them into the `next-update` branch. This helps us keep our CI Builds separate as `-SNAPSHOT` builds.
+
 ## Licensing
 
 Essence is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for more information.
