@@ -98,6 +98,8 @@ help:
   admin: "§6[Essence] ------- Essence Help - Administration ------"
   seen: "§6[Essence] §e/seen <name> - Last seen player."
   info: "§6[Essence] §e/info <name> - View player information."
+  invisible: "§6[Essence] §e/invisible - Make yourself invisible."
+  visible: "§6[Essence] §e/visible - Make yourself visible."
   chat: "§6[Essence] ------------ Essence Help - Chat -----------"
   broadcast: "§6[Essence] §e/broadcast <message> - Broadcast a message"
   msg: "§6[Essence] §e/msg <name> <message> - Message a player."
@@ -191,6 +193,10 @@ heal:
   healedby: "§2[Essence] §aYou've been healed by {{1}}."
   beenhealed: "§2[Essence] §aYou've been healed!"
   usage: "§4[Essence] §cUsage: /heal <player>"
+visibility:
+  invisible: "§2[Essence] §aYou are now invisible."
+  visible: "§2[Essence] §aYou are now visible."
+  alreadyvisible: "§4[Essence] §cYou are already visible."
 gamemode:
   usage: "§4[Essence] §cUsage: /gamemode <mode> [player]."
   specify: "§4[Essence] §cPlease specify a gamemode (example: /gamemode creative)."
