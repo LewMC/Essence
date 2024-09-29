@@ -191,6 +191,10 @@ heal:
   healedby: "§2[Essence] §aYou've been healed by {{1}}."
   beenhealed: "§2[Essence] §aYou've been healed!"
   usage: "§4[Essence] §cUsage: /heal <player>"
+visibility:
+  invisible: "§2[Essence] §aYou are now invisible."
+  visible: "§2[Essence] §aYou are now visible."
+  alreadyvisible: "§4[Essence] §cYou are already visible."
 gamemode:
   usage: "§4[Essence] §cUsage: /gamemode <mode> [player]."
   specify: "§4[Essence] §cPlease specify a gamemode (example: /gamemode creative)."

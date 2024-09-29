@@ -243,6 +243,14 @@ commands:
     usage: /info <user>
     aliases: ['pinfo','playerinfo']
     permission: essence.admin.info
+  invisible:
+    description: Makes the player invisible.
+    usage: /invisible
+    permission: essence.admin.invisible
+  visible:
+    description: Makes the player visible.
+    usage: /visible
+    permission: essence.admin.invisible
   msg:
     description: Send a private message to another player.
     usage: /msg <user> <message>
