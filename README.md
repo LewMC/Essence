@@ -17,7 +17,7 @@ Install JDK 21 before continuing. Click [here](https://docs.oracle.com/en/java/j
 
 ```sh
 # Clone the repository and move into it.
-git clone https://github.com/dankfmemes/essence && cd essence
+git clone https://github.com/lewmc/essence && cd essence
 
 # Perform a clean build (optional if you're rebuilding).
 mvn clean package -Dmaven.test.skip=true
