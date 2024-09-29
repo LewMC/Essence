@@ -98,6 +98,8 @@ help:
   admin: "§6[Essence] ------- Essence 帮助 - 管理员命令 ------"
   seen: "§6[Essence] §e/seen <name> - 查看某人最后退出的时间."
   info: "§6[Essence] §e/info <name> - 查看某玩家信息."
+  invisible: "§6[Essence] §e/invisible - Make yourself invisible."
+  visible: "§6[Essence] §e/visible - Make yourself visible."
   chat: "§6[Essence] ------------ Essence 帮助 - 聊天 -----------"
   broadcast: "§6[Essence] §e/broadcast <message> - 广播消息"
   msg: "§6[Essence] §e/msg <name> <message> - 给某玩家发消息."
@@ -191,6 +193,10 @@ heal:
   healedby: "§2[Essence] §a你被 {{1}} 治疗了."
   beenhealed: "§2[Essence] §a已经被治疗了!"
   usage: "§4[Essence] §c用法: /heal <player>"
+visibility:
+  invisible: "§2[Essence] §aYou are now invisible."
+  visible: "§2[Essence] §aYou are now visible."
+  alreadyvisible: "§4[Essence] §cYou are already visible."
 gamemode:
   usage: "§4[Essence] §c用法: /gamemode <mode> [player]."
   specify: "§4[Essence] §c请指定游戏模式 (比如: /gamemode creative)."
