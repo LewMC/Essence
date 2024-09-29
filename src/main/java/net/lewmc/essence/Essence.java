@@ -94,7 +94,7 @@ public class Essence extends JavaPlugin {
         this.log.info("███████╗██████╔╝██████╔╝███████╗██║░╚███║╚█████╔╝███████╗");
         this.log.info("╚══════╝╚═════╝░╚═════╝░╚══════╝╚═╝░░╚══╝░╚════╝░╚══════╝");
         this.log.info("");
-        this.log.info("Running Essence version "+this.getDescription().getVersion()+ ".");
+        this.log.info("Running Essence version " + this.getDescription().getVersion() + ".");
         this.log.info("Please report any issues with Essence to our GitHub repository: https://github.com/lewmc/essence/issues");
         this.log.info("");
         this.log.info("Please consider leaving us a review at https://www.spigotmc.org/resources/essence.114553");
@@ -165,6 +165,7 @@ public class Essence extends JavaPlugin {
 
     /**
      * Sets up Vault to use Essence's economy.
+     *
      * @return boolean - If it could be setup correctly.
      */
     private boolean setupEconomy() {
@@ -199,7 +200,7 @@ public class Essence extends JavaPlugin {
             this.log.severe("To get full plugin support please consider using Paper instead.");
             this.log.severe("You can download it from https://papermc.io");
         } else {
-            this.log.info("Running server jar: "+ this.getServer().getName());
+            this.log.info("Running server jar: " + this.getServer().getName());
             if (this.verbose) {
                 FoliaLib flib = new FoliaLib(this);
                 this.log.info("Is Folia: " + flib.isFolia());
@@ -212,10 +213,7 @@ public class Essence extends JavaPlugin {
      * Checks if Essentials or EssentialsX is installed and disables the plugin if it is.
      */
     private void checkForEssentials() {
-        if (
-            getServer().getPluginManager().getPlugin("Essentials") != null ||
-            getServer().getPluginManager().getPlugin("EssentialsX") != null
-        ) {
+        if (getServer().getPluginManager().getPlugin("Essentials") != null || getServer().getPluginManager().getPlugin("EssentialsX") != null) {
             this.log.severe("Essentials is installed alongside Essence.");
             this.log.severe("Essence's commands clash with Essentials, this may cause issues later down the line.");
             this.log.severe("If you require commands that are in Essentials but not in Essence, please remove Essence from the server.");
@@ -233,14 +231,14 @@ public class Essence extends JavaPlugin {
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
         if (!statsFolder.exists() && !statsFolder.mkdirs()) {
-                log.severe("Unable to make data folder.");
-                log.warn("The plugin is being disabled, most of the plugin's features will not work without the data folder.");
-                log.warn("Please create a folder called 'data' in the 'Essence' folder.");
-                log.warn("Please create a folder called 'players' in the 'data' folder.");
-                log.warn("Once this is complete, restart the server and Essence will re-enable.");
-                this.log.info("");
-                getServer().getPluginManager().disablePlugin(this);
-            }
+            log.severe("Unable to make data folder.");
+            log.warn("The plugin is being disabled, most of the plugin's features will not work without the data folder.");
+            log.warn("Please create a folder called 'data' in the 'Essence' folder.");
+            log.warn("Please create a folder called 'players' in the 'data' folder.");
+            log.warn("Once this is complete, restart the server and Essence will re-enable.");
+            this.log.info("");
+            getServer().getPluginManager().disablePlugin(this);
+        }
 
 
         File warpsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "warps.yml");
@@ -270,7 +268,7 @@ public class Essence extends JavaPlugin {
     private void checkLanguageSystem() {
         File setLang = new File(getDataFolder() + File.separator + "language" + File.separator + getConfig().getString("language") + ".yml");
         if (!setLang.exists()) {
-            this.log.severe("Language file '"+getConfig().getString("language")+"' does not exist!");
+            this.log.severe("Language file '" + getConfig().getString("language") + "' does not exist!");
             this.log.severe("Please check the file and try again.");
             getServer().getPluginManager().disablePlugin(this);
         }
@@ -343,6 +341,9 @@ public class Essence extends JavaPlugin {
 
             this.getCommand("seen").setExecutor(new SeenCommand(this));
             this.getCommand("info").setExecutor(new InfoCommand(this));
+
+            this.getCommand("invisible").setExecutor(new InvisibleCommand(this));
+            this.getCommand("visible").setExecutor(new VisibleCommand(this));
 
             this.getCommand("rules").setExecutor(new RulesCommands(this));
         } catch (NullPointerException e) {
