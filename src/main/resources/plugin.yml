@@ -243,6 +243,14 @@ commands:
     usage: /info <user>
     aliases: ['pinfo','playerinfo']
     permission: essence.admin.info
+  invisible:
+    description: Makes the player invisible.
+    usage: /invisible
+    permission: essence.admin.invisible
+  visible:
+    description: Makes the player visible.
+    usage: /visible
+    permission: essence.admin.invisible
   msg:
     description: Send a private message to another player.
     usage: /msg <user> <message>
@@ -503,6 +511,7 @@ permissions:
       essence.admin.info: true
       essence.admin.reload: true
       essence.admin.import: true
+      essence.admin.invisible: true
   essence.admin.seen:
     description: Allows players to see when the player was last online.
   essence.admin.info:
@@ -511,5 +520,7 @@ permissions:
     description: Allows players to reload Essence.
   essence.admin.import:
     description: Allows players to reload Essence.
+  essence.admin.invisible:
+    description: Toggles invisibility.
   essence.rules:
     description: Allows players to view the server rules.
