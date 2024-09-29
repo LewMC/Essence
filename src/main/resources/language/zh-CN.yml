@@ -98,6 +98,8 @@ help:
   admin: "§6[Essence] ------- Essence 帮助 - 管理员命令 ------"
   seen: "§6[Essence] §e/seen <name> - 查看某人最后退出的时间."
   info: "§6[Essence] §e/info <name> - 查看某玩家信息."
+  invisible: "§6[Essence] §e/invisible - Make yourself invisible."
+  visible: "§6[Essence] §e/visible - Make yourself visible."
   chat: "§6[Essence] ------------ Essence 帮助 - 聊天 -----------"
   broadcast: "§6[Essence] §e/broadcast <message> - 广播消息"
   msg: "§6[Essence] §e/msg <name> <message> - 给某玩家发消息."
