@@ -1,8 +1,9 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -33,16 +34,12 @@ public class MessageUtil {
     public void send(String group, String message, String[] replace) {
         message = this.getMessage(message, group);
         if (message != null) {
-            int i = 1;
-            for (String item : replace) {
-                message = message.replace("{{"+i+"}}", item);
-                i++;
+            for (int i = 0; i < replace.length; i++) {
+                message = message.replace("{{" + (i + 1) + "}}", replace[i]);
             }
-            this.cs.sendMessage(message);
+            this.cs.sendMessage(Component.text(message)); // Send the formatted message
         } else {
-            this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            sendErrorMessage(cs);
         }
     }
 
@@ -55,11 +52,9 @@ public class MessageUtil {
     public void send(String group, String message) {
         message = this.getMessage(message, group);
         if (message != null) {
-            this.cs.sendMessage(message);
+            this.cs.sendMessage(Component.text(message)); // Send the formatted message
         } else {
-            this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            sendErrorMessage(cs);
         }
     }
 
@@ -73,17 +68,14 @@ public class MessageUtil {
     public void sendTo(CommandSender cs, String group, String message) {
         message = this.getMessage(message, group);
         if (message != null) {
-            cs.sendMessage(message);
+            cs.sendMessage(Component.text(message)); // Send the formatted message
         } else {
-            cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            sendErrorMessage(cs);
         }
     }
 
     /**
-     * Send a message to a user.
+     * Send a message to a user with additional data.
      * @param cs CommandSender - The player to send the message to.
      * @param group String - The group the message belongs to in the language file.
      * @param message String - The message taken from the language file.
@@ -93,17 +85,12 @@ public class MessageUtil {
     public void sendTo(CommandSender cs, String group, String message, String[] replace) {
         message = this.getMessage(message, group);
         if (message != null) {
-            int i = 1;
-            for (String item : replace) {
-                message = message.replace("{{"+i+"}}", item);
-                i++;
+            for (int i = 0; i < replace.length; i++) {
+                message = message.replace("{{" + (i + 1) + "}}", replace[i]);
             }
-            cs.sendMessage(message);
+            cs.sendMessage(Component.text(message)); // Send the formatted message
         } else {
-            cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            LogUtil log = new LogUtil(this.plugin);
-            log.warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            sendErrorMessage(cs);
         }
     }
 
@@ -112,7 +99,8 @@ public class MessageUtil {
      * @param message String - The message to be sent.
      */
     public void broadcast(String message) {
-        Bukkit.broadcastMessage(ChatColor.GOLD + "Broadcast > " + ChatColor.YELLOW + message);
+        Bukkit.broadcast(Component.text("Broadcast > ").color(NamedTextColor.GOLD)
+                .append(Component.text(message).color(NamedTextColor.YELLOW)));
     }
 
     /**
@@ -124,15 +112,25 @@ public class MessageUtil {
     private String getMessage(String code, String group) {
         String language = this.plugin.getConfig().getString("language");
         FileUtil data = new FileUtil(this.plugin);
-        data.load("language/"+language+".yml");
+        data.load("language/" + language + ".yml");
 
         if (data.get(group) != null) {
-            String toSend = data.getString(group+"."+code);
+            String toSend = data.getString(group + "." + code);
             data.close();
             return toSend;
         } else {
             data.close();
             return null;
         }
+    }
+
+    /**
+     * Send an error message to a specific CommandSender.
+     * @param cs CommandSender - The recipient of the error message.
+     */
+    private void sendErrorMessage(CommandSender cs) {
+        Component errorMessage = Component.text("[Essence] Unable to send message to player, see console for more information.")
+                .color(NamedTextColor.DARK_RED);
+        cs.sendMessage(errorMessage);
     }
 }
