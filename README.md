@@ -3,6 +3,7 @@
 - 💾 **Download Essence** - https://lewmc.net/plugin/essence
 - 🔧 **View the JavaDocs** - https://lewmc.github.io/Essence
 - 🌐 **Help Translate Essence** - https://crowdin.com/project/lewmc-essence
+- 📊 **Code Analysis** - https://sonarcloud.io/project/overview?id=LewMC_Essence
 - ⭐ Enjoying Essence? We'd love to hear your feedback on Spigot. Leave us a review [here](https://www.spigotmc.org/resources/essence.114553/).
 
 [![Crowdin](https://badges.crowdin.net/lewmc-essence/localized.svg)](https://crowdin.com/project/lewmc-essence) [![Maven Build](https://github.com/LewMC/Essence/actions/workflows/maven.yml/badge.svg)](https://github.com/LewMC/Essence/actions/workflows/maven.yml)
