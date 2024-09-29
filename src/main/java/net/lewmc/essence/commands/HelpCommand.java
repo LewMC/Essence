@@ -119,10 +119,12 @@ public class HelpCommand {
                 this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("admin".equalsIgnoreCase(args[1])) {
-                int blank = 6;
+                int blank = 4;
                 this.message.send("help", "admin");
                 if (!cu.isDisabled("info")) { this.message.send("help", "info"); } else { blank++; }
                 if (!cu.isDisabled("seen")) { this.message.send("help", "seen"); } else { blank++; }
+                if (!cu.isDisabled("invisible")) { this.message.send("help", "invisible"); } else { blank++; }
+                if (!cu.isDisabled("visible")) { this.message.send("help", "visible"); } else { blank++; }
                 this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("chat".equalsIgnoreCase(args[1])) {
