@@ -1,3 +1,5 @@
+name: Test Plugin
+
 on:
   push:
     branches:
@@ -5,7 +7,7 @@ on:
       - next-update
   pull_request:
     types:
-      - opened
+      - [opened, reopened, review_requested]
     branches:
       - 'main/**'
       - 'next-update/**'
@@ -19,10 +21,14 @@ jobs:
         version: [ "1.20.6", "1.21", "1.21.1" ]
         java-version: [21]
         include:
-          - version: 1.21.1
+          - version: "1.20.6"
+            java-version: 21
+          - version: "1.21"
+            java-version: 21
+          - version: "1.21.1"
             java-version: 21
 
-    name: Test Plugin on Minecraft ${{ matrix.version }}
+    name: Minecraft ${{ matrix.version }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup JDK ${{ matrix.java-version }}
@@ -33,7 +39,7 @@ jobs:
           cache: 'maven'
       - name: Build Plugin
         run: mvn -B package --file pom.xml
-      - name: Test plugin - Bukkit ${{ matrix.version }}
+      - name: Bukkit ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
@@ -42,7 +48,7 @@ jobs:
           time: 30
           commands: |
             essence
-      - name: Test plugin - Spigot ${{ matrix.version }}
+      - name: Spigot ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
@@ -51,7 +57,7 @@ jobs:
           time: 30
           commands: |
             essence
-      - name: Test plugin - Paper ${{ matrix.version }}
+      - name: Paper ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
@@ -60,7 +66,7 @@ jobs:
           time: 30
           commands: |
             essence
-      - name: Test plugin - Purpur ${{ matrix.version }}
+      - name: Purpur ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
