@@ -4,13 +4,17 @@ import net.lewmc.essence.Essence;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import io.papermc.paper.threadedregions.scheduler.RegionScheduler;
 
 import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * Essence's teleportation utility.
@@ -155,26 +159,36 @@ public class TeleportUtil {
             this.log.severe("Location: " + location);
             return;
         }
-
+    
         if (delay > 0) {
             message.send("teleport", "movetocancel");
         }
-
+    
         this.setTeleportStatus(player, true);
-
-        // Using RegionScheduler to delay teleportation
-        Bukkit.getRegionScheduler().runDelayed(plugin, location, task -> {
-            if (teleportIsValid(player)) {
-                player.teleportAsync(location).thenAccept(success -> {
-                    if (success) {
-                        setTeleportStatus(player, false);
-                    } else {
-                        this.log.severe("Teleport failed for player: " + player.getName());
-                    }
-                });
-            }
-        }, delay * 20L);  // Delay in ticks (1 second = 20 ticks)
-    }
+    
+        boolean isPaperOrFolia = Bukkit.getServer().getVersion().contains("Paper") || Bukkit.getServer().getVersion().contains("Folia");
+    
+        if (isPaperOrFolia) {
+            Bukkit.getRegionScheduler().runDelayed(plugin, location, task -> {
+                if (teleportIsValid(player)) {
+                    player.teleportAsync(location).thenAccept(success -> {
+                        if (success) {
+                            setTeleportStatus(player, false);
+                        } else {
+                            this.log.severe("Teleport failed for player: " + player.getName());
+                        }
+                    });
+                }
+            }, delay * 20L);
+        } else {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (teleportIsValid(player)) {
+                    player.teleport(location);
+                    setTeleportStatus(player, false);
+                }
+            }, delay * 20L);
+        }
+    }    
 
     /**
      * Determines which type of teleportation is taking place.
