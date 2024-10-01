@@ -172,6 +172,13 @@ public class TeleportUtil {
         if (!isLocationValid(location, message))
             return;
 
+        // Since the delay would be 0 here, we can teleport the player immediately and then exit.
+        if (delay == 0) {
+            player.teleport(location);
+            setTeleportStatus(player, false);
+            return;
+        }
+
         if (delay > 0) {
             message.send("teleport", "movetocancel");
         }
