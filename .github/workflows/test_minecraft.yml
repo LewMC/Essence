@@ -9,7 +9,6 @@ jobs:
     timeout-minutes: 360
     strategy:
       matrix:
-        plugin-path: "*.jar"
         version: [1.21.1]
         java-version: [21]
         include:
@@ -30,24 +29,24 @@ jobs:
       - name: Test Plugin - ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
-          path: ${{ matrix.plugin-path }}
+          path: "essence-*.jar"
           runtime: 'craftbukkit'
           version: ${{ matrix.version }}
       - name: Test Plugin - ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
-          path: ${{ matrix.plugin-path }}
+          path: "essence-*.jar"
           runtime: 'spigot'
           version: ${{ matrix.version }}
       - name: Test Plugin - ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
-          path: ${{ matrix.plugin-path }}
+          path: "essence-*.jar"
           runtime: 'paper'
           version: ${{ matrix.version }}
       - name: Test Plugin - ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
-          path: ${{ matrix.plugin-path }}
+          path: "essence-*.jar"
           runtime: 'purpur'
           version: ${{ matrix.version }}
