@@ -81,6 +81,11 @@ public class Essence extends JavaPlugin {
     public List<String> disabledCommands;
 
     /**
+     * Stores update status.
+     */
+    public boolean hasPendingUpdate = false;
+
+    /**
      * This function runs when Essence is enabled.
      */
     @Override

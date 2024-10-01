@@ -512,6 +512,7 @@ permissions:
       essence.admin.reload: true
       essence.admin.import: true
       essence.admin.invisible: true
+      essence.admin.updates: true
   essence.admin.seen:
     description: Allows players to see when the player was last online.
   essence.admin.info:
@@ -521,6 +522,8 @@ permissions:
   essence.admin.import:
     description: Allows players to reload Essence.
   essence.admin.invisible:
+    description: Toggles invisibility.
+  essence.admin.updates:
     description: Toggles invisibility.
   essence.rules:
     description: Allows players to view the server rules.
