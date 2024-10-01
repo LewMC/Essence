@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 360
     strategy:
       matrix:
-        plugin-path: ""
+        plugin-path: "*.jar"
         version: [1.21.1]
         java-version: [21]
         include:
