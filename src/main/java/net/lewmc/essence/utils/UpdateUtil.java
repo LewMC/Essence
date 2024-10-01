@@ -56,6 +56,7 @@ public class UpdateUtil {
                         log.warn("UPDATE > Your version: "+this.plugin.getDescription().getVersion()+" - latest version: "+response);
                         log.warn("UPDATE > You can download the latest version from lewmc.net/essence");
                         this.log.info("");
+                        this.plugin.hasPendingUpdate = true;
                     }
                 } else {
                     log.severe("Unable to perform update check: There was no response from the server.");
