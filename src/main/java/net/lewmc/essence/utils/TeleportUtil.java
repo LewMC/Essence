@@ -1,11 +1,11 @@
 package net.lewmc.essence.utils;
 
-import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.DateTimeException;
 import java.time.Duration;
@@ -164,39 +164,29 @@ public class TeleportUtil {
      * @param delay int - The amount of time to wait before teleporting.
      */
     public void doTeleport(Player player, Location location, int delay) {
-        FoliaLib flib = new FoliaLib(this.plugin);
         MessageUtil message = new MessageUtil(player, this.plugin);
+        
         if (location.getWorld() == null) {
-            message.send("teleport","exception");
+            message.send("teleport", "exception");
             this.log.severe("Unable to locate world in universe.");
-            this.log.severe("Details: {\"error\": \"WORLD_IS_NULL\", \"caught\": \"TeleportUtil.java\", \"submitted\": \"null\", \"found\": \"null\"}.");
-            this.log.severe("Location: "+location);
+            this.log.severe("Location: " + location);
             return;
         }
 
         if (delay > 0) {
             message.send("teleport", "movetocancel");
         }
+
         this.setTeleportStatus(player, true);
-        if (flib.isFolia()) {
-            flib.getImpl().runAtEntityLater(player, () -> {
-                if (teleportIsValid(player)) {
-                    player.teleportAsync(location);
-                    setTeleportStatus(player, false);
-                }
-            }, delay * 20L);
-        } else {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (teleportIsValid(player)) {
-                        player.teleport(location);
-                        setTeleportStatus(player, false);
-                    }
-                }
-            }.runTaskLater(plugin, delay * 20L);
-        }
+
+        Bukkit.getRegionScheduler().runDelayed(plugin, location, task -> {
+            if (teleportIsValid(player)) {
+                player.teleportAsync(location);
+                setTeleportStatus(player, false);
+            }
+        }, delay * 20L);
     }
+
 
     /**
      * Determines which type of teleportation is taking place.
