@@ -45,7 +45,7 @@ jobs:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
           runtime: 'craftbukkit'
           version: ${{ matrix.version }}
-          time: 30
+          time: 120
           commands: |
             essence
       - name: Spigot ${{ matrix.version }}
@@ -54,7 +54,7 @@ jobs:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
           runtime: 'spigot'
           version: ${{ matrix.version }}
-          time: 30
+          time: 120
           commands: |
             essence
       - name: Paper ${{ matrix.version }}
@@ -63,7 +63,7 @@ jobs:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
           runtime: 'paper'
           version: ${{ matrix.version }}
-          time: 30
+          time: 120
           commands: |
             essence
       - name: Purpur ${{ matrix.version }}
@@ -72,6 +72,6 @@ jobs:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
           runtime: 'purpur'
           version: ${{ matrix.version }}
-          time: 30
+          time: 120
           commands: |
             essence
