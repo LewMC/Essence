@@ -1,13 +1,11 @@
 package net.lewmc.essence.utils;
 
-import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.DateTimeException;
 import java.time.Duration;
