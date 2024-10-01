@@ -1,8 +1,12 @@
+on:
+  push:
+    branches:
+      - main
+      - next-update
 jobs:
   test-server:
     runs-on: ubuntu-latest
     timeout-minutes: 360
-
     strategy:
       matrix:
         plugin-path: ""
