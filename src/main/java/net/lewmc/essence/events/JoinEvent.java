@@ -48,6 +48,10 @@ public class JoinEvent implements Listener {
             this.spawn(event, log);
         }
 
+        if (this.plugin.hasPendingUpdate) {
+            this.showUpdateAlert(event);
+        }
+
         FileUtil playerFile = new FileUtil(plugin);
         String playerDataFile = playerFile.playerDataFile(event.getPlayer());
 
@@ -176,6 +180,19 @@ public class JoinEvent implements Listener {
             event.setJoinMessage(tag.doReplacement(this.plugin.getConfig().getString("broadcasts.join")));
         } else {
             event.setJoinMessage(tag.doReplacement(this.plugin.getConfig().getString("broadcasts.first-join")));
+        }
+    }
+
+    /**
+     * Displays the update alert.
+     * @param event PlayerJoinEvent - The event
+     */
+    private void showUpdateAlert(PlayerJoinEvent event) {
+        MessageUtil msg = new MessageUtil(event.getPlayer(), this.plugin);
+        PermissionHandler perms = new PermissionHandler(event.getPlayer(), msg);
+        if (perms.has("essence.admin.updates") && this.plugin.hasPendingUpdate) {
+            msg.send("other", "updatemsg");
+            msg.send("other", "updatemore");
         }
     }
 }
