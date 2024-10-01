@@ -194,9 +194,9 @@ heal:
   beenhealed: "§2[Essence] §a已经被治疗了!"
   usage: "§4[Essence] §c用法: /heal <player>"
 visibility:
-  invisible: "§2[Essence] §a你现在处于隐身状态。"
-  visible: "§2[Essence] §a你现在是可见的。"
-  alreadyvisible: "§4[Essence] §c你已经是可见的。"
+  invisible: "§2[Essence] §aYou are now invisible."
+  visible: "§2[Essence] §aYou are now visible."
+  alreadyvisible: "§4[Essence] §cYou are already visible."
 gamemode:
   usage: "§4[Essence] §c用法: /gamemode <mode> [player]."
   specify: "§4[Essence] §c请指定游戏模式 (比如: /gamemode creative)."
