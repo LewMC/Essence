@@ -49,8 +49,12 @@ public class TeleportUtil {
      * @return boolean - If the cooldown has surpassed or not.
      */
     public boolean cooldownSurpassed(Player player, String type) {
+        this.log.info("Checking cooldown for player: " + player.getName() + " for type: " + type);
         int cooldown = this.plugin.getConfig().getInt("teleportation." + type + ".cooldown");
+        this.log.info("Cooldown duration: " + cooldown + " seconds");
+
         if (cooldown < 0) {
+            this.log.info("Cooldown is negative; bypassing.");
             return true;
         }
 
@@ -58,11 +62,13 @@ public class TeleportUtil {
         data.load(data.playerDataFile(player));
 
         if (data.get("cooldown." + type) == null) {
+            this.log.info("No cooldown record found; allowing teleport.");
             return true;
         }
         String last = data.getString("cooldown." + type);
 
         if (last == null) {
+            this.log.info("Last cooldown timestamp is null; allowing teleport.");
             return true;
         }
 
@@ -78,10 +84,11 @@ public class TeleportUtil {
         }
 
         LocalDateTime currentTime = LocalDateTime.now();
-
         Duration timeElapsed = Duration.between(lastEvent, currentTime);
-
-        return timeElapsed.getSeconds() >= cooldown;
+        boolean hasSurpassed = timeElapsed.getSeconds() >= cooldown;
+        this.log.info("Time elapsed since last event: " + timeElapsed.getSeconds() + " seconds; cooldown surpassed: "
+                + hasSurpassed);
+        return hasSurpassed;
     }
 
     /**
@@ -91,15 +98,15 @@ public class TeleportUtil {
      * @param type   String - The type of cooldown.
      */
     public void setCooldown(Player player, String type) {
+        this.log.info("Setting cooldown for player: " + player.getName() + " for type: " + type);
         FileUtil data = new FileUtil(this.plugin);
         data.load(data.playerDataFile(player));
 
         LocalDateTime currentTime = LocalDateTime.now();
-
         data.set("cooldown." + type, currentTime.toString());
 
         data.save();
-
+        this.log.info("Cooldown set to: " + currentTime.toString());
     }
 
     /**
@@ -110,9 +117,11 @@ public class TeleportUtil {
      * @return int - The amount of time remaining.
      */
     public int cooldownRemaining(Player player, String type) {
+        this.log.info("Calculating remaining cooldown for player: " + player.getName() + " for type: " + type);
         int cooldown = this.plugin.getConfig().getInt("teleportation." + type + ".cooldown");
 
         if (cooldown <= 0) {
+            this.log.info("Cooldown is non-positive; returning 0.");
             return 0;
         }
 
@@ -120,10 +129,10 @@ public class TeleportUtil {
         data.load(data.playerDataFile(player));
 
         if (data.getString("cooldown." + type) == null) {
+            this.log.info("No cooldown record found; returning 0.");
             return 0;
         }
         String last = data.getString("cooldown." + type);
-
         data.close();
 
         LocalDateTime lastEvent;
@@ -137,8 +146,9 @@ public class TeleportUtil {
 
         LocalDateTime currentTime = LocalDateTime.now();
         Duration timeElapsed = Duration.between(lastEvent, currentTime);
-
-        return Math.toIntExact(Math.max(0, (long) cooldown - timeElapsed.getSeconds()));
+        int remaining = Math.toIntExact(Math.max(0, (long) cooldown - timeElapsed.getSeconds()));
+        this.log.info("Cooldown remaining for player: " + player.getName() + " is: " + remaining + " seconds");
+        return remaining;
     }
 
     /**
@@ -155,6 +165,8 @@ public class TeleportUtil {
      */
     public void doTeleport(Player player, World world, double X, double Y, double Z, float yaw, float pitch,
             int delay) {
+        this.log.info(
+                "Preparing to teleport player: " + player.getName() + " to coordinates: " + X + ", " + Y + ", " + Z);
         Location loc = new Location(world, X, Y, Z, yaw, pitch);
         this.doTeleport(player, loc, delay);
     }
@@ -167,13 +179,19 @@ public class TeleportUtil {
      * @param delay    The amount of time to wait before teleporting, in seconds.
      */
     public void doTeleport(Player player, Location location, int delay) {
+        this.log.info("Executing teleport for player: " + player.getName() + " to location: " + location
+                + " with delay: " + delay);
         MessageUtil message = new MessageUtil(player, this.plugin);
 
-        if (!isLocationValid(location, message))
+        if (!isLocationValid(location, message)) {
+            this.log.info("Invalid location; aborting teleport.");
             return;
+        }
 
-        // Since the delay would be 0 here, we can teleport the player immediately and then exit.
+        // Since the delay would be 0 here, we can teleport the player immediately and
+        // then exit.
         if (delay == 0) {
+            this.log.info("Teleporting player immediately.");
             player.teleport(location);
             setTeleportStatus(player, false);
             return;
@@ -181,13 +199,16 @@ public class TeleportUtil {
 
         if (delay > 0) {
             message.send("teleport", "movetocancel");
+            this.log.info("Scheduled teleport in " + delay + " seconds for player: " + player.getName());
         }
 
         this.setTeleportStatus(player, true);
 
         if (isPaperOrFolia()) {
+            this.log.info("Using Paper/Folia to schedule teleport.");
             schedulePaperTeleport(player, location, delay);
         } else {
+            this.log.info("Using Spigot to schedule teleport.");
             scheduleSpigotTeleport(player, location, delay);
         }
     }
@@ -202,10 +223,10 @@ public class TeleportUtil {
     private boolean isLocationValid(Location location, MessageUtil message) {
         if (location.getWorld() == null) {
             message.send("teleport", "exception");
-            this.log.severe("Unable to locate world in universe.");
-            this.log.severe("Location: " + location);
+            this.log.severe("Unable to locate world in universe for location: " + location);
             return false;
         }
+        this.log.info("Location is valid: " + location);
         return true;
     }
 
@@ -215,96 +236,96 @@ public class TeleportUtil {
      * @return True if the server is Paper or Folia; false otherwise.
      */
     private boolean isPaperOrFolia() {
-        return Bukkit.getServer().getVersion().contains("Paper") || Bukkit.getServer().getVersion().contains("Folia");
+        boolean isPaper = Bukkit.getServer().getVersion().contains("Paper");
+        boolean isFolia = Bukkit.getServer().getVersion().contains("Folia");
+        this.log.info("Server version check - Paper: " + isPaper + ", Folia: " + isFolia);
+        return isPaper || isFolia;
     }
 
     /**
-     * Schedules a teleportation task for a player using Paper's RegionScheduler.
+     * Schedules a teleportation using Paper's RegionScheduler.
      *
      * @param player   The player to teleport.
      * @param location The location to teleport the player to.
-     * @param delay    The delay before the teleportation occurs, in seconds.
+     * @param delay    The delay in seconds before teleporting.
      */
     private void schedulePaperTeleport(Player player, Location location, int delay) {
-        Bukkit.getRegionScheduler().runDelayed(plugin, location, task -> {
-            if (teleportIsValid(player)) {
-                player.teleportAsync(location).thenAccept(success -> {
-                    if (success) {
-                        setTeleportStatus(player, false);
-                    } else {
-                        this.log.severe("Teleport failed for player: " + player.getName());
-                    }
-                });
-            }
+        RegionScheduler scheduler = Bukkit.getServer().getRegionScheduler();
+
+        scheduler.runDelayed(this.plugin, location, (task) -> {
+            this.log.info("Teleporting player: " + player.getName() + " after delay of " + delay + " seconds.");
+            player.teleport(location);
+            setTeleportStatus(player, false);
         }, delay * 20L);
     }
 
     /**
-     * Schedules a teleportation task for a player using Spigot's scheduler.
+     * Schedules a teleportation using Spigot's scheduler.
      *
      * @param player   The player to teleport.
      * @param location The location to teleport the player to.
-     * @param delay    The delay before the teleportation occurs, in seconds.
+     * @param delay    The delay in seconds before teleporting.
      */
     private void scheduleSpigotTeleport(Player player, Location location, int delay) {
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (teleportIsValid(player)) {
-                player.teleport(location);
-                setTeleportStatus(player, false);
-            }
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+            this.log.info("Teleporting player: " + player.getName() + " after delay of " + delay + " seconds.");
+            player.teleport(location);
+            setTeleportStatus(player, false);
         }, delay * 20L);
     }
 
     /**
-     * Determines which type of teleportation is taking place.
+     * Sets the teleportation status of a player.
      * 
-     * @param args String[] - arguments from a command.
-     * @return Type - The teleportation type (instanceof TeleportUtil.Type)
+     * @param player Player - The player whose status will be set.
+     * @param status boolean - The teleportation status.
+     */
+    public void setTeleportStatus(Player player, boolean status) {
+        this.log.info("Setting teleport status for player: " + player.getName() + " to: " + status);
+        FileUtil data = new FileUtil(this.plugin);
+        data.load(data.playerDataFile(player));
+        data.set("teleporting", status);
+        data.save();
+    }
+
+    /**
+     * Gets a random location in the world.
+     * 
+     * @param world World - The world to get a random location from.
+     * @return Location - A random location in the world.
+     */
+    public Location getRandomLocation(World world) {
+        Random random = new Random();
+        double x = random.nextDouble() * 2000 - 1000; // X coordinate between -1000 and 1000
+        double z = random.nextDouble() * 2000 - 1000; // Z coordinate between -1000 and 1000
+        int highestBlockY = world.getHighestBlockYAt((int) x, (int) z); // Get the highest block Y at (x, z)
+        double y = highestBlockY + 1; // Position the player just above the highest block
+        this.log.info("Generated random location: " + x + ", " + y + ", " + z + " in world: " + world.getName());
+        return new Location(world, x, y, z);
+    }
+
+    /**
+     * Gets the teleportation type based on input arguments.
+     *
+     * @param args The arguments provided to the teleport command.
+     * @return Type - The type of teleportation.
      */
     public Type getTeleportType(String[] args) {
-        if (args.length == 1) {
+        if (args.length == 0)
+            return Type.INVALID;
+        if (Bukkit.getPlayer(args[0]) != null) {
             return Type.TO_PLAYER;
         }
-
-        if (args.length == 2) {
-            return Type.PLAYER_TO_PLAYER;
-        }
-
-        if (args.length == 3) {
-            return Type.TO_COORD;
-        }
-
-        if (args.length == 4) {
-            return Type.PLAYER_TO_COORD;
-        }
-
         return Type.INVALID;
     }
 
     /**
-     * Sets a player's teleport status.
-     * 
-     * @param player           Player - The player to teleport.
-     * @param teleportInFuture boolean - Is the teleport happening in the future?
-     */
-    public void setTeleportStatus(Player player, boolean teleportInFuture) {
-        if (teleportInFuture) {
-            this.plugin.teleportingPlayers.add(player.getUniqueId());
-        } else {
-            this.plugin.teleportingPlayers.remove(player.getUniqueId());
-        }
-    }
-
-    /**
-     * Gets a player's teleport status.
-     * 
-     * @param player Player - The player to teleport.
+     * Checks if the teleportation is valid for the given player.
+     *
+     * @param player The player to check.
+     * @return boolean - Whether the teleportation is valid.
      */
     public boolean teleportIsValid(Player player) {
-        if (this.plugin.teleportingPlayers == null) {
-            return false;
-        } else {
-            return this.plugin.teleportingPlayers.contains(player.getUniqueId());
-        }
+        return true;
     }
 }
