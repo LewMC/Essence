@@ -21,7 +21,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.10.0</version>
                 <executions>
                     <execution>
                         <id>generate-javadoc</id>
@@ -102,7 +102,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>13.0</version>
+            <version>25.0.0</version>
         </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
@@ -129,7 +129,7 @@
         <dependency>
             <groupId>com.github.technicallycoded</groupId>
             <artifactId>FoliaLib</artifactId>
-            <version>main-3db2e83ef4-1</version>
+            <version>v0.4.3</version>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
