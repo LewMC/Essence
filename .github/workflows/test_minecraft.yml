@@ -1,0 +1,49 @@
+jobs:
+  test-server:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    strategy:
+      matrix:
+        plugin-path: ""
+        version: [1.21.1]
+        java-version: [21]
+        include:
+          - version: 1.21.1
+            java-version: 21
+
+    name: Test Plugin on Minecraft ${{ matrix.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
+          cache: 'maven'
+      - name: Build Plugin
+        run: mvn -B package --file pom.xml
+      - name: Test Plugin - ${{ matrix.version }}
+        uses: GamerCoder215/TestMC@v2.0.2
+        with:
+          path: ${{ matrix.plugin-path }}
+          runtime: 'craftbukkit'
+          version: ${{ matrix.version }}
+      - name: Test Plugin - ${{ matrix.version }}
+        uses: GamerCoder215/TestMC@v2.0.2
+        with:
+          path: ${{ matrix.plugin-path }}
+          runtime: 'spigot'
+          version: ${{ matrix.version }}
+      - name: Test Plugin - ${{ matrix.version }}
+        uses: GamerCoder215/TestMC@v2.0.2
+        with:
+          path: ${{ matrix.plugin-path }}
+          runtime: 'paper'
+          version: ${{ matrix.version }}
+      - name: Test Plugin - ${{ matrix.version }}
+        uses: GamerCoder215/TestMC@v2.0.2
+        with:
+          path: ${{ matrix.plugin-path }}
+          runtime: 'purpur'
+          version: ${{ matrix.version }}
