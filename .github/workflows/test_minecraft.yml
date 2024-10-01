@@ -3,6 +3,13 @@ on:
     branches:
       - main
       - next-update
+  pull_request:
+    types:
+      - opened
+    branches:
+      - 'main/**'
+      - 'next-update/**'
+
 jobs:
   test-server:
     runs-on: ubuntu-latest
@@ -32,33 +39,33 @@ jobs:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
           runtime: 'craftbukkit'
           version: ${{ matrix.version }}
+          time: 30
           commands: |
             essence
-            stop
       - name: Test plugin - Spigot ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
           runtime: 'spigot'
           version: ${{ matrix.version }}
+          time: 30
           commands: |
             essence
-            stop
       - name: Test plugin - Paper ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
           runtime: 'paper'
           version: ${{ matrix.version }}
+          time: 30
           commands: |
             essence
-            stop
       - name: Test plugin - Purpur ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
           runtime: 'purpur'
           version: ${{ matrix.version }}
+          time: 30
           commands: |
             essence
-            stop
