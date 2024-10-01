@@ -7,7 +7,9 @@ on:
       - next-update
   pull_request:
     types:
-      - [opened, reopened, review_requested]
+      - opened
+      - reopened
+      - review_requested]
     branches:
       - 'main/**'
       - 'next-update/**'
