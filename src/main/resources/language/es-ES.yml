@@ -34,6 +34,8 @@ generic:
 other:
   respawnset: "§6[Essence] §eRespawn point set."
   rule: "§a{{1}}"
+  updatemsg: "§4[Essence] §cYour version of Essence is out of date!"
+  updatemore: "§4[Essence] §cSee the server console for more information."
 help:
   page: "§6[Essence] ----------------- Page {{1}}/{{2}} -----------------"
   inventory: "§6[Essence] --------- Essence Help - Inventory ---------"
