@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 360
     strategy:
       matrix:
-        version: [1.20.6, 1.21.0, 1.21.1]
+        version: [ "1.20.6", "1.21", "1.21.1" ]
         java-version: [21]
         include:
           - version: 1.21.1
