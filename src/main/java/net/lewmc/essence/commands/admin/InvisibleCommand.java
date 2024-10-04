@@ -1,15 +1,11 @@
 package net.lewmc.essence.commands.admin;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.CommandUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,12 +29,12 @@ public class InvisibleCommand implements CommandExecutor {
             @NotNull String s,
             String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            commandSender.sendMessage("Only players can use this command.");
+        if (!(commandSender instanceof Player player)) {
+            LogUtil log = new LogUtil(this.plugin);
+            log.noConsole();
             return true;
         }
 
-        Player player = (Player) commandSender;
         MessageUtil message = new MessageUtil(commandSender, plugin);
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
@@ -48,14 +44,8 @@ public class InvisibleCommand implements CommandExecutor {
                 return cmd.disabled(message);
             }
 
-            if (permission.has("essence.admin.invisible")) {
-                // Apply invisibility
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
-                message.send("visibility", "invisible", new String[]{player.getName()});
-                return true;
-            } else {
-                return permission.not();
-            }
+            StatsUtil stats = new StatsUtil(this.plugin, player, permission);
+            return stats.invisible(true);
         }
 
         return false;
