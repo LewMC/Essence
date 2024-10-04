@@ -87,6 +87,7 @@ public class Essence extends JavaPlugin {
 
     /**
      * Manages random numbers.
+     * Pseudo-random, not to be used in secure contexts.
      */
     public Random rand = new Random();
 
