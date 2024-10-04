@@ -45,7 +45,11 @@ public class JoinEvent implements Listener {
         if (plugin.getConfig().getBoolean("motd.enabled")) { this.motd(event); }
 
         if (plugin.getConfig().getBoolean("teleportation.spawn.always-spawn") || firstJoin) {
-            this.spawn(event, log);
+            try {
+                this.spawn(event, log);
+            } catch (Exception e) {
+                log.severe("Unknown exception: " + e.getMessage());
+            }
         }
 
         if (this.plugin.hasPendingUpdate) {
@@ -101,8 +105,9 @@ public class JoinEvent implements Listener {
 
         if (spawnConfiguration.get("spawn") == null) {
             if (Bukkit.getServer().getWorld(spawnName) == null) {
-                WorldCreator creator = new WorldCreator(spawnName);
-                creator.createWorld();
+                message.send("spawn", "notexist");
+                log.severe("The spawn world does not exist. Please check your Essence configuration.");
+                return;
             }
             if (Bukkit.getServer().getWorld(spawnName) != null && Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null) {
                 TeleportUtil tp = new TeleportUtil(plugin);
