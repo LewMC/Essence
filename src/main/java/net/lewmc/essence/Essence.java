@@ -86,6 +86,11 @@ public class Essence extends JavaPlugin {
     public boolean hasPendingUpdate = false;
 
     /**
+     * Manages random numbers.
+     */
+    public Random rand = new Random();
+
+    /**
      * This function runs when Essence is enabled.
      */
     @Override
