@@ -4,18 +4,18 @@ meta:
   language: British English
   author: LewMC
 about:
-  version: "§6[Essence] §eRunning Essence version {{1}}."
-  description: "§6[Essence] §eEssence is a lightweight and customisable plugin that adds warps, homes, and more."
-  author: "§6[Essence] §eCreated by LewMC"
-  authorLang: "§6[Essence] §eTranslated into {{1}} by {{2}}."
-  issues: "§4[Essence] §cPlease report any bugs or issues to github.com/lewmc/essence"
-  more: "§6[Essence] §eUse /es help for more commands."
+  version: "§6[Essence] §eEssence 버전 {{1}} 실행."
+  description: "§6[Essence] §eEssence는 워프, 홈 등을 추가하는 가볍고 사용자 정의가 가능한 플러그인입니다."
+  author: "§6[Essence] §e제작자 by LewMC"
+  authorLang: "§6[Essence] §e{{2}}에 의해 {{1}}로 번역되었습니다."
+  issues: "§4[Essence] §c버그나 문제점은 github.com/lewmc/essence로 제보해 주세요."
+  more: "§6[Essence] §e사용방법은 /es help 통해 명령어를 확인이 가능합니다."
 broadcast:
-  usage: "§4[Essence] §cUsage: /broadcast <message>"
+  usage: "§4[Essence] §c사용법: /broadcast <message>"
 economy:
-  balance: "§6[Essence] §eYour balance is: {{1}}"
-  insufficientfunds: "§4[Essence] §cInsufficient funds."
-  payusage: "§4[Essence] §cUsage: /pay <player> <amount>"
+  balance: "§6[Essence] §e당신의 잔액: {{1}}"
+  insufficientfunds: "§4[Essence] §c잔액이 부족합니다."
+  payusage: "§4[Essence] §c사용법: /pay <닉네임> <값>"
   sent: "§2[Essence] §aYou sent {{1}} to {{2}}"
   received: "§2[Essence] §aYou received {{1}} from {{2}}"
 generic:
