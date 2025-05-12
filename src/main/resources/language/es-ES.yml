@@ -106,7 +106,7 @@ help:
   broadcast: "§6[Essence] §e/broadcast <message> - Broadcast a message"
   msg: "§6[Essence] §e/msg <name> <message> - Message a player."
   reply: "§6[Essence] §e/reply <message> - Reply to your last /msg."
-  misc: "§6[Essence] -------- Essence Help - Miscellaneous ------"
+  misc: "§6[Essence] ----- Ayuda de Essence - Miscellaneous -----"
   rules: "§6[Essence] §e/rules - View the server rules."
   kit: "§6[Essence] §e/kit - Get a kit."
   help: "§6[Essence] --------------- Essence Help ---------------"
@@ -161,7 +161,7 @@ warp:
   teleporting: "§2[Essence] §aWarping to '{{1}}' in {{2}} seconds..."
   noneset: "§4[Essence] §cThere are no warps set."
   list: "§6[Essence] §eWarps: {{1}}"
-  hitlimit: "§4[Essence] §cYou can't create any more warps."
+  hitlimit: "§4[Essence] §cNo puedes crear más warps."
 teleport:
   to: "§2[Essence] §aTeleporting to {{1}}..."
   toplayer: "§2[Essence] §aTeleporting {{1}} to {{2}}..."
