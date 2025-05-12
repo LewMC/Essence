@@ -59,7 +59,7 @@ help:
   tp: "§6[Essence] §e/tp <name/coordomate> - Teleport."
   warp: "§6[Essence] §e/warp <name> - Go to a warp."
   warps: "§6[Essence] §e/warps - View warp list."
-  setwarp: "§6[Essence] §e/setwarp <name> - Create a warp where you are."
+  setwarp: "§6[Essence] §e/setwarp <nombre> - Crea un warp donde estás."
   delwarp: "§6[Essence] §e/delwarp <name> - Delete a warp."
   home: "§6[Essence] §e/home [name] - Go home."
   homes: "§6[Essence] §e/homes - View home list."
