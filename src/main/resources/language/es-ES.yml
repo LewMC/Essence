@@ -217,7 +217,7 @@ team:
   leaderrequired: "§4[Essence] §cYou need to be team leader to use this command."
   teamrequests: "§6[Essence] §eRequests to join {{1}}: {{2}}"
   howtoaccept: "§6[Essence] §eTo accept use /team accept <name>"
-  howtodecline: "§6[Essence] §eTo decline use /team decline <name>"
+  howtodecline: "§6[Essence] §ePara rechazar usa /team decline <nombre>"
   alreadyinteam: "§4[Essence] §cYou are currently a member of {{1}}. To join another team you must first leave this team by using /team leave."
   accepted: "§2[Essence] §aAccepted {{1}}'s join request."
   declined: "§2[Essence] §aDeclined {{1}}'s join request."
