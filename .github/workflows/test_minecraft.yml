@@ -38,7 +38,7 @@ jobs:
       - name: Build Plugin
         run: mvn -B package --file pom.xml
       - name: Bukkit ${{ matrix.version }}
-        uses: GamerCoder215/TestMC@latest
+        uses: gmitch215/TestMC@v2
         with:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
           runtime: 'craftbukkit'
