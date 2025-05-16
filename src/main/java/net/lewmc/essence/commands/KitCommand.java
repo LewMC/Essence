@@ -95,6 +95,8 @@ public class KitCommand implements CommandExecutor {
                     message.send("kit", "nopermission");
                 } else if (kit.giveKit(args[0]) == 2) {
                     message.send("kit", "notexist");
+                } else if (kit.giveKit(args[0]) == 3) {
+                    message.send("kit", "max");
                 }
             }
             return true;

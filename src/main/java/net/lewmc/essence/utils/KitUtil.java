@@ -30,7 +30,7 @@ public class KitUtil {
     /**
      * Gives the user referenced in the constructor the kit specified.
      * @param kit String - the kit to give the user.
-     * @return int - Result of operation. 0 = Successful, 1 = No Permission, 2 = Kit is missing.
+     * @return int - Result of operation. 0 = Successful, 1 = No Permission, 2 = Kit is missing, 3 = Claimed too many times.
      */
     public int giveKit(String kit) {
         FileUtil kitData = new FileUtil(this.plugin);
@@ -50,37 +50,30 @@ public class KitUtil {
 
         Object max = kitData.get("kits."+kit+".maxclaims");
 
-        LogUtil loga = new LogUtil(this.plugin);
 
         FileUtil playerData = new FileUtil(this.plugin);
         playerData.load(playerData.playerDataFile(this.player));
 
-        if (!playerData.exists("kits." + kit + ".claims")) {
+        Object claims = playerData.get("kits." + kit + ".claims");
+
+        if (claims == null || (int) claims < 0) {
             playerData.set("kits." + kit + ".claims", 0);
         }
 
-        loga.info(max.toString() + " max out of claims: "+playerData.getInt("kits." + kit + ".claims"));
-
         if (max != null && (int) max != -1) {
-            loga.info("1");
             PermissionHandler perm = new PermissionHandler(this.player, this.message);
 
             if (!perm.has("essence.bypass.maxkitclaims")) {
-                loga.info("2");
                 if (playerData.getInt("kits." + kit + ".claims") >= (int) max) {
-                    loga.info("3");
-                    message.send("kit", "max");
                     playerData.save();
                     playerData.close();
-                    return 0;
+                    return 3;
                 }
             }
         }
 
-        loga.info("4");
         playerData.set("kits." + kit + ".claims", playerData.getInt("kits." + kit + ".claims") + 1);
 
-        loga.info("5");
         playerData.save();
         playerData.close();
 
