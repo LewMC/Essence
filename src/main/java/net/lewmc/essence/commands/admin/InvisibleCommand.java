@@ -41,7 +41,7 @@ public class InvisibleCommand implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("invisible")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("visible") || cmd.isDisabled("invisible") || cmd.isDisabled("v")) {
+            if (cmd.isDisabled("invisible")) {
                 return cmd.disabled(message);
             }
 
