@@ -59,12 +59,6 @@ public class TprandomCommand implements CommandExecutor {
         Player player = (Player) commandSender;
         PermissionHandler permission = new PermissionHandler(commandSender, message);
 
-        if (this.flib.isFolia()) {
-            message.send("generic","nofolia");
-            message.send("generic","helpfolia");
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("tprandom")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
             if (cmd.isDisabled("tprandom")) {
@@ -77,6 +71,7 @@ public class TprandomCommand implements CommandExecutor {
                     return true;
                 }
                 message.send("tprandom", "searching");
+
                 WorldBorder wb;
                 try {
                     wb = Objects.requireNonNull(Bukkit.getWorld(player.getWorld().getUID())).getWorldBorder();
@@ -85,8 +80,38 @@ public class TprandomCommand implements CommandExecutor {
                     message.send("generic", "exception");
                     return true;
                 }
-
                 LocationUtil loc = new LocationUtil(this.plugin);
+
+                if (this.flib.isFolia()) {
+                    if (player.isOp()) {
+                        message.send("generic","nofolia");
+                        message.send("generic","helpfolia");
+                    }
+                    this.flib.getImpl().runAsync(wrappedTask -> {
+                        java.util.Random rand = new java.util.Random();
+                        Location center = wb.getCenter();
+                        double maxX = (center.getBlockX() + (wb.getSize()/2));
+                        double minX = (center.getBlockX() - (wb.getSize()/2));
+                        double maxZ = (center.getBlockZ() + (wb.getSize()/2));
+                        double minZ = (center.getBlockZ() - (wb.getSize()/2));
+                        int x = (int) (minX + (maxX - minX) * rand.nextDouble());
+                        int z = (int) (minZ + (maxZ - minZ) * rand.nextDouble());
+                        Location baseLoc = new Location(player.getWorld(), x, 0, z);
+
+                        this.flib.getImpl().runAtLocation(baseLoc, wrappedTask2 -> {
+                            int attempt = 1;
+                            int y = loc.GetGroundY(player.getWorld(), x, z);
+                            while (y == -64 && attempt != 3) {
+                                y = loc.GetGroundY(player.getWorld(), x, z);
+                                attempt++;
+                            }
+                            Location teleportLocation = new Location(player.getWorld(), x, y, z);
+                            this.checkChunkLoaded(player, teleportLocation);
+                        });
+                    });
+                    return true;
+                }
+
                 this.flib.getImpl().runAsync(wrappedTask -> {
                     Location teleportLocation = loc.GetRandomLocation(player, wb);
                     this.checkChunkLoaded(player, teleportLocation);
