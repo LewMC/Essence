@@ -252,6 +252,7 @@ kit:
   nopermission: "§4[Essence] §cYou do not have access to this kit."
   notexist: "§4[Essence] §cThis kit does not exist."
   done: "§2[Essence] §aYou now have the {{1}} kit."
+  max: "§4[Essence] §cYou have claimed this kit too many times."
 info:
   lastname: "§6[Essence] §eLast known name: {{1}}."
   uuid: "§6[Essence] §eUUID: {{1}}"
