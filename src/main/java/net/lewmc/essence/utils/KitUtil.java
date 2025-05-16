@@ -41,11 +41,10 @@ public class KitUtil {
             return 2;
         }
 
-        if (kitData.get("kits."+kit+".permission") != null) {
-            PermissionHandler perm = new PermissionHandler(this.player, this.message);
-            if (!perm.has(kitData.get("kits."+kit+".permission").toString())) {
-                return 1;
-            }
+        PermissionHandler perm = new PermissionHandler(this.player, this.message);
+
+        if (kitData.get("kits."+kit+".permission") != null && !perm.has(kitData.get("kits."+kit+".permission").toString())) {
+            return 1;
         }
 
         Object max = kitData.get("kits."+kit+".maxclaims");
@@ -60,15 +59,11 @@ public class KitUtil {
             playerData.set("kits." + kit + ".claims", 0);
         }
 
-        if (max != null && (int) max != -1) {
-            PermissionHandler perm = new PermissionHandler(this.player, this.message);
-
-            if (!perm.has("essence.bypass.maxkitclaims")) {
-                if (playerData.getInt("kits." + kit + ".claims") >= (int) max) {
-                    playerData.save();
-                    playerData.close();
-                    return 3;
-                }
+        if ((max != null && (int) max != -1) && !perm.has("essence.bypass.maxkitclaims")) {
+            if (playerData.getInt("kits." + kit + ".claims") >= (int) max) {
+                playerData.save();
+                playerData.close();
+                return 3;
             }
         }
 
