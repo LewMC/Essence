@@ -1,5 +1,6 @@
 #Translate Essence!
 #https://crowdin.com/project/lewmc-essence
+#Make sure to set author to your name, not ours! We'd like to be able to give you credit for your amazing translation work!
 meta:
   language: Français
   author: LewMC
@@ -100,8 +101,8 @@ help:
   admin: "§6[Essence] ------- Essence Help - Administration ------"
   seen: "§6[Essence] §e/seen <name> - Last seen player."
   info: "§6[Essence] §e/info <name> - View player information."
-  invisible: "§6[Essence] §e/invisible - Make yourself invisible."
-  visible: "§6[Essence] §e/visible - Make yourself visible."
+  invisible: "§6[Essence] §e/invisible - Toggle if you're invisible."
+  visible: "§6[Essence] §e/visible - Toggle if you're visible."
   chat: "§6[Essence] ------------ Essence Help - Chat -----------"
   broadcast: "§6[Essence] §e/broadcast <message> - Broadcast a message"
   msg: "§6[Essence] §e/msg <name> <message> - Message a player."
@@ -252,6 +253,7 @@ kit:
   nopermission: "§4[Essence] §cYou do not have access to this kit."
   notexist: "§4[Essence] §cThis kit does not exist."
   done: "§2[Essence] §aYou now have the {{1}} kit."
+  max: "§4[Essence] §cYou have claimed this kit too many times."
 info:
   lastname: "§6[Essence] §eLast known name: {{1}}."
   uuid: "§6[Essence] §eUUID: {{1}}"
