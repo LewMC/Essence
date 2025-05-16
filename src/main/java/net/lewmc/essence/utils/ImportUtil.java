@@ -113,27 +113,29 @@ public class ImportUtil {
         file.loadNoReformat(new File(this.plugin.getServer().getPluginsFolder() + "/Essentials/spawn.yml"));
         Set<String> spawns = file.getKeys("spawns", false);
 
-        for (String esxName : spawns) {
-            if (file.getString("spawns." + esxName) != null) {
-                FileUtil spawnFile = new FileUtil(this.plugin);
+        if (spawns != null) {
+            for (String esxName : spawns) {
+                if (file.getString("spawns." + esxName) != null) {
+                    FileUtil spawnFile = new FileUtil(this.plugin);
 
 
-                spawnFile.load("data/spawns.yml");
+                    spawnFile.load("data/spawns.yml");
 
-                World world = this.plugin.getServer().getWorld(file.getString("spawns." + esxName + ".world-name"));
+                    World world = this.plugin.getServer().getWorld(file.getString("spawns." + esxName + ".world-name"));
 
-                if (world != null) {
-                    String essName = world.getName();
-                    if (spawnFile.get("spawn."+essName) == null) {
-                        spawnFile.set("spawn." + essName + ".X", file.getDouble("spawns." + esxName + ".x"));
-                        spawnFile.set("spawn." + essName + ".Y", file.getDouble("spawns." + esxName + ".y"));
-                        spawnFile.set("spawn." + essName + ".Z", file.getDouble("spawns." + esxName + ".z"));
-                        spawnFile.set("spawn." + essName + ".yaw", file.getDouble("spawns." + esxName + ".yaw"));
-                        spawnFile.set("spawn." + essName + ".pitch", file.getDouble("spawns." + esxName + ".pitch"));
+                    if (world != null) {
+                        String essName = world.getName();
+                        if (spawnFile.get("spawn." + essName) == null) {
+                            spawnFile.set("spawn." + essName + ".X", file.getDouble("spawns." + esxName + ".x"));
+                            spawnFile.set("spawn." + essName + ".Y", file.getDouble("spawns." + esxName + ".y"));
+                            spawnFile.set("spawn." + essName + ".Z", file.getDouble("spawns." + esxName + ".z"));
+                            spawnFile.set("spawn." + essName + ".yaw", file.getDouble("spawns." + esxName + ".yaw"));
+                            spawnFile.set("spawn." + essName + ".pitch", file.getDouble("spawns." + esxName + ".pitch"));
+                        }
                     }
-                }
 
-                success = spawnFile.save();
+                    success = spawnFile.save();
+                }
             }
         }
         file.close();
