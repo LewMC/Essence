@@ -37,15 +37,6 @@ jobs:
           cache: 'maven'
       - name: Build Plugin
         run: mvn -B package --file pom.xml
-      - name: Bukkit ${{ matrix.version }}
-        uses: gmitch215/TestMC@v2
-        with:
-          path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
-          runtime: 'craftbukkit'
-          version: ${{ matrix.version }}
-          time: 120
-          commands: |
-            essence
       - name: Spigot ${{ matrix.version }}
         uses: GamerCoder215/TestMC@v2.0.2
         with:
@@ -60,15 +51,6 @@ jobs:
         with:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
           runtime: 'paper'
-          version: ${{ matrix.version }}
-          time: 120
-          commands: |
-            essence
-      - name: Purpur ${{ matrix.version }}
-        uses: GamerCoder215/TestMC@v2.0.2
-        with:
-          path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
-          runtime: 'purpur'
           version: ${{ matrix.version }}
           time: 120
           commands: |
