@@ -42,6 +42,12 @@ public class TeleportUtil {
      * @return boolean - If the cooldown has surpassed or not.
      */
     public boolean cooldownSurpassed(Player player, String type) {
+        PermissionHandler perms = new PermissionHandler(player, new MessageUtil(player, this.plugin));
+
+        if (perms.has("essence.admin.bypass.teleportcooldown")) {
+            return true;
+        }
+
         int cooldown = this.plugin.getConfig().getInt("teleportation."+type+".cooldown");
         if (cooldown < 0) { return true; }
 
