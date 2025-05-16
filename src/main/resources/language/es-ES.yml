@@ -2,7 +2,7 @@
 #https://crowdin.com/project/lewmc-essence
 meta:
   language: Español
-  author: LewMC
+  author: Bautista Igarzabal
 about:
   version: "§6[Essence] §eCorriendo la version {{1}}."
   description: "§6[Essence] §eEssence es un plugin ligero y personalizable que añade warps, casas, y más."
