@@ -20,10 +20,10 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        version: [ "1.21.5" ]
+        version: [ "1.21.4" ]
         java-version: [21]
         include:
-          - version: "1.21.5"
+          - version: "1.21.4"
             java-version: 21
 
     name: Minecraft ${{ matrix.version }}
@@ -38,7 +38,7 @@ jobs:
       - name: Build Plugin
         run: mvn -B package --file pom.xml
       - name: Bukkit ${{ matrix.version }}
-        uses: GamerCoder215/TestMC@v2.0.2
+        uses: GamerCoder215/TestMC@latest
         with:
           path: "/home/runner/work/Essence/Essence/target/essence-*.jar"
           runtime: 'craftbukkit'
