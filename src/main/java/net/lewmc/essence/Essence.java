@@ -114,6 +114,14 @@ public class Essence extends JavaPlugin {
         this.log.info("");
 
         this.verbose = this.getConfig().getBoolean("verbose");
+
+        if (this.verbose) {
+            this.log.warn("Verbose mode is ENABLED.");
+            this.log.warn("This will likely cause a lot of console spam.");
+            this.log.warn("You should only enable this if you're having problems.");
+            this.log.info("");
+        }
+
         this.disabledCommandsFeedback = this.getConfig().getBoolean("disabled-commands-feedback");
 
         if (!Bukkit.getOnlineMode()) {
