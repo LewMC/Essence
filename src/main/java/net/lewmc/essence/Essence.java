@@ -362,7 +362,7 @@ public class Essence extends JavaPlugin {
             this.getCommand("info").setExecutor(new InfoCommand(this));
 
             this.getCommand("invisible").setExecutor(new InvisibleCommand(this));
-            this.getCommand("visible").setExecutor(new VisibleCommand(this));
+            this.getCommand("visible").setExecutor(new InvisibleCommand(this));
 
             this.getCommand("rules").setExecutor(new RulesCommands(this));
         } catch (NullPointerException e) {

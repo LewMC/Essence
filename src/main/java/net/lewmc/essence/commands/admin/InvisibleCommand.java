@@ -9,13 +9,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * /invisible command.
+ * /visible command.
  */
 public class InvisibleCommand implements CommandExecutor {
     private final Essence plugin;
 
     /**
      * Constructor for the InvisibleCommand class.
+     *
      * @param plugin References to the main plugin class.
      */
     public InvisibleCommand(Essence plugin) {
@@ -35,17 +36,16 @@ public class InvisibleCommand implements CommandExecutor {
             return true;
         }
 
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
+        MessageUtil message = new MessageUtil(commandSender, this.plugin);
+        StatsUtil stats = new StatsUtil(this.plugin, commandSender, new PermissionHandler(commandSender, message));
 
         if (command.getName().equalsIgnoreCase("invisible")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("invisible")) {
+            if (cmd.isDisabled("visible") || cmd.isDisabled("invisible") || cmd.isDisabled("v")) {
                 return cmd.disabled(message);
             }
 
-            StatsUtil stats = new StatsUtil(this.plugin, player, permission);
-            return stats.invisible(true);
+            return stats.toggleInvisible();
         }
 
         return false;

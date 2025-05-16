@@ -21,12 +21,11 @@ public class StatsUtil {
 
     /**
      * Sets the player to be invisible.
-     * @param isInvisible boolean - Should the player be invisible (true) or visible (false).
      * @return boolean - Was the operation successful?
      */
-    public boolean invisible(boolean isInvisible) {
+    public boolean toggleInvisible() {
             if (this.permission.has("essence.admin.invisible")) {
-                if (isInvisible) {
+                if (!this.player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                     this.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
                     MessageUtil message = new MessageUtil(this.player, this.plugin);
                     message.send("visibility", "invisible", new String[]{this.player.getName()});

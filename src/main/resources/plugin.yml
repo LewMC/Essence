@@ -244,12 +244,9 @@ commands:
     aliases: ['pinfo','playerinfo']
     permission: essence.admin.info
   invisible:
-    description: Makes the player invisible.
+    description: Toggles player invisibility.
     usage: /invisible
-    permission: essence.admin.invisible
-  visible:
-    description: Makes the player visible.
-    usage: /visible
+    aliases: ['visible', 'v']
     permission: essence.admin.invisible
   msg:
     description: Send a private message to another player.
