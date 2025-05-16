@@ -1,5 +1,6 @@
 #Translate Essence!
 #https://crowdin.com/project/lewmc-essence
+#Make sure to set author to your name, not ours! We'd like to be able to give you credit for your amazing translation work!
 meta:
   language: 中文
   author: Xiao Renjunya
@@ -100,8 +101,8 @@ help:
   admin: "§6[Essence] ------- Essence 帮助 - 管理员命令 ------"
   seen: "§6[Essence] §e/seen <name> - 查看某人最后退出的时间."
   info: "§6[Essence] §e/info <name> - 查看某玩家信息."
-  invisible: "§6[Essence] §e/invisible - Make yourself invisible."
-  visible: "§6[Essence] §e/visible - Make yourself visible."
+  invisible: "§6[Essence] §e/invisible - Toggle if you're invisible."
+  visible: "§6[Essence] §e/visible - Toggle if you're visible."
   chat: "§6[Essence] ------------ Essence 帮助 - 聊天 -----------"
   broadcast: "§6[Essence] §e/broadcast <message> - 广播消息"
   msg: "§6[Essence] §e/msg <name> <message> - 给某玩家发消息."
@@ -252,6 +253,7 @@ kit:
   nopermission: "§4[Essence] §c您无权开启此礼包."
   notexist: "§4[Essence] §c该礼包不存在."
   done: "§2[Essence] §a您现在有了 {{1}} 礼包."
+  max: "§4[Essence] §cYou have claimed this kit too many times."
 info:
   lastname: "§6[Essence] §e最后的已知玩家名: {{1}}."
   uuid: "§6[Essence] §eUUID: {{1}}"
