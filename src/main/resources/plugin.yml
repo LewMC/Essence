@@ -530,12 +530,12 @@ permissions:
     default: op
     children:
       essence.bypass.teleportcooldown: true
-      essence.bypass.teleportwait: true
+      essence.bypass.teleportdelay: true
       essence.bypass.maxkitclaims: true
   essence.bypass.teleportcooldown:
     description: Allows bypassing the teleportation cooldown.
-  essence.bypass.teleportwait:
-    description: Allows bypassing the teleportation cooldown.
+  essence.bypass.teleportdelay:
+    description: Allows bypassing the teleportation delay.
   essence.bypass.maxkitclaims:
     description: Allows bypassing the maximum number of kit redemptions.
   essence.rules:
