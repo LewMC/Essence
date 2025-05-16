@@ -243,6 +243,11 @@ commands:
     usage: /info <user>
     aliases: ['pinfo','playerinfo']
     permission: essence.admin.info
+  invisible:
+    description: Toggles player invisibility.
+    usage: /invisible
+    aliases: ['visible', 'v']
+    permission: essence.admin.invisible
   msg:
     description: Send a private message to another player.
     usage: /msg <user> <message>
@@ -503,6 +508,8 @@ permissions:
       essence.admin.info: true
       essence.admin.reload: true
       essence.admin.import: true
+      essence.admin.invisible: true
+      essence.admin.updates: true
   essence.admin.seen:
     description: Allows players to see when the player was last online.
   essence.admin.info:
@@ -511,5 +518,22 @@ permissions:
     description: Allows players to reload Essence.
   essence.admin.import:
     description: Allows players to reload Essence.
+  essence.admin.invisible:
+    description: Toggles invisibility.
+  essence.admin.updates:
+    description: Toggles invisibility.
+  essence.bypass.*:
+    description: Allows bypassing of various limits.
+    default: op
+    children:
+      essence.bypass.teleportcooldown: true
+      essence.bypass.teleportdelay: true
+      essence.bypass.maxkitclaims: true
+  essence.bypass.teleportcooldown:
+    description: Allows bypassing the teleportation cooldown.
+  essence.bypass.teleportdelay:
+    description: Allows bypassing the teleportation delay.
+  essence.bypass.maxkitclaims:
+    description: Allows bypassing the maximum number of kit redemptions.
   essence.rules:
     description: Allows players to view the server rules.

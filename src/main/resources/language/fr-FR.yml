@@ -1,5 +1,6 @@
 #Translate Essence!
 #https://crowdin.com/project/lewmc-essence
+#Make sure to set author to your name, not ours! We'd like to be able to give you credit for your amazing translation work!
 meta:
   language: Français
   author: LewMC
@@ -34,6 +35,8 @@ generic:
 other:
   respawnset: "§6[Essence] §eRespawn point set."
   rule: "§a{{1}}"
+  updatemsg: "§4[Essence] §cYour version of Essence is out of date!"
+  updatemore: "§4[Essence] §cSee the server console for more information."
 help:
   page: "§6[Essence] ----------------- Page {{1}}/{{2}} -----------------"
   inventory: "§6[Essence] --------- Essence Help - Inventory ---------"
@@ -98,6 +101,8 @@ help:
   admin: "§6[Essence] ------- Essence Help - Administration ------"
   seen: "§6[Essence] §e/seen <name> - Last seen player."
   info: "§6[Essence] §e/info <name> - View player information."
+  invisible: "§6[Essence] §e/invisible - Toggle if you're invisible."
+  visible: "§6[Essence] §e/visible - Toggle if you're visible."
   chat: "§6[Essence] ------------ Essence Help - Chat -----------"
   broadcast: "§6[Essence] §e/broadcast <message> - Broadcast a message"
   msg: "§6[Essence] §e/msg <name> <message> - Message a player."
@@ -191,6 +196,10 @@ heal:
   healedby: "§2[Essence] §aYou've been healed by {{1}}."
   beenhealed: "§2[Essence] §aYou've been healed!"
   usage: "§4[Essence] §cUtilisation: /heal <joueur>"
+visibility:
+  invisible: "§2[Essence] §aYou are now invisible."
+  visible: "§2[Essence] §aYou are now visible."
+  alreadyvisible: "§4[Essence] §cYou are already visible."
 gamemode:
   usage: "§4[Essence] §cUtilisation: /gamemode <mode> [joueur]."
   specify: "§4[Essence] §cPlease specify a gamemode (example: /gamemode creative)."
@@ -244,6 +253,7 @@ kit:
   nopermission: "§4[Essence] §cYou do not have access to this kit."
   notexist: "§4[Essence] §cThis kit does not exist."
   done: "§2[Essence] §aYou now have the {{1}} kit."
+  max: "§4[Essence] §cYou have claimed this kit too many times."
 info:
   lastname: "§6[Essence] §eLast known name: {{1}}."
   uuid: "§6[Essence] §eUUID: {{1}}"

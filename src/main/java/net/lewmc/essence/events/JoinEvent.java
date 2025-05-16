@@ -45,7 +45,15 @@ public class JoinEvent implements Listener {
         if (plugin.getConfig().getBoolean("motd.enabled")) { this.motd(event); }
 
         if (plugin.getConfig().getBoolean("teleportation.spawn.always-spawn") || firstJoin) {
-            this.spawn(event, log);
+            try {
+                this.spawn(event, log);
+            } catch (Exception e) {
+                log.severe("Unknown exception: " + e.getMessage());
+            }
+        }
+
+        if (this.plugin.hasPendingUpdate) {
+            this.showUpdateAlert(event);
         }
 
         FileUtil playerFile = new FileUtil(plugin);
@@ -56,7 +64,7 @@ public class JoinEvent implements Listener {
         if (!playerFile.exists(playerDataFile)) {
             if (pu.createPlayerData()) {
                 if (plugin.verbose) {
-                    log.info("Player data saved.");
+                    log.info("Player data file created.");
                 }
             } else {
                 log.severe("Unable to create player data.");
@@ -64,7 +72,7 @@ public class JoinEvent implements Listener {
         } else {
             if (pu.updatePlayerData()) {
                 if (plugin.verbose) {
-                    log.info("Player data saved.");
+                    log.info("Player data file saved.");
                 }
             } else {
                 log.severe("Unable to create player data.");
@@ -97,8 +105,9 @@ public class JoinEvent implements Listener {
 
         if (spawnConfiguration.get("spawn") == null) {
             if (Bukkit.getServer().getWorld(spawnName) == null) {
-                WorldCreator creator = new WorldCreator(spawnName);
-                creator.createWorld();
+                message.send("spawn", "notexist");
+                log.severe("The spawn world does not exist. Please check your Essence configuration.");
+                return;
             }
             if (Bukkit.getServer().getWorld(spawnName) != null && Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null) {
                 TeleportUtil tp = new TeleportUtil(plugin);
@@ -176,6 +185,19 @@ public class JoinEvent implements Listener {
             event.setJoinMessage(tag.doReplacement(this.plugin.getConfig().getString("broadcasts.join")));
         } else {
             event.setJoinMessage(tag.doReplacement(this.plugin.getConfig().getString("broadcasts.first-join")));
+        }
+    }
+
+    /**
+     * Displays the update alert.
+     * @param event PlayerJoinEvent - The event
+     */
+    private void showUpdateAlert(PlayerJoinEvent event) {
+        MessageUtil msg = new MessageUtil(event.getPlayer(), this.plugin);
+        PermissionHandler perms = new PermissionHandler(event.getPlayer(), msg);
+        if (perms.has("essence.admin.updates") && this.plugin.hasPendingUpdate) {
+            msg.send("other", "updatemsg");
+            msg.send("other", "updatemore");
         }
     }
 }

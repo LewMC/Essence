@@ -56,6 +56,7 @@ public class UpdateUtil {
                         log.warn("UPDATE > Your version: "+this.plugin.getDescription().getVersion()+" - latest version: "+response);
                         log.warn("UPDATE > You can download the latest version from lewmc.net/essence");
                         this.log.info("");
+                        this.plugin.hasPendingUpdate = true;
                     }
                 } else {
                     log.severe("Unable to perform update check: There was no response from the server.");
@@ -126,6 +127,30 @@ public class UpdateUtil {
                 ConfigUpdater.update(plugin, "language/fr-FR.yml", frFR);
             } catch (IOException e) {
                 this.log.warn("Unable to update fr-FR language file: "+e);
+            }
+        }
+
+        // es-ES
+        File esES = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "es-ES.yml");
+        if (!esES.exists()) {
+            this.plugin.saveResource("language/es-ES.yml", false);
+        } else {
+            try {
+                ConfigUpdater.update(plugin, "language/es-ES.yml", frFR);
+            } catch (IOException e) {
+                this.log.warn("Unable to update es-ES language file: "+e);
+            }
+        }
+
+        // ko-KR
+        File koKR = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "ko-KR.yml");
+        if (!koKR.exists()) {
+            this.plugin.saveResource("language/ko-KR.yml", false);
+        } else {
+            try {
+                ConfigUpdater.update(plugin, "language/ko-KR.yml", frFR);
+            } catch (IOException e) {
+                this.log.warn("Unable to update ko-KR language file: "+e);
             }
         }
     }

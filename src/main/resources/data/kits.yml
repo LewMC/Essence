@@ -1,6 +1,8 @@
 kits:
   wooden-tools:
     items: ["WOODEN_AXE","WOODEN_PICKAXE","WOODEN_SHOVEL","WOODEN_SWORD"]
+    maxclaims: 1
   god-tools:
     items: ["DIAMOND_AXE","DIAMOND_PICKAXE","DIAMOND_SHOVEL","DIAMOND_SWORD"]
+    maxclaims: 1
     permission: "essence.kits.god"
