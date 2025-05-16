@@ -64,7 +64,7 @@ public class JoinEvent implements Listener {
         if (!playerFile.exists(playerDataFile)) {
             if (pu.createPlayerData()) {
                 if (plugin.verbose) {
-                    log.info("Player data saved.");
+                    log.info("Player data file created.");
                 }
             } else {
                 log.severe("Unable to create player data.");
@@ -72,7 +72,7 @@ public class JoinEvent implements Listener {
         } else {
             if (pu.updatePlayerData()) {
                 if (plugin.verbose) {
-                    log.info("Player data saved.");
+                    log.info("Player data file saved.");
                 }
             } else {
                 log.severe("Unable to create player data.");
