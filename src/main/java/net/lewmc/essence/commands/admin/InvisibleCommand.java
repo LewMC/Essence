@@ -37,7 +37,7 @@ public class InvisibleCommand implements CommandExecutor {
         }
 
         MessageUtil message = new MessageUtil(commandSender, this.plugin);
-        StatsUtil stats = new StatsUtil(this.plugin, commandSender, new PermissionHandler(commandSender, message));
+        StatsUtil stats = new StatsUtil(this.plugin, (Player) commandSender, new PermissionHandler(commandSender, message));
 
         if (command.getName().equalsIgnoreCase("invisible")) {
             CommandUtil cmd = new CommandUtil(this.plugin);
