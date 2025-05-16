@@ -77,25 +77,27 @@ public class ImportUtil {
                 file.loadNoReformat(child);
                 Set<String> homes = file.getKeys("homes", false);
 
-                for (String home : homes) {
-                    HomeUtil homeUtil = new HomeUtil(this.plugin);
+                if (homes != null) {
+                    for (String home : homes) {
+                        HomeUtil homeUtil = new HomeUtil(this.plugin);
 
-                    if (file.getString("homes."+home) != null) {
+                        if (file.getString("homes." + home) != null) {
 
-                        Location loc = new Location(
-                                this.plugin.getServer().getWorld(file.getString("homes." + home + ".world-name")),
-                                file.getDouble("homes." + home + ".x"),
-                                file.getDouble("homes." + home + ".y"),
-                                file.getDouble("homes." + home + ".z"),
-                                (float) file.getDouble("homes." + home + ".yaw"),
-                                (float) file.getDouble("homes." + home + ".pitch")
-                        );
+                            Location loc = new Location(
+                                    this.plugin.getServer().getWorld(file.getString("homes." + home + ".world-name")),
+                                    file.getDouble("homes." + home + ".x"),
+                                    file.getDouble("homes." + home + ".y"),
+                                    file.getDouble("homes." + home + ".z"),
+                                    (float) file.getDouble("homes." + home + ".yaw"),
+                                    (float) file.getDouble("homes." + home + ".pitch")
+                            );
 
-                        homeUtil.create(
-                                home,
-                                this.plugin.getServer().getPlayer(file.getString("last-account-name")),
-                                loc
-                        );
+                            homeUtil.create(
+                                    home,
+                                    this.plugin.getServer().getPlayer(file.getString("last-account-name")),
+                                    loc
+                            );
+                        }
                     }
                 }
                 file.close();
