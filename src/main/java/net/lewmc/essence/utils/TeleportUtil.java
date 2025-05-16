@@ -160,6 +160,12 @@ public class TeleportUtil {
                 pitch
         );
 
+        PermissionHandler perms = new PermissionHandler(player, new MessageUtil(player, this.plugin));
+
+        if (perms.has("essence.admin.bypass.teleportdelay")) {
+            delay = 0;
+        }
+
         this.doTeleport(player, loc, delay);
     }
 

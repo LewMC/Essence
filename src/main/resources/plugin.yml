@@ -513,7 +513,6 @@ permissions:
       essence.admin.import: true
       essence.admin.invisible: true
       essence.admin.updates: true
-      essence.admin.bypass.*: true
   essence.admin.seen:
     description: Allows players to see when the player was last online.
   essence.admin.info:
@@ -526,15 +525,18 @@ permissions:
     description: Toggles invisibility.
   essence.admin.updates:
     description: Toggles invisibility.
-  essence.admin.bypass.*:
+  essence.bypass.*:
     description: Allows bypassing of various limits.
     default: op
     children:
-      essence.admin.bypass.teleportcooldown: true
-      essence.admin.bypass.teleportwait: true
-  essence.admin.bypass.teleportcooldown:
+      essence.bypass.teleportcooldown: true
+      essence.bypass.teleportwait: true
+      essence.bypass.maxkitclaims: true
+  essence.bypass.teleportcooldown:
     description: Allows bypassing the teleportation cooldown.
-  essence.admin.bypass.teleportwait:
+  essence.bypass.teleportwait:
     description: Allows bypassing the teleportation cooldown.
+  essence.bypass.maxkitclaims:
+    description: Allows bypassing the maximum number of kit redemptions.
   essence.rules:
     description: Allows players to view the server rules.

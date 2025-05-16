@@ -48,6 +48,42 @@ public class KitUtil {
             }
         }
 
+        Object max = kitData.get("kits."+kit+".maxclaims");
+
+        LogUtil loga = new LogUtil(this.plugin);
+
+        FileUtil playerData = new FileUtil(this.plugin);
+        playerData.load(playerData.playerDataFile(this.player));
+
+        if (!playerData.exists("kits." + kit + ".claims")) {
+            playerData.set("kits." + kit + ".claims", 0);
+        }
+
+        loga.info(max.toString() + " max out of claims: "+playerData.getInt("kits." + kit + ".claims"));
+
+        if (max != null && (int) max != -1) {
+            loga.info("1");
+            PermissionHandler perm = new PermissionHandler(this.player, this.message);
+
+            if (!perm.has("essence.bypass.maxkitclaims")) {
+                loga.info("2");
+                if (playerData.getInt("kits." + kit + ".claims") >= (int) max) {
+                    loga.info("3");
+                    message.send("kit", "max");
+                    playerData.save();
+                    playerData.close();
+                    return 0;
+                }
+            }
+        }
+
+        loga.info("4");
+        playerData.set("kits." + kit + ".claims", playerData.getInt("kits." + kit + ".claims") + 1);
+
+        loga.info("5");
+        playerData.save();
+        playerData.close();
+
         List<String> items = kitData.getStringList("kits."+kit+".items");
 
         for (String object : items) {
