@@ -13,5 +13,7 @@ jobs:
         with:
           message: |
             **Thank you for opening a pull request to Essence.**
+            
             Someone will review your request shortly. If you don't hear from us within 5 working days, please feel free to ping Lewis or email dev@lewmc.net
+            
             Thank you!

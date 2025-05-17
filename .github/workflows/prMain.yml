@@ -13,6 +13,9 @@ jobs:
         with:
           message: |
             **Thank you for opening a pull request to Essence.**
+            
             You've requested to merge something into `main`, please note that if you're adding, removing, or changing a feature on Essence you must merge into `next-update` so that compatability can be checked properly with any other pending changes.
-            Please close and reopen your pull request into `next-update` if this is the case.
+            
+            We unfortunately do not accept any pull requests into `main`, [for more information please click here](https://github.com/LewMC/Essence/edit/main/CONTRIBUTING.md). Please close and reopen your pull request into `next-update` if this is the case.
+            
             Thank you!
