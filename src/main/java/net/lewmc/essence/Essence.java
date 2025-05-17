@@ -389,6 +389,8 @@ public class Essence extends JavaPlugin {
         getCommand("es").setTabCompleter(new EssenceTabCompleter());
 
         getCommand("team").setTabCompleter(new TeamTabCompleter());
+
+        getCommand("tp").setTabCompleter(new TpTabCompleter());
     }
 
     /**

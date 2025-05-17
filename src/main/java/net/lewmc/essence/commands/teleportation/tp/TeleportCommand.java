@@ -10,7 +10,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class TeleportCommand implements CommandExecutor {
     private final Essence plugin;
@@ -56,214 +59,74 @@ public class TeleportCommand implements CommandExecutor {
                 return cmd.disabled(message);
             }
 
-            TeleportUtil tu = new TeleportUtil(this.plugin);
-            TeleportUtil.Type type = tu.getTeleportType(args);
-
-            if (type == TeleportUtil.Type.TO_COORD) {
-                if (console(commandSender)) {
-                    this.log.noConsole();
-                    return true;
-                }
-
-                if (permission.has("essence.teleport.coord")) {
-                    LocationUtil locationUtil = new LocationUtil(this.plugin);
-                    locationUtil.UpdateLastLocation(player);
-
-                    if (this.isNull(player)) {
-                        return true;
-                    }
-
-                    double x;
-                    double y;
-                    double z;
-
-                    try {
-                        assert player != null;
-                        if (Objects.equals(args[0], "~")) {
-                            x = player.getLocation().getX();
-                        } else {
-                            x = Double.parseDouble(args[0]);
-                        }
-
-                        if (Objects.equals(args[1], "~")) {
-                            y = player.getLocation().getY();
-                        } else {
-                            y = Double.parseDouble(args[1]);
-                        }
-
-                        if (Objects.equals(args[2], "~")) {
-                            z = player.getLocation().getZ();
-                        } else {
-                            z = Double.parseDouble(args[2]);
-                        }
-                    } catch (NullPointerException e) {
-                        message.send("generic", "exception");
-                        this.log.severe(e.getMessage());
-                        return true;
-                    } catch (NumberFormatException e) {
-                        message.send("generic", "numberformaterror");
-                        return true;
-                    }
-                    Location location = new Location(player.getWorld(), x, y, z);
-                    TeleportUtil tp = new TeleportUtil(this.plugin);
-                    tp.doTeleport(player, location, 0);
-
-                    message.send("teleport", "tocoord", new String[] { x+", "+y+", "+z });
-                } else {
-                    return permission.not();
-                }
-                return true;
-            } else if (type == TeleportUtil.Type.PLAYER_TO_COORD) {
-                if (permission.has("essence.teleport.other") && permission.has("essence.teleport.coord")) {
-                    String p = args[0];
-                    if (p.equalsIgnoreCase("@s")) {
-                        LocationUtil locationUtil = new LocationUtil(this.plugin);
-                        locationUtil.UpdateLastLocation(player);
-
-                        if (this.isNull(player)) {
-                            return true;
-                        }
-
-                        double x;
-                        double y;
-                        double z;
-
-                        try {
-                            assert player != null;
-                            if (Objects.equals(args[1], "~")) {
-                                x = player.getLocation().getX();
-                            } else {
-                                x = Double.parseDouble(args[1]);
-                            }
-
-                            if (Objects.equals(args[2], "~")) {
-                                y = player.getLocation().getY();
-                            } else {
-                                y = Double.parseDouble(args[2]);
-                            }
-
-                            if (Objects.equals(args[3], "~")) {
-                                z = player.getLocation().getZ();
-                            } else {
-                                z = Double.parseDouble(args[3]);
-                            }
-                        } catch (NullPointerException e) {
-                            message.send("generic", "exception");
-                            this.log.severe(e.getMessage());
-                            return true;
-                        } catch (NumberFormatException e) {
-                            message.send("generic", "numberformaterror");
-                            return true;
-                        }
-
-                        Location location = new Location(player.getWorld(), x, y, z);
-                        player.teleport(location);
-                    } else {
-                        Player playerToTeleport = this.plugin.getServer().getPlayer(args[0]);
-                        if (playerToTeleport == null) {
-                            message.send("generic", "playernotfound");
-                            return true;
-                        }
-
-                        LocationUtil locationUtil = new LocationUtil(this.plugin);
-                        locationUtil.UpdateLastLocation(playerToTeleport);
-
-                        double x;
-                        double y;
-                        double z;
-
-                        try {
-                            if (Objects.equals(args[1], "~")) {
-                                x = playerToTeleport.getLocation().getX();
-                            } else {
-                                x = Double.parseDouble(args[1]);
-                            }
-
-                            if (Objects.equals(args[2], "~")) {
-                                y = playerToTeleport.getLocation().getY();
-                            } else {
-                                y = Double.parseDouble(args[2]);
-                            }
-
-                            if (Objects.equals(args[3], "~")) {
-                                z = playerToTeleport.getLocation().getZ();
-                            } else {
-                                z = Double.parseDouble(args[3]);
-                            }
-                        } catch (NullPointerException e) {
-                            message.send("generic", "exception");
-                            this.log.severe(e.getMessage());
-                            return true;
-                        } catch (NumberFormatException e) {
-                            message.send("generic", "numberformaterror");
-                            return true;
-                        }
-
-                        Location location = new Location(playerToTeleport.getWorld(), x, y, z);
-                        TeleportUtil tp = new TeleportUtil(this.plugin);
-                        tp.doTeleport(playerToTeleport, location, 0);
-
-                        message.send("teleport", "playertocoord", new String[] { playerToTeleport.getName(), x+", "+y+", "+z });
-                    }
-                } else {
-                    return permission.not();
-                }
-                return true;
-            } else if (type == TeleportUtil.Type.TO_PLAYER) {
-                if (console(commandSender)) {
-                    this.log.noConsole();
-                    return true;
-                }
-                if (permission.has("essence.teleport.player")) {
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                            LocationUtil locationUtil = new LocationUtil(this.plugin);
-                            locationUtil.UpdateLastLocation(player);
-
-                            message.send("teleport", "to", new String[] { p.getName() });
-
-                            TeleportUtil tp = new TeleportUtil(this.plugin);
-                            tp.doTeleport(player, p.getLocation(), 0);
-                            return true;
-                        }
-                    }
-                } else {
-                    return permission.not();
-                }
-                message.send("generic", "playernotfound");
-                return true;
-            } else if (type == TeleportUtil.Type.PLAYER_TO_PLAYER) {
-                if (permission.has("essence.teleport.other") && permission.has("essence.teleport.player")) {
-                    Player player1 = null;
-                    Player player2 = null;
-
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                            player1 = p;
-                        }
-                        if ((p.getName().toLowerCase()).equalsIgnoreCase(args[1])) {
-                            player2 = p;
-                        }
-                    }
-
-                    if (player1 == null || player2 == null) {
-                        message.send("generic", "playernotfound");
-                    } else {
-                        LocationUtil locationUtil = new LocationUtil(this.plugin);
-                        locationUtil.UpdateLastLocation(player);
-
-                        message.send("teleport", "toplayer", new String[] { player1.getName(), player2.getName() });
-
-                        TeleportUtil tp = new TeleportUtil(this.plugin);
-                        tp.doTeleport(player1, player2.getLocation(), 0);
-                    }
-                    return true;
-                } else {
-                    return permission.not();
-                }
-            } else {
+            if (args.length == 0) {
                 message.send("teleport", "usage");
+                return true;
             }
+
+            // /tp <selector> <x> <y> <z>
+            if (args.length >= 4) {
+                String selector = args[0];
+                List<Player> targets = parseSelector(selector, commandSender);
+                if (targets.isEmpty()) {
+                    message.send("generic", "playernotfound");
+                    return true;
+                }
+                double x, y, z;
+                try {
+                    Player ref = (commandSender instanceof Player) ? (Player) commandSender : targets.get(0);
+                    x = args[1].equals("~") ? ref.getLocation().getX() : Double.parseDouble(args[1]);
+                    y = args[2].equals("~") ? ref.getLocation().getY() : Double.parseDouble(args[2]);
+                    z = args[3].equals("~") ? ref.getLocation().getZ() : Double.parseDouble(args[3]);
+                } catch (Exception e) {
+                    message.send("generic", "numberformaterror");
+                    return true;
+                }
+                for (Player t : targets) {
+                    Location loc = new Location(t.getWorld(), x, y, z);
+                    TeleportUtil tp = new TeleportUtil(this.plugin);
+                    tp.doTeleport(t, loc, 0); // Folia兼容
+                }
+                message.send("teleport", "tocoord", new String[] { x+", "+y+", "+z });
+                return true;
+            }
+
+            // /tp <selector1> <selector2>  或 /tp <selector1> <player2>
+            if (args.length == 2) {
+                List<Player> fromList = parseSelector(args[0], commandSender);
+                List<Player> toList = parseSelector(args[1], commandSender);
+                if (fromList.isEmpty() || toList.isEmpty()) {
+                    message.send("generic", "playernotfound");
+                    return true;
+                }
+                Player to = toList.get(0);
+                for (Player from : fromList) {
+                    TeleportUtil tp = new TeleportUtil(this.plugin);
+                    tp.doTeleport(from, to.getLocation(), 0); // Folia兼容
+                }
+                message.send("teleport", "toplayer", new String[] { fromList.stream().map(Player::getName).collect(Collectors.joining(", ")), to.getName() });
+                return true;
+            }
+
+            // /tp <x> <y> <z>  (自己传送到坐标)
+            if (args.length == 3 && player != null) {
+                double x, y, z;
+                try {
+                    x = args[0].equals("~") ? player.getLocation().getX() : Double.parseDouble(args[0]);
+                    y = args[1].equals("~") ? player.getLocation().getY() : Double.parseDouble(args[1]);
+                    z = args[2].equals("~") ? player.getLocation().getZ() : Double.parseDouble(args[2]);
+                } catch (Exception e) {
+                    message.send("generic", "numberformaterror");
+                    return true;
+                }
+                Location loc = new Location(player.getWorld(), x, y, z);
+                TeleportUtil tp = new TeleportUtil(this.plugin);
+                tp.doTeleport(player, loc, 0); // Folia兼容
+                message.send("teleport", "tocoord", new String[] { x+", "+y+", "+z });
+                return true;
+            }
+
+            message.send("teleport", "usage");
             return true;
         }
 
@@ -291,6 +154,50 @@ public class TeleportCommand implements CommandExecutor {
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * 解析目标选择器，返回匹配的玩家列表
+     */
+    private List<Player> parseSelector(String selector, CommandSender sender) {
+        if (selector.equalsIgnoreCase("@s")) {
+            if (sender instanceof Player) {
+                List<Player> list = new ArrayList<>();
+                list.add((Player) sender);
+                return list;
+            }
+            return new ArrayList<>();
+        } else if (selector.equalsIgnoreCase("@a")) {
+            return new ArrayList<>(Bukkit.getOnlinePlayers());
+        } else if (selector.equalsIgnoreCase("@p")) {
+            if (sender instanceof Player) {
+                Player self = (Player) sender;
+                Player nearest = null;
+                double minDist = Double.MAX_VALUE;
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (p.equals(self)) continue;
+                    double dist = p.getLocation().distance(self.getLocation());
+                    if (dist < minDist) {
+                        minDist = dist;
+                        nearest = p;
+                    }
+                }
+                if (nearest != null) {
+                    List<Player> list = new ArrayList<>();
+                    list.add(nearest);
+                    return list;
+                }
+            }
+            return new ArrayList<>();
+        } else {
+            Player p = plugin.getServer().getPlayer(selector);
+            if (p != null) {
+                List<Player> list = new ArrayList<>();
+                list.add(p);
+                return list;
+            }
+            return new ArrayList<>();
         }
     }
 }

@@ -15,11 +15,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-<<<<<<< HEAD
-        <version>3.10.0</version>
-=======
         <version>3.11.2</version>
->>>>>>> efa4751fd80439dedf4134258cf22f9b35c89759
         <executions>
           <execution>
             <id>generate-javadoc</id>
