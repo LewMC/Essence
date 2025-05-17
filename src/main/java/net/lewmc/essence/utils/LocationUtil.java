@@ -7,8 +7,6 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 
-import java.util.Random;
-
 /**
  * Essence location utility.
  */
@@ -40,15 +38,14 @@ public class LocationUtil {
     public Location GetRandomLocation(Player player, WorldBorder wb) {
         World world = player.getWorld();
 
-        Random rand = new Random();
         Location center = wb.getCenter();
         double maxX = (center.getBlockX() + (wb.getSize()/2));
         double minX = (center.getBlockX() - (wb.getSize()/2));
         double maxZ = (center.getBlockZ() + (wb.getSize()/2));
         double minZ = (center.getBlockZ() - (wb.getSize()/2));
 
-        int x = (int) (minX + (maxX - minX) * rand.nextDouble());
-        int z = (int) (minZ + (maxZ - minZ) * rand.nextDouble());
+        int x = (int) (minX + (maxX - minX) * this.plugin.rand.nextDouble());
+        int z = (int) (minZ + (maxZ - minZ) * this.plugin.rand.nextDouble());
 
         int attempt = 1;
         int y = GetGroundY(world, x, z);

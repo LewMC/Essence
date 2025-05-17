@@ -13,6 +13,7 @@ import java.util.UUID;
  */
 public class ImportUtil {
     private final Essence plugin;
+    private final LogUtil log;
 
     /**
      * Constructor for the ImportUtil class.
@@ -20,6 +21,7 @@ public class ImportUtil {
      */
     public ImportUtil(Essence plugin) {
         this.plugin = plugin;
+        this.log = new LogUtil(this.plugin);
     }
 
     /**
@@ -56,6 +58,7 @@ public class ImportUtil {
                 file.close();
             }
         } else {
+            this.log.info("No Essentials warps found!");
             return false;
         }
         return true;
@@ -74,30 +77,33 @@ public class ImportUtil {
                 file.loadNoReformat(child);
                 Set<String> homes = file.getKeys("homes", false);
 
-                for (String home : homes) {
-                    HomeUtil homeUtil = new HomeUtil(this.plugin);
+                if (homes != null) {
+                    for (String home : homes) {
+                        HomeUtil homeUtil = new HomeUtil(this.plugin);
 
-                    if (file.getString("homes."+home) != null) {
+                        if (file.getString("homes." + home) != null) {
 
-                        Location loc = new Location(
-                                this.plugin.getServer().getWorld(file.getString("homes." + home + ".world-name")),
-                                file.getDouble("homes." + home + ".x"),
-                                file.getDouble("homes." + home + ".y"),
-                                file.getDouble("homes." + home + ".z"),
-                                (float) file.getDouble("homes." + home + ".yaw"),
-                                (float) file.getDouble("homes." + home + ".pitch")
-                        );
+                            Location loc = new Location(
+                                    this.plugin.getServer().getWorld(file.getString("homes." + home + ".world-name")),
+                                    file.getDouble("homes." + home + ".x"),
+                                    file.getDouble("homes." + home + ".y"),
+                                    file.getDouble("homes." + home + ".z"),
+                                    (float) file.getDouble("homes." + home + ".yaw"),
+                                    (float) file.getDouble("homes." + home + ".pitch")
+                            );
 
-                        homeUtil.create(
-                                home,
-                                this.plugin.getServer().getPlayer(file.getString("last-account-name")),
-                                loc
-                        );
+                            homeUtil.create(
+                                    home,
+                                    this.plugin.getServer().getPlayer(file.getString("last-account-name")),
+                                    loc
+                            );
+                        }
                     }
                 }
                 file.close();
             }
         } else {
+            this.log.info("No Essentials homes found!");
             return false;
         }
         return true;
@@ -110,31 +116,40 @@ public class ImportUtil {
     public boolean essentialsSpawns() {
         boolean success = false;
         FileUtil file = new FileUtil(this.plugin);
-        file.loadNoReformat(new File(this.plugin.getServer().getPluginsFolder() + "/Essentials/spawn.yml"));
-        Set<String> spawns = file.getKeys("spawns", false);
 
-        for (String esxName : spawns) {
-            if (file.getString("spawns." + esxName) != null) {
-                FileUtil spawnFile = new FileUtil(this.plugin);
+        if (file.exists(this.plugin.getServer().getPluginsFolder() + "/Essentials/spawn.yml")) {
+            file.loadNoReformat(new File(this.plugin.getServer().getPluginsFolder() + "/Essentials/spawn.yml"));
+            Set<String> spawns = file.getKeys("spawns", false);
+
+            if (spawns != null) {
+                for (String esxName : spawns) {
+                    if (file.getString("spawns." + esxName) != null) {
+                        FileUtil spawnFile = new FileUtil(this.plugin);
 
 
-                spawnFile.load("data/spawns.yml");
+                        spawnFile.load("data/spawns.yml");
 
-                World world = this.plugin.getServer().getWorld(file.getString("spawns." + esxName + ".world-name"));
+                        World world = this.plugin.getServer().getWorld(file.getString("spawns." + esxName + ".world-name"));
 
-                if (world != null) {
-                    String essName = world.getName();
-                    if (spawnFile.get("spawn."+essName) == null) {
-                        spawnFile.set("spawn." + essName + ".X", file.getDouble("spawns." + esxName + ".x"));
-                        spawnFile.set("spawn." + essName + ".Y", file.getDouble("spawns." + esxName + ".y"));
-                        spawnFile.set("spawn." + essName + ".Z", file.getDouble("spawns." + esxName + ".z"));
-                        spawnFile.set("spawn." + essName + ".yaw", file.getDouble("spawns." + esxName + ".yaw"));
-                        spawnFile.set("spawn." + essName + ".pitch", file.getDouble("spawns." + esxName + ".pitch"));
+                        if (world != null) {
+                            String essName = world.getName();
+                            if (spawnFile.get("spawn." + essName) == null) {
+                                spawnFile.set("spawn." + essName + ".X", file.getDouble("spawns." + esxName + ".x"));
+                                spawnFile.set("spawn." + essName + ".Y", file.getDouble("spawns." + esxName + ".y"));
+                                spawnFile.set("spawn." + essName + ".Z", file.getDouble("spawns." + esxName + ".z"));
+                                spawnFile.set("spawn." + essName + ".yaw", file.getDouble("spawns." + esxName + ".yaw"));
+                                spawnFile.set("spawn." + essName + ".pitch", file.getDouble("spawns." + esxName + ".pitch"));
+                            }
+                        }
+
+                        success = spawnFile.save();
                     }
                 }
-
-                success = spawnFile.save();
+            } else {
+                this.log.info("No Essentials spawns found!");
             }
+        } else {
+            this.log.info("Essentials spawns file does not exist!");
         }
         file.close();
         return success;

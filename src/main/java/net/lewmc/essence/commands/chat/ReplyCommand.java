@@ -53,7 +53,7 @@ public class ReplyCommand implements CommandExecutor {
                 if (this.plugin.msgHistory.containsKey(commandSender)) {
                     CommandSender p = this.plugin.msgHistory.get(commandSender);
 
-                    String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+                    String msg = String.join(" ", Arrays.copyOfRange(args, 0, args.length));
                     String[] repl = new String[]{commandSender.getName(), p.getName(), msg};
                     message.send("msg", "send", repl);
                     message.sendTo(p, "msg", "send", repl);
