@@ -56,18 +56,15 @@ public class LocationUtil {
         return new Location(world, (float) x, (float) y, (float) z);
     }
 
-    private int GetGroundY(World world, int x, int z) {
+    public int GetGroundY(World world, int x, int z) {
         int y = 319;
-
         Material block = world.getBlockAt(x, y, z).getType();
         while ((block == Material.AIR)) {
             y--;
             block = world.getBlockAt(x, y, z).getType();
             if (y == -64) { break; }
         }
-
         if (!LocationIsSafe(block) || y == -64) { return -64; }
-
         return y + 1;
     }
 

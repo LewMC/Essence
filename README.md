@@ -13,6 +13,9 @@ We welcome contributions from the community. Please fork the repository, make yo
 
 Please read [our contributor guide](CONTRIBUTING.md) before submitting any changes, thank you!
 
+Please merge any changes into the `next-update` branch, not the `main` branch.
+This helps us to ensure that our snapshot builds are labelled as snapshot so that it is clear to users download them that they are still in development, and that any changes being made will work with future versions of Essence.
+
 ## Build Process
 
 Install JDK 21 before continuing. Click [here](https://docs.oracle.com/en/java/javase/21/install/index.html) for documentation.
