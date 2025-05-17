@@ -83,10 +83,6 @@ public class TprandomCommand implements CommandExecutor {
                 LocationUtil loc = new LocationUtil(this.plugin);
 
                 if (this.flib.isFolia()) {
-                    if (player.isOp()) {
-                        message.send("generic","nofolia");
-                        message.send("generic","helpfolia");
-                    }
                     this.flib.getImpl().runAsync(wrappedTask -> {
                         java.util.Random rand = new java.util.Random();
                         Location center = wb.getCenter();

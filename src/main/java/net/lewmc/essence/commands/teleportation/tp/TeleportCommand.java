@@ -66,6 +66,20 @@ public class TeleportCommand implements CommandExecutor {
 
             // /tp <selector> <x> <y> <z>
             if (args.length >= 4) {
+                // 权限检查
+                boolean isSelf = false;
+                if (commandSender instanceof Player && (args[0].equalsIgnoreCase("@s") || (args[0].equalsIgnoreCase(((Player)commandSender).getName())))) {
+                    isSelf = true;
+                }
+                if (isSelf) {
+                    if (!permission.has("essence.teleport.coord")) {
+                        return permission.not();
+                    }
+                } else {
+                    if (!(permission.has("essence.teleport.other") && permission.has("essence.teleport.coord"))) {
+                        return permission.not();
+                    }
+                }
                 String selector = args[0];
                 List<Player> targets = parseSelector(selector, commandSender);
                 if (targets.isEmpty()) {
@@ -93,6 +107,9 @@ public class TeleportCommand implements CommandExecutor {
 
             // /tp <selector1> <selector2>  或 /tp <selector1> <player2>
             if (args.length == 2) {
+                if (!(permission.has("essence.teleport.other") && permission.has("essence.teleport.player"))) {
+                    return permission.not();
+                }
                 List<Player> fromList = parseSelector(args[0], commandSender);
                 List<Player> toList = parseSelector(args[1], commandSender);
                 if (fromList.isEmpty() || toList.isEmpty()) {
@@ -110,6 +127,9 @@ public class TeleportCommand implements CommandExecutor {
 
             // /tp <x> <y> <z>  (自己传送到坐标)
             if (args.length == 3 && player != null) {
+                if (!permission.has("essence.teleport.coord")) {
+                    return permission.not();
+                }
                 double x, y, z;
                 try {
                     x = args[0].equals("~") ? player.getLocation().getX() : Double.parseDouble(args[0]);
@@ -123,6 +143,23 @@ public class TeleportCommand implements CommandExecutor {
                 TeleportUtil tp = new TeleportUtil(this.plugin);
                 tp.doTeleport(player, loc, 0); // Folia兼容
                 message.send("teleport", "tocoord", new String[] { x+", "+y+", "+z });
+                return true;
+            }
+
+            // /tp <player> 仅玩家传送到玩家
+            if (args.length == 1 && player != null) {
+                if (!permission.has("essence.teleport.player")) {
+                    return permission.not();
+                }
+                List<Player> toList = parseSelector(args[0], commandSender);
+                if (toList.isEmpty()) {
+                    message.send("generic", "playernotfound");
+                    return true;
+                }
+                Player to = toList.get(0);
+                TeleportUtil tp = new TeleportUtil(this.plugin);
+                tp.doTeleport(player, to.getLocation(), 0);
+                message.send("teleport", "to", new String[] { to.getName() });
                 return true;
             }
 
