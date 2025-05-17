@@ -28,8 +28,6 @@ generic:
   exception: "§4[Essence] §cEssence 在试图处理此问题时遇到问题 请查阅控制台了解详细信息."
   configexception: "§4[Essence] §cEssence 在尝试处理时遇到问题 配置文件, 请查阅控制台了解详细信息."
   missingpermission: "§4[Essence] §c你没有权限"
-  nofolia: "§4[Essence] §c该命令不能在Folia端运行."
-  helpfolia: "§4[Essence] §c如果您想帮助我们添加对Folia的支持，请访问 github.com/lewmc/essence"
   reload: "§2[Essence] §a已重载配置."
   numberformaterror: "§4[Essence] §cEssence在转换数字格式时遇到问题。请检查您发送的命令是否正确，然后重试."
 other:

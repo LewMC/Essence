@@ -1,44 +1,21 @@
-name: Deploy JavaDoc
-permissions:
-  contents: write
-  pages: write
-  pull-requests: write
+name: Deploy Javadoc
 
 on:
   push:
     branches:
       - main
-    paths-ignore:
-      - '**/*.md'
-      - '**/*.txt'
-      - '**/*.xml'
-      - '**/*.json'
-      - '**/*.html'
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
-      - name: Checkout Repository 📡
-        uses: actions/checkout@v2
-
-      - name: Set up JDK 21 🔧
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-
-      - name: Build with Maven 🏗️
-        run: |
-          mvn clean package -Dmaven.test.skip=true -X
-
       - name: Deploy JavaDoc 🚀
         uses: MathieuSoysal/Javadoc-publisher.yml@v3.0.2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          javadoc-branch: javadocs
-          java-version: '21'
-          target-folder: .
-          javadoc-source-folder: target/site/apidocs
+          javadoc-branch: javadoc
+          java-version: 21
+          target-folder: ""
           project: maven
