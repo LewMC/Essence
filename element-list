@@ -1,0 +1,16 @@
+net.lewmc.essence
+net.lewmc.essence.commands
+net.lewmc.essence.commands.admin
+net.lewmc.essence.commands.chat
+net.lewmc.essence.commands.economy
+net.lewmc.essence.commands.inventories
+net.lewmc.essence.commands.stats
+net.lewmc.essence.commands.teleportation
+net.lewmc.essence.commands.teleportation.home
+net.lewmc.essence.commands.teleportation.home.team
+net.lewmc.essence.commands.teleportation.tp
+net.lewmc.essence.commands.teleportation.warp
+net.lewmc.essence.events
+net.lewmc.essence.tabcompleter
+net.lewmc.essence.utils
+net.lewmc.essence.utils.economy
