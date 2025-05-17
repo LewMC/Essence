@@ -28,8 +28,6 @@ generic:
   exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this command, please see console for details."
   configexception: "§4[Essence] §cEssence encountered an issue whilst trying to process a configuration file, please see console for details."
   missingpermission: "§4[Essence] §cYou don't have the required permission to run this command."
-  nofolia: "§4[Essence] §cThis command cannot run on Folia-based server software."
-  helpfolia: "§4[Essence] §cIf you'd like to help us add support for Folia please visit github.com/lewmc/essence"
   reload: "§2[Essence] §aReloaded."
   numberformaterror: "§4[Essence] §cEssence encountered an issue whilst converting the format of a number. Please check the command you sent is correct and try again."
 other:
