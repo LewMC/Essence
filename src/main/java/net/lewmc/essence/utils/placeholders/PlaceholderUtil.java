@@ -2,11 +2,14 @@ package net.lewmc.essence.utils.placeholders;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.LogUtil;
+import net.lewmc.essence.utils.MessageUtil;
+import net.lewmc.essence.utils.TeamUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Objects;
 
 /**
  * The tag utility replaces tags with preconfigured text (placeholders)
@@ -58,6 +61,9 @@ public class PlaceholderUtil {
             text = text.replace("%essence_date%", this.replaceSingle("date"));
             text = text.replace("%essence_datetime%", this.replaceSingle("datetime"));
             text = text.replace("%essence_player%", this.replaceSingle("player"));
+            text = text.replace("%essence_team%", this.replaceSingle("team_name"));
+            text = text.replace("%essence_team_name%", this.replaceSingle("team_name"));
+            text = text.replace("%essence_team_leader%", this.replaceSingle("team_leader"));
         }
 
         return text;
@@ -69,6 +75,8 @@ public class PlaceholderUtil {
      * @return String - The string the placeholder becomes.
      */
     public String replaceSingle(String placeholder) {
+        TeamUtil tu = new TeamUtil(this.plugin, new MessageUtil(this.cs, this.plugin));
+
         if (placeholder.equalsIgnoreCase("version")) {
             return this.plugin.getDescription().getVersion();
         } else if (placeholder.equalsIgnoreCase("minecraft_version")) {
@@ -83,6 +91,18 @@ public class PlaceholderUtil {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         } else if (placeholder.equalsIgnoreCase("player")) {
             return this.cs.getName();
+        } else if (placeholder.equalsIgnoreCase("team_name")) {
+            if (this.cs instanceof Player p) {
+                return Objects.requireNonNullElse(tu.getPlayerTeam(p.getUniqueId()), "No team");
+            } else {
+                return "No team";
+            }
+        } else if (placeholder.equalsIgnoreCase("team_leader")) {
+            if (this.cs instanceof Player p) {
+                return Objects.requireNonNullElse(tu.getTeamLeader(tu.getPlayerTeam(p.getUniqueId())), "No leader");
+            } else {
+                return "No leader";
+            }
         } else {
             return placeholder;
         }
