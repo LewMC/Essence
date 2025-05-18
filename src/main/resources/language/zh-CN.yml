@@ -205,6 +205,7 @@ gamemode:
   doneby: "§2[Essence] §a您已被 {{2}} 切换至 {{1}} 模式."
   doneother: "§2[Essence] §a你已将 {{1}} 切换至 {{2}} mode."
 team:
+  longname: "§4[Essence] §cTeam name is too long, maximum 12 characters."
   exists: "§4[Essence] §c具有此名称的团队已经存在."
   notfound: "§4[Essence] §c找不到有这个名字的团队."
   specialchars: "§4[Essence] §c团队名称不能包含特殊字符."
