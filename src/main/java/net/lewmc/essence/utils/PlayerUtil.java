@@ -163,7 +163,12 @@ public class PlayerUtil {
     public String getPlayerPrefix() {
         if (this.plugin.chat != null) {
             if (this.cs instanceof Player p) {
-                return "["+this.plugin.chat.getPlayerPrefix(p)+"]";
+                String prefix = this.plugin.chat.getPlayerPrefix(p);
+                if (prefix != null && !prefix.isEmpty()) {
+                    return "[" +  prefix + "]";
+                } else {
+                    return "";
+                }
             } else {
                 return "";
             }
@@ -179,7 +184,12 @@ public class PlayerUtil {
     public String getPlayerSuffix() {
         if (this.plugin.chat != null) {
             if (this.cs instanceof Player p) {
-                return " " + this.plugin.chat.getPlayerSuffix(p);
+                String suffix = this.plugin.chat.getPlayerSuffix(p);
+                if (suffix != null && !suffix.isEmpty()) {
+                    return " " +  suffix;
+                } else {
+                    return "";
+                }
             } else {
                 return "";
             }
@@ -217,6 +227,22 @@ public class PlayerUtil {
         pf.load(pf.playerDataFile(p));
 
         boolean success = pf.set("user.nickname", nickname);
+        pf.save();
+        pf.close();
+
+        return success;
+    }
+
+    /**
+     * Sets a player's display name.
+     * @param p Player - The player.
+     * @return true/false success.
+     */
+    public boolean removePlayerDisplayname(Player p) {
+        FileUtil pf = new FileUtil(this.plugin);
+        pf.load(pf.playerDataFile(p));
+
+        boolean success = pf.delete("user.nickname");
         pf.save();
         pf.close();
 

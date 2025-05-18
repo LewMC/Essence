@@ -57,6 +57,13 @@ public class NickCommand implements CommandExecutor {
                     return true;
                 }
 
+                if (args[0].equalsIgnoreCase("off")) {
+                    if (pu.removePlayerDisplayname((Player) cs)) {
+                        msg.send("nick","success", new String[]{cs.getName()});
+                    }
+                    return true;
+                }
+
                 if (pu.setPlayerDisplayname((Player) cs, args[0])) {
                     msg.send("nick","success", new String[]{args[0]});
                 }
@@ -71,6 +78,14 @@ public class NickCommand implements CommandExecutor {
 
                 if (new SecurityUtil().hasSpecialCharacters(args[1])) {
                     msg.send("nick","specialchars");
+                    return true;
+                }
+
+                if (args[1].equalsIgnoreCase("off")) {
+                    if (pu.removePlayerDisplayname(player)) {
+                        msg.send("nick","successother", new String[]{args[0], player.getName()});
+                        msg.sendTo(player, "nick","changedby", new String[]{cs.getName(), player.getName()});
+                    }
                     return true;
                 }
 
