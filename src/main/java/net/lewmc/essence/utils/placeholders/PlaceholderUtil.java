@@ -63,6 +63,7 @@ public class PlaceholderUtil {
             text = text.replace("%essence_date%", this.replaceSingle("date"));
             text = text.replace("%essence_datetime%", this.replaceSingle("datetime"));
             text = text.replace("%essence_player%", this.replaceSingle("player"));
+            text = text.replace("%essence_username%", this.replaceSingle("username"));
             text = text.replace("%essence_team%", this.replaceSingle("team_name"));
             text = text.replace("%essence_team_name%", this.replaceSingle("team_name"));
             text = text.replace("%essence_team_leader%", this.replaceSingle("team_leader"));
@@ -97,7 +98,9 @@ public class PlaceholderUtil {
         } else if (placeholder.equalsIgnoreCase("datetime")) {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         } else if (placeholder.equalsIgnoreCase("player")) {
-            return this.cs.getName();
+            return new PlayerUtil(this.plugin, cs).getPlayerDisplayname((Player) cs);
+        } else if (placeholder.equalsIgnoreCase("userername")) {
+            return cs.getName();
         } else if (placeholder.equalsIgnoreCase("team_name")) {
             if (this.cs instanceof Player p) {
                 return Objects.requireNonNullElse(tu.getPlayerTeam(p.getUniqueId()), "No team");

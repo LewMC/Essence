@@ -187,4 +187,39 @@ public class PlayerUtil {
             return "";
         }
     }
+
+    /**
+     * Gets a player's display name.
+     * @param p Player - The player to check.
+     * @return
+     */
+    public String getPlayerDisplayname(Player p) {
+        FileUtil pf = new FileUtil(this.plugin);
+        pf.load(pf.playerDataFile(p));
+        String nickname = pf.getString("user.nickname");
+        pf.close();
+
+        if (nickname == null) {
+            return p.getName();
+        } else {
+            return nickname;
+        }
+    }
+
+    /**
+     * Sets a player's display name.
+     * @param p Player - The player.
+     * @param nickname String - The nickname
+     * @return true/false success.
+     */
+    public boolean setPlayerDisplayname(Player p, String nickname) {
+        FileUtil pf = new FileUtil(this.plugin);
+        pf.load(pf.playerDataFile(p));
+
+        boolean success = pf.set("user.nickname", nickname);
+        pf.save();
+        pf.close();
+
+        return success;
+    }
 }

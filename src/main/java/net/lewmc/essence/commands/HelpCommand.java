@@ -131,11 +131,13 @@ public class HelpCommand {
                 this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("chat".equalsIgnoreCase(args[1])) {
-                int blank = 5;
+                int blank = 3;
                 this.message.send("help", "chat");
                 if (!cu.isDisabled("broadcast")) { this.message.send("help", "broadcast"); } else { blank++; }
                 if (!cu.isDisabled("msg")) { this.message.send("help", "msg"); } else { blank++; }
                 if (!cu.isDisabled("reply")) { this.message.send("help", "reply"); } else { blank++; }
+                if (!cu.isDisabled("nick")) { this.message.send("help", "nickself"); } else { blank++; }
+                if (!cu.isDisabled("nick")) { this.message.send("help", "nickother"); } else { blank++; }
                 this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("misc".equalsIgnoreCase(args[1])) {

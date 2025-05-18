@@ -413,6 +413,7 @@ public class Essence extends JavaPlugin {
             this.getCommand("broadcast").setExecutor(new BroadcastCommand(this));
             this.getCommand("msg").setExecutor(new MsgCommand(this));
             this.getCommand("reply").setExecutor(new ReplyCommand(this));
+            this.getCommand("nick").setExecutor(new NickCommand(this));
 
             this.getCommand("pay").setExecutor(new PayCommand(this));
             this.getCommand("balance").setExecutor(new BalanceCommand(this));

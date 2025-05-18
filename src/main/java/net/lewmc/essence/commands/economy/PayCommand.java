@@ -48,22 +48,38 @@ public class PayCommand implements CommandExecutor {
                     Economy sender = new Economy(this.plugin, cs);
                     double amount = Double.parseDouble(args[1]);
 
-                    if ((sender.balance() - amount) >= 0) {
+                    if (cmd.console(cs)) {
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
                                 Economy recipient = new Economy(this.plugin, p);
-
                                 recipient.balanceAdd(amount);
-                                sender.balanceSubtract(amount);
 
-                                msg.send("economy", "sent", new String[] { this.plugin.economySymbol + amount, p.getName() });
-                                msg.sendTo(p, "economy", "received", new String[] { this.plugin.economySymbol + amount, p.getName() });
+                                msg.send("economy", "sent", new String[]{this.plugin.economySymbol + amount, p.getName()});
+                                msg.sendTo(p, "economy", "received", new String[]{this.plugin.economySymbol + amount, "god"});
                                 return true;
                             }
                         }
                         msg.send("generic", "playernotfound");
+                        return true;
                     } else {
-                        msg.send("economy", "insufficientfunds");
+                        if ((sender.balance() - amount) >= 0) {
+                            for (Player p : Bukkit.getOnlinePlayers()) {
+                                if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
+                                    Economy recipient = new Economy(this.plugin, p);
+
+                                    recipient.balanceAdd(amount);
+                                    sender.balanceSubtract(amount);
+
+                                    msg.send("economy", "sent", new String[]{this.plugin.economySymbol + amount, p.getName()});
+                                    msg.sendTo(p, "economy", "received", new String[]{this.plugin.economySymbol + amount, cs.getName()});
+                                    return true;
+                                }
+                            }
+                            msg.send("generic", "playernotfound");
+                            return true;
+                        } else {
+                            msg.send("economy", "insufficientfunds");
+                        }
                     }
                 } else {
                     msg.send("economy", "payusage");

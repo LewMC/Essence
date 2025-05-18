@@ -105,6 +105,8 @@ help:
   broadcast: "§6[Essence] §e/broadcast <message> - Broadcast a message"
   msg: "§6[Essence] §e/msg <name> <message> - Message a player."
   reply: "§6[Essence] §e/reply <message> - Reply to your last /msg."
+  nickself: "§6[Essence] §e/nick <name> - Change your displayname."
+  nickother: "§6[Essence] §e/nick <user> <name> - Change other nick."
   misc: "§6[Essence] -------- Essence Help - Miscellaneous ------"
   rules: "§6[Essence] §e/rules - View the server rules."
   kit: "§6[Essence] §e/kit - Get a kit."
@@ -267,6 +269,12 @@ msg:
 reply:
   usage: "§4[Essence] §cUsage: /reply <message>"
   none: "§4[Essence] §cYou don't have anyone to reply to!"
+nick:
+  usage: "§4[Essence] §cUsage: /nick <name>"
+  consoleusage: "§4[Essence] §cUsage: /nick <user> <name>"
+  specialchars: "§4[Essence] §cNicknames cannot contain special characters."
+  success: "§2[Essence] §aChanged your nickname to {{1}}."
+  successother: "§2[Essence] §aChanged {{1}}'s nickname to {{2}}."
 import:
   list: "§6[Essence] §ePlease select an option: 'Essentials'."
   unsupported: "§4[Essence] §cSorry, Essence doesn't support importing data from '{{1}}'"

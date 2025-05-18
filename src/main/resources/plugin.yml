@@ -262,6 +262,11 @@ commands:
     description: Displays the server rules.
     usage: /rules
     permission: essence.rules
+  nick:
+    description: Change your display name.
+    usage: /nick
+    aliases: ['nickname', 'displayname']
+    permission: essence.chat.nick
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -447,12 +452,23 @@ permissions:
       essence.chat.broadcast: true
       essence.chat.msg: true
       essence.chat.reply: true
+      essence.chat.nick: true
+      essence.chat.nick.*: true
   essence.chat.broadcast:
     description: Allows players to broadcast a message to chat.
   essence.chat.msg:
     description: Allows players to privately message.
   essence.chat.reply:
-    description: Allows players to reply to private messages.
+    description: Allows players to change display names.
+  essence.chat.nick.*:
+    default: op
+    children:
+      essence.chat.nick.self: true
+      essence.chat.nick.other: true
+  essence.chat.nick.self:
+    description: Allows players to change their display names.
+  essence.chat.nick.other:
+    description: Allows players to change other player's display names.
   essence.economy.*:
     description: Allows players to access all economy commands.
     default: op
