@@ -37,7 +37,7 @@ public class TprandomCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -45,36 +45,29 @@ public class TprandomCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-            @NotNull CommandSender commandSender,
+            @NotNull CommandSender cs,
             @NotNull Command command,
             @NotNull String s,
             String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("tprandom")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("tprandom")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("tprandom")) { return cmd.disabled(); }
+            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
 
-            if (permission.has("essence.teleport.random")) {
-                if (!this.teleUtil.cooldownSurpassed(player, "randomtp")) {
-                    message.send("teleport", "tryagain", new String[] { String.valueOf(this.teleUtil.cooldownRemaining(player, "randomtp")) });
+            MessageUtil message = new MessageUtil(this.plugin, cs);
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+
+            if (perms.has("essence.teleport.random")) {
+                if (!this.teleUtil.cooldownSurpassed(p, "randomtp")) {
+                    message.send("teleport", "tryagain", new String[] { String.valueOf(this.teleUtil.cooldownRemaining(p, "randomtp")) });
                     return true;
                 }
                 message.send("tprandom", "searching");
 
                 WorldBorder wb;
                 try {
-                    wb = Objects.requireNonNull(Bukkit.getWorld(player.getWorld().getUID())).getWorldBorder();
+                    wb = Objects.requireNonNull(Bukkit.getWorld(p.getWorld().getUID())).getWorldBorder();
                 } catch (NullPointerException e) {
                     this.log.warn("NullPointerException randomly teleporting: " + e);
                     message.send("generic", "exception");
@@ -92,38 +85,37 @@ public class TprandomCommand implements CommandExecutor {
                         double minZ = (center.getBlockZ() - (wb.getSize()/2));
                         int x = (int) (minX + (maxX - minX) * rand.nextDouble());
                         int z = (int) (minZ + (maxZ - minZ) * rand.nextDouble());
-                        Location baseLoc = new Location(player.getWorld(), x, 0, z);
+                        Location baseLoc = new Location(p.getWorld(), x, 0, z);
 
                         this.flib.getImpl().runAtLocation(baseLoc, wrappedTask2 -> {
                             int attempt = 1;
-                            int y = loc.GetGroundY(player.getWorld(), x, z);
+                            int y = loc.GetGroundY(p.getWorld(), x, z);
                             while (y == -64 && attempt != 3) {
-                                y = loc.GetGroundY(player.getWorld(), x, z);
+                                y = loc.GetGroundY(p.getWorld(), x, z);
                                 attempt++;
                             }
-                            Location teleportLocation = new Location(player.getWorld(), x, y, z);
-                            this.checkChunkLoaded(player, teleportLocation);
+                            Location teleportLocation = new Location(p.getWorld(), x, y, z);
+                            this.checkChunkLoaded(p, teleportLocation);
                         });
                     });
                     return true;
                 }
 
                 this.flib.getImpl().runAsync(wrappedTask -> {
-                    Location teleportLocation = loc.GetRandomLocation(player, wb);
-                    this.checkChunkLoaded(player, teleportLocation);
+                    Location teleportLocation = loc.GetRandomLocation(p, wb);
+                    this.checkChunkLoaded(p, teleportLocation);
                 });
                 return true;
             } else {
-                permission.not();
+                return perms.not();
             }
-            return true;
         }
 
         return false;
     }
 
     private void checkChunkLoaded(Player player, Location teleportLocation) {
-        MessageUtil message = new MessageUtil(player, plugin);
+        MessageUtil message = new MessageUtil(this.plugin, player);
 
         if (teleportLocation.getY() != -64) {
             message.send("tprandom", "teleporting");

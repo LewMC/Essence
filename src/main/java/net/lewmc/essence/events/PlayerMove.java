@@ -31,7 +31,7 @@ public class PlayerMove implements Listener {
             TeleportUtil tp = new TeleportUtil(this.plugin);
             if (tp.teleportIsValid(event.getPlayer())) {
                 tp.setTeleportStatus(event.getPlayer(), false);
-                MessageUtil msg = new MessageUtil(event.getPlayer(), this.plugin);
+                MessageUtil msg = new MessageUtil(this.plugin, event.getPlayer());
                 msg.send("teleport", "cancelled");
             }
         }

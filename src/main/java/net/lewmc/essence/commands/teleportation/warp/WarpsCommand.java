@@ -5,7 +5,6 @@ import net.lewmc.essence.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -23,7 +22,7 @@ public class WarpsCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -31,26 +30,21 @@ public class WarpsCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            LogUtil log = new LogUtil(this.plugin);
-            log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("warps")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("warps")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("warps")) { return cmd.disabled(); }
 
-            if (permission.has("essence.warp.list")) {
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+
+            if (perms.has("essence.warp.list")) {
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
+
                 FileUtil data = new FileUtil(this.plugin);
                 data.load("/data/warps.yml");
 
@@ -58,7 +52,7 @@ public class WarpsCommand implements CommandExecutor {
 
                 if (keys == null || Objects.equals(keys.toString(), "[]")) {
                     data.close();
-                    message.send("warp", "noneset");
+                    msg.send("warp", "noneset");
                     return true;
                 }
 
@@ -74,9 +68,9 @@ public class WarpsCommand implements CommandExecutor {
                     i++;
                 }
                 data.close();
-                message.send("warp", "list", new String[] { warps.toString() });
+                msg.send("warp", "list", new String[] { warps.toString() });
             } else {
-                permission.not();
+                return perms.not();
             }
             return true;
         }

@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class BalanceCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the BalanceCommand class.
@@ -18,12 +17,11 @@ public class BalanceCommand implements CommandExecutor {
      */
     public BalanceCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
      * /bal command handler.
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -31,33 +29,26 @@ public class BalanceCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-            @NotNull CommandSender commandSender,
+            @NotNull CommandSender cs,
             @NotNull Command command,
             @NotNull String s,
             String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, this.plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("balance")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("balance")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("balance")) { return cmd.disabled(); }
+
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 
             if (permission.has("essence.economy.balance")) {
-                FileUtil data = new FileUtil(this.plugin);
-                data.load(data.playerDataFile(player));
-
-                double balance = data.getDouble("economy.balance");
-                data.close();
-
-                message.send("economy","balance", new String[] { plugin.getConfig().getString("economy.symbol") + balance });
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
+                if (cs instanceof Player p) {
+                    FileUtil pf = new FileUtil(this.plugin);
+                    pf.load(pf.playerDataFile(p));
+                    msg.send("economy", "balance", new String[]{this.plugin.economySymbol + pf.getDouble("economy.balance")});
+                } else {
+                    msg.send("economy", "balance", new String[]{this.plugin.economySymbol + "Infinity"});
+                }
                 return true;
             } else {
                 return permission.not();

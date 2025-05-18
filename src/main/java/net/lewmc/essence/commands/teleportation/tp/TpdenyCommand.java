@@ -23,7 +23,7 @@ public class TpdenyCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -31,33 +31,23 @@ public class TpdenyCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-            @NotNull CommandSender commandSender,
+            @NotNull CommandSender cs,
             @NotNull Command command,
             @NotNull String s,
             String[] args
     ) {
-        MessageUtil msg = new MessageUtil(commandSender, this.plugin);
-        PermissionHandler permission = new PermissionHandler(commandSender, msg);
-        LogUtil log = new LogUtil(this.plugin);
-
-        CommandUtil cmd = new CommandUtil(this.plugin);
-        if (cmd.console(commandSender)) {
-            log.noConsole();
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("tpdeny")) {
-            if (cmd.isDisabled("tpdeny")) {
-                return cmd.disabled(msg);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("tpdeny")) { return cmd.disabled(); }
+            if (cmd.console(cs)) { return new LogUtil(this.plugin).noConsole(); }
 
-            if (permission.has("essence.teleport.request.deny")) {
-                TeleportRequestUtil tpru = new TeleportRequestUtil(this.plugin);
-                tpru.deleteFromRequested(commandSender.getName());
-                msg.send("teleport","canceldone");
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+            if (perms.has("essence.teleport.request.deny")) {
+                new TeleportRequestUtil(this.plugin).deleteFromRequested(cs.getName());
+                new MessageUtil(this.plugin,cs).send("teleport","canceldone");
                 return true;
             } else {
-                return permission.not();
+                return perms.not();
             }
         }
         return false;

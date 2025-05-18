@@ -23,7 +23,7 @@ public class DelthomeCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -31,43 +31,36 @@ public class DelthomeCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender,plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
-        TeamUtil tu = new TeamUtil(this.plugin, message);
-        String team = tu.getPlayerTeam(player.getUniqueId());
-
-        if (team == null) {
-            message.send("team", "noteam");
-            return true;
-        }
-
-        if (!tu.getRule(team, "allow-team-homes")) {
-            message.send("team", "disallowedhomes");
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("delthome")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("delthome")) {
-                return cmd.disabled(message);
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("delthome")) { return cmd.disabled(); }
+
+            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
+
+            MessageUtil message = new MessageUtil(this.plugin, cs);
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
+
+            TeamUtil tu = new TeamUtil(this.plugin, message);
+            String team = tu.getPlayerTeam(p.getUniqueId());
+
+            if (team == null) {
+                message.send("team", "noteam");
+                return true;
+            }
+
+            if (!tu.getRule(team, "allow-team-homes")) {
+                message.send("team", "disallowedhomes");
+                return true;
             }
 
             if (permission.has("essence.home.team.delete")) {
-                String name;
-                if (args.length == 0) {
-                    name = "home";
-                } else {
+                String name  = "home";
+                if (args.length != 0) {
                     name = args[0];
                 }
 
@@ -90,7 +83,7 @@ public class DelthomeCommand implements CommandExecutor {
 
                 dataUtil.save();
             } else {
-                permission.not();
+                return permission.not();
             }
             return true;
         }

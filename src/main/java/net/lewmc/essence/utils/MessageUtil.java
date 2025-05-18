@@ -18,9 +18,9 @@ public class MessageUtil {
      * @param cs CommandSender - the user who sent the command.
      * @param plugin Reference to the main Essence class.
      */
-    public MessageUtil(CommandSender cs, Essence plugin) {
-        this.cs = cs;
+    public MessageUtil(Essence plugin, CommandSender cs) {
         this.plugin = plugin;
+        this.cs = cs;
     }
 
     /**

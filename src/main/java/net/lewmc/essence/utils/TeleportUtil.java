@@ -42,7 +42,7 @@ public class TeleportUtil {
      * @return boolean - If the cooldown has surpassed or not.
      */
     public boolean cooldownSurpassed(Player player, String type) {
-        PermissionHandler perms = new PermissionHandler(player, new MessageUtil(player, this.plugin));
+        PermissionHandler perms = new PermissionHandler(this.plugin, player);
 
         if (perms.has("essence.bypass.teleportcooldown")) {
             return true;
@@ -101,7 +101,7 @@ public class TeleportUtil {
      * @return int - The amount of time remaining.
      */
     public int cooldownRemaining(Player player, String type) {
-        PermissionHandler perms = new PermissionHandler(player, new MessageUtil(player, this.plugin));
+        PermissionHandler perms = new PermissionHandler(this.plugin, player);
 
         if (perms.has("essence.bypass.teleportcooldown")) {
             return 0;
@@ -166,7 +166,7 @@ public class TeleportUtil {
                 pitch
         );
 
-        PermissionHandler perms = new PermissionHandler(player, new MessageUtil(player, this.plugin));
+        PermissionHandler perms = new PermissionHandler(this.plugin, player);
 
         if (perms.has("essence.bypass.teleportdelay")) {
             delay = 0;
@@ -183,7 +183,7 @@ public class TeleportUtil {
      */
     public void doTeleport(Player player, Location location, int delay) {
         FoliaLib flib = new FoliaLib(this.plugin);
-        MessageUtil message = new MessageUtil(player, this.plugin);
+        MessageUtil message = new MessageUtil(this.plugin, player);
         if (location.getWorld() == null) {
             message.send("teleport","exception");
             this.log.severe("Unable to locate world in universe.");
@@ -199,6 +199,7 @@ public class TeleportUtil {
         if (flib.isFolia()) {
             flib.getImpl().runAtEntityLater(player, () -> {
                 if (teleportIsValid(player)) {
+                    new LocationUtil(plugin).UpdateLastLocation(player);
                     player.teleportAsync(location);
                     setTeleportStatus(player, false);
                 }
@@ -208,6 +209,7 @@ public class TeleportUtil {
                 @Override
                 public void run() {
                     if (teleportIsValid(player)) {
+                        new LocationUtil(plugin).UpdateLastLocation(player);
                         player.teleport(location);
                         setTeleportStatus(player, false);
                     }
@@ -263,6 +265,35 @@ public class TeleportUtil {
             return false;
         } else {
             return this.plugin.teleportingPlayers.contains(player.getUniqueId());
+        }
+    }
+
+    /**
+     * Is the teleport blocked by the teleport toggle?
+     * @param requester The player requesting the teleport.
+     * @param target The target of the teleport.
+     * @return true - Teleport can proceed, false - Teleport should be blocked.
+     */
+    public boolean teleportToggleCheck(Player requester, Player target) {
+        FileUtil targetPd = new FileUtil(this.plugin);
+        targetPd.load(targetPd.playerDataFile(target));
+
+        FileUtil config = new FileUtil(this.plugin);
+        config.load("config.yml");
+
+        PermissionHandler ph = new PermissionHandler(this.plugin, requester);
+        if (
+            !targetPd.getBoolean("user.accepting-teleport-requests") &&
+            config.getBoolean("teleportation.extended-toggle") &&
+            !(ph.has("essence.bypass.extendedteleporttoggle"))
+        ) {
+            targetPd.close();
+            config.close();
+            return false;
+        } else {
+            targetPd.close();
+            config.close();
+            return true;
         }
     }
 }

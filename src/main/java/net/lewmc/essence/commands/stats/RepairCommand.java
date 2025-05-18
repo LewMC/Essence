@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class RepairCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the RepairCommand class.
@@ -25,51 +24,46 @@ public class RepairCommand implements CommandExecutor {
      */
     public RepairCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
+    public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if (command.getName().equalsIgnoreCase("repair")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
+            if (!(cs instanceof Player p)) { return new LogUtil(this.plugin).noConsole(); }
+
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
             if (cmd.isDisabled("repair")) {
-                return cmd.disabled(message);
+                return cmd.disabled();
             }
 
-            if (permission.has("essence.stats.repair")) {
-                ItemStack itemInHand = player.getInventory().getItemInMainHand();
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+
+            if (perms.has("essence.stats.repair")) {
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
+
+                ItemStack itemInHand = p.getInventory().getItemInMainHand();
 
                 if (itemInHand != null && itemInHand.getType() != Material.AIR) {
                     if (itemInHand.getItemMeta() instanceof Damageable) {
                         Damageable damageableMeta = (Damageable) itemInHand.getItemMeta();
                         damageableMeta.setDamage(0);
                         itemInHand.setItemMeta(damageableMeta);
-                        message.send("repair","done");
+                        msg.send("repair","done");
                     } else {
-                        message.send("repair", "invalidtype");
+                        msg.send("repair", "invalidtype");
                     }
                 } else {
-                    message.send("repair", "invalidtype");
+                    msg.send("repair", "invalidtype");
                 }
             } else {
-                permission.not();
+                perms.not();
             }
             return true;
         }

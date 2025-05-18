@@ -13,7 +13,6 @@ import java.util.Objects;
 
 public class BackCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the BackCommand class.
@@ -22,11 +21,10 @@ public class BackCommand implements CommandExecutor {
      */
     public BackCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -34,40 +32,36 @@ public class BackCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-            @NotNull CommandSender commandSender,
+            @NotNull CommandSender cs,
             @NotNull Command command,
             @NotNull String s,
             String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("back")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("back")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("back")) { return cmd.disabled(); }
 
-            if (permission.has("essence.teleport.back")) {
+            if (!(cs instanceof Player p)) { return new LogUtil(this.plugin).noConsole(); }
+
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+
+            if (perms.has("essence.teleport.back")) {
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
                 FileUtil playerData = new FileUtil(this.plugin);
-                playerData.load(playerData.playerDataFile(player));
+
+                playerData.load(playerData.playerDataFile(p));
 
                 if (playerData.get("last-location") == null) {
-                    message.send("back", "cant");
+                    msg.send("back", "cant");
                     return true;
                 }
 
                 LocationUtil locationUtil = new LocationUtil(this.plugin);
-                locationUtil.UpdateLastLocation(player);
+                locationUtil.UpdateLastLocation(p);
 
                 TeleportUtil tp = new TeleportUtil(plugin);
                 tp.doTeleport(
-                        player,
+                        p,
                         Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString("last-location.world"))),
                         playerData.getDouble("last-location.X"),
                         playerData.getDouble("last-location.Y"),
@@ -79,10 +73,10 @@ public class BackCommand implements CommandExecutor {
 
                 playerData.close();
 
-                message.send("back", "going");
+                msg.send("back", "going");
 
             } else {
-                permission.not();
+                return perms.not();
             }
             return true;
         }

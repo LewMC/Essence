@@ -105,6 +105,8 @@ help:
   broadcast: "§6[Essence] §e/broadcast <message> - 广播消息"
   msg: "§6[Essence] §e/msg <name> <message> - 给某玩家发消息."
   reply: "§6[Essence] §e/reply <message> - 回复你最近的一次消息（/msg）."
+  nickself: "§6[Essence] §e/nick <name> - Change your displayname."
+  nickother: "§6[Essence] §e/nick <user> <name> - Change other nick."
   misc: "§6[Essence] -------- Essence 帮助 - 杂项 ------"
   rules: "§6[Essence] §e/rules - 查看服务器规则."
   kit: "§6[Essence] §e/kit - 得到一个礼包."
@@ -205,6 +207,7 @@ gamemode:
   doneby: "§2[Essence] §a您已被 {{2}} 切换至 {{1}} 模式."
   doneother: "§2[Essence] §a你已将 {{1}} 切换至 {{2}} mode."
 team:
+  longname: "§4[Essence] §cTeam name is too long, maximum 12 characters."
   exists: "§4[Essence] §c具有此名称的团队已经存在."
   notfound: "§4[Essence] §c找不到有这个名字的团队."
   specialchars: "§4[Essence] §c团队名称不能包含特殊字符."
@@ -266,6 +269,13 @@ msg:
 reply:
   usage: "§4[Essence] §c用法: /reply <message>"
   none: "§4[Essence] §c你没有人可以去回复!"
+nick:
+  usage: "§4[Essence] §cUsage: /nick <name>"
+  consoleusage: "§4[Essence] §cUsage: /nick <user> <name>"
+  specialchars: "§4[Essence] §cNicknames cannot contain special characters."
+  success: "§2[Essence] §aChanged your nickname to {{1}}."
+  successother: "§2[Essence] §aChanged {{1}}'s nickname to {{2}}."
+  changedby: "§2[Essence] §a{{1}} changed your nickname to {{2}}."
 import:
   list: "§6[Essence] §e请选择一个选项: 'Essentials'."
   unsupported: "§4[Essence] §c抱歉, Essence 不支持从 '{{1}}' 导入数据."

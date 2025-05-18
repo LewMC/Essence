@@ -23,29 +23,32 @@ public class InvisibleCommand implements CommandExecutor {
         this.plugin = plugin;
     }
 
+    /**
+     * The Invisible command.
+     * @param cs Information about who sent the command - player or console.
+     * @param command Information about what command was sent.
+     * @param s Command label - not used here.
+     * @param args The command's arguments.
+     * @return boolean true/false - was the command accepted and processed or not?
+     */
     @Override
     public boolean onCommand(
-            @NotNull CommandSender commandSender,
+            @NotNull CommandSender cs,
             @NotNull Command command,
             @NotNull String s,
             String[] args
     ) {
-        if (!(commandSender instanceof Player player)) {
-            LogUtil log = new LogUtil(this.plugin);
-            log.noConsole();
-            return true;
-        }
-
-        MessageUtil message = new MessageUtil(commandSender, this.plugin);
-        StatsUtil stats = new StatsUtil(this.plugin, player, new PermissionHandler(commandSender, message));
 
         if (command.getName().equalsIgnoreCase("invisible")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("invisible")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("invisible")) { return cmd.disabled(); }
 
-            return stats.toggleInvisible();
+            if (!(cs instanceof Player)) { return new LogUtil(this.plugin).noConsole(); }
+
+            PermissionHandler perm = new PermissionHandler(this.plugin, cs);
+            if (!perm.has("essence.admin.invisible")) { return perm.not(); }
+
+            return new StatsUtil(this.plugin, (Player) cs).toggleInvisible();
         }
 
         return false;

@@ -19,6 +19,7 @@ import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.UpdateUtil;
 import net.lewmc.essence.utils.economy.VaultEconomy;
+import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -92,6 +93,36 @@ public class Essence extends JavaPlugin {
     public Random rand = new Random();
 
     /**
+     * Stores if PlaceholderAPI is being used.
+     */
+    public boolean usingPAPI = false;
+
+    /**
+     * The nameFormat to use in chats.
+     */
+    public String chat_nameFormat;
+
+    /**
+     * Stores if Essence should manage chat messages or not
+     */
+    public boolean chat_manage = false;
+
+    /**
+     * Should essence chat allow colours?
+     */
+    public boolean chat_allowMessageFormatting;
+
+    /**
+     * Vault chat
+     */
+    public Chat chat;
+
+    /**
+     * Economy symbol.
+     */
+    public String economySymbol = "$";
+
+    /**
      * This function runs when Essence is enabled.
      */
     @Override
@@ -140,9 +171,14 @@ public class Essence extends JavaPlugin {
         this.loadCommands();
         this.loadEventHandlers();
         this.loadTabCompleters();
+        this.loadChatFormat();
 
         if (!setupEconomy()) {
             this.log.warn("Vault not found! Using local economy.");
+        }
+
+        if (!setupChat()) {
+            this.log.warn("Vault not found! Using local chat.");
         }
 
         UpdateUtil update = new UpdateUtil(this);
@@ -150,8 +186,10 @@ public class Essence extends JavaPlugin {
         update.UpdateConfig();
         update.UpdateLanguage();
 
+        this.registerPAPIExpansion();
         this.checkLanguageSystem();
 
+        this.log.info("");
         this.log.info("Startup completed.");
 
         if (Objects.equals(System.getProperty("ESSENCE_LOADED", ""), "TRUE")) {
@@ -205,14 +243,37 @@ public class Essence extends JavaPlugin {
 
         this.log.info("");
 
+        this.economySymbol = this.getConfig().getString("economy.symbol");
+
         return this.economy != null;
+    }
+
+    /**
+     * Sets up Vault to use Essence's economy.
+     *
+     * @return boolean - If it could be setup correctly.
+     */
+    private boolean setupChat() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        this.log.info("Vault found, setting up chat service...");
+
+        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        if (rsp != null) {
+            this.chat = rsp.getProvider();
+        }
+
+        this.log.info("");
+
+        return this.chat != null;
     }
 
     /**
      * Checks if the server is running Paper, and informs the user that they should upgrade if not.
      */
     private void checkForPaper() {
-        CommandUtil cmd = new CommandUtil(this);
+        CommandUtil cmd = new CommandUtil(this, null);
         if (!cmd.isPaperCompatible()) {
             this.log.severe("You are running " + this.getServer().getName());
             this.log.severe("Some commands have been disabled, please see https://bit.ly/essencepaper for help.");
@@ -352,6 +413,7 @@ public class Essence extends JavaPlugin {
             this.getCommand("broadcast").setExecutor(new BroadcastCommand(this));
             this.getCommand("msg").setExecutor(new MsgCommand(this));
             this.getCommand("reply").setExecutor(new ReplyCommand(this));
+            this.getCommand("nick").setExecutor(new NickCommand(this));
 
             this.getCommand("pay").setExecutor(new PayCommand(this));
             this.getCommand("balance").setExecutor(new BalanceCommand(this));
@@ -404,5 +466,28 @@ public class Essence extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerBedEnter(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new LeaveEvent(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerMove(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new PlayerChatEvent(this), this);
+    }
+
+    /**
+     * Registers Essence's PlaceholderAPIExpansion
+     */
+    private void registerPAPIExpansion() {
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new EssencePAPIExpansion(this).register();
+            usingPAPI = true;
+            this.log.info("Placeholder API is installed, registered placeholders.");
+        } else {
+            usingPAPI = false;
+            if (this.verbose) {
+                this.log.info("Placeholder API is not installed, placeholders not registered.");
+            }
+        }
+    }
+
+    private void loadChatFormat() {
+        this.chat_nameFormat = this.getConfig().getString("chat.name-format");
+        this.chat_manage = this.getConfig().getBoolean("chat.enabled");
+        this.chat_allowMessageFormatting = this.getConfig().getBoolean("chat.allow-message-formatting");
     }
 }

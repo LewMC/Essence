@@ -24,7 +24,7 @@ public class SetthomeCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -32,36 +32,31 @@ public class SetthomeCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, this.plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
-        TeamUtil tu = new TeamUtil(this.plugin, message);
-        String team = tu.getPlayerTeam(player.getUniqueId());
-
-        if (team == null) {
-            message.send("team", "noteam");
-            return true;
-        }
-
-        if (!tu.getRule(team, "allow-team-homes")) {
-            message.send("team", "disallowedhomes");
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("setthome")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("setthome")) {
-                return cmd.disabled(message);
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("setthome")) { return cmd.disabled(); }
+
+            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
+
+            MessageUtil message = new MessageUtil(this.plugin, cs);
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
+
+            TeamUtil tu = new TeamUtil(this.plugin, message);
+            String team = tu.getPlayerTeam(p.getUniqueId());
+
+            if (team == null) {
+                message.send("team", "noteam");
+                return true;
+            }
+
+            if (!tu.getRule(team, "allow-team-homes")) {
+                message.send("team", "disallowedhomes");
+                return true;
             }
 
             if (permission.has("essence.home.team.create")) {
@@ -73,7 +68,7 @@ public class SetthomeCommand implements CommandExecutor {
                     name = args[0];
                 }
 
-                Location loc = player.getLocation();
+                Location loc = p.getLocation();
                 FileUtil dataUtil = new FileUtil(this.plugin);
                 dataUtil.load("data/teams/"+team+".yml");
 
@@ -93,13 +88,13 @@ public class SetthomeCommand implements CommandExecutor {
                 }
 
                 HomeUtil hu = new HomeUtil(this.plugin);
-                int homeLimit = permission.getTeamHomesLimit(player);
-                if (hu.getTeamHomeCount(player) >= homeLimit && homeLimit != -1) {
+                int homeLimit = permission.getTeamHomesLimit(p);
+                if (hu.getTeamHomeCount(p) >= homeLimit && homeLimit != -1) {
                     message.send("teamhome", "hitlimit");
                     return true;
                 }
 
-                dataUtil.set(homeName + ".creator", player.getUniqueId().toString());
+                dataUtil.set(homeName + ".creator", p.getUniqueId().toString());
                 dataUtil.set(homeName + ".world", loc.getWorld().getName());
                 dataUtil.set(homeName + ".X", loc.getX());
                 dataUtil.set(homeName + ".Y", loc.getY());

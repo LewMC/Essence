@@ -24,7 +24,7 @@ public class SeenCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -32,21 +32,19 @@ public class SeenCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-            @NotNull CommandSender commandSender,
+            @NotNull CommandSender cs,
             @NotNull Command command,
             @NotNull String s,
             String[] args
     ) {
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("seen")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("seen")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("seen")) { return cmd.disabled(); }
+
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 
             if (permission.has("essence.playerinfo.seen")) {
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
                 if (args.length == 1) {
                     OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                     if (p.hasPlayedBefore()) {
@@ -54,19 +52,19 @@ public class SeenCommand implements CommandExecutor {
                         if (fu.exists(fu.playerDataFile(p.getUniqueId()))) {
                             fu.load(fu.playerDataFile(p.getUniqueId()));
                             if (fu.getString("user.last-seen") != null) {
-                                message.send("seen", "lastseen", new String[]{p.getName(), fu.getString("user.last-seen")});
+                                msg.send("seen", "lastseen", new String[]{p.getName(), fu.getString("user.last-seen")});
                             } else {
-                                message.send("seen", "neverseen", new String[]{p.getName()});
+                                msg.send("seen", "neverseen", new String[]{p.getName()});
                             }
                             fu.close();
                         } else {
-                            message.send("generic","playernotfound");
+                            msg.send("generic","playernotfound");
                         }
                     } else {
-                        message.send("generic","playernotfound");
+                        msg.send("generic","playernotfound");
                     }
                 } else {
-                    message.send("generic","playernotfound");
+                    msg.send("generic","playernotfound");
                 }
                 return true;
             } else {

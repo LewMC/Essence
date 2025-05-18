@@ -22,7 +22,7 @@ public class EssenceCommands implements CommandExecutor {
 
     /**
     * /essence command handler.
-    * @param commandSender Information about who sent the command - player or console.
+    * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -30,27 +30,25 @@ public class EssenceCommands implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        MessageUtil message = new MessageUtil(commandSender, plugin);
+        MessageUtil message = new MessageUtil(this.plugin, cs);
 
         if (command.getName().equalsIgnoreCase("essence")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("essence")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("essence")) { return cmd.disabled(); }
 
             if (args.length > 0) {
                 if ("help".equals(args[0])) {
-                    HelpCommand helpCommand = new HelpCommand(this.plugin, message, args);
+                    HelpCommand helpCommand = new HelpCommand(this.plugin, message, args, cs);
                     return helpCommand.runHelpCommand();
                 } else if ("reload".equals(args[0])) {
-                    return this.reloadCommand(commandSender, message);
+                    return this.reloadCommand(cs, message);
                 } else if ("import".equals(args[0])) {
-                    return this.importCommand(args, message, commandSender);
+                    return this.importCommand(args, message, cs);
                 }
             } else {
                 message.send("about", "version", new String[] { plugin.getDescription().getVersion() });
@@ -74,17 +72,21 @@ public class EssenceCommands implements CommandExecutor {
 
     /**
      * Reloads Essence's configuration (experimental).
-     * @param commandSender CommandSender - The entity that sent the command.
+     * @param cs CommandSender - The entity that sent the command.
      * @param message MessageUtil - The message utility.
      * @return boolean - If the operation was successful.
      */
-    private boolean reloadCommand(CommandSender commandSender, MessageUtil message) {
-        PermissionHandler perms = new PermissionHandler(commandSender, message);
+    private boolean reloadCommand(CommandSender cs, MessageUtil message) {
+        PermissionHandler perms = new PermissionHandler(this.plugin, cs);
         if (perms.has("essence.admin.reload")) {
             this.plugin.reloadConfig();
             this.plugin.disabledCommands = this.plugin.getConfig().getStringList("disabled-commands");
             this.plugin.disabledCommandsFeedback = this.plugin.getConfig().getBoolean("disabled-commands-feedback");
             this.plugin.verbose = this.plugin.getConfig().getBoolean("verbose");
+            this.plugin.chat_nameFormat = this.plugin.getConfig().getString("chat.name-format");
+            this.plugin.chat_manage = this.plugin.getConfig().getBoolean("chat.enabled");
+            this.plugin.chat_allowMessageFormatting = this.plugin.getConfig().getBoolean("chat.allow-message-formatting");
+            this.plugin.economySymbol = this.plugin.getConfig().getString("economy.symbol");
             message.send("generic", "reload");
             return true;
         } else {
@@ -96,11 +98,11 @@ public class EssenceCommands implements CommandExecutor {
      * Imports homes, warps, and spawns from other plugins.
      * @param args String[] - List of command arguments.
      * @param message MessageUtil - The message utility.
-     * @param commandSender CommandSender - The entity that sent the command.
+     * @param cs CommandSender - The entity that sent the command.
      * @return boolean - If the operation was successful.
      */
-    private boolean importCommand(String[] args, MessageUtil message, CommandSender commandSender) {
-        PermissionHandler perms = new PermissionHandler(commandSender, message);
+    private boolean importCommand(String[] args, MessageUtil message, CommandSender cs) {
+        PermissionHandler perms = new PermissionHandler(this.plugin, cs);
         if (perms.has("essence.admin.import")) {
             if (args.length > 1) {
                 if (args[1].equalsIgnoreCase("essentials")) {

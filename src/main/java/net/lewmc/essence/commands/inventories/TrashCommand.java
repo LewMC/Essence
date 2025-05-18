@@ -3,14 +3,12 @@ package net.lewmc.essence.commands.inventories;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TrashCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the TrashCommand class.
@@ -26,11 +23,10 @@ public class TrashCommand implements CommandExecutor {
      */
     public TrashCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -38,31 +34,25 @@ public class TrashCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("trash")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("trash")) {
-                return cmd.disabled(message);
-            }
+            if (cs instanceof Player p) {
+                CommandUtil cmd = new CommandUtil(this.plugin, cs);
+                if (cmd.isDisabled("trash")) {return cmd.disabled();}
 
-            if (permission.has("essence.inventory.trash")) {
-                Inventory inventory = Bukkit.createInventory(player, 27, "Trash");
-                player.openInventory(inventory);
-                return true;
+                PermissionHandler permission = new PermissionHandler(this.plugin, cs);
+                if (permission.has("essence.inventory.trash")) {
+                    p.openInventory(Bukkit.createInventory(p, 27, "Trash"));
+                    return true;
+                } else {
+                    return permission.not();
+                }
             } else {
-                return permission.not();
+                return new LogUtil(this.plugin).noConsole();
             }
         }
 

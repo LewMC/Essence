@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class PlayerUtil {
     private final Essence plugin;
-    private final CommandSender commandSender;
+    private final CommandSender cs;
 
     /**
      * The Player utility.
@@ -22,7 +22,7 @@ public class PlayerUtil {
      */
     public PlayerUtil(Essence plugin, CommandSender cs) {
         this.plugin = plugin;
-        this.commandSender = cs;
+        this.cs = cs;
     }
 
     /**
@@ -33,8 +33,8 @@ public class PlayerUtil {
      * @return boolean - Success
      */
     public boolean setGamemode(CommandSender cs, Player player, GameMode gamemode) {
-        PermissionHandler permission = new PermissionHandler(cs, new MessageUtil(this.commandSender, this.plugin));
-        MessageUtil message = new MessageUtil(this.commandSender, this.plugin);
+        PermissionHandler permission = new PermissionHandler(this.plugin, cs);
+        MessageUtil message = new MessageUtil(this.plugin, cs);
         if (permission.has("essence.gamemode."+gamemode.toString().toLowerCase())) {
             if (cs == player) {
                 message.send("gamemode", "done", new String[] { gamemode.toString().toLowerCase() });
@@ -61,7 +61,7 @@ public class PlayerUtil {
      */
     public boolean createPlayerData() {
         FileUtil playerFile = new FileUtil(this.plugin);
-        Player player = (Player) this.commandSender;
+        Player player = (Player) this.cs;
 
         if (!playerFile.exists(playerFile.playerDataFile(player.getUniqueId()))) {
             return this.updatePlayerData(
@@ -84,7 +84,7 @@ public class PlayerUtil {
             boolean acceptingPayments
     ) {
         FileUtil playerFile = new FileUtil(this.plugin);
-        Player player = (Player) this.commandSender;
+        Player player = (Player) this.cs;
 
         LogUtil log = new LogUtil(this.plugin);
 
@@ -129,7 +129,7 @@ public class PlayerUtil {
      */
     public boolean updatePlayerData() {
         FileUtil playerFile = new FileUtil(this.plugin);
-        Player player = (Player) this.commandSender;
+        Player player = (Player) this.cs;
 
         LogUtil log = new LogUtil(this.plugin);
 
@@ -154,5 +154,98 @@ public class PlayerUtil {
 
         playerFile.save();
         return true;
+    }
+
+    /**
+     * Fetches a player's prefix.
+     * @return String - The player's prefix (might be blank).
+     */
+    public String getPlayerPrefix() {
+        if (this.plugin.chat != null) {
+            if (this.cs instanceof Player p) {
+                String prefix = this.plugin.chat.getPlayerPrefix(p);
+                if (prefix != null && !prefix.isEmpty()) {
+                    return "[" +  prefix + "]";
+                } else {
+                    return "";
+                }
+            } else {
+                return "";
+            }
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Fetches a player's suffix.
+     * @return String - The player's suffix (might be blank).
+     */
+    public String getPlayerSuffix() {
+        if (this.plugin.chat != null) {
+            if (this.cs instanceof Player p) {
+                String suffix = this.plugin.chat.getPlayerSuffix(p);
+                if (suffix != null && !suffix.isEmpty()) {
+                    return " " +  suffix;
+                } else {
+                    return "";
+                }
+            } else {
+                return "";
+            }
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Gets a player's display name.
+     * @param p Player - The player to check.
+     * @return The display name.
+     */
+    public String getPlayerDisplayname(Player p) {
+        FileUtil pf = new FileUtil(this.plugin);
+        pf.load(pf.playerDataFile(p));
+        String nickname = pf.getString("user.nickname");
+        pf.close();
+
+        if (nickname == null) {
+            return p.getName();
+        } else {
+            return nickname;
+        }
+    }
+
+    /**
+     * Sets a player's display name.
+     * @param p Player - The player.
+     * @param nickname String - The nickname
+     * @return true/false success.
+     */
+    public boolean setPlayerDisplayname(Player p, String nickname) {
+        FileUtil pf = new FileUtil(this.plugin);
+        pf.load(pf.playerDataFile(p));
+
+        boolean success = pf.set("user.nickname", nickname);
+        pf.save();
+        pf.close();
+
+        return success;
+    }
+
+    /**
+     * Sets a player's display name.
+     * @param p Player - The player.
+     * @return true/false success.
+     */
+    public boolean removePlayerDisplayname(Player p) {
+        FileUtil pf = new FileUtil(this.plugin);
+        pf.load(pf.playerDataFile(p));
+
+        boolean success = pf.delete("user.nickname");
+        pf.save();
+        pf.close();
+
+        return success;
     }
 }

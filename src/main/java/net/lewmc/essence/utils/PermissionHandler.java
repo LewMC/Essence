@@ -1,5 +1,6 @@
 package net.lewmc.essence.utils;
 
+import net.lewmc.essence.Essence;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -11,17 +12,17 @@ import java.util.Set;
  */
 public class PermissionHandler {
 
-    private final CommandSender commandSender;
-    private final MessageUtil message;
+    private final CommandSender cs;
+    private final Essence plugin;
 
     /**
      * Constructor.
-     * @param commandSender CommandSender - The user who executed the command.
-     * @param message MessageUtil - A reference to the MessageUtil class.
+     * @param plugin Reference to the main Essence class.
+     * @param cs CommandSender - The user who executed the command.
      */
-    public PermissionHandler(CommandSender commandSender, MessageUtil message) {
-        this.commandSender = commandSender;
-        this.message = message;
+    public PermissionHandler(Essence plugin, CommandSender cs) {
+        this.plugin = plugin;
+        this.cs = cs;
     }
 
     /**
@@ -30,9 +31,8 @@ public class PermissionHandler {
      * @return boolean - If the user has a permission (true/false)
      */
     public boolean has(String node) {
-        if (this.commandSender instanceof Player) {
-            Player player = (Player) this.commandSender;
-            return player.hasPermission(node);
+        if (this.cs instanceof Player p) {
+            return p.hasPermission(node);
         } else {
             return true;
         }
@@ -42,7 +42,7 @@ public class PermissionHandler {
      * Informs the user that they do not have a permission.
      */
     public boolean not() {
-        this.message.send("generic", "missingpermission");
+        new MessageUtil(this.plugin, this.cs).send("generic", "missingpermission");
         return true;
     }
 

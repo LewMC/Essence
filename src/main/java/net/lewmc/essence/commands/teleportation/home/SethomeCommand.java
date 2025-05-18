@@ -24,7 +24,7 @@ public class SethomeCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -32,59 +32,53 @@ public class SethomeCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, this.plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("sethome")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("sethome")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("sethome")) { return cmd.disabled(); }
 
-            if (permission.has("essence.home.create")) {
+            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
 
-                String name;
-                if (args.length == 0) {
-                    name = "home";
-                } else {
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+
+            if (perms.has("essence.home.create")) {
+
+                String name = "home";
+                if (args.length != 0) {
                     name = args[0];
                 }
 
-                Location loc = player.getLocation();
+                Location loc = p.getLocation();
                 FileUtil playerData = new FileUtil(this.plugin);
-                playerData.load(playerData.playerDataFile(player));
+                playerData.load(playerData.playerDataFile(p));
 
                 SecurityUtil securityUtil = new SecurityUtil();
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
+
                 if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {
                     playerData.close();
-                    message.send("home", "specialchars");
+                    msg.send("home", "specialchars");
                     return true;
                 }
 
                 HomeUtil hu = new HomeUtil(this.plugin);
-                int homeLimit = permission.getHomesLimit(player);
-                if (hu.getHomeCount(player) >= homeLimit && homeLimit != -1) {
-                    message.send("home", "hitlimit");
+                int homeLimit = perms.getHomesLimit(p);
+                if (hu.getHomeCount(p) >= homeLimit && homeLimit != -1) {
+                    msg.send("home", "hitlimit");
                     return true;
                 }
 
-                if (hu.create(name.toLowerCase(), player, loc)) {
-                    message.send("home", "created", new String[] { name });
+                if (hu.create(name.toLowerCase(), p, loc)) {
+                    msg.send("home", "created", new String[] { name });
                 } else {
-                    message.send("home", "cantcreate", new String[] { name });
+                    msg.send("home", "cantcreate", new String[] { name });
                 }
             } else {
-                permission.not();
+                return perms.not();
             }
             return true;
         }

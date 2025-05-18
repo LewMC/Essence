@@ -24,7 +24,7 @@ public class SetwarpCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -32,31 +32,27 @@ public class SetwarpCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, this.plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("setwarp")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("setwarp")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("setwarp")) { return cmd.disabled(); }
+
+            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
+
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 
             if (permission.has("essence.warp.create")) {
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
+
                 if (args.length == 0) {
-                    message.send("warp", "setusage");
+                    msg.send("warp", "setusage");
                     return true;
                 }
-                Location loc = player.getLocation();
+                Location loc = p.getLocation();
                 FileUtil warpsData = new FileUtil(this.plugin);
                 warpsData.load("data/warps.yml");
 
@@ -65,21 +61,21 @@ public class SetwarpCommand implements CommandExecutor {
                 SecurityUtil securityUtil = new SecurityUtil();
                 if (securityUtil.hasSpecialCharacters(warpName)) {
                     warpsData.close();
-                    message.send("warp", "specialchars");
+                    msg.send("warp", "specialchars");
                     return true;
                 }
 
                 WarpUtil wu = new WarpUtil(this.plugin);
-                int warpLimit = permission.getWarpsLimit(player);
-                if (wu.getWarpCount(player) >= warpLimit && warpLimit != -1) {
-                    message.send("warp", "hitlimit");
+                int warpLimit = permission.getWarpsLimit(p);
+                if (wu.getWarpCount(p) >= warpLimit && warpLimit != -1) {
+                    msg.send("warp", "hitlimit");
                     return true;
                 }
 
-                if (wu.create(warpName, player.getUniqueId(), loc)) {
-                    message.send("warp", "created", new String[] { args[0] });
+                if (wu.create(warpName, p.getUniqueId(), loc)) {
+                    msg.send("warp", "created", new String[] { args[0] });
                 } else {
-                    message.send("warp", "cantcreate", new String[] { args[0] });
+                    msg.send("warp", "cantcreate", new String[] { args[0] });
                 }
 
                 warpsData.close();

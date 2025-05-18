@@ -12,13 +12,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TeleportCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
-    private MessageUtil message;
 
     /**
      * Constructor for the TeleportCommand class.
@@ -26,11 +23,10 @@ public class TeleportCommand implements CommandExecutor {
      */
     public TeleportCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -38,39 +34,39 @@ public class TeleportCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        this.message = new MessageUtil(commandSender, plugin);
-
-        Player player = null;
-
-        if (!console(commandSender)) {
-            player = (Player) commandSender;
-        }
-
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("tp")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("tp")) {
-                return cmd.disabled(message);
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("tp")) { return cmd.disabled(); }
+
+            MessageUtil message = new MessageUtil(this.plugin, cs);
+
+            Player player = null;
+
+            if (!console(cs)) {
+                player = (Player) cs;
             }
+
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 
             if (args.length == 0) {
                 message.send("teleport", "usage");
                 return true;
             }
 
+            TeleportUtil tp = new TeleportUtil(this.plugin);
+
             // /tp <selector> <x> <y> <z>
             if (args.length >= 4) {
-                // 权限检查
                 boolean isSelf = false;
-                if (commandSender instanceof Player && (args[0].equalsIgnoreCase("@s") || (args[0].equalsIgnoreCase(((Player)commandSender).getName())))) {
+                if (cs instanceof Player && (args[0].equalsIgnoreCase("@s") || (args[0].equalsIgnoreCase(cs.getName())))) {
                     isSelf = true;
                 }
+
                 if (isSelf) {
                     if (!permission.has("essence.teleport.coord")) {
                         return permission.not();
@@ -81,14 +77,14 @@ public class TeleportCommand implements CommandExecutor {
                     }
                 }
                 String selector = args[0];
-                List<Player> targets = parseSelector(selector, commandSender);
+                List<Player> targets = parseSelector(selector, cs);
                 if (targets.isEmpty()) {
                     message.send("generic", "playernotfound");
                     return true;
                 }
                 double x, y, z;
                 try {
-                    Player ref = (commandSender instanceof Player) ? (Player) commandSender : targets.get(0);
+                    Player ref = (cs instanceof Player) ? (Player) cs : targets.getFirst();
                     x = args[1].equals("~") ? ref.getLocation().getX() : Double.parseDouble(args[1]);
                     y = args[2].equals("~") ? ref.getLocation().getY() : Double.parseDouble(args[2]);
                     z = args[3].equals("~") ? ref.getLocation().getZ() : Double.parseDouble(args[3]);
@@ -97,35 +93,43 @@ public class TeleportCommand implements CommandExecutor {
                     return true;
                 }
                 for (Player t : targets) {
-                    Location loc = new Location(t.getWorld(), x, y, z);
-                    TeleportUtil tp = new TeleportUtil(this.plugin);
-                    tp.doTeleport(t, loc, 0); // Folia兼容
+
+                    if (!tp.teleportToggleCheck(player, t)) {
+                        message.send("teleport", "requestsdisabled", new String[] { t.getName() });
+                    } else {
+                        Location loc = new Location(t.getWorld(), x, y, z);
+                        tp.doTeleport(t, loc, 0);
+                    }
                 }
                 message.send("teleport", "tocoord", new String[] { x+", "+y+", "+z });
                 return true;
             }
 
-            // /tp <selector1> <selector2>  或 /tp <selector1> <player2>
+            // /tp <selector1> <selector2> or /tp <selector1> <player2>
             if (args.length == 2) {
                 if (!(permission.has("essence.teleport.other") && permission.has("essence.teleport.player"))) {
                     return permission.not();
                 }
-                List<Player> fromList = parseSelector(args[0], commandSender);
-                List<Player> toList = parseSelector(args[1], commandSender);
+                List<Player> fromList = parseSelector(args[0], cs);
+                List<Player> toList = parseSelector(args[1], cs);
                 if (fromList.isEmpty() || toList.isEmpty()) {
                     message.send("generic", "playernotfound");
                     return true;
                 }
-                Player to = toList.get(0);
+                Player to = toList.getFirst();
                 for (Player from : fromList) {
-                    TeleportUtil tp = new TeleportUtil(this.plugin);
-                    tp.doTeleport(from, to.getLocation(), 0); // Folia兼容
+
+                    if (!tp.teleportToggleCheck(player, to)) {
+                        message.send("teleport", "requestsdisabled", new String[] { to.getName() });
+                    } else {
+                        tp.doTeleport(from, to.getLocation(), 0); // Folia
+                    }
                 }
                 message.send("teleport", "toplayer", new String[] { fromList.stream().map(Player::getName).collect(Collectors.joining(", ")), to.getName() });
                 return true;
             }
 
-            // /tp <x> <y> <z>  (自己传送到坐标)
+            // /tp <x> <y> <z> (Teleport yourself to the coordinates)
             if (args.length == 3 && player != null) {
                 if (!permission.has("essence.teleport.coord")) {
                     return permission.not();
@@ -140,24 +144,29 @@ public class TeleportCommand implements CommandExecutor {
                     return true;
                 }
                 Location loc = new Location(player.getWorld(), x, y, z);
-                TeleportUtil tp = new TeleportUtil(this.plugin);
                 tp.doTeleport(player, loc, 0); // Folia兼容
                 message.send("teleport", "tocoord", new String[] { x+", "+y+", "+z });
                 return true;
             }
 
-            // /tp <player> 仅玩家传送到玩家
+            // /tp <player> Player to player teleport only
             if (args.length == 1 && player != null) {
                 if (!permission.has("essence.teleport.player")) {
                     return permission.not();
                 }
-                List<Player> toList = parseSelector(args[0], commandSender);
+
+                List<Player> toList = parseSelector(args[0], cs);
                 if (toList.isEmpty()) {
                     message.send("generic", "playernotfound");
                     return true;
                 }
-                Player to = toList.get(0);
-                TeleportUtil tp = new TeleportUtil(this.plugin);
+                Player to = toList.getFirst();
+
+                if (!tp.teleportToggleCheck(player, to)) {
+                    message.send("teleport", "requestsdisabled", new String[] { to.getName() });
+                    return true;
+                }
+
                 tp.doTeleport(player, to.getLocation(), 0);
                 message.send("teleport", "to", new String[] { to.getName() });
                 return true;
@@ -180,22 +189,10 @@ public class TeleportCommand implements CommandExecutor {
     }
 
     /**
-     * Checks if a player is null.
-     * @param player Player - The player to check.
-     * @return boolean - If the player is null.
-     */
-    private boolean isNull(Player player) {
-        if (player == null) {
-            this.message.send("generic", "exception");
-            this.log.severe("Unable to complete teleportation, player is null.");
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 解析目标选择器，返回匹配的玩家列表
+     * Parse the target selector and return a list of matching players
+     * @param selector The selector to be parsed
+     * @param sender The command sender.
+     * @return List a list of Player.
      */
     private List<Player> parseSelector(String selector, CommandSender sender) {
         if (selector.equalsIgnoreCase("@s")) {

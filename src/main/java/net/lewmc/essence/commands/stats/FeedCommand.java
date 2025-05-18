@@ -23,7 +23,7 @@ public class FeedCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -31,27 +31,29 @@ public class FeedCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
-        @NotNull String s, String[] args
+        @NotNull String s,
+        String[] args
     ) {
-        MessageUtil message = new MessageUtil(commandSender, this.plugin);
-        if (!(commandSender instanceof Player) && args.length == 0) {
-            message.send("feed","usage");
-            return true;
-        }
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
 
         if (command.getName().equalsIgnoreCase("feed")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("feed")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("feed")) { return cmd.disabled(); }
+
+            MessageUtil message = new MessageUtil(this.plugin, cs);
+
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 
             if (args.length > 0) {
-                return this.feedOther(permission, commandSender, message, args);
+                return this.feedOther(permission, cs, message, args);
             } else {
-               return this.feedSelf(permission, commandSender, message);
+                if (!(cs instanceof Player)) {
+                    message.send("feed","usage");
+                    return true;
+                } else {
+                    return this.feedSelf(permission, (Player) cs, message);
+                }
             }
         }
 
@@ -60,48 +62,47 @@ public class FeedCommand implements CommandExecutor {
 
     /**
      * Feeds the command sender.
-     * @param permission PermisionHandler - The permission system.
-     * @param sender CommandSender - The user to feed.
-     * @param message MessageUtil - The messaging system.
+     * @param perms PermisionHandler - The permission system.
+     * @param p Player - The user to feed.
+     * @param msg MessageUtil - The messaging system.
      * @return boolean - If the operation was successful
      */
-    private boolean feedSelf(PermissionHandler permission, CommandSender sender, MessageUtil message) {
-        if (permission.has("essence.stats.feed")) {
-            Player player = (Player) sender;
-            player.setFoodLevel(20);
-            message.send("feed", "beenfed");
+    private boolean feedSelf(PermissionHandler perms, Player p, MessageUtil msg) {
+        if (perms.has("essence.stats.feed")) {
+            p.setFoodLevel(20);
+            msg.send("feed", "beenfed");
             return true;
         } else {
-            return permission.not();
+            return perms.not();
         }
     }
 
     /**
      * Feeds another user.
-     * @param permission PermisionHandler - The permission system.
-     * @param sender CommandSender - The user to feed.
-     * @param message MessageUtil - The messaging system.
+     * @param perms PermisionHandler - The permission system.
+     * @param cs CommandSender - The user to feed.
+     * @param msg MessageUtil - The messaging system.
      * @param args String[] - List of command arguments.
      * @return boolean - If the operation was successful
      */
-    private boolean feedOther(PermissionHandler permission, CommandSender sender, MessageUtil message, String[] args) {
-        if (permission.has("essence.stats.feed.other")) {
+    private boolean feedOther(PermissionHandler perms, CommandSender cs, MessageUtil msg, String[] args) {
+        if (perms.has("essence.stats.feed.other")) {
             String pName = args[0];
             Player p = Bukkit.getPlayer(pName);
             if (p != null) {
-                message.send("feed", "fed", new String[] { p.getName() });
-                if (!(sender instanceof Player)) {
-                    message.sendTo(p, "feed", "serverfed");
+                msg.send("feed", "fed", new String[] { p.getName() });
+                if (!(cs instanceof Player)) {
+                    msg.sendTo(p, "feed", "serverfed");
                 } else {
-                    message.sendTo(p, "feed", "fedby", new String[] { sender.getName() });
+                    msg.sendTo(p, "feed", "fedby", new String[] { cs.getName() });
                 }
                 p.setFoodLevel(20);
             } else {
-                message.send("generic", "playernotfound");
+                msg.send("generic", "playernotfound");
             }
             return true;
         } else {
-            return permission.not();
+            return perms.not();
         }
     }
 }

@@ -22,7 +22,7 @@ public class ThomesCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -30,50 +30,45 @@ public class ThomesCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
-        TeamUtil tu = new TeamUtil(this.plugin, message);
-        String team = tu.getPlayerTeam(player.getUniqueId());
-
-        if (team == null) {
-            message.send("team", "noteam");
-            return true;
-        }
-
-        if (!tu.getRule(team, "allow-team-homes")) {
-            message.send("team", "disallowedhomes");
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("thomes")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("thomes")) {
-                return cmd.disabled(message);
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("thomes")) { return cmd.disabled(); }
+
+            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
+
+            MessageUtil msg = new MessageUtil(this.plugin, cs);
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+
+            TeamUtil tu = new TeamUtil(this.plugin, msg);
+            String team = tu.getPlayerTeam(p.getUniqueId());
+
+            if (team == null) {
+                msg.send("team", "noteam");
+                return true;
             }
 
-            if (permission.has("essence.home.team.list")) {
+            if (!tu.getRule(team, "allow-team-homes")) {
+                msg.send("team", "disallowedhomes");
+                return true;
+            }
+
+            if (perms.has("essence.home.team.list")) {
                 HomeUtil hu = new HomeUtil(this.plugin);
                 StringBuilder setHomes = hu.getTeamHomesList(team);
 
                 if (setHomes == null) {
-                    message.send("teamhome", "noneset");
+                    msg.send("teamhome", "noneset");
                     return true;
                 }
 
-                message.send("teamhome", "list", new String[] { setHomes.toString() });
+                msg.send("teamhome", "list", new String[] { setHomes.toString() });
             } else {
-                permission.not();
+                perms.not();
             }
             return true;
         }

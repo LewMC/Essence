@@ -105,6 +105,8 @@ help:
   broadcast: "§6[Essence] §e/broadcast <mensaje> - Transmite un mensaje"
   msg: "§6[Essence] §e/msg <nombre> <mensaje> - Enviar un mensaje a un jugador."
   reply: "§6[Essence] §e/reply <mensaje> - Responde a tu último /msg."
+  nickself: "§6[Essence] §e/nick <name> - Change your displayname."
+  nickother: "§6[Essence] §e/nick <user> <name> - Change other nick."
   misc: "§6[Essence] ----- Ayuda de Essence - Miscellaneous -----"
   rules: "§6[Essence] §e/rules - Ver las reglas del servidor."
   kit: "§6[Essence] §e/kit - Obtener un kit."
@@ -205,6 +207,7 @@ gamemode:
   doneby: "§2[Essence] §aHas sido cambiado al modo {{1}} por {{2}}."
   doneother: "§2[Essence] §aHas cambiado al modo {{1}} a {{2}}."
 team:
+  longname: "§4[Essence] §cTeam name is too long, maximum 12 characters."
   exists: "§4[Essence] §cYa existe un equipo con ese nombre."
   notfound: "§4[Essence] §cNo se ha podido encontrar un equipo con ese nombre."
   specialchars: "§4[Essence] §cLos nombres de equipo no pueden contener caracteres especiales."
@@ -266,6 +269,13 @@ msg:
 reply:
   usage: "§4[Essence] §cUso: /reply <mensaje>"
   none: "§4[Essence] §cNo tienes nadie a quien responder!."
+nick:
+  usage: "§4[Essence] §cUsage: /nick <name>"
+  consoleusage: "§4[Essence] §cUsage: /nick <user> <name>"
+  specialchars: "§4[Essence] §cNicknames cannot contain special characters."
+  success: "§2[Essence] §aChanged your nickname to {{1}}."
+  successother: "§2[Essence] §aChanged {{1}}'s nickname to {{2}}."
+  changedby: "§2[Essence] §a{{1}} changed your nickname to {{2}}."
 import:
   list: "§6[Essence] §ePor favor, selecciona una opción: 'Essentials'."
   unsupported: "§4[Essence] §cLo sentimos, Essence no soporta importar datos de '{{1}}'"
