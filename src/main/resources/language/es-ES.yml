@@ -205,6 +205,7 @@ gamemode:
   doneby: "§2[Essence] §aHas sido cambiado al modo {{1}} por {{2}}."
   doneother: "§2[Essence] §aHas cambiado al modo {{1}} a {{2}}."
 team:
+  longname: "§4[Essence] §cTeam name is too long, maximum 12 characters."
   exists: "§4[Essence] §cYa existe un equipo con ese nombre."
   notfound: "§4[Essence] §cNo se ha podido encontrar un equipo con ese nombre."
   specialchars: "§4[Essence] §cLos nombres de equipo no pueden contener caracteres especiales."
