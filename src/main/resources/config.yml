@@ -24,6 +24,13 @@ broadcasts:
   join: "§e%essence_player% joined the server!"
   leave: "§c%essence_player% left the server!"
 
+# CHAT
+# You can use § colour codes here!
+chat:
+  enabled: true
+  name-format: "%essence_combined_prefix% %essence_player%%essence_player_suffix%:"
+  allow-message-formatting: false
+
 # SPAWN KITS
 # Players are given these kits when they first join the server.
 # Set to "false" to disable this feature.

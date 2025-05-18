@@ -69,6 +69,10 @@ public class EssencePAPIExpansion extends PlaceholderExpansion {
         if (param.equalsIgnoreCase("team")) { return pu.replaceSingle("team_name"); }
         if (param.equalsIgnoreCase("team_name")) { return pu.replaceSingle("team_name"); }
         if (param.equalsIgnoreCase("team_leader")) { return pu.replaceSingle("team_leader"); }
+        if (param.equalsIgnoreCase("team_prefix")) { return pu.replaceSingle("team_prefix"); }
+        if (param.equalsIgnoreCase("player_prefix")) { return pu.replaceSingle("player_prefix"); }
+        if (param.equalsIgnoreCase("player_suffix")) { return pu.replaceSingle("player_suffix"); }
+        if (param.equalsIgnoreCase("combined_prefix")) { return pu.replaceSingle("combined_prefix"); }
 
         return null; //
     }

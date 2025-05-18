@@ -3,6 +3,7 @@ package net.lewmc.essence.utils.placeholders;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
+import net.lewmc.essence.utils.PlayerUtil;
 import net.lewmc.essence.utils.TeamUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -64,6 +65,10 @@ public class PlaceholderUtil {
             text = text.replace("%essence_team%", this.replaceSingle("team_name"));
             text = text.replace("%essence_team_name%", this.replaceSingle("team_name"));
             text = text.replace("%essence_team_leader%", this.replaceSingle("team_leader"));
+            text = text.replace("%essence_team_prefix%", this.replaceSingle("team_prefix"));
+            text = text.replace("%essence_combined_prefix%", this.replaceSingle("combined_prefix"));
+            text = text.replace("%essence_player_prefix%", this.replaceSingle("player_prefix"));
+            text = text.replace("%essence_player_suffix%", this.replaceSingle("player_suffix"));
         }
 
         return text;
@@ -103,6 +108,14 @@ public class PlaceholderUtil {
             } else {
                 return "No leader";
             }
+        } else if (placeholder.equalsIgnoreCase("team_prefix")) {
+            return tu.getTeamPrefix(this.cs);
+        } else if (placeholder.equalsIgnoreCase("combined_prefix")) {
+            return new PlayerUtil(this.plugin, cs).getPlayerPrefix() + tu.getTeamPrefix(this.cs);
+        } else if (placeholder.equalsIgnoreCase("player_prefix")) {
+            return new PlayerUtil(this.plugin, cs).getPlayerPrefix();
+        } else if (placeholder.equalsIgnoreCase("player_suffix")) {
+            return new PlayerUtil(this.plugin, cs).getPlayerSuffix();
         } else {
             return placeholder;
         }

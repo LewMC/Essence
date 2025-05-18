@@ -56,7 +56,7 @@ public class TeamCommands implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("create")) {
                     if (permission.has("essence.team.create")) {
                         if (args.length == 2) {
-                            team.CreateNewTeam(args[1], player.getUniqueId());
+                            team.create(args[1], player.getUniqueId());
                         } else {
                             message.send("team", "namerequired");
                         }

@@ -85,6 +85,9 @@ public class EssenceCommands implements CommandExecutor {
             this.plugin.disabledCommands = this.plugin.getConfig().getStringList("disabled-commands");
             this.plugin.disabledCommandsFeedback = this.plugin.getConfig().getBoolean("disabled-commands-feedback");
             this.plugin.verbose = this.plugin.getConfig().getBoolean("verbose");
+            this.plugin.chat_nameFormat = this.plugin.getConfig().getString("chat.name-format");
+            this.plugin.chat_manage = this.plugin.getConfig().getBoolean("chat.enabled");
+            this.plugin.chat_allowMessageFormatting = this.plugin.getConfig().getBoolean("chat.allow-message-formatting");
             message.send("generic", "reload");
             return true;
         } else {

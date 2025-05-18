@@ -3,6 +3,7 @@ package net.lewmc.essence.utils;
 import net.lewmc.essence.Essence;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,11 +31,15 @@ public class TeamUtil {
      * @param name String - Team name
      * @param leader UUID - Leader's UUID
      */
-    public void CreateNewTeam(String name, UUID leader) {
+    public void create(String name, UUID leader) {
         SecurityUtil su = new SecurityUtil();
         if (su.hasSpecialCharacters(name)) {
             message.send("team", "specialchars");
             return;
+        }
+
+        if (name.length() > 12) {
+            message.send("team", "longname");
         }
 
         FileUtil teamsFile = new FileUtil(this.plugin);
@@ -268,17 +273,25 @@ public class TeamUtil {
      * @return String - The leader of the team.
      */
     public String getTeamLeader(String team) {
-        FileUtil teamData = new FileUtil(this.plugin);
-        teamData.load("data/teams/"+team+".yml");
-        String leader = teamData.getString("members.leader");
-        teamData.close();
+        if (team != null) {
+            FileUtil teamData = new FileUtil(this.plugin);
+            teamData.load("data/teams/" + team + ".yml");
+            String leader = teamData.getString("members.leader");
+            teamData.close();
 
-        FileUtil playerData = new FileUtil(this.plugin);
-        playerData.load(playerData.playerDataFile(UUID.fromString(leader)));
-        leader = playerData.getString("user.last-known-name");
-        playerData.close();
+            if (leader != null) {
+                FileUtil playerData = new FileUtil(this.plugin);
+                playerData.load(playerData.playerDataFile(UUID.fromString(leader)));
+                leader = playerData.getString("user.last-known-name");
+                playerData.close();
 
-        return leader;
+                return leader;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -460,5 +473,23 @@ public class TeamUtil {
     public boolean exists(String team) {
         FileUtil teamData = new FileUtil(this.plugin);
         return teamData.exists("data/teams/"+team+".yml");
+    }
+
+    /**
+     * Fetches a team's prefix.
+     * @param cs String - The command sender.
+     * @return String - The team's prefix (may be blank).
+     */
+    public String getTeamPrefix(CommandSender cs) {
+        if (cs instanceof Player p) {
+            String prefix = this.getPlayerTeam(p.getUniqueId());
+            if (prefix == null) {
+                return "";
+            } else {
+                return "["+prefix+"]";
+            }
+        } else {
+            return "";
+        }
     }
 }
