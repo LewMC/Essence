@@ -87,7 +87,7 @@ public class JoinEvent implements Listener {
      * @param log LogUtil - Logging system.
      */
     private void spawn(PlayerJoinEvent event, LogUtil log) {
-        MessageUtil message = new MessageUtil(event.getPlayer(), this.plugin);
+        MessageUtil message = new MessageUtil(this.plugin, event.getPlayer());
 
         FileUtil essenceConfiguration = new FileUtil(this.plugin);
         if (!essenceConfiguration.load("config.yml")) {
@@ -194,8 +194,8 @@ public class JoinEvent implements Listener {
      * @param event PlayerJoinEvent - The event
      */
     private void showUpdateAlert(PlayerJoinEvent event) {
-        MessageUtil msg = new MessageUtil(event.getPlayer(), this.plugin);
-        PermissionHandler perms = new PermissionHandler(event.getPlayer(), msg);
+        MessageUtil msg = new MessageUtil(this.plugin, event.getPlayer());
+        PermissionHandler perms = new PermissionHandler(this.plugin, event.getPlayer());
         if (perms.has("essence.admin.updates") && this.plugin.hasPendingUpdate) {
             msg.send("other", "updatemsg");
             msg.send("other", "updatemore");

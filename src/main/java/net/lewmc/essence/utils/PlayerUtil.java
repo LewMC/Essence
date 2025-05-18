@@ -33,8 +33,8 @@ public class PlayerUtil {
      * @return boolean - Success
      */
     public boolean setGamemode(CommandSender cs, Player player, GameMode gamemode) {
-        PermissionHandler permission = new PermissionHandler(cs, new MessageUtil(this.cs, this.plugin));
-        MessageUtil message = new MessageUtil(this.cs, this.plugin);
+        PermissionHandler permission = new PermissionHandler(this.plugin, cs);
+        MessageUtil message = new MessageUtil(this.plugin, cs);
         if (permission.has("essence.gamemode."+gamemode.toString().toLowerCase())) {
             if (cs == player) {
                 message.send("gamemode", "done", new String[] { gamemode.toString().toLowerCase() });

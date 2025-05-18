@@ -12,13 +12,15 @@ import java.util.Objects;
  */
 public class CommandUtil {
     private final Essence plugin;
+    private final CommandSender cs;
 
     /**
      * The constructor for the CommandUtil.
      * @param plugin Reference to the main Essence class.
      */
-    public CommandUtil(Essence plugin) {
+    public CommandUtil(Essence plugin, CommandSender cs) {
         this.plugin = plugin;
+        this.cs = cs;
     }
 
     /**
@@ -38,12 +40,11 @@ public class CommandUtil {
 
     /**
      * Responds to disabled command usage.
-     * @param msg MessageUtil - The message utility.
      * @return boolean - Verbose mode (false) or not (true)
      */
-    public boolean disabled(MessageUtil msg) {
+    public boolean disabled() {
         if (this.plugin.disabledCommandsFeedback) {
-            msg.send("generic", "commanddisabled");
+            new MessageUtil(this.plugin, cs).send("generic", "commanddisabled");
         }
 
         if (this.plugin.verbose) {

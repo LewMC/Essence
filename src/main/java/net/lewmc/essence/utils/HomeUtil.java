@@ -109,7 +109,7 @@ public class HomeUtil {
      * @return int - The number of team homes.
      */
     public int getTeamHomeCount(Player player) {
-        TeamUtil teamUtil = new TeamUtil(this.plugin, new MessageUtil(player, this.plugin));
+        TeamUtil teamUtil = new TeamUtil(this.plugin, new MessageUtil(this.plugin, player));
         FileUtil dataUtil = new FileUtil(this.plugin);
         dataUtil.load("data/teams/"+teamUtil.getPlayerTeam(player.getUniqueId())+".yml");
 
@@ -143,7 +143,7 @@ public class HomeUtil {
 
         if (playerData.get(homeName) != null) {
             playerData.close();
-            MessageUtil message = new MessageUtil(player, this.plugin);
+            MessageUtil message = new MessageUtil(this.plugin, player);
             message.send("home", "alreadyexists");
             return false;
         }

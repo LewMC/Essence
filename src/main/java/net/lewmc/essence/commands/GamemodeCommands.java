@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 public class GamemodeCommands implements CommandExecutor {
     private final Essence plugin;
     private MessageUtil message;
-    private CommandSender commandSender;
+    private CommandSender cs;
     private final LogUtil log;
 
     /**
@@ -32,7 +32,7 @@ public class GamemodeCommands implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -40,21 +40,19 @@ public class GamemodeCommands implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        PlayerUtil playerUtil = new PlayerUtil(this.plugin, commandSender);
-        this.message = new MessageUtil(commandSender, this.plugin);
-        this.commandSender = commandSender;
-
         Player player;
+        PlayerUtil playerUtil = new PlayerUtil(this.plugin, this.cs);
+        this.message = new MessageUtil(this.plugin, cs);
+        this.cs = cs;
+
         if (command.getName().equalsIgnoreCase("gamemode")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("gamemode")) {
-                return cmd.disabled(this.message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("gamemode")) { return cmd.disabled(); }
 
             GameMode gamemode;
             if (args.length > 0) {
@@ -86,11 +84,11 @@ public class GamemodeCommands implements CommandExecutor {
                     log.warn("Usage: /gamemode "+gamemode.toString().toLowerCase()+" <player>");
                     return true;
                 } else {
-                    player = (Player) commandSender;
+                    player = (Player) this.cs;
                 }
             }
 
-            return playerUtil.setGamemode(this.commandSender, player, gamemode);
+            return playerUtil.setGamemode(this.cs, player, gamemode);
         }
 
         if (command.getName().equalsIgnoreCase("gmc")) {
@@ -105,11 +103,11 @@ public class GamemodeCommands implements CommandExecutor {
                     log.warn("Usage: /gmc <player>");
                     return true;
                 } else {
-                    player = (Player) commandSender;
+                    player = (Player) this.cs;
                 }
             }
 
-            return playerUtil.setGamemode(this.commandSender, player, GameMode.CREATIVE);
+            return playerUtil.setGamemode(this.cs, player, GameMode.CREATIVE);
         }
 
         if (command.getName().equalsIgnoreCase("gms")) {
@@ -127,12 +125,12 @@ public class GamemodeCommands implements CommandExecutor {
                     if (console()) {
                         return true;
                     } else {
-                        player = (Player) commandSender;
+                        player = (Player) this.cs;
                     }
                 }
             }
 
-            return playerUtil.setGamemode(this.commandSender, player, GameMode.SURVIVAL);
+            return playerUtil.setGamemode(this.cs, player, GameMode.SURVIVAL);
         }
 
         if (command.getName().equalsIgnoreCase("gma")) {
@@ -147,11 +145,11 @@ public class GamemodeCommands implements CommandExecutor {
                     log.warn("Usage: /gma <player>");
                     return true;
                 } else {
-                    player = (Player) commandSender;
+                    player = (Player) this.cs;
                 }
             }
 
-            return playerUtil.setGamemode(this.commandSender, player, GameMode.ADVENTURE);
+            return playerUtil.setGamemode(this.cs, player, GameMode.ADVENTURE);
         }
 
         if (command.getName().equalsIgnoreCase("gmsp")) {
@@ -166,11 +164,11 @@ public class GamemodeCommands implements CommandExecutor {
                     log.warn("Usage: /gmsp <player>");
                     return true;
                 } else {
-                    player = (Player) commandSender;
+                    player = (Player) this.cs;
                 }
             }
 
-            return playerUtil.setGamemode(this.commandSender, player, GameMode.SPECTATOR);
+            return playerUtil.setGamemode(this.cs, player, GameMode.SPECTATOR);
         }
         return false;
     }
@@ -181,6 +179,6 @@ public class GamemodeCommands implements CommandExecutor {
     }
 
     public boolean console() {
-        return !(this.commandSender instanceof Player);
+        return !(this.cs instanceof Player);
     }
 }

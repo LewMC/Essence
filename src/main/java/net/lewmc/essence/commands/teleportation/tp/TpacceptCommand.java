@@ -23,7 +23,7 @@ public class TpacceptCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -31,30 +31,23 @@ public class TpacceptCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-            @NotNull CommandSender commandSender,
+            @NotNull CommandSender cs,
             @NotNull Command command,
             @NotNull String s,
             String[] args
     ) {
-        MessageUtil message = new MessageUtil(commandSender, this.plugin);
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-        LogUtil log = new LogUtil(this.plugin);
-
-        CommandUtil cmd = new CommandUtil(this.plugin);
-        if (cmd.console(commandSender)) {
-            log.noConsole();
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("tpaccept")) {
-            if (cmd.isDisabled("tpaccept")) {
-                return cmd.disabled(message);
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("tpaccept")) { return cmd.disabled(); }
+            if (cmd.console(cs)) {
+                return new LogUtil(this.plugin).noConsole();
             }
 
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
+
             if (permission.has("essence.teleport.request.accept")) {
-                TeleportRequestUtil tpru = new TeleportRequestUtil(plugin);
-                if (!tpru.acceptRequest(commandSender.getName())) {
-                    message.send("teleport", "acceptnone");
+                if (!new TeleportRequestUtil(plugin).acceptRequest(cs.getName())) {
+                    new MessageUtil(this.plugin, cs).send("teleport", "acceptnone");
                 }
                 return true;
             } else {

@@ -24,7 +24,7 @@ public class SetspawnCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -32,27 +32,20 @@ public class SetspawnCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, this.plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("setspawn")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("setspawn")) {
-                return cmd.disabled(message);
-            }
+            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
 
-            if (permission.has("essence.spawn.set")) {
-                Location loc = player.getLocation();
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("setspawn")) { return cmd.disabled(); }
+
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+            if (perms.has("essence.spawn.set")) {
+                Location loc = p.getLocation();
                 FileUtil spawnFile = new FileUtil(this.plugin);
 
                 String spawnName = loc.getWorld().getName();
@@ -67,10 +60,11 @@ public class SetspawnCommand implements CommandExecutor {
 
                 // Save the configuration to the file
                 spawnFile.save();
+                spawnFile.close();
 
-                message.send("spawn", "set");
+                new MessageUtil(this.plugin, cs).send("spawn", "set");
             } else {
-                permission.not();
+                return perms.not();
             }
             return true;
         }

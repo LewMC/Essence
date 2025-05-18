@@ -26,7 +26,7 @@ public class SpawnCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -34,44 +34,39 @@ public class SpawnCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, this.plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("spawn")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("spawn")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("spawn")) { return cmd.disabled(); }
 
-            if (permission.has("essence.spawn")) {
+            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
+
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+            if (perms.has("essence.spawn")) {
 
                 int waitTime = plugin.getConfig().getInt("teleportation.spawn.wait");
                 TeleportUtil teleUtil = new TeleportUtil(this.plugin);
 
-                if (!teleUtil.cooldownSurpassed(player, "spawn")) {
-                    message.send("teleport", "tryagain", new String[] { String.valueOf(teleUtil.cooldownRemaining(player, "spawn")) });
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
+
+                if (!teleUtil.cooldownSurpassed(p, "spawn")) {
+                    msg.send("teleport", "tryagain", new String[] { String.valueOf(teleUtil.cooldownRemaining(p, "spawn")) });
                     return true;
                 }
 
-                Location loc = player.getLocation();
+                Location loc = p.getLocation();
 
                 String spawnName;
 
                 if (args.length == 1) {
-                    if (permission.has("essence.spawn.other")) {
+                    if (perms.has("essence.spawn.other")) {
                         spawnName = args[0];
                     } else {
-                        message.send("spawn", "worldnoperms");
+                        msg.send("spawn", "worldnoperms");
                         return true;
                     }
                 } else {
@@ -102,7 +97,7 @@ public class SpawnCommand implements CommandExecutor {
                                 Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch()
                         );
                     } else {
-                        message.send("spawn", "notexist");
+                        msg.send("spawn", "notexist");
                         return true;
                     }
                 } else {
@@ -110,7 +105,7 @@ public class SpawnCommand implements CommandExecutor {
                         this.log.info("Spawn implicitly set for world '"+spawnName+"'.");
                     }
                     LocationUtil locationUtil = new LocationUtil(this.plugin);
-                    locationUtil.UpdateLastLocation(player);
+                    locationUtil.UpdateLastLocation(p);
 
                     if (Bukkit.getServer().getWorld(spawnName) == null) {
                         WorldCreator creator = new WorldCreator(spawnName);
@@ -127,16 +122,16 @@ public class SpawnCommand implements CommandExecutor {
                     );
                 }
 
-                teleUtil.setCooldown(player, "spawn");
+                teleUtil.setCooldown(p, "spawn");
 
-                message.send("spawn", "teleporting", new String[] { String.valueOf(waitTime) });
+                msg.send("spawn", "teleporting", new String[] { String.valueOf(waitTime) });
 
-                teleUtil.doTeleport(player, teleportLocation, waitTime);
+                teleUtil.doTeleport(p, teleportLocation, waitTime);
 
                 spawnData.close();
 
             } else {
-                permission.not();
+                return perms.not();
             }
             return true;
         }

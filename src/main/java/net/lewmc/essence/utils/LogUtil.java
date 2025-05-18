@@ -44,7 +44,8 @@ public class LogUtil {
     /**
      * Logs a message to the console, informing the console operator that it cannot run the command requested.
      */
-    public void noConsole() {
-        this.info("Sorry, you need to be an in-game player to use this command.");
+    public boolean noConsole() {
+        this.warn("Sorry, you need to be an in-game player to use this command.");
+        return true;
     }
 }

@@ -24,7 +24,7 @@ public class TpahereCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -32,60 +32,52 @@ public class TpahereCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-            @NotNull CommandSender commandSender,
+            @NotNull CommandSender cs,
             @NotNull Command command,
             @NotNull String s,
             String[] args
     ) {
-        MessageUtil message = new MessageUtil(commandSender, this.plugin);
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-        LogUtil log = new LogUtil(this.plugin);
-
-        CommandUtil cmd = new CommandUtil(this.plugin);
-        if (cmd.console(commandSender)) {
-            log.noConsole();
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("tpahere")) {
-            if (cmd.isDisabled("tpahere")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("tpahere")) { return cmd.disabled(); }
+            if (cmd.console(cs)) { return new LogUtil(this.plugin).noConsole(); }
 
-            if (permission.has("essence.teleport.request.here")) {
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+
+            if (perms.has("essence.teleport.request.here")) {
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
                 if (args.length == 0) {
-                    message.send("teleport", "userrequired");
+                    msg.send("teleport", "userrequired");
                 } else {
                     Player playerToRequest = this.plugin.getServer().getPlayer(args[0]);
                     if (playerToRequest == null) {
-                        message.send("generic", "playernotfound");
+                        msg.send("generic", "playernotfound");
                         return true;
                     }
 
-                    if (playerToRequest.getName().equals(commandSender.getName())) {
-                        message.send("generic", "cantyourself");
+                    if (playerToRequest.getName().equals(cs.getName())) {
+                        msg.send("generic", "cantyourself");
                         return true;
                     }
 
                     FileUtil playerData = new FileUtil(this.plugin);
                     playerData.load(playerData.playerDataFile(playerToRequest));
                     if (!playerData.getBoolean("user.accepting-teleport-requests")) {
-                        message.send("teleport", "requestsdisabled", new String[] { playerToRequest.getName() });
+                        msg.send("teleport", "requestsdisabled", new String[] { playerToRequest.getName() });
                         return true;
                     }
                     playerData.close();
 
                     TeleportRequestUtil tpru = new TeleportRequestUtil(this.plugin);
-                    tpru.createRequest(commandSender.getName(), playerToRequest.getName(), true);
+                    tpru.createRequest(cs.getName(), playerToRequest.getName(), true);
 
-                    message.send("teleport", "requestsent");
-                    message.sendTo(playerToRequest, "teleport", "requestedhere", new String[] { commandSender.getName() });
-                    message.sendTo(playerToRequest, "teleport", "acceptdeny");
-
+                    msg.send("teleport", "requestsent");
+                    msg.sendTo(playerToRequest, "teleport", "requestedhere", new String[] { cs.getName() });
+                    msg.sendTo(playerToRequest, "teleport", "acceptdeny");
                 }
                 return true;
             } else {
-                return permission.not();
+                return perms.not();
             }
         } else {
             return false;

@@ -3,6 +3,7 @@ package net.lewmc.essence.commands;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
+import org.bukkit.command.CommandSender;
 
 /**
  * Help command class.
@@ -11,6 +12,7 @@ public class HelpCommand {
     private final MessageUtil message;
     private final String[] args;
     private final Essence plugin;
+    private final CommandSender cs;
 
     /**
      * Constructor for the HelpCommand class.
@@ -18,10 +20,11 @@ public class HelpCommand {
      * @param message MessageUtil - Instance of the MessageUtil class.
      * @param args String[] - Array of command arguments.
      */
-    public HelpCommand(Essence plugin, MessageUtil message, String[] args) {
+    public HelpCommand(Essence plugin, MessageUtil message, String[] args, CommandSender cs) {
         this.plugin = plugin;
         this.message = message;
         this.args = args;
+        this.cs = cs;
     }
 
     /**
@@ -29,7 +32,7 @@ public class HelpCommand {
      * @return If the command was executed correctly.
      */
     public boolean runHelpCommand() {
-        CommandUtil cu = new CommandUtil(this.plugin);
+        CommandUtil cu = new CommandUtil(this.plugin, this.cs);
         if (args.length > 1) {
             if ("inventory".equalsIgnoreCase(args[1])) {
                 if (args.length < 3 || args[2].equals("1")) {

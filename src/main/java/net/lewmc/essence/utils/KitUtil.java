@@ -14,7 +14,6 @@ import java.util.Objects;
 public class KitUtil {
     private final Player player;
     private final Essence plugin;
-    private final MessageUtil message;
 
     /**
      * Constructor for the KitUtil class.
@@ -24,7 +23,6 @@ public class KitUtil {
     public KitUtil(Essence plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
-        this.message = new MessageUtil(player, plugin);
     }
 
     /**
@@ -41,7 +39,7 @@ public class KitUtil {
             return 2;
         }
 
-        PermissionHandler perm = new PermissionHandler(this.player, this.message);
+        PermissionHandler perm = new PermissionHandler(this.plugin, this.player);
 
         if (kitData.get("kits."+kit+".permission") != null && !perm.has(kitData.get("kits."+kit+".permission").toString())) {
             return 1;

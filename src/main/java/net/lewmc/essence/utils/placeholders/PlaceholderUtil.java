@@ -80,7 +80,7 @@ public class PlaceholderUtil {
      * @return String - The string the placeholder becomes.
      */
     public String replaceSingle(String placeholder) {
-        TeamUtil tu = new TeamUtil(this.plugin, new MessageUtil(this.cs, this.plugin));
+        TeamUtil tu = new TeamUtil(this.plugin, new MessageUtil(this.plugin, this.cs));
 
         if (placeholder.equalsIgnoreCase("version")) {
             return this.plugin.getDescription().getVersion();

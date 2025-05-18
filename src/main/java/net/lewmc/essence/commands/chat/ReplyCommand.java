@@ -8,7 +8,6 @@ import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -26,7 +25,7 @@ public class ReplyCommand implements CommandExecutor {
 
     /**
      * /reply command handler.
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -34,39 +33,38 @@ public class ReplyCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
         if (command.getName().equalsIgnoreCase("reply")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            MessageUtil message = new MessageUtil(commandSender, plugin);
-            if (cmd.isDisabled("reply")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("reply")) { return cmd.disabled(); }
 
-            PermissionHandler permission = new PermissionHandler(commandSender, message);
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
             if (!permission.has("essence.chat.reply")) {
                 return permission.not();
             }
 
+            MessageUtil message = new MessageUtil(this.plugin, cs);
+
             if (args.length > 0) {
-                if (this.plugin.msgHistory.containsKey(commandSender)) {
-                    CommandSender p = this.plugin.msgHistory.get(commandSender);
+                if (this.plugin.msgHistory.containsKey(cs)) {
+                    CommandSender p = this.plugin.msgHistory.get(cs);
 
                     String msg = String.join(" ", Arrays.copyOfRange(args, 0, args.length));
 
-                    msg = new PlaceholderUtil(this.plugin, commandSender).replaceAll(msg);
+                    msg = new PlaceholderUtil(this.plugin, cs).replaceAll(msg);
 
-                    String[] repl = new String[]{commandSender.getName(), p.getName(), msg};
+                    String[] repl = new String[]{cs.getName(), p.getName(), msg};
                     message.send("msg", "send", repl);
                     message.sendTo(p, "msg", "send", repl);
 
                     if (this.plugin.msgHistory.containsKey(p)) {
-                        this.plugin.msgHistory.replace(p, commandSender);
+                        this.plugin.msgHistory.replace(p, cs);
                     } else {
-                        this.plugin.msgHistory.put(p, commandSender);
+                        this.plugin.msgHistory.put(p, cs);
                     }
                 } else {
                     message.send("reply", "none");

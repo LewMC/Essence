@@ -20,7 +20,7 @@ public class HomesCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -28,29 +28,24 @@ public class HomesCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            LogUtil log = new LogUtil(this.plugin);
-            log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("homes")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("homes")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("homes")) { return cmd.disabled(); }
+
+            if (!(cs instanceof Player p)) { return new LogUtil(this.plugin).noConsole(); }
+
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 
             if (permission.has("essence.home.list")) {
+                MessageUtil message = new MessageUtil(this.plugin, cs);
+
                 HomeUtil hu = new HomeUtil(this.plugin);
-                StringBuilder setHomes = hu.getHomesList(player);
+                StringBuilder setHomes = hu.getHomesList(p);
 
                 if (setHomes == null) {
                     message.send("home", "noneset");

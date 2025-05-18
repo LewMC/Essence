@@ -26,7 +26,7 @@ public class WarpCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -34,31 +34,28 @@ public class WarpCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-        TeleportUtil teleUtil = new TeleportUtil(this.plugin);
-
         if (command.getName().equalsIgnoreCase("warp")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("warp")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("warp")) { return cmd.disabled(); }
+
+            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
+
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 
             if (permission.has("essence.warp.use")) {
                 int waitTime = plugin.getConfig().getInt("teleportation.warp.wait");
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
+
                 if (args.length > 0) {
-                    if (!teleUtil.cooldownSurpassed(player, "warp")) {
-                        message.send("teleport", "tryagain", new String[] { String.valueOf(teleUtil.cooldownRemaining(player, "warp")) });
+                    TeleportUtil teleUtil = new TeleportUtil(this.plugin);
+
+                    if (!teleUtil.cooldownSurpassed(p, "warp")) {
+                        msg.send("teleport", "tryagain", new String[] { String.valueOf(teleUtil.cooldownRemaining(p, "warp")) });
                         return true;
                     }
 
@@ -66,31 +63,31 @@ public class WarpCommand implements CommandExecutor {
                     config.load("data/warps.yml");
 
                     if (config.get("warps." + args[0].toLowerCase()) == null) {
-                        message.send("warp", "notfound", new String[] { args[0].toLowerCase() });
+                        msg.send("warp", "notfound", new String[] { args[0].toLowerCase() });
                         return true;
                     }
 
                     if (config.getString("warps." + args[0].toLowerCase()+".world") == null) {
                         config.close();
-                        message.send("generic", "exception");
-                        this.log.warn("Player "+player+" attempted to warp to "+args[0].toLowerCase()+" but couldn't due to an error.");
+                        msg.send("generic", "exception");
+                        this.log.warn("Player "+p+" attempted to warp to "+args[0].toLowerCase()+" but couldn't due to an error.");
                         this.log.warn("Error: world is null, please check configuration file.");
                         return true;
                     }
                     LocationUtil locationUtil = new LocationUtil(this.plugin);
-                    locationUtil.UpdateLastLocation(player);
+                    locationUtil.UpdateLastLocation(p);
 
-                    teleUtil.setCooldown(player, "warp");
+                    teleUtil.setCooldown(p, "warp");
 
                     if (Bukkit.getServer().getWorld(config.getString("warps." + args[0].toLowerCase()+".world")) == null) {
                         WorldCreator creator = new WorldCreator(config.getString("warps." + args[0].toLowerCase()+".world"));
                         creator.createWorld();
                     }
 
-                    message.send("warp", "teleporting", new String[] { args[0], waitTime+"" });
+                    msg.send("warp", "teleporting", new String[] { args[0], waitTime+"" });
 
                     teleUtil.doTeleport(
-                            player,
+                            p,
                             Bukkit.getServer().getWorld(Objects.requireNonNull(config.getString("warps." + args[0].toLowerCase()+".world"))),
                             config.getDouble("warps." + args[0].toLowerCase()+".X"),
                             config.getDouble("warps." + args[0].toLowerCase()+".Y"),
@@ -104,10 +101,10 @@ public class WarpCommand implements CommandExecutor {
 
                     return true;
                 } else {
-                    message.send("warp", "usage");
+                    msg.send("warp", "usage");
                 }
             } else {
-                permission.not();
+                return permission.not();
             }
             return true;
         }

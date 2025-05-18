@@ -27,7 +27,7 @@ public class RulesCommands implements CommandExecutor {
 
     /**
     * /rules command handler.
-    * @param commandSender Information about who sent the command - player or console.
+    * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -35,30 +35,27 @@ public class RulesCommands implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
         if (command.getName().equalsIgnoreCase("rules")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            MessageUtil message = new MessageUtil(commandSender, plugin);
-            if (cmd.isDisabled("rules")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("rules")) { return cmd.disabled(); }
 
-            PermissionHandler perms = new PermissionHandler(commandSender, message);
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
             if (perms.has("essence.rules")) {
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
                 try (BufferedReader br = new BufferedReader(new FileReader(this.plugin.getDataFolder() + File.separator + "rules.txt"))) {
                     String rule;
-                    PlaceholderUtil pu = new PlaceholderUtil(this.plugin, commandSender);
+                    PlaceholderUtil pu = new PlaceholderUtil(this.plugin, cs);
                     while ((rule = br.readLine()) != null) {
-                        rule = pu.replaceAll(rule);
-                        message.send("other", "rule", new String[] {rule});
+                        msg.send("other", "rule", new String[] {pu.replaceAll(rule)});
                     }
                 } catch (IOException e) {
                     LogUtil log = new LogUtil(this.plugin);
-                    message.send("generic", "exception");
+                    msg.send("generic", "exception");
                     log.severe("Unable to display rules.");
                     log.severe(e.getMessage());
                     log.severe(Arrays.toString(e.getStackTrace()));

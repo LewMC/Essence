@@ -42,7 +42,7 @@ public class TeleportUtil {
      * @return boolean - If the cooldown has surpassed or not.
      */
     public boolean cooldownSurpassed(Player player, String type) {
-        PermissionHandler perms = new PermissionHandler(player, new MessageUtil(player, this.plugin));
+        PermissionHandler perms = new PermissionHandler(this.plugin, player);
 
         if (perms.has("essence.bypass.teleportcooldown")) {
             return true;
@@ -101,7 +101,7 @@ public class TeleportUtil {
      * @return int - The amount of time remaining.
      */
     public int cooldownRemaining(Player player, String type) {
-        PermissionHandler perms = new PermissionHandler(player, new MessageUtil(player, this.plugin));
+        PermissionHandler perms = new PermissionHandler(this.plugin, player);
 
         if (perms.has("essence.bypass.teleportcooldown")) {
             return 0;
@@ -166,7 +166,7 @@ public class TeleportUtil {
                 pitch
         );
 
-        PermissionHandler perms = new PermissionHandler(player, new MessageUtil(player, this.plugin));
+        PermissionHandler perms = new PermissionHandler(this.plugin, player);
 
         if (perms.has("essence.bypass.teleportdelay")) {
             delay = 0;
@@ -183,7 +183,7 @@ public class TeleportUtil {
      */
     public void doTeleport(Player player, Location location, int delay) {
         FoliaLib flib = new FoliaLib(this.plugin);
-        MessageUtil message = new MessageUtil(player, this.plugin);
+        MessageUtil message = new MessageUtil(this.plugin, player);
         if (location.getWorld() == null) {
             message.send("teleport","exception");
             this.log.severe("Unable to locate world in universe.");
@@ -281,7 +281,7 @@ public class TeleportUtil {
         FileUtil config = new FileUtil(this.plugin);
         config.load("config.yml");
 
-        PermissionHandler ph = new PermissionHandler(requester, new MessageUtil(requester, this.plugin));
+        PermissionHandler ph = new PermissionHandler(this.plugin, requester);
         if (
             !targetPd.getBoolean("user.accepting-teleport-requests") &&
             config.getBoolean("teleportation.extended-toggle") &&

@@ -29,7 +29,7 @@ public class RespawnEvent implements Listener {
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         LogUtil log = new LogUtil(this.plugin);
-        MessageUtil message = new MessageUtil(event.getPlayer(), this.plugin);
+        MessageUtil message = new MessageUtil(this.plugin, event.getPlayer());
 
         FileUtil config = new FileUtil(this.plugin);
         config.load("config.yml");

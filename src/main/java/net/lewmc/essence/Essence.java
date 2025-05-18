@@ -28,7 +28,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
@@ -117,6 +116,11 @@ public class Essence extends JavaPlugin {
      * Vault chat
      */
     public Chat chat;
+
+    /**
+     * Economy symbol.
+     */
+    public String economySymbol = "$";
 
     /**
      * This function runs when Essence is enabled.
@@ -239,6 +243,8 @@ public class Essence extends JavaPlugin {
 
         this.log.info("");
 
+        this.economySymbol = this.getConfig().getString("economy.symbol");
+
         return this.economy != null;
     }
 
@@ -267,7 +273,7 @@ public class Essence extends JavaPlugin {
      * Checks if the server is running Paper, and informs the user that they should upgrade if not.
      */
     private void checkForPaper() {
-        CommandUtil cmd = new CommandUtil(this);
+        CommandUtil cmd = new CommandUtil(this, null);
         if (!cmd.isPaperCompatible()) {
             this.log.severe("You are running " + this.getServer().getName());
             this.log.severe("Some commands have been disabled, please see https://bit.ly/essencepaper for help.");

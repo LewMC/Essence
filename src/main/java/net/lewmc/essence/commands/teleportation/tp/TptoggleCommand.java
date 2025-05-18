@@ -24,7 +24,7 @@ public class TptoggleCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -32,46 +32,39 @@ public class TptoggleCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-            @NotNull CommandSender commandSender,
+            @NotNull CommandSender cs,
             @NotNull Command command,
             @NotNull String s,
             String[] args
     ) {
-        LogUtil log = new LogUtil(this.plugin);
-
-        CommandUtil cmd = new CommandUtil(this.plugin);
-        if (cmd.console(commandSender)) {
-            log.noConsole();
-            return true;
-        }
-
-        Player player = (Player) commandSender;
-
         if (command.getName().equalsIgnoreCase("tptoggle")) {
-            MessageUtil message = new MessageUtil(commandSender, this.plugin);
 
-            if (cmd.isDisabled("tptoggle")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("tptoggle")) { return cmd.disabled(); }
+            if (cmd.console(cs)) { return new LogUtil(this.plugin).noConsole(); }
 
-            PermissionHandler permission = new PermissionHandler(commandSender, message);
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
 
-            if (permission.has("essence.teleport.request.toggle")) {
+            if (perms.has("essence.teleport.request.toggle")) {
                 FileUtil file = new FileUtil(this.plugin);
-                file.load(file.playerDataFile(player.getUniqueId()));
+
+                Player p = (Player) cs;
+                file.load(file.playerDataFile(p.getUniqueId()));
+
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
 
                 if (file.getBoolean("user.accepting-teleport-requests")) {
                     file.set("user.accepting-teleport-requests", false);
-                    message.send("teleport", "toggled", new String[] { "disabled" });
+                    msg.send("teleport", "toggled", new String[] { "disabled" });
                 } else {
                     file.set("user.accepting-teleport-requests", true);
-                    message.send("teleport", "toggled", new String[] { "enabled" });
+                    msg.send("teleport", "toggled", new String[] { "enabled" });
                 }
 
                 file.save();
                 return true;
             } else {
-                return permission.not();
+                return perms.not();
             }
         }
         return false;

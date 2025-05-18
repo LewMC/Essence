@@ -10,13 +10,11 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class StatsUtil {
     private final Player player;
-    private final PermissionHandler permission;
     private final Essence plugin;
 
-    public StatsUtil(Essence plugin, Player player, PermissionHandler permission) {
+    public StatsUtil(Essence plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
-        this.permission = permission;
     }
 
     /**
@@ -24,19 +22,14 @@ public class StatsUtil {
      * @return boolean - Was the operation successful?
      */
     public boolean toggleInvisible() {
-            if (this.permission.has("essence.admin.invisible")) {
-                if (!this.player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                    this.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
-                    MessageUtil message = new MessageUtil(this.player, this.plugin);
-                    message.send("visibility", "invisible", new String[]{this.player.getName()});
-                } else {
-                    this.player.removePotionEffect(PotionEffectType.INVISIBILITY);
-                    MessageUtil message = new MessageUtil(this.player, this.plugin);
-                    message.send("visibility", "visible", new String[]{this.player.getName()});
-                }
-                return true;
-            } else {
-                return this.permission.not();
-            }
+        MessageUtil msg = new MessageUtil(this.plugin, this.player);
+        if (!this.player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+            this.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
+            msg.send("visibility", "invisible", new String[]{this.player.getName()});
+        } else {
+            this.player.removePotionEffect(PotionEffectType.INVISIBILITY);
+            msg.send("visibility", "visible", new String[]{this.player.getName()});
+        }
+        return true;
     }
 }

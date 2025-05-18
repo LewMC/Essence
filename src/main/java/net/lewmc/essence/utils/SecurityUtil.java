@@ -1,6 +1,5 @@
 package net.lewmc.essence.utils;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -13,9 +12,6 @@ public class SecurityUtil {
      * @return boolean - If it has special characters
      */
     public boolean hasSpecialCharacters(String string) {
-        Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(string);
-
-        return m.find();
+        return Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE).matcher(string).find();
     }
 }

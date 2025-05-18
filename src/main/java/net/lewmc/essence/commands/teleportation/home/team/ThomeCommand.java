@@ -27,7 +27,7 @@ public class ThomeCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -35,44 +35,40 @@ public class ThomeCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-        TeleportUtil teleUtil = new TeleportUtil(this.plugin);
-
-        TeamUtil tu = new TeamUtil(this.plugin, message);
-        String team = tu.getPlayerTeam(player.getUniqueId());
-
-        if (team == null) {
-            message.send("team", "noteam");
-            return true;
-        }
-
-        if (!tu.getRule(team, "allow-team-homes")) {
-            message.send("team", "disallowedhomes");
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("thome")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("thome")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("thome")) { return cmd.disabled(); }
 
-            if (permission.has("essence.home.team.use")) {
+            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
+
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+
+            if (perms.has("essence.home.team.use")) {
+
+                MessageUtil message = new MessageUtil(this.plugin, cs);
+                TeleportUtil teleUtil = new TeleportUtil(this.plugin);
+
+                TeamUtil tu = new TeamUtil(this.plugin, message);
+                String team = tu.getPlayerTeam(p.getUniqueId());
+
+                if (team == null) {
+                    message.send("team", "noteam");
+                    return true;
+                }
+
+                if (!tu.getRule(team, "allow-team-homes")) {
+                    message.send("team", "disallowedhomes");
+                    return true;
+                }
 
                 int waitTime = plugin.getConfig().getInt("teleportation.home.wait");
-                if (!teleUtil.cooldownSurpassed(player, "home")) {
-                    message.send("teleport", "tryagain", new String[] { String.valueOf(teleUtil.cooldownRemaining(player, "home")) });
+                if (!teleUtil.cooldownSurpassed(p, "home")) {
+                    message.send("teleport", "tryagain", new String[] { String.valueOf(teleUtil.cooldownRemaining(p, "home")) });
                     return true;
                 }
 
@@ -94,7 +90,7 @@ public class ThomeCommand implements CommandExecutor {
                     homeName = "homes.home";
                     chatHomeName = "home";
                     if (dataUtil.get(homeName) == null) {
-                        if (permission.has("essence.home.team.list")) {
+                        if (perms.has("essence.home.team.list")) {
                             dataUtil.close();
 
                             HomeUtil hu = new HomeUtil(this.plugin);
@@ -116,7 +112,7 @@ public class ThomeCommand implements CommandExecutor {
                 if (dataUtil.get(homeName) == null) {
                     dataUtil.close();
                     message.send("generic", "exception");
-                    this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
+                    this.log.warn("Player " + p + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: Unable to load from configuration file, please check configuration file.");
                     return true;
                 }
@@ -124,15 +120,15 @@ public class ThomeCommand implements CommandExecutor {
                 if (dataUtil.getString(homeName + ".world") == null) {
                     dataUtil.close();
                     message.send("generic", "exception");
-                    this.log.warn("Player " + player + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
+                    this.log.warn("Player " + p + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
                     this.log.warn("Error: world is null, please check configuration file.");
                     return true;
                 }
 
                 LocationUtil locationUtil = new LocationUtil(this.plugin);
-                locationUtil.UpdateLastLocation(player);
+                locationUtil.UpdateLastLocation(p);
 
-                teleUtil.setCooldown(player, "home");
+                teleUtil.setCooldown(p, "home");
 
                 if (Bukkit.getServer().getWorld(dataUtil.getString(homeName + ".world")) == null) {
                     WorldCreator creator = new WorldCreator(dataUtil.getString(homeName + ".world"));
@@ -140,7 +136,7 @@ public class ThomeCommand implements CommandExecutor {
                 }
 
                 teleUtil.doTeleport(
-                        player,
+                        p,
                         Bukkit.getServer().getWorld(Objects.requireNonNull(dataUtil.getString(homeName + ".world"))),
                         dataUtil.getDouble(homeName + ".X"),
                         dataUtil.getDouble(homeName + ".Y"),
@@ -154,7 +150,7 @@ public class ThomeCommand implements CommandExecutor {
                 message.send("teamhome", "teleporting", new String[] { chatHomeName, waitTime + "" });
                 return true;
             } else {
-                return permission.not();
+                return perms.not();
             }
         }
         return false;

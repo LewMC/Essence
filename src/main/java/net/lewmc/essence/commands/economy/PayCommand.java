@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.economy;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.essence.utils.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class PayCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
 
     /**
      * Constructor for the PayCommand class.
@@ -19,12 +19,11 @@ public class PayCommand implements CommandExecutor {
      */
     public PayCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
     }
 
     /**
      * /pay command handler
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -32,57 +31,42 @@ public class PayCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-            @NotNull CommandSender commandSender,
+            @NotNull CommandSender cs,
             @NotNull Command command,
             @NotNull String s,
             String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("pay")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("pay")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("pay")) { return cmd.disabled(); }
+
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 
             if (permission.has("essence.economy.pay")) {
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
                 if (args.length == 2) {
-                    FileUtil senderDataFile = new FileUtil(this.plugin);
-                    senderDataFile.load(senderDataFile.playerDataFile(player));
-
-                    double balance = senderDataFile.getDouble("economy.balance");
-
+                    Economy sender = new Economy(this.plugin, cs);
                     double amount = Double.parseDouble(args[1]);
 
-                    if ((balance - amount) >= 0) {
-                        senderDataFile.set("economy.balance", (balance - amount));
-                        senderDataFile.save();
+                    if ((sender.balance() - amount) >= 0) {
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                                FileUtil recieverDataFile = new FileUtil(this.plugin);
+                                Economy recipient = new Economy(this.plugin, p);
 
-                                recieverDataFile.load(senderDataFile.playerDataFile(p));
-                                double newBalance = recieverDataFile.getDouble("economy.balance") + amount;
-                                recieverDataFile.set("economy.balance", newBalance);
-                                recieverDataFile.save();
+                                recipient.balanceAdd(amount);
+                                sender.balanceSubtract(amount);
 
-                                message.send("economy", "sent", new String[] { plugin.getConfig().getString("economy.symbol") + amount, p.getName() });
-                                message.sendTo(p, "economy", "received", new String[] { (plugin.getConfig().getString("economy.symbol") + amount), player.getName() });
+                                msg.send("economy", "sent", new String[] { this.plugin.economySymbol + amount, p.getName() });
+                                msg.sendTo(p, "economy", "received", new String[] { this.plugin.economySymbol + amount, p.getName() });
                                 return true;
                             }
                         }
-                        message.send("generic", "playernotfound");
+                        msg.send("generic", "playernotfound");
                     } else {
-                        message.send("economy", "insufficientfunds");
+                        msg.send("economy", "insufficientfunds");
                     }
                 } else {
-                    message.send("economy", "payusage");
+                    msg.send("economy", "payusage");
                 }
                 return true;
             } else {

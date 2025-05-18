@@ -26,7 +26,7 @@ public class TeleportCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
@@ -34,26 +34,24 @@ public class TeleportCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        MessageUtil message = new MessageUtil(commandSender, plugin);
-
-        Player player = null;
-
-        if (!console(commandSender)) {
-            player = (Player) commandSender;
-        }
-
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("tp")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("tp")) {
-                return cmd.disabled(message);
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("tp")) { return cmd.disabled(); }
+
+            MessageUtil message = new MessageUtil(this.plugin, cs);
+
+            Player player = null;
+
+            if (!console(cs)) {
+                player = (Player) cs;
             }
+
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 
             if (args.length == 0) {
                 message.send("teleport", "usage");
@@ -65,7 +63,7 @@ public class TeleportCommand implements CommandExecutor {
             // /tp <selector> <x> <y> <z>
             if (args.length >= 4) {
                 boolean isSelf = false;
-                if (commandSender instanceof Player && (args[0].equalsIgnoreCase("@s") || (args[0].equalsIgnoreCase(commandSender.getName())))) {
+                if (cs instanceof Player && (args[0].equalsIgnoreCase("@s") || (args[0].equalsIgnoreCase(cs.getName())))) {
                     isSelf = true;
                 }
 
@@ -79,14 +77,14 @@ public class TeleportCommand implements CommandExecutor {
                     }
                 }
                 String selector = args[0];
-                List<Player> targets = parseSelector(selector, commandSender);
+                List<Player> targets = parseSelector(selector, cs);
                 if (targets.isEmpty()) {
                     message.send("generic", "playernotfound");
                     return true;
                 }
                 double x, y, z;
                 try {
-                    Player ref = (commandSender instanceof Player) ? (Player) commandSender : targets.getFirst();
+                    Player ref = (cs instanceof Player) ? (Player) cs : targets.getFirst();
                     x = args[1].equals("~") ? ref.getLocation().getX() : Double.parseDouble(args[1]);
                     y = args[2].equals("~") ? ref.getLocation().getY() : Double.parseDouble(args[2]);
                     z = args[3].equals("~") ? ref.getLocation().getZ() : Double.parseDouble(args[3]);
@@ -112,8 +110,8 @@ public class TeleportCommand implements CommandExecutor {
                 if (!(permission.has("essence.teleport.other") && permission.has("essence.teleport.player"))) {
                     return permission.not();
                 }
-                List<Player> fromList = parseSelector(args[0], commandSender);
-                List<Player> toList = parseSelector(args[1], commandSender);
+                List<Player> fromList = parseSelector(args[0], cs);
+                List<Player> toList = parseSelector(args[1], cs);
                 if (fromList.isEmpty() || toList.isEmpty()) {
                     message.send("generic", "playernotfound");
                     return true;
@@ -157,7 +155,7 @@ public class TeleportCommand implements CommandExecutor {
                     return permission.not();
                 }
 
-                List<Player> toList = parseSelector(args[0], commandSender);
+                List<Player> toList = parseSelector(args[0], cs);
                 if (toList.isEmpty()) {
                     message.send("generic", "playernotfound");
                     return true;

@@ -29,14 +29,10 @@ public class PlayerDamageEvent implements Listener {
      */
     @EventHandler
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player p1 = (Player) event.getEntity();
-
-            Entity p2 = event.getDamager();
-
-            if (p2 instanceof Player) {
-                TeamUtil team = new TeamUtil(this.plugin, new MessageUtil(p1, this.plugin));
-                if (team.areTeammates(p1, (Player)p2)) {
+        if (event.getEntity() instanceof Player p1) {
+            if (event.getDamager() instanceof Player p2) {
+                TeamUtil team = new TeamUtil(this.plugin, new MessageUtil(this.plugin, p1));
+                if (team.areTeammates(p1, p2)) {
                     if (!team.getRule(team.getPlayerTeam(p1.getUniqueId()), "allow-friendly-fire")) {
                         event.setCancelled(true);
                     }

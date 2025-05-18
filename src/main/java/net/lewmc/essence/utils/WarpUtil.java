@@ -61,7 +61,7 @@ public class WarpUtil {
 
         if (warpsData.get("warps." + warpName) != null) {
             warpsData.close();
-            MessageUtil message = new MessageUtil(this.plugin.getServer().getPlayer(playerUUID), this.plugin);
+            MessageUtil message = new MessageUtil(this.plugin, this.plugin.getServer().getPlayer(playerUUID));
             message.send("warp", "alreadyexists");
             return false;
         }

@@ -23,7 +23,7 @@ public class TpcancelCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs            Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -31,29 +31,21 @@ public class TpcancelCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-            @NotNull CommandSender commandSender,
+            @NotNull CommandSender cs,
             @NotNull Command command,
             @NotNull String s,
             String[] args
     ) {
-        MessageUtil msg = new MessageUtil(commandSender, this.plugin);
-        PermissionHandler permission = new PermissionHandler(commandSender, msg);
-        LogUtil log = new LogUtil(this.plugin);
-
-        CommandUtil cmd = new CommandUtil(this.plugin);
-        if (cmd.console(commandSender)) {
-            log.noConsole();
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("tpcancel")) {
-            if (cmd.isDisabled("tpcancel")) {
-                return cmd.disabled(msg);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("tpcancel")) { return cmd.disabled(); }
+            if (cmd.console(cs)) { new LogUtil(this.plugin).noConsole(); return true; }
+
+            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 
             if (permission.has("essence.teleport.request.cancel")) {
-                TeleportRequestUtil tpru = new TeleportRequestUtil(this.plugin);
-                if (tpru.deleteFromRequester(commandSender.getName())) {
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
+                if (new TeleportRequestUtil(this.plugin).deleteFromRequester(cs.getName())) {
                     msg.send("teleport","canceldone");
                 } else {
                     msg.send("teleport","cancelnone");

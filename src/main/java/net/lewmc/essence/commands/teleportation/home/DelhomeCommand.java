@@ -23,7 +23,7 @@ public class DelhomeCommand implements CommandExecutor {
     }
 
     /**
-     * @param commandSender Information about who sent the command - player or console.
+     * @param cs Information about who sent the command - player or console.
      * @param command       Information about what command was sent.
      * @param s             Command label - not used here.
      * @param args          The command's arguments.
@@ -31,26 +31,20 @@ public class DelhomeCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(
-        @NotNull CommandSender commandSender,
+        @NotNull CommandSender cs,
         @NotNull Command command,
         @NotNull String s,
         String[] args
     ) {
-        if (!(commandSender instanceof Player)) {
-            this.log.noConsole();
-            return true;
-        }
-        MessageUtil message = new MessageUtil(commandSender,plugin);
-        Player player = (Player) commandSender;
-        PermissionHandler permission = new PermissionHandler(commandSender, message);
-
         if (command.getName().equalsIgnoreCase("delhome")) {
-            CommandUtil cmd = new CommandUtil(this.plugin);
-            if (cmd.isDisabled("delhome")) {
-                return cmd.disabled(message);
-            }
+            CommandUtil cmd = new CommandUtil(this.plugin, cs);
+            if (cmd.isDisabled("delhome")) { return cmd.disabled(); }
 
-            if (permission.has("essence.home.delete")) {
+            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
+
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+
+            if (perms.has("essence.home.delete")) {
                 String name;
                 if (args.length == 0) {
                     name = "home";
@@ -59,25 +53,26 @@ public class DelhomeCommand implements CommandExecutor {
                 }
 
                 FileUtil config = new FileUtil(this.plugin);
-                config.load(config.playerDataFile(player));
+                config.load(config.playerDataFile(p));
 
                 String homeName = name.toLowerCase();
 
+                MessageUtil msg = new MessageUtil(this.plugin, cs);
                 if (config.get("homes."+homeName) == null) {
                     config.close();
-                    message.send("home", "notfound", new String[] { name });
+                    msg.send("home", "notfound", new String[] { name });
                     return true;
                 }
 
                 if (config.remove("homes."+homeName)) {
-                    message.send("home", "deleted", new String[] { homeName });
+                    msg.send("home", "deleted", new String[] { homeName });
                 } else {
-                    message.send("generic", "exception");
+                    msg.send("generic", "exception");
                 }
 
                 config.save();
             } else {
-                permission.not();
+                return perms.not();
             }
             return true;
         }
