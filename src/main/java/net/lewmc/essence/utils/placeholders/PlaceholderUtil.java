@@ -1,11 +1,7 @@
 package net.lewmc.essence.utils.placeholders;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.PlayerUtil;
-import net.lewmc.essence.utils.TeamUtil;
-import net.lewmc.essence.utils.economy.Economy;
+import net.lewmc.essence.utils.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -122,7 +118,13 @@ public class PlaceholderUtil {
         } else if (placeholder.equalsIgnoreCase("player_suffix")) {
             return new PlayerUtil(this.plugin, cs).getPlayerSuffix();
         } else if (placeholder.equalsIgnoreCase("balance")) {
-            return this.plugin.economySymbol + new Economy(this.plugin, cs).balance();
+            if (cs instanceof Player p) {
+                FileUtil pf = new FileUtil(this.plugin);
+                pf.load(pf.playerDataFile(p));
+                return this.plugin.economySymbol + pf.getDouble("economy.balance");
+            } else {
+                return this.plugin.economySymbol + "Infinity";
+            }
         } else {
             return placeholder;
         }

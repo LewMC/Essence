@@ -76,6 +76,7 @@ public class NickCommand implements CommandExecutor {
 
                 if (pu.setPlayerDisplayname(player, args[1])) {
                     msg.send("nick","successother", new String[]{args[0], args[1]});
+                    msg.sendTo(player, "nick","changedby", new String[]{cs.getName(), args[1]});
                 }
             } else {
                 msg.send("nick","usage");
