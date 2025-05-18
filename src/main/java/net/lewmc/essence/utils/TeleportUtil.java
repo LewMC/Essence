@@ -201,6 +201,7 @@ public class TeleportUtil {
                 if (teleportIsValid(player)) {
                     player.teleportAsync(location);
                     setTeleportStatus(player, false);
+                    new LocationUtil(plugin).UpdateLastLocation(player);
                 }
             }, delay * 20L);
         } else {
@@ -210,6 +211,7 @@ public class TeleportUtil {
                     if (teleportIsValid(player)) {
                         player.teleport(location);
                         setTeleportStatus(player, false);
+                        new LocationUtil(plugin).UpdateLastLocation(player);
                     }
                 }
             }.runTaskLater(plugin, delay * 20L);
@@ -263,6 +265,29 @@ public class TeleportUtil {
             return false;
         } else {
             return this.plugin.teleportingPlayers.contains(player.getUniqueId());
+        }
+    }
+
+    /**
+     * Is the teleport blocked by the teleport toggle?
+     * @param requester The player requesting the teleport.
+     * @param target The target of the teleport.
+     * @return true - Teleport can proceed, false - Teleport should be blocked.
+     */
+    public boolean teleportToggleCheck(Player requester, Player target) {
+        FileUtil targetPd = new FileUtil(this.plugin);
+        PermissionHandler ph = new PermissionHandler(requester, new MessageUtil(requester, this.plugin));
+        targetPd.load(targetPd.playerDataFile(target));
+        if (
+            !targetPd.getBoolean("user.accepting-teleport-requests") &&
+            this.plugin.getConfig().getBoolean("extended-toggle") &&
+            !(ph.has("essence.bypass.extendedteleporttoggle"))
+        ) {
+            targetPd.close();
+            return false;
+        } else {
+            targetPd.close();
+            return true;
         }
     }
 }
