@@ -191,7 +191,7 @@ public class PlayerUtil {
     /**
      * Gets a player's display name.
      * @param p Player - The player to check.
-     * @return
+     * @return The display name.
      */
     public String getPlayerDisplayname(Player p) {
         FileUtil pf = new FileUtil(this.plugin);

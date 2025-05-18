@@ -2,15 +2,12 @@ package net.lewmc.essence.commands.chat;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
-import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
 
 public class NickCommand implements CommandExecutor {
     private final Essence plugin;

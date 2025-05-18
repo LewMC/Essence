@@ -2,18 +2,15 @@ package net.lewmc.essence.utils.economy;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.FileUtil;
-import net.lewmc.essence.utils.LogUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Economy {
-    private final Essence plugin;
     private Player p;
     private FileUtil file;
     private boolean isConsole = false;
 
     public Economy(Essence plugin, CommandSender cs) {
-        this.plugin = plugin;
         if (cs instanceof Player p) {
             this.p = p;
             this.file = new FileUtil(plugin);
