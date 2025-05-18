@@ -159,7 +159,7 @@ public class UpdateUtil {
      * Migrates old Essence files.
      */
     private void migrate() {
-        // Language.
+        // NEW LANGUAGE FILES.
         if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
             FileUtil config = new FileUtil(this.plugin);
             config.load("config.yml");
@@ -169,6 +169,65 @@ public class UpdateUtil {
             config.set("language", "en-GB");
             config.save();
             this.plugin.reloadConfig();
+        }
+
+        // NEW PLACEHOLDER SYSTEM (1.9.0+)
+        FileUtil f = new FileUtil(this.plugin);
+        f.load("config.yml");
+        if (f.getInt("config-version") == 1) {
+            LogUtil log = new LogUtil(this.plugin);
+            log.info("Essence is updating your configuration file, please wait...");
+
+            log.info("[1/4] Updating first join message...");
+            String firstJoin = f.getString("broadcasts.first-join");
+            firstJoin = firstJoin.replace("{{essence-version}}", "%essence_version%");
+            firstJoin = firstJoin.replace("{{minecraft-version}}", "%essence_minecraft_version%");
+            firstJoin = firstJoin.replace("{{time}}", "%essence_time%");
+            firstJoin = firstJoin.replace("{{date}}", "%essence_date%");
+            firstJoin = firstJoin.replace("{{datetime}}", "%essence_datetime%");
+            firstJoin = firstJoin.replace("{{player}}", "%essence_player%");
+            f.set("broadcasts.first-join", firstJoin);
+            log.info("[1/4] Done.");
+
+            log.info("[2/4] Updating join message...");
+            String join = f.getString("broadcasts.join");
+            join = join.replace("{{essence-version}}", "%essence_version%");
+            join = join.replace("{{minecraft-version}}", "%essence_minecraft_version%");
+            join = join.replace("{{time}}", "%essence_time%");
+            join = join.replace("{{date}}", "%essence_date%");
+            join = join.replace("{{datetime}}", "%essence_datetime%");
+            join = join.replace("{{player}}", "%essence_player%");
+            f.set("broadcasts.join", join);
+            log.info("[2/4] Done.");
+
+            log.info("[3/4] Updating leaving message...");
+            String leave = f.getString("broadcasts.leave");
+            leave = leave.replace("{{essence-version}}", "%essence_version%");
+            leave = leave.replace("{{minecraft-version}}", "%essence_minecraft_version%");
+            leave = leave.replace("{{time}}", "%essence_time%");
+            leave = leave.replace("{{date}}", "%essence_date%");
+            leave = leave.replace("{{datetime}}", "%essence_datetime%");
+            leave = leave.replace("{{player}}", "%essence_player%");
+            f.set("broadcasts.leave", leave);
+            log.info("[3/4] Done.");
+
+            log.info("[4/4] Updating MOTD...");
+            String motd = f.getString("motd.message");
+            motd = motd.replace("{{essence-version}}", "%essence_version%");
+            motd = motd.replace("{{minecraft-version}}", "%essence_minecraft_version%");
+            motd = motd.replace("{{time}}", "%essence_time%");
+            motd = motd.replace("{{date}}", "%essence_date%");
+            motd = motd.replace("{{datetime}}", "%essence_datetime%");
+            motd = motd.replace("{{player}}", "%essence_player%");
+            f.set("motd.message", motd);
+            log.info("[4/4] Done.");
+
+            f.set("config-version", 2);
+            f.save();
+            f.close();
+
+            log.info("Done.");
+            log.info("");
         }
     }
 }

@@ -4,9 +4,11 @@ import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class BroadcastCommand implements CommandExecutor {
@@ -54,7 +56,8 @@ public class BroadcastCommand implements CommandExecutor {
                 for (String arg : args) {
                     broadcastMessage.append(arg).append(" ");
                 }
-                message.broadcast(broadcastMessage.toString());
+                String finalBroadcastMessage = new PlaceholderUtil(this.plugin, commandSender).replaceAll(broadcastMessage.toString());
+                message.broadcast(finalBroadcastMessage);
             } else {
                 message.send("broadcast","usage");
             }

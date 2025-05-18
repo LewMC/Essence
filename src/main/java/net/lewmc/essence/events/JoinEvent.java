@@ -2,6 +2,7 @@ package net.lewmc.essence.events;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.WorldCreator;
@@ -169,8 +170,8 @@ public class JoinEvent implements Listener {
         if (plugin.getConfig().getString("motd.message") != null) {
             String message = plugin.getConfig().getString("motd.message");
             if (message != null) {
-                TagUtil tag = new TagUtil(plugin, event.getPlayer());
-                event.getPlayer().sendMessage(tag.doReplacement(message));
+                PlaceholderUtil tag = new PlaceholderUtil(plugin, event.getPlayer());
+                event.getPlayer().sendMessage(tag.replaceAll(message));
             }
         }
     }
@@ -180,11 +181,11 @@ public class JoinEvent implements Listener {
      * @param event PlayerJoinEvent - The event
      */
     private void playerJoinMessage(PlayerJoinEvent event) {
-        TagUtil tag = new TagUtil(this.plugin, event.getPlayer());
+        PlaceholderUtil tag = new PlaceholderUtil(this.plugin, event.getPlayer());
         if (event.getPlayer().hasPlayedBefore()) {
-            event.setJoinMessage(tag.doReplacement(this.plugin.getConfig().getString("broadcasts.join")));
+            event.setJoinMessage(tag.replaceAll(this.plugin.getConfig().getString("broadcasts.join")));
         } else {
-            event.setJoinMessage(tag.doReplacement(this.plugin.getConfig().getString("broadcasts.first-join")));
+            event.setJoinMessage(tag.replaceAll(this.plugin.getConfig().getString("broadcasts.first-join")));
         }
     }
 

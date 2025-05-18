@@ -5,6 +5,7 @@ import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -50,7 +51,9 @@ public class RulesCommands implements CommandExecutor {
             if (perms.has("essence.rules")) {
                 try (BufferedReader br = new BufferedReader(new FileReader(this.plugin.getDataFolder() + File.separator + "rules.txt"))) {
                     String rule;
+                    PlaceholderUtil pu = new PlaceholderUtil(this.plugin, commandSender);
                     while ((rule = br.readLine()) != null) {
+                        rule = pu.replaceAll(rule);
                         message.send("other", "rule", new String[] {rule});
                     }
                 } catch (IOException e) {

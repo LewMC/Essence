@@ -2,11 +2,9 @@ package net.lewmc.essence.events;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.LocationUtil;
-import net.lewmc.essence.utils.MessageUtil;
-import net.lewmc.essence.utils.TagUtil;
+import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
@@ -32,7 +30,7 @@ public class LeaveEvent implements Listener {
         LocationUtil locationUtil = new LocationUtil(this.plugin);
         locationUtil.UpdateLastLocation(event.getPlayer());
 
-        TagUtil tag = new TagUtil(this.plugin, event.getPlayer());
-        event.setQuitMessage(tag.doReplacement(this.plugin.getConfig().getString("broadcasts.leave")));
+        PlaceholderUtil tag = new PlaceholderUtil(this.plugin, event.getPlayer());
+        event.setQuitMessage(tag.replaceAll(this.plugin.getConfig().getString("broadcasts.leave")));
     }
 }

@@ -20,9 +20,9 @@ motd:
 # BROADCASTS
 # These are some predefined broadcasts that fire at specific times.
 broadcasts:
-  first-join: "§a{{player}} joined the server for the first time!"
-  join: "§e{{player}} joined the server!"
-  leave: "§c{{player}} left the server!"
+  first-join: "§a%essence_player% joined the server for the first time!"
+  join: "§e%essence_player% joined the server!"
+  leave: "§c%essence_player% left the server!"
 
 # SPAWN KITS
 # Players are given these kits when they first join the server.
@@ -75,4 +75,4 @@ disabled-commands-feedback: true
 verbose: false
 
 # Do not change this!
-config-version: 1
+config-version: 2

@@ -92,6 +92,11 @@ public class Essence extends JavaPlugin {
     public Random rand = new Random();
 
     /**
+     * Stores if PlaceholderAPI is being used.
+     */
+    public boolean usingPAPI = false;
+
+    /**
      * This function runs when Essence is enabled.
      */
     @Override
@@ -150,8 +155,10 @@ public class Essence extends JavaPlugin {
         update.UpdateConfig();
         update.UpdateLanguage();
 
+        this.registerPAPIExpansion();
         this.checkLanguageSystem();
 
+        this.log.info("");
         this.log.info("Startup completed.");
 
         if (Objects.equals(System.getProperty("ESSENCE_LOADED", ""), "TRUE")) {
@@ -404,5 +411,21 @@ public class Essence extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerBedEnter(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new LeaveEvent(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PlayerMove(this), this);
+    }
+
+    /**
+     * Registers Essence's PlaceholderAPIExpansion
+     */
+    private void registerPAPIExpansion() {
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new EssencePAPIExpansion(this).register();
+            usingPAPI = true;
+            this.log.info("Placeholder API is installed, registered placeholders.");
+        } else {
+            usingPAPI = false;
+            if (this.verbose) {
+                this.log.info("Placeholder API is not installed, placeholders not registered.");
+            }
+        }
     }
 }

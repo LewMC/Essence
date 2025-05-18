@@ -4,6 +4,7 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -56,7 +57,11 @@ public class MsgCommand implements CommandExecutor {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
                         String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+
+                        msg = new PlaceholderUtil(this.plugin, commandSender).replaceAll(msg);
+
                         String[] repl = new String[] {commandSender.getName(), p.getName(), msg};
+
                         message.send("msg", "send", repl);
                         message.sendTo(p, "msg", "send", repl);
 

@@ -4,9 +4,11 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -54,6 +56,9 @@ public class ReplyCommand implements CommandExecutor {
                     CommandSender p = this.plugin.msgHistory.get(commandSender);
 
                     String msg = String.join(" ", Arrays.copyOfRange(args, 0, args.length));
+
+                    msg = new PlaceholderUtil(this.plugin, commandSender).replaceAll(msg);
+
                     String[] repl = new String[]{commandSender.getName(), p.getName(), msg};
                     message.send("msg", "send", repl);
                     message.sendTo(p, "msg", "send", repl);
