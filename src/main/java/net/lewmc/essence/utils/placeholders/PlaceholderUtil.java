@@ -5,6 +5,7 @@ import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PlayerUtil;
 import net.lewmc.essence.utils.TeamUtil;
+import net.lewmc.essence.utils.economy.Economy;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -69,6 +70,7 @@ public class PlaceholderUtil {
             text = text.replace("%essence_combined_prefix%", this.replaceSingle("combined_prefix"));
             text = text.replace("%essence_player_prefix%", this.replaceSingle("player_prefix"));
             text = text.replace("%essence_player_suffix%", this.replaceSingle("player_suffix"));
+            text = text.replace("%essence_balance%", this.replaceSingle("balance"));
         }
 
         return text;
@@ -116,6 +118,8 @@ public class PlaceholderUtil {
             return new PlayerUtil(this.plugin, cs).getPlayerPrefix();
         } else if (placeholder.equalsIgnoreCase("player_suffix")) {
             return new PlayerUtil(this.plugin, cs).getPlayerSuffix();
+        } else if (placeholder.equalsIgnoreCase("balance")) {
+            return this.plugin.economySymbol + new Economy(this.plugin, cs).balance();
         } else {
             return placeholder;
         }
