@@ -14,3 +14,4 @@ net.lewmc.essence.events
 net.lewmc.essence.tabcompleter
 net.lewmc.essence.utils
 net.lewmc.essence.utils.economy
+net.lewmc.essence.utils.placeholders
