@@ -199,9 +199,9 @@ public class TeleportUtil {
         if (flib.isFolia()) {
             flib.getImpl().runAtEntityLater(player, () -> {
                 if (teleportIsValid(player)) {
+                    new LocationUtil(plugin).UpdateLastLocation(player);
                     player.teleportAsync(location);
                     setTeleportStatus(player, false);
-                    new LocationUtil(plugin).UpdateLastLocation(player);
                 }
             }, delay * 20L);
         } else {
@@ -209,9 +209,9 @@ public class TeleportUtil {
                 @Override
                 public void run() {
                     if (teleportIsValid(player)) {
+                        new LocationUtil(plugin).UpdateLastLocation(player);
                         player.teleport(location);
                         setTeleportStatus(player, false);
-                        new LocationUtil(plugin).UpdateLastLocation(player);
                     }
                 }
             }.runTaskLater(plugin, delay * 20L);
@@ -276,17 +276,23 @@ public class TeleportUtil {
      */
     public boolean teleportToggleCheck(Player requester, Player target) {
         FileUtil targetPd = new FileUtil(this.plugin);
-        PermissionHandler ph = new PermissionHandler(requester, new MessageUtil(requester, this.plugin));
         targetPd.load(targetPd.playerDataFile(target));
+
+        FileUtil config = new FileUtil(this.plugin);
+        config.load("config.yml");
+
+        PermissionHandler ph = new PermissionHandler(requester, new MessageUtil(requester, this.plugin));
         if (
             !targetPd.getBoolean("user.accepting-teleport-requests") &&
-            this.plugin.getConfig().getBoolean("extended-toggle") &&
+            config.getBoolean("teleportation.extended-toggle") &&
             !(ph.has("essence.bypass.extendedteleporttoggle"))
         ) {
             targetPd.close();
+            config.close();
             return false;
         } else {
             targetPd.close();
+            config.close();
             return true;
         }
     }

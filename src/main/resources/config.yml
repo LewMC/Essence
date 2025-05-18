@@ -53,6 +53,7 @@ teleportation:
   requests:
     cooldown: 10
     default-enabled: true
+  extended-toggle: false
 
 # LANGUAGE
 # The file that will be used to display messages.

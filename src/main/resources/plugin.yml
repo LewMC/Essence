@@ -533,6 +533,8 @@ permissions:
     description: Allows bypassing the teleportation cooldown.
   essence.bypass.teleportdelay:
     description: Allows bypassing the teleportation delay.
+  essence.bypass.extendedteleporttoggle:
+    description: Allows bypassing the extended teleport toggles.
   essence.bypass.maxkitclaims:
     description: Allows bypassing the maximum number of kit redemptions.
   essence.rules:
