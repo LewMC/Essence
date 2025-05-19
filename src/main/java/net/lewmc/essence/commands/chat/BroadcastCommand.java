@@ -3,14 +3,12 @@ package net.lewmc.essence.commands.chat;
 import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.PermissionHandler;
 import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
+import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
-public class BroadcastCommand implements CommandExecutor {
+public class BroadcastCommand extends FoundryCommand {
     private final Essence plugin;
 
     /**
@@ -22,6 +20,15 @@ public class BroadcastCommand implements CommandExecutor {
     }
 
     /**
+     * The permission required to run the command.
+     * @return String - The permission string.
+     */
+    @Override
+    protected String requiredPermission() {
+        return "essence.chat.broadcast";
+    }
+
+    /**
      * /broadcast command handler.
      * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
@@ -30,32 +37,20 @@ public class BroadcastCommand implements CommandExecutor {
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(
-        @NotNull CommandSender cs,
-        @NotNull Command command,
-        @NotNull String s,
-        String[] args
-    ) {
-        if (command.getName().equalsIgnoreCase("broadcast")) {
-            CommandUtil cmd = new CommandUtil(this.plugin, cs);
-            if (cmd.isDisabled("broadcast")) { return cmd.disabled(); }
+    protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
+        CommandUtil cmd = new CommandUtil(this.plugin, cs);
+        if (cmd.isDisabled("broadcast")) { return cmd.disabled(); }
 
-            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
-            if (!permission.has("essence.chat.broadcast")) { return permission.not(); }
+        MessageUtil msg = new MessageUtil(this.plugin, cs);
 
-            MessageUtil msg = new MessageUtil(this.plugin, cs);
-
-            if (args.length > 0) {
-                StringBuilder broadcastMessage = new StringBuilder();
-                for (String arg : args) { broadcastMessage.append(arg).append(" "); }
-                msg.broadcast(new PlaceholderUtil(this.plugin, cs).replaceAll(broadcastMessage.toString()));
-            } else {
-                msg.send("broadcast","usage");
-            }
-
-            return true;
+        if (args.length > 0) {
+            StringBuilder broadcastMessage = new StringBuilder();
+            for (String arg : args) { broadcastMessage.append(arg).append(" "); }
+            msg.broadcast(new PlaceholderUtil(this.plugin, cs).replaceAll(broadcastMessage.toString()));
+        } else {
+            msg.send("broadcast","usage");
         }
 
-        return false;
+        return true;
     }
 }
