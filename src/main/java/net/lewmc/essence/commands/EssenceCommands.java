@@ -2,6 +2,7 @@ package net.lewmc.essence.commands;
 
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -55,7 +56,7 @@ public class EssenceCommands implements CommandExecutor {
                 message.send("about", "description");
                 message.send("about", "author");
                 if (!Objects.equals(this.plugin.getConfig().getString("language"), "en-GB")) {
-                    FileUtil lang = new FileUtil(this.plugin);
+                    Files lang = new Files(this.plugin.config, this.plugin);
                     lang.load("language/"+this.plugin.getConfig().getString("language")+".yml");
                     message.send("about", "authorLang", new String[] { lang.getString("meta.language"), lang.getString("meta.author") });
                     lang.close();

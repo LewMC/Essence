@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.warp;
 
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
@@ -60,7 +61,7 @@ public class WarpCommand implements CommandExecutor {
                         return true;
                     }
 
-                    FileUtil config = new FileUtil(this.plugin);
+                    Files config = new Files(this.plugin.config, this.plugin);
                     config.load("data/warps.yml");
 
                     if (config.get("warps." + args[0].toLowerCase()) == null) {

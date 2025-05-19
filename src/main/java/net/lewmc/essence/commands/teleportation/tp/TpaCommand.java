@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.tp;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -61,7 +62,7 @@ public class TpaCommand implements CommandExecutor {
                         return true;
                     }
 
-                    FileUtil playerData = new FileUtil(this.plugin);
+                    Files playerData = new Files(this.plugin.config, this.plugin);
                     playerData.load(playerData.playerDataFile(playerToRequest));
                     if (!playerData.getBoolean("user.accepting-teleport-requests")) {
                         msg.send("teleport", "requestsdisabled", new String[] { playerToRequest.getName() });

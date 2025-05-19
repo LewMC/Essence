@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.warp;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -45,7 +46,7 @@ public class WarpsCommand implements CommandExecutor {
             if (perms.has("essence.warp.list")) {
                 MessageUtil msg = new MessageUtil(this.plugin, cs);
 
-                FileUtil data = new FileUtil(this.plugin);
+                Files data = new Files(this.plugin.config, this.plugin);
                 data.load("/data/warps.yml");
 
                 Set<String> keys = data.getKeys("warps", false);

@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -74,7 +75,7 @@ public class SpawnCommand implements CommandExecutor {
                     spawnName = loc.getWorld().getName();
                 }
 
-                FileUtil spawnData = new FileUtil(this.plugin);
+                Files spawnData = new Files(this.plugin.config, this.plugin);
                 spawnData.load("data/spawns.yml");
 
                 Location teleportLocation;

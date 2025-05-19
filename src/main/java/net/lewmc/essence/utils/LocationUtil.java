@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -22,7 +23,7 @@ public class LocationUtil {
     }
 
     public void UpdateLastLocation(Player player) {
-        FileUtil playerData = new FileUtil(this.plugin);
+        Files playerData = new Files(this.plugin.config, this.plugin);
         playerData.load(playerData.playerDataFile(player));
 
         playerData.set("last-location.world", player.getLocation().getWorld().getName());

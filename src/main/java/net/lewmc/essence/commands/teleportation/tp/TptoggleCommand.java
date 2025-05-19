@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.tp;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -47,7 +48,7 @@ public class TptoggleCommand implements CommandExecutor {
             PermissionHandler perms = new PermissionHandler(this.plugin, cs);
 
             if (perms.has("essence.teleport.request.toggle")) {
-                FileUtil file = new FileUtil(this.plugin);
+                Files file = new Files(this.plugin.config, this.plugin);
 
                 Player p = (Player) cs;
                 file.load(file.playerDataFile(p.getUniqueId()));

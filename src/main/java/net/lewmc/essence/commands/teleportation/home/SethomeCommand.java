@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.home;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.Security;
 import org.bukkit.Location;
@@ -55,7 +56,7 @@ public class SethomeCommand implements CommandExecutor {
                 }
 
                 Location loc = p.getLocation();
-                FileUtil playerData = new FileUtil(this.plugin);
+                Files playerData = new Files(this.plugin.config, this.plugin);
                 playerData.load(playerData.playerDataFile(p));
 
                 Security sec = new Security(this.plugin.config);

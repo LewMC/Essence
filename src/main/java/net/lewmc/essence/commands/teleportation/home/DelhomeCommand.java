@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.home;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -53,7 +54,7 @@ public class DelhomeCommand implements CommandExecutor {
                     name = args[0];
                 }
 
-                FileUtil config = new FileUtil(this.plugin);
+                Files config = new Files(this.plugin.config, this.plugin);
                 config.load(config.playerDataFile(p));
 
                 String homeName = name.toLowerCase();

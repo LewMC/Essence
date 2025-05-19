@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
@@ -61,7 +62,7 @@ public class PlayerUtil {
      * @return boolean - If the operation was successful.
      */
     public boolean createPlayerData() {
-        FileUtil playerFile = new FileUtil(this.plugin);
+        Files playerFile = new Files(this.plugin.config, this.plugin);
         Player player = (Player) this.cs;
 
         if (!playerFile.exists(playerFile.playerDataFile(player.getUniqueId()))) {
@@ -84,7 +85,7 @@ public class PlayerUtil {
             double balance,
             boolean acceptingPayments
     ) {
-        FileUtil playerFile = new FileUtil(this.plugin);
+        Files playerFile = new Files(this.plugin.config, this.plugin);
         Player player = (Player) this.cs;
 
         Logger log = new Logger(this.plugin.config);
@@ -129,7 +130,7 @@ public class PlayerUtil {
      * @return boolean - If the operation was successful.
      */
     public boolean updatePlayerData() {
-        FileUtil playerFile = new FileUtil(this.plugin);
+        Files playerFile = new Files(this.plugin.config, this.plugin);
         Player player = (Player) this.cs;
 
         Logger log = new Logger(this.plugin.config);
@@ -205,7 +206,7 @@ public class PlayerUtil {
      * @return The display name.
      */
     public String getPlayerDisplayname(Player p) {
-        FileUtil pf = new FileUtil(this.plugin);
+        Files pf = new Files(this.plugin.config, this.plugin);
         pf.load(pf.playerDataFile(p));
         String nickname = pf.getString("user.nickname");
         pf.close();
@@ -224,7 +225,7 @@ public class PlayerUtil {
      * @return true/false success.
      */
     public boolean setPlayerDisplayname(Player p, String nickname) {
-        FileUtil pf = new FileUtil(this.plugin);
+        Files pf = new Files(this.plugin.config, this.plugin);
         pf.load(pf.playerDataFile(p));
 
         boolean success = pf.set("user.nickname", nickname);
@@ -240,7 +241,7 @@ public class PlayerUtil {
      * @return true/false success.
      */
     public boolean removePlayerDisplayname(Player p) {
-        FileUtil pf = new FileUtil(this.plugin);
+        Files pf = new Files(this.plugin.config, this.plugin);
         pf.load(pf.playerDataFile(p));
 
         boolean success = pf.delete("user.nickname");

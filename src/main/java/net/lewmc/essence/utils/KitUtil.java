@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +32,7 @@ public class KitUtil {
      * @return int - Result of operation. 0 = Successful, 1 = No Permission, 2 = Kit is missing, 3 = Claimed too many times.
      */
     public int giveKit(String kit) {
-        FileUtil kitData = new FileUtil(this.plugin);
+        Files kitData = new Files(this.plugin.config, this.plugin);
 
         kitData.load("data/kits.yml");
 
@@ -47,8 +48,7 @@ public class KitUtil {
 
         Object max = kitData.get("kits."+kit+".maxclaims");
 
-
-        FileUtil playerData = new FileUtil(this.plugin);
+        Files playerData = new Files(this.plugin.config, this.plugin);
         playerData.load(playerData.playerDataFile(this.player));
 
         Object claims = playerData.get("kits." + kit + ".claims");

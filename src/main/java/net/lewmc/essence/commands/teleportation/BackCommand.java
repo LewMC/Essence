@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -48,7 +49,7 @@ public class BackCommand implements CommandExecutor {
 
             if (perms.has("essence.teleport.back")) {
                 MessageUtil msg = new MessageUtil(this.plugin, cs);
-                FileUtil playerData = new FileUtil(this.plugin);
+                Files playerData = new Files(this.plugin.config, this.plugin);
 
                 playerData.load(playerData.playerDataFile(p));
 

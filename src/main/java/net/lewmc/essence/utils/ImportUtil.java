@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -34,7 +35,7 @@ public class ImportUtil {
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
             for (File child : directoryListing) {
-                FileUtil file = new FileUtil(this.plugin);
+                Files file = new Files(this.plugin.config, this.plugin);
                 file.loadNoReformat(child);
                 WarpUtil warp = new WarpUtil(this.plugin);
 
@@ -74,7 +75,7 @@ public class ImportUtil {
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
             for (File child : directoryListing) {
-                FileUtil file = new FileUtil(this.plugin);
+                Files file = new Files(this.plugin.config, this.plugin);
                 file.loadNoReformat(child);
                 Set<String> homes = file.getKeys("homes", false);
 
@@ -116,7 +117,7 @@ public class ImportUtil {
      */
     public boolean essentialsSpawns() {
         boolean success = false;
-        FileUtil file = new FileUtil(this.plugin);
+        Files file = new Files(this.plugin.config, this.plugin);
 
         if (file.exists(this.plugin.getServer().getPluginsFolder() + "/Essentials/spawn.yml")) {
             file.loadNoReformat(new File(this.plugin.getServer().getPluginsFolder() + "/Essentials/spawn.yml"));
@@ -125,7 +126,7 @@ public class ImportUtil {
             if (spawns != null) {
                 for (String esxName : spawns) {
                     if (file.getString("spawns." + esxName) != null) {
-                        FileUtil spawnFile = new FileUtil(this.plugin);
+                        Files spawnFile = new Files(this.plugin.config, this.plugin);
 
 
                         spawnFile.load("data/spawns.yml");

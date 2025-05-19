@@ -3,6 +3,7 @@ package net.lewmc.essence.events;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -58,7 +59,7 @@ public class JoinEvent implements Listener {
             this.showUpdateAlert(event);
         }
 
-        FileUtil playerFile = new FileUtil(plugin);
+        Files playerFile = new Files(plugin.config, this.plugin);
         String playerDataFile = playerFile.playerDataFile(event.getPlayer());
 
         PlayerUtil pu = new PlayerUtil(this.plugin, event.getPlayer());
@@ -90,7 +91,7 @@ public class JoinEvent implements Listener {
     private void spawn(PlayerJoinEvent event, Logger log) {
         MessageUtil message = new MessageUtil(this.plugin, event.getPlayer());
 
-        FileUtil essenceConfiguration = new FileUtil(this.plugin);
+        Files essenceConfiguration = new Files(this.plugin.config, this.plugin);
         if (!essenceConfiguration.load("config.yml")) {
             log.severe("Unable to load configuration file 'config.yml'. Essence may be unable to set some player data");
             return;
@@ -99,7 +100,7 @@ public class JoinEvent implements Listener {
         String spawnName = essenceConfiguration.get("teleportation.spawn.main-spawn-world").toString();
         essenceConfiguration.close();
 
-        FileUtil spawnConfiguration = new FileUtil(this.plugin);
+        Files spawnConfiguration = new Files(this.plugin.config, this.plugin);
         if (!spawnConfiguration.load("data/spawns.yml")) {
             log.severe("Unable to load configuration file 'data/spawns.yml'. Essence may be unable to teleport players to the correct spawn");
             return;

@@ -2,6 +2,7 @@ package net.lewmc.essence.utils.placeholders;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -120,7 +121,7 @@ public class PlaceholderUtil {
             return new PlayerUtil(this.plugin, cs).getPlayerSuffix();
         } else if (placeholder.equalsIgnoreCase("balance")) {
             if (cs instanceof Player p) {
-                FileUtil pf = new FileUtil(this.plugin);
+                Files pf = new Files(this.plugin.config, this.plugin);
                 pf.load(pf.playerDataFile(p));
                 return this.plugin.economySymbol + pf.getDouble("economy.balance");
             } else {

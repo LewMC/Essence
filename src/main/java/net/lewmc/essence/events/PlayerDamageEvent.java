@@ -3,7 +3,6 @@ package net.lewmc.essence.events;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.TeamUtil;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

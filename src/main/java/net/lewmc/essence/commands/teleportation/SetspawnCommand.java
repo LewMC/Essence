@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -47,7 +48,7 @@ public class SetspawnCommand implements CommandExecutor {
             PermissionHandler perms = new PermissionHandler(this.plugin, cs);
             if (perms.has("essence.spawn.set")) {
                 Location loc = p.getLocation();
-                FileUtil spawnFile = new FileUtil(this.plugin);
+                Files spawnFile = new Files(this.plugin.config, this.plugin);
 
                 String spawnName = loc.getWorld().getName();
 

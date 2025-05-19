@@ -1,8 +1,8 @@
 package net.lewmc.essence.events;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.FileUtil;
 import net.lewmc.essence.utils.MessageUtil;
+import net.lewmc.foundry.Files;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,7 +27,7 @@ public class PlayerBedEnter implements Listener {
     public void onPlayerBedEnterEvent(PlayerBedEnterEvent event) {
         Location bedLocation = event.getBed().getLocation();
 
-        FileUtil playerData = new FileUtil(this.plugin);
+        Files playerData = new Files(this.plugin.config, this.plugin);
         playerData.load(playerData.playerDataFile(event.getPlayer()));
 
         playerData.set("user.last-sleep-location.world", bedLocation.getWorld().getName());

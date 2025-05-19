@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -120,7 +121,7 @@ public class MessageUtil {
      */
     private String getMessage(String code, String group) {
         String language = this.plugin.getConfig().getString("language");
-        FileUtil data = new FileUtil(this.plugin);
+        Files data = new Files(this.plugin.config, this.plugin);
         data.load("language/"+language+".yml");
 
         if (data.get(group) != null) {

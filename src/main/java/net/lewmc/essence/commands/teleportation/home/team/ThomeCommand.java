@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.home.team;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
@@ -73,7 +74,7 @@ public class ThomeCommand implements CommandExecutor {
                     return true;
                 }
 
-                FileUtil dataUtil = new FileUtil(this.plugin);
+                Files dataUtil = new Files(this.plugin.config, this.plugin);
                 dataUtil.load("data/teams/"+team+".yml");
 
                 String homeName;

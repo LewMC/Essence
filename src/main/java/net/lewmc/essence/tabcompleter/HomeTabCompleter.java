@@ -1,7 +1,7 @@
 package net.lewmc.essence.tabcompleter;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.FileUtil;
+import net.lewmc.foundry.Files;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -40,7 +40,7 @@ public class HomeTabCompleter implements TabCompleter {
             @NotNull String arg,
             String[] args
     ) {
-        FileUtil data = new FileUtil(this.plugin);
+        Files data = new Files(this.plugin.config, this.plugin);
 
         data.load(data.playerDataFile((Player) sender));
         Set<String> keys = data.getKeys("homes", false);

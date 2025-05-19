@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.economy;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -43,7 +44,7 @@ public class BalanceCommand implements CommandExecutor {
             if (permission.has("essence.economy.balance")) {
                 MessageUtil msg = new MessageUtil(this.plugin, cs);
                 if (cs instanceof Player p) {
-                    FileUtil pf = new FileUtil(this.plugin);
+                    Files pf = new Files(this.plugin.config, this.plugin);
                     pf.load(pf.playerDataFile(p));
                     msg.send("economy", "balance", new String[]{this.plugin.economySymbol + pf.getDouble("economy.balance")});
                 } else {

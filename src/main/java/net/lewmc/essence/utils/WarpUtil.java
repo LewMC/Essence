@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -28,7 +29,7 @@ public class WarpUtil {
      * @return int - The number of warps.
      */
     public int getWarpCount(Player player) {
-        FileUtil dataUtil = new FileUtil(this.plugin);
+        Files dataUtil = new Files(this.plugin.config, this.plugin);
         dataUtil.load("data/warps.yml");
 
         Set<String> keys = dataUtil.getKeys("warps", false);
@@ -56,7 +57,7 @@ public class WarpUtil {
      * @return boolean - If the operation was successful.
      */
     public boolean create(String warpName, UUID playerUUID, Location loc) {
-        FileUtil warpsData = new FileUtil(this.plugin);
+        Files warpsData = new Files(this.plugin.config, this.plugin);
         warpsData.load("data/warps.yml");
 
         if (warpsData.get("warps." + warpName) != null) {

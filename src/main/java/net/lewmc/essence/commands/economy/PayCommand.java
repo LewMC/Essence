@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.economy;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -48,7 +49,7 @@ public class PayCommand implements CommandExecutor {
             if (permission.has("essence.economy.pay")) {
                 MessageUtil message = new MessageUtil(this.plugin, cs);
                 if (args.length == 2) {
-                    FileUtil senderDataFile = new FileUtil(this.plugin);
+                    Files senderDataFile = new Files(this.plugin.config, this.plugin);
                     senderDataFile.load(senderDataFile.playerDataFile(player));
 
                     double balance = senderDataFile.getDouble("economy.balance");
@@ -60,7 +61,7 @@ public class PayCommand implements CommandExecutor {
                         senderDataFile.save();
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                                FileUtil recieverDataFile = new FileUtil(this.plugin);
+                                Files recieverDataFile = new Files(this.plugin.config, this.plugin);
 
                                 recieverDataFile.load(senderDataFile.playerDataFile(p));
                                 double newBalance = recieverDataFile.getDouble("economy.balance") + amount;

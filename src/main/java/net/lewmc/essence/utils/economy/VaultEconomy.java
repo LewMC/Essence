@@ -1,8 +1,8 @@
 package net.lewmc.essence.utils.economy;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.utils.FileUtil;
 import net.lewmc.essence.utils.PlayerUtil;
+import net.lewmc.foundry.Files;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -107,7 +107,7 @@ public class VaultEconomy implements Economy {
      */
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        FileUtil playerData = new FileUtil(this.plugin);
+        Files playerData = new Files(this.plugin.config, this.plugin);
         return playerData.exists(playerData.playerDataFile(offlinePlayer.getUniqueId()));
     }
 
@@ -153,7 +153,7 @@ public class VaultEconomy implements Economy {
      */
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        FileUtil fileUtil = new FileUtil(this.plugin);
+        Files fileUtil = new Files(this.plugin.config, this.plugin);
 
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
@@ -207,7 +207,7 @@ public class VaultEconomy implements Economy {
      */
     @Override
     public boolean has(OfflinePlayer offlinePlayer, double v) {
-        FileUtil fileUtil = new FileUtil(this.plugin);
+        Files fileUtil = new Files(this.plugin.config, this.plugin);
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
         fileUtil.close();
@@ -262,7 +262,7 @@ public class VaultEconomy implements Economy {
      */
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
-        FileUtil fileUtil = new FileUtil(this.plugin);
+        Files fileUtil = new Files(this.plugin.config, this.plugin);
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
         if (fileUtil.set("economy.balance", bal - v)) {
@@ -322,7 +322,7 @@ public class VaultEconomy implements Economy {
      */
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
-        FileUtil fileUtil = new FileUtil(this.plugin);
+        Files fileUtil = new Files(this.plugin.config, this.plugin);
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
         if (fileUtil.set("economy.balance", bal + v)) {

@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.warp;
 
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,7 +53,7 @@ public class DelwarpCommand implements CommandExecutor {
                     msg.send("warp", "delusage");
                     return true;
                 }
-                FileUtil config = new FileUtil(this.plugin);
+                Files config = new Files(this.plugin.config, this.plugin);
                 config.load("data/warps.yml");
 
                 String warpName = args[0].toLowerCase();

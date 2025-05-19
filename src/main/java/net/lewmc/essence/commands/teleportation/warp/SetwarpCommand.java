@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.warp;
 
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.Security;
 import org.bukkit.Location;
@@ -55,7 +56,7 @@ public class SetwarpCommand implements CommandExecutor {
                     return true;
                 }
                 Location loc = p.getLocation();
-                FileUtil warpsData = new FileUtil(this.plugin);
+                Files warpsData = new Files(this.plugin.config, this.plugin);
                 warpsData.load("data/warps.yml");
 
                 String warpName = args[0].toLowerCase();

@@ -2,6 +2,7 @@ package net.lewmc.essence.events;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
@@ -32,13 +33,13 @@ public class RespawnEvent implements Listener {
         Logger log = new Logger(this.plugin.config);
         MessageUtil message = new MessageUtil(this.plugin, event.getPlayer());
 
-        FileUtil config = new FileUtil(this.plugin);
+        Files config = new Files(this.plugin.config, this.plugin);
         config.load("config.yml");
         String spawnName = config.getString("teleportation.spawn.main-spawn-world");
         boolean alwaysSpawn = config.getBoolean("teleportation.spawn.always-spawn");
         config.close();
 
-        FileUtil playerData = new FileUtil(this.plugin);
+        Files playerData = new Files(this.plugin.config, this.plugin);
         playerData.load(config.playerDataFile(event.getPlayer()));
 
         LocationUtil locationUtil = new LocationUtil(this.plugin);
@@ -62,7 +63,7 @@ public class RespawnEvent implements Listener {
 
         playerData.close();
 
-        FileUtil spawns = new FileUtil(this.plugin);
+        Files spawns = new Files(this.plugin.config, this.plugin);
         spawns.load("data/spawns.yml");
 
         if (spawns.get("spawn."+spawnName) == null) {

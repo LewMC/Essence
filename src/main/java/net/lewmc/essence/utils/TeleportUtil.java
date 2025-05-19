@@ -2,6 +2,7 @@ package net.lewmc.essence.utils;
 
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -52,7 +53,7 @@ public class TeleportUtil {
         int cooldown = this.plugin.getConfig().getInt("teleportation."+type+".cooldown");
         if (cooldown < 0) { return true; }
 
-        FileUtil data = new FileUtil(this.plugin);
+        Files data = new Files(this.plugin.config, this.plugin);
         data.load(data.playerDataFile(player));
 
         if (data.get("cooldown."+type) == null) { return true; }
@@ -84,7 +85,7 @@ public class TeleportUtil {
      * @param type String - The type of cooldown.
      */
     public void setCooldown(Player player, String type) {
-        FileUtil data = new FileUtil(this.plugin);
+        Files data = new Files(this.plugin.config, this.plugin);
         data.load(data.playerDataFile(player));
 
         LocalDateTime currentTime = LocalDateTime.now();
@@ -114,7 +115,7 @@ public class TeleportUtil {
             return 0;
         }
 
-        FileUtil data = new FileUtil(this.plugin);
+        Files data = new Files(this.plugin.config, this.plugin);
         data.load(data.playerDataFile(player));
 
         if (data.getString("cooldown."+type) == null) { return 0; }
@@ -276,10 +277,10 @@ public class TeleportUtil {
      * @return true - Teleport can proceed, false - Teleport should be blocked.
      */
     public boolean teleportToggleCheck(Player requester, Player target) {
-        FileUtil targetPd = new FileUtil(this.plugin);
+        Files targetPd = new Files(this.plugin.config, this.plugin);
         targetPd.load(targetPd.playerDataFile(target));
 
-        FileUtil config = new FileUtil(this.plugin);
+        Files config = new Files(this.plugin.config, this.plugin);
         config.load("config.yml");
 
         PermissionHandler ph = new PermissionHandler(this.plugin, requester);

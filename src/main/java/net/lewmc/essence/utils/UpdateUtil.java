@@ -2,6 +2,7 @@ package net.lewmc.essence.utils;
 
 import com.tchristofferson.configupdater.ConfigUpdater;
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 
 import java.io.File;
@@ -162,7 +163,7 @@ public class UpdateUtil {
     private void migrate() {
         // NEW LANGUAGE FILES.
         if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
-            FileUtil config = new FileUtil(this.plugin);
+            Files config = new Files(this.plugin.config, this.plugin);
             config.load("config.yml");
             if (config.exists("language/en-gb.yml")) {
                 config.delete("language/en-gb.yml");
@@ -173,7 +174,7 @@ public class UpdateUtil {
         }
 
         // NEW PLACEHOLDER SYSTEM (1.9.0+)
-        FileUtil f = new FileUtil(this.plugin);
+        Files f = new Files(this.plugin.config, this.plugin);
         f.load("config.yml");
         if (f.getInt("config-version") == 1) {
             Logger log = new Logger(this.plugin.config);

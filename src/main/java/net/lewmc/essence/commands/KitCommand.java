@@ -2,6 +2,7 @@ package net.lewmc.essence.commands;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,7 +53,7 @@ public class KitCommand implements CommandExecutor {
             if (args.length == 0) {
                 StringBuilder kits = new StringBuilder("No kits found.");
 
-                FileUtil kitData = new FileUtil(this.plugin);
+                Files kitData = new Files(this.plugin.config, this.plugin);
                 kitData.load("data/kits.yml");
                 Set<String> keys = kitData.getKeys("kits", false);
 

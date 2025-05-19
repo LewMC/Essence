@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.admin;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -48,7 +49,7 @@ public class SeenCommand implements CommandExecutor {
                 if (args.length == 1) {
                     OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                     if (p.hasPlayedBefore()) {
-                        FileUtil fu = new FileUtil(this.plugin);
+                        Files fu = new Files(this.plugin.config, this.plugin);
                         if (fu.exists(fu.playerDataFile(p.getUniqueId()))) {
                             fu.load(fu.playerDataFile(p.getUniqueId()));
                             if (fu.getString("user.last-seen") != null) {

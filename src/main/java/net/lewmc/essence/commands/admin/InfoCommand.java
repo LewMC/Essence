@@ -2,9 +2,9 @@ package net.lewmc.essence.commands.admin;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.CommandUtil;
-import net.lewmc.essence.utils.FileUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.foundry.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -52,7 +52,7 @@ public class InfoCommand implements CommandExecutor {
                 if (args.length == 1) {
                     OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
                     if (p.hasPlayedBefore()) {
-                        FileUtil fu = new FileUtil(this.plugin);
+                        Files fu = new Files(this.plugin.config, this.plugin);
                         if (fu.exists(fu.playerDataFile(p.getUniqueId()))) {
                             fu.load(fu.playerDataFile(p.getUniqueId()));
                             message.send("info", "uuid", new String[] { String.valueOf(p.getUniqueId()) });

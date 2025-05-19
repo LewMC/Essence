@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -27,7 +28,7 @@ public class HomeUtil {
      * @return StringBuilder|null - List of homes or null.
      */
     public StringBuilder getHomesList(Player player) {
-        FileUtil dataUtil = new FileUtil(this.plugin);
+        Files dataUtil = new Files(this.plugin.config, this.plugin);
         dataUtil.load(dataUtil.playerDataFile(player));
 
         Set<String> keys = dataUtil.getKeys("homes", false);
@@ -59,7 +60,7 @@ public class HomeUtil {
      * @return StringBuilder|null - List of homes or null.
      */
     public StringBuilder getTeamHomesList(String team) {
-        FileUtil dataUtil = new FileUtil(this.plugin);
+        Files dataUtil = new Files(this.plugin.config, this.plugin);
         dataUtil.load("data/teams/"+team+".yml");
 
         Set<String> keys = dataUtil.getKeys("homes", false);
@@ -91,7 +92,7 @@ public class HomeUtil {
      * @return int - The number of homes.
      */
     public int getHomeCount(Player player) {
-        FileUtil dataUtil = new FileUtil(this.plugin);
+        Files dataUtil = new Files(this.plugin.config, this.plugin);
         dataUtil.load(dataUtil.playerDataFile(player));
 
         Set<String> homes = dataUtil.getKeys("homes", false);
@@ -110,7 +111,7 @@ public class HomeUtil {
      */
     public int getTeamHomeCount(Player player) {
         TeamUtil teamUtil = new TeamUtil(this.plugin, new MessageUtil(this.plugin, player));
-        FileUtil dataUtil = new FileUtil(this.plugin);
+        Files dataUtil = new Files(this.plugin.config, this.plugin);
         dataUtil.load("data/teams/"+teamUtil.getPlayerTeam(player.getUniqueId())+".yml");
 
         Set<String> keys = dataUtil.getKeys("homes", false);
@@ -138,7 +139,7 @@ public class HomeUtil {
      * @return boolean - If the operation was successful.
      */
     public boolean create(String homeName, Player player, Location loc) {
-        FileUtil playerData = new FileUtil(this.plugin);
+        Files playerData = new Files(this.plugin.config, this.plugin);
         playerData.load(playerData.playerDataFile(player));
 
         if (playerData.get(homeName) != null) {
