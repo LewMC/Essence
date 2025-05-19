@@ -133,7 +133,7 @@
         <dependency>
             <groupId>com.github.technicallycoded</groupId>
             <artifactId>FoliaLib</artifactId>
-            <version>v0.4.3</version>
+            <version>0.4.4</version>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
