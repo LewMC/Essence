@@ -3,7 +3,6 @@ package net.lewmc.essence.commands.economy;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import net.lewmc.foundry.Files;
-import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -12,7 +11,6 @@ import org.bukkit.entity.Player;
 
 public class PayCommand extends FoundryPlayerCommand {
     private final Essence plugin;
-    private final Logger log;
 
     /**
      * Constructor for the PayCommand class.
@@ -20,7 +18,6 @@ public class PayCommand extends FoundryPlayerCommand {
      */
     public PayCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new Logger(plugin.config);
     }
 
     /**
