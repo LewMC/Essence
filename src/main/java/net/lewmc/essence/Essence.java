@@ -1,21 +1,28 @@
 package net.lewmc.essence;
 
 import com.tcoded.folialib.FoliaLib;
-import net.lewmc.essence.commands.*;
-import net.lewmc.essence.commands.admin.*;
-import net.lewmc.essence.commands.chat.*;
-import net.lewmc.essence.commands.economy.*;
-import net.lewmc.essence.commands.inventories.*;
-import net.lewmc.essence.commands.stats.*;
-import net.lewmc.essence.commands.teleportation.*;
-import net.lewmc.essence.commands.teleportation.home.*;
-import net.lewmc.essence.commands.teleportation.home.team.*;
-import net.lewmc.essence.commands.teleportation.tp.*;
-import net.lewmc.essence.commands.teleportation.warp.*;
-import net.lewmc.essence.events.*;
-import net.lewmc.essence.tabcompleter.*;
-import net.lewmc.essence.utils.*;
-import net.lewmc.essence.utils.economy.VaultEconomy;
+import net.lewmc.essence.global.*;
+import net.lewmc.essence.module.admin.*;
+import net.lewmc.essence.module.chat.*;
+import net.lewmc.essence.module.core.CommandEssence;
+import net.lewmc.essence.module.core.CommandRules;
+import net.lewmc.essence.module.core.TabCompleterEssence;
+import net.lewmc.essence.module.economy.*;
+import net.lewmc.essence.module.inventory.*;
+import net.lewmc.essence.module.kit.CommandKit;
+import net.lewmc.essence.module.stats.*;
+import net.lewmc.essence.module.gamemode.CommandGamemode;
+import net.lewmc.essence.module.gamemode.TabCompleterGamemode;
+import net.lewmc.essence.module.team.TabCompleterTeam;
+import net.lewmc.essence.module.team.CommandTeam;
+import net.lewmc.essence.module.teleportation.*;
+import net.lewmc.essence.module.teleportation.home.*;
+import net.lewmc.essence.module.teleportation.home.team.*;
+import net.lewmc.essence.module.teleportation.spawn.CommandSetspawn;
+import net.lewmc.essence.module.teleportation.spawn.CommandSpawn;
+import net.lewmc.essence.module.teleportation.tp.*;
+import net.lewmc.essence.module.teleportation.warp.*;
+import net.lewmc.essence.module.economy.UtilVaultEconomy;
 import net.lewmc.foundry.*;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -192,7 +199,7 @@ public class Essence extends JavaPlugin {
             this.log.warn("Vault not found! Using local chat.");
         }
 
-        UpdateUtil update = new UpdateUtil(this);
+        UtilUpdate update = new UtilUpdate(this);
         update.VersionCheck();
         update.UpdateConfig();
         update.UpdateLanguage();
@@ -242,7 +249,7 @@ public class Essence extends JavaPlugin {
         }
         this.log.info("Vault found, setting up economy service...");
 
-        getServer().getServicesManager().register(Economy.class, new VaultEconomy(this), this, ServicePriority.Highest);
+        getServer().getServicesManager().register(Economy.class, new UtilVaultEconomy(this), this, ServicePriority.Highest);
 
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
@@ -284,7 +291,7 @@ public class Essence extends JavaPlugin {
      * Checks if the server is running Paper, and informs the user that they should upgrade if not.
      */
     private void checkForPaper() {
-        CommandUtil cmd = new CommandUtil(this, null);
+        UtilCommand cmd = new UtilCommand(this, null);
         if (!cmd.isPaperCompatible()) {
             this.log.severe("You are running " + this.getServer().getName());
             this.log.severe("Some commands have been disabled, please see https://bit.ly/essencepaper for help.");
@@ -369,95 +376,95 @@ public class Essence extends JavaPlugin {
      * Loads and registers the plugin's command handlers.
      */
     private void loadCommands() {
-        this.registry.command("essence", new EssenceCommands(this));
+        this.registry.command("essence", new CommandEssence(this));
 
-        this.registry.command(new String[] {"gamemode", "gmc", "gms", "gma", "gmsp"}, new GamemodeCommands(this));
+        this.registry.command(new String[] {"gamemode", "gmc", "gms", "gma", "gmsp"}, new CommandGamemode(this));
 
-        this.registry.command("anvil", new AnvilCommand(this));
-        this.registry.command("cartography", new CartographyCommand(this));
-        this.registry.command("craft", new CraftCommand(this));
-        this.registry.command("enderchest", new EnderchestCommand(this));
-        this.registry.command("grindstone", new GrindstoneCommand(this));
-        this.registry.command("loom", new LoomCommand(this));
-        this.registry.command("smithing", new SmithingCommand(this));
-        this.registry.command("stonecutter", new StonecutterCommand(this));
-        this.registry.command("trash", new TrashCommand(this));
+        this.registry.command("anvil", new CommandAnvil(this));
+        this.registry.command("cartography", new CommandCartography(this));
+        this.registry.command("craft", new CommandCraft(this));
+        this.registry.command("enderchest", new CommandEnderchest(this));
+        this.registry.command("grindstone", new CommandGrindstone(this));
+        this.registry.command("loom", new CommandLoom(this));
+        this.registry.command("smithing", new CommandSmithing(this));
+        this.registry.command("stonecutter", new CommandStonecutter(this));
+        this.registry.command("trash", new CommandTrash(this));
 
-        this.registry.command("kit", new KitCommand(this));
+        this.registry.command("kit", new CommandKit(this));
 
-        this.registry.command("feed", new FeedCommand(this));
-        this.registry.command("heal", new HealCommand(this));
-        this.registry.command("repair", new RepairCommand(this));
-        this.registry.command("invisible", new InvisibleCommand(this));
+        this.registry.command("feed", new CommandFeed(this));
+        this.registry.command("heal", new CommandHeal(this));
+        this.registry.command("repair", new CommandRepair(this));
+        this.registry.command("invisible", new CommandInvisible(this));
 
-        this.registry.command("tp", new TeleportCommand(this));
-        this.registry.command("tpa", new TpaCommand(this));
-        this.registry.command("tpaccept", new TpacceptCommand(this));
-        this.registry.command("tpdeny", new TpdenyCommand(this));
-        this.registry.command("tptoggle", new TptoggleCommand(this));
-        this.registry.command("tpahere", new TpahereCommand(this));
-        this.registry.command("tpcancel", new TpcancelCommand(this));
-        this.registry.command("tprandom", new TprandomCommand(this));
+        this.registry.command("tp", new CommandTeleport(this));
+        this.registry.command("tpa", new CommandTpa(this));
+        this.registry.command("tpaccept", new CommandTpaccept(this));
+        this.registry.command("tpdeny", new CommandTpdeny(this));
+        this.registry.command("tptoggle", new CommandTptoggle(this));
+        this.registry.command("tpahere", new CommandTpahere(this));
+        this.registry.command("tpcancel", new CommandTpcancel(this));
+        this.registry.command("tprandom", new CommandTprandom(this));
 
-        this.registry.command("home", new HomeCommand(this));
-        this.registry.command("homes", new HomesCommand(this));
-        this.registry.command("sethome", new SethomeCommand(this));
-        this.registry.command("delhome", new DelhomeCommand(this));
-        this.registry.command("thome", new ThomeCommand(this));
-        this.registry.command("thomes", new ThomesCommand(this));
-        this.registry.command("setthome", new SetthomeCommand(this));
-        this.registry.command("delthome", new DelthomeCommand(this));
+        this.registry.command("home", new CommandHome(this));
+        this.registry.command("homes", new CommandHomes(this));
+        this.registry.command("sethome", new CommandSethome(this));
+        this.registry.command("delhome", new CommandDelhome(this));
+        this.registry.command("thome", new CommandThome(this));
+        this.registry.command("thomes", new CommandThomas(this));
+        this.registry.command("setthome", new CommandSetthome(this));
+        this.registry.command("delthome", new CommandDelthomes(this));
 
-        this.registry.command("warp", new WarpCommand(this));
-        this.registry.command("warps", new WarpsCommand(this));
-        this.registry.command("setwarp", new SetwarpCommand(this));
-        this.registry.command("delwarp", new DelwarpCommand(this));
+        this.registry.command("warp", new CommandWarp(this));
+        this.registry.command("warps", new CommandWarps(this));
+        this.registry.command("setwarp", new CommandSetwarp(this));
+        this.registry.command("delwarp", new CommandDelwarp(this));
 
-        this.registry.command("spawn", new SpawnCommand(this));
-        this.registry.command("setspawn", new SetspawnCommand(this));
+        this.registry.command("spawn", new CommandSpawn(this));
+        this.registry.command("setspawn", new CommandSetspawn(this));
 
-        this.registry.command("back", new BackCommand(this));
+        this.registry.command("back", new CommandBack(this));
 
-        this.registry.command("broadcast", new BroadcastCommand(this));
-        this.registry.command("msg", new MsgCommand(this));
-        this.registry.command("reply", new ReplyCommand(this));
-        this.registry.command("nick", new NickCommand(this));
+        this.registry.command("broadcast", new CommandBroadcast(this));
+        this.registry.command("msg", new CommandMsg(this));
+        this.registry.command("reply", new CommandReply(this));
+        this.registry.command("nick", new CommandNick(this));
 
-        this.registry.command("pay", new PayCommand(this));
-        this.registry.command("balance", new BalanceCommand(this));
+        this.registry.command("pay", new CommandPay(this));
+        this.registry.command("balance", new CommandBalance(this));
 
-        this.registry.command("team", new TeamCommands(this));
+        this.registry.command("team", new CommandTeam(this));
 
-        this.registry.command("seen", new SeenCommand(this));
-        this.registry.command("info", new InfoCommand(this));
+        this.registry.command("seen", new CommandSeen(this));
+        this.registry.command("info", new CommandInfo(this));
 
-        this.registry.command("rules", new RulesCommands(this));
+        this.registry.command("rules", new CommandRules(this));
     }
 
     /**
      * Loads and registers all tab completers.
      */
     private void loadTabCompleters() {
-        this.registry.tabCompleter(new String[] { "warp", "delwarp" }, new WarpTabCompleter(this));
-        this.registry.tabCompleter(new String[] { "home", "delhome" }, new HomeTabCompleter(this));
-        this.registry.tabCompleter(new String[] { "gamemode", "gm" }, new GamemodeTabCompleter());
-        this.registry.tabCompleter(new String[] { "es" }, new EssenceTabCompleter());
-        this.registry.tabCompleter(new String[] { "team" }, new TeamTabCompleter());
-        this.registry.tabCompleter(new String[] { "tp" }, new TpTabCompleter());
+        this.registry.tabCompleter(new String[] { "warp", "delwarp" }, new TabCompleterWarp(this));
+        this.registry.tabCompleter(new String[] { "home", "delhome" }, new TabCompleterHome(this));
+        this.registry.tabCompleter(new String[] { "gamemode", "gm" }, new TabCompleterGamemode());
+        this.registry.tabCompleter(new String[] { "es" }, new TabCompleterEssence());
+        this.registry.tabCompleter(new String[] { "team" }, new TabCompleterTeam());
+        this.registry.tabCompleter(new String[] { "tp" }, new TabCompleterTp());
     }
 
     /**
      * Loads and registers all the plugin's event handlers.
      */
     private void loadEventHandlers() {
-        this.registry.event(new JoinEvent(this));
-        this.registry.event(new DeathEvent(this));
-        this.registry.event(new PlayerDamageEvent(this));
-        this.registry.event(new RespawnEvent(this));
-        this.registry.event(new PlayerBedEnter(this));
-        this.registry.event(new LeaveEvent(this));
-        this.registry.event(new PlayerMove(this));
-        this.registry.event(new PlayerChatEvent(this));
+        this.registry.event(new EventJoin(this));
+        this.registry.event(new EventDeath(this));
+        this.registry.event(new EventPlayerDamage(this));
+        this.registry.event(new EventRespawn(this));
+        this.registry.event(new EventPlayerBedEnter(this));
+        this.registry.event(new EventLeave(this));
+        this.registry.event(new EventPlayerMove(this));
+        this.registry.event(new EventPlayerChat(this));
     }
 
     /**
