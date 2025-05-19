@@ -4,14 +4,13 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
 
-public class FeedCommand implements CommandExecutor {
+public class FeedCommand extends FoundryCommand {
     private final Essence plugin;
 
     /**
@@ -23,58 +22,50 @@ public class FeedCommand implements CommandExecutor {
     }
 
     /**
-     * @param cs Information about who sent the command - player or console.
-     * @param command Information about what command was sent.
-     * @param s Command label - not used here.
-     * @param args The command's arguments.
+     * The permission required to run the command.
+     * @return String - The permission string.
+     */
+    @Override
+    protected String requiredPermission() {
+        return "essence.stats.feed";
+    }
+
+    /**
+     * @param cs        Information about who sent the command - player or console.
+     * @param command   Information about what command was sent.
+     * @param s         Command label - not used here.
+     * @param args      The command's arguments.
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(
-        @NotNull CommandSender cs,
-        @NotNull Command command,
-        @NotNull String s,
-        String[] args
-    ) {
+    protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
+        CommandUtil cmd = new CommandUtil(this.plugin, cs);
+        if (cmd.isDisabled("feed")) { return cmd.disabled(); }
 
-        if (command.getName().equalsIgnoreCase("feed")) {
-            CommandUtil cmd = new CommandUtil(this.plugin, cs);
-            if (cmd.isDisabled("feed")) { return cmd.disabled(); }
+        MessageUtil message = new MessageUtil(this.plugin, cs);
 
-            MessageUtil message = new MessageUtil(this.plugin, cs);
-
-            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
-
-            if (args.length > 0) {
-                return this.feedOther(permission, cs, message, args);
+        if (args.length > 0) {
+            return this.feedOther(new PermissionHandler(this.plugin, cs), cs, message, args);
+        } else {
+            if (!(cs instanceof Player)) {
+                message.send("feed","usage");
+                return true;
             } else {
-                if (!(cs instanceof Player)) {
-                    message.send("feed","usage");
-                    return true;
-                } else {
-                    return this.feedSelf(permission, (Player) cs, message);
-                }
+                return this.feedSelf((Player) cs, message);
             }
         }
-
-        return true;
     }
 
     /**
      * Feeds the command sender.
-     * @param perms PermisionHandler - The permission system.
      * @param p Player - The user to feed.
      * @param msg MessageUtil - The messaging system.
      * @return boolean - If the operation was successful
      */
-    private boolean feedSelf(PermissionHandler perms, Player p, MessageUtil msg) {
-        if (perms.has("essence.stats.feed")) {
-            p.setFoodLevel(20);
-            msg.send("feed", "beenfed");
-            return true;
-        } else {
-            return perms.not();
-        }
+    private boolean feedSelf(Player p, MessageUtil msg) {
+        p.setFoodLevel(20);
+        msg.send("feed", "beenfed");
+        return true;
     }
 
     /**

@@ -4,14 +4,13 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.CommandUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class HealCommand implements CommandExecutor {
+public class HealCommand extends FoundryCommand {
     private final Essence plugin;
 
     /**
@@ -23,57 +22,51 @@ public class HealCommand implements CommandExecutor {
     }
 
     /**
-     * @param cs Information about who sent the command - player or console.
-     * @param command Information about what command was sent.
-     * @param s Command label - not used here.
-     * @param args The command's arguments.
+     * The permission required to run the command.
+     * @return String - The permission string.
+     */
+    @Override
+    protected String requiredPermission() {
+        return "essence.stats.heal";
+    }
+
+    /**
+     * @param cs        Information about who sent the command - player or console.
+     * @param command   Information about what command was sent.
+     * @param s         Command label - not used here.
+     * @param args      The command's arguments.
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(
-        @NotNull CommandSender cs,
-        @NotNull Command command,
-        @NotNull String s,
-        String[] args
-    ) {
-        if (command.getName().equalsIgnoreCase("heal")) {
-            CommandUtil cmd = new CommandUtil(this.plugin, cs);
-            if (cmd.isDisabled("heal")) { return cmd.disabled(); }
+    protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
+        CommandUtil cmd = new CommandUtil(this.plugin, cs);
+        if (cmd.isDisabled("heal")) { return cmd.disabled(); }
 
-            MessageUtil message = new MessageUtil(this.plugin, cs);
-            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
+        MessageUtil message = new MessageUtil(this.plugin, cs);
 
-            if (args.length > 0) {
-                return this.healOther(permission, cs, message, args);
-            } else {
-                if (!(cs instanceof Player)) {
-                    message.send("heal","usage");
-                    return true;
-                }
-
-                return this.healSelf(permission, cs, message);
+        if (args.length > 0) {
+            return this.healOther(new PermissionHandler(this.plugin, cs), cs, message, args);
+        } else {
+            if (!(cs instanceof Player)) {
+                message.send("heal","usage");
+                return true;
             }
-        }
 
-        return true;
+            return this.healSelf(cs, message);
+        }
     }
 
     /**
      * Heals the command sender.
-     * @param permission PermisionHandler - The permission system.
      * @param sender CommandSender - The user to feed.
      * @param message MessageUtil - The messaging system.
      * @return boolean - If the operation was successful
      */
-    private boolean healSelf(PermissionHandler permission, CommandSender sender, MessageUtil message) {
-        if (permission.has("essence.stats.heal")) {
-            Player player = (Player) sender;
-            player.setHealth(20.0);
-            message.send("heal", "beenhealed");
-            return true;
-        } else {
-            return permission.not();
-        }
+    private boolean healSelf(CommandSender sender, MessageUtil message) {
+        Player player = (Player) sender;
+        player.setHealth(20.0);
+        message.send("heal", "beenhealed");
+        return true;
     }
 
     /**
