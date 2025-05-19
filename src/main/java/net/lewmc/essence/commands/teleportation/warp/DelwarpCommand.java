@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.warp;
 
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class DelwarpCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
+    private final Logger log;
 
     /**
      * Constructor for the DelwarpCommand class.
@@ -19,7 +20,7 @@ public class DelwarpCommand implements CommandExecutor {
      */
     public DelwarpCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
+        this.log = new Logger(plugin.config);
     }
 
     /**

@@ -3,6 +3,7 @@ package net.lewmc.essence.commands.teleportation.tp;
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -20,7 +21,7 @@ import java.util.Objects;
  */
 public class TprandomCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
+    private final Logger log;
     private final FoliaLib flib;
     private final TeleportUtil teleUtil;
 
@@ -31,7 +32,7 @@ public class TprandomCommand implements CommandExecutor {
      */
     public TprandomCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
+        this.log = new Logger(plugin.config);
         this.flib = new FoliaLib(this.plugin);
         this.teleUtil = new TeleportUtil(this.plugin);
     }

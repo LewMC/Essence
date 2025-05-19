@@ -2,6 +2,7 @@ package net.lewmc.essence.events;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
@@ -28,7 +29,7 @@ public class RespawnEvent implements Listener {
      */
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        LogUtil log = new LogUtil(this.plugin);
+        Logger log = new Logger(this.plugin.config);
         MessageUtil message = new MessageUtil(this.plugin, event.getPlayer());
 
         FileUtil config = new FileUtil(this.plugin);

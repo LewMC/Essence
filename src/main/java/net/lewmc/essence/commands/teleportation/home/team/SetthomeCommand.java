@@ -2,7 +2,8 @@ package net.lewmc.essence.commands.teleportation.home.team;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
-import net.lewmc.foundry.utils.SecurityUtil;
+import net.lewmc.foundry.Logger;
+import net.lewmc.foundry.Security;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SetthomeCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
+    private final Logger log;
 
     /**
      * Constructor for the SetthomeCommand class.
@@ -21,7 +22,7 @@ public class SetthomeCommand implements CommandExecutor {
      */
     public SetthomeCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
+        this.log = new Logger(plugin.config);
     }
 
     /**
@@ -73,8 +74,7 @@ public class SetthomeCommand implements CommandExecutor {
                 FileUtil dataUtil = new FileUtil(this.plugin);
                 dataUtil.load("data/teams/"+team+".yml");
 
-                SecurityUtil securityUtil = new SecurityUtil();
-                if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {
+                if (new Security(this.plugin.config).hasSpecialCharacters(name.toLowerCase())) {
                     dataUtil.close();
                     message.send("teamhome", "specialchars");
                     return true;

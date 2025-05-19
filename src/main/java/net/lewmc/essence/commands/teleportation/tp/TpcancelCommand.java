@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.tp;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -39,7 +40,7 @@ public class TpcancelCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("tpcancel")) {
             CommandUtil cmd = new CommandUtil(this.plugin, cs);
             if (cmd.isDisabled("tpcancel")) { return cmd.disabled(); }
-            if (cmd.console(cs)) { new LogUtil(this.plugin).noConsole(); return true; }
+            if (cmd.console(cs)) { new Logger(this.plugin.config).noConsole(); return true; }
 
             PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 

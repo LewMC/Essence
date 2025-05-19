@@ -2,6 +2,7 @@ package net.lewmc.essence.commands;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,7 +38,7 @@ public class TeamCommands implements CommandExecutor {
             String[] args
     ) {
         if (command.getName().equalsIgnoreCase("team")) {
-            if (!(cs instanceof Player p)) { return new LogUtil(this.plugin).noConsole(); }
+            if (!(cs instanceof Player p)) { return new Logger(this.plugin.config).noConsole(); }
             
             CommandUtil cmd = new CommandUtil(this.plugin, cs);
             if (cmd.isDisabled("team")) { return cmd.disabled(); }

@@ -4,8 +4,7 @@ import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.commands.*;
 import net.lewmc.essence.commands.admin.*;
 import net.lewmc.essence.commands.chat.*;
-import net.lewmc.essence.commands.economy.BalanceCommand;
-import net.lewmc.essence.commands.economy.PayCommand;
+import net.lewmc.essence.commands.economy.*;
 import net.lewmc.essence.commands.inventories.*;
 import net.lewmc.essence.commands.stats.*;
 import net.lewmc.essence.commands.teleportation.*;
@@ -15,18 +14,17 @@ import net.lewmc.essence.commands.teleportation.tp.*;
 import net.lewmc.essence.commands.teleportation.warp.*;
 import net.lewmc.essence.events.*;
 import net.lewmc.essence.tabcompleter.*;
-import net.lewmc.essence.utils.CommandUtil;
-import net.lewmc.essence.utils.LogUtil;
-import net.lewmc.essence.utils.UpdateUtil;
+import net.lewmc.essence.utils.*;
 import net.lewmc.essence.utils.economy.VaultEconomy;
+import net.lewmc.foundry.FoundryConfig;
+import net.lewmc.foundry.Logger;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.ServicePriority;
+import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -39,7 +37,7 @@ public class Essence extends JavaPlugin {
     /**
      * The logging system.
      */
-    private final LogUtil log = new LogUtil(this);
+    private Logger log;
 
     /**
      * The config.yml's verbose value is stored here.
@@ -123,10 +121,17 @@ public class Essence extends JavaPlugin {
     public String economySymbol = "$";
 
     /**
+     * Holds the Foundry configuration.
+     */
+    public FoundryConfig config;
+
+    /**
      * This function runs when Essence is enabled.
      */
     @Override
     public void onEnable() {
+        this.config = new FoundryConfig(this);
+        this.log = new Logger(this.config);
 
         this.log.info("");
         this.log.info("███████╗░██████╗░██████╗███████╗███╗░░██╗░█████╗░███████╗");

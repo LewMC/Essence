@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Logger;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,7 +18,7 @@ import java.util.UUID;
  */
 public class FileUtil {
     private final Essence plugin;
-    private final LogUtil log;
+    private final Logger log;
     private YamlConfiguration config;
     private File file;
 
@@ -27,7 +28,7 @@ public class FileUtil {
      */
     public FileUtil(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
+        this.log = new Logger(plugin.config);
         this.config = new YamlConfiguration();
     }
 

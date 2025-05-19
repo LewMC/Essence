@@ -2,8 +2,8 @@ package net.lewmc.essence.commands.inventories;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.CommandUtil;
-import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,7 +52,7 @@ public class TrashCommand implements CommandExecutor {
                     return permission.not();
                 }
             } else {
-                return new LogUtil(this.plugin).noConsole();
+                return new Logger(this.plugin.config).noConsole();
             }
         }
 

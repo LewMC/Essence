@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.tp;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,7 +41,7 @@ public class TpacceptCommand implements CommandExecutor {
             CommandUtil cmd = new CommandUtil(this.plugin, cs);
             if (cmd.isDisabled("tpaccept")) { return cmd.disabled(); }
             if (cmd.console(cs)) {
-                return new LogUtil(this.plugin).noConsole();
+                return new Logger(this.plugin.config).noConsole();
             }
 
             PermissionHandler permission = new PermissionHandler(this.plugin, cs);

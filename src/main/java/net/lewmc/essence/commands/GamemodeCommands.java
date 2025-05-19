@@ -1,10 +1,10 @@
 package net.lewmc.essence.commands;
 
 import net.lewmc.essence.utils.CommandUtil;
-import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.PlayerUtil;
+import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -20,7 +20,7 @@ public class GamemodeCommands implements CommandExecutor {
     private final Essence plugin;
     private MessageUtil message;
     private CommandSender cs;
-    private final LogUtil log;
+    private final Logger log;
 
     /**
      * Constructor for the GamemodeCommands class.
@@ -28,7 +28,7 @@ public class GamemodeCommands implements CommandExecutor {
      */
     public GamemodeCommands(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(this.plugin);
+        this.log = new Logger(this.plugin.config);
     }
 
     /**

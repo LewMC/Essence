@@ -2,7 +2,7 @@ package net.lewmc.essence.commands.chat;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
-import net.lewmc.foundry.utils.SecurityUtil;
+import net.lewmc.foundry.Security;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -40,8 +40,8 @@ public class NickCommand implements CommandExecutor {
             CommandUtil cmd = new CommandUtil(this.plugin, cs);
             if (cmd.isDisabled("nick")) { return cmd.disabled(); }
 
-            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
-            if (!permission.has("essence.chat.nick.self")) { return permission.not(); }
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
+            if (!perms.has("essence.chat.nick.self")) { return perms.not(); }
 
             MessageUtil msg = new MessageUtil(this.plugin, cs);
 
@@ -53,7 +53,7 @@ public class NickCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (new SecurityUtil().hasSpecialCharacters(args[0])) {
+                if (new Security(this.plugin.config).hasSpecialCharacters(args[0])) {
                     msg.send("nick","specialchars");
                     return true;
                 }
@@ -69,7 +69,7 @@ public class NickCommand implements CommandExecutor {
                     msg.send("nick","success", new String[]{args[0]});
                 }
             } else if (args.length == 2) {
-                if (!permission.has("essence.chat.nick.other")) { return permission.not(); }
+                if (!perms.has("essence.chat.nick.other")) { return perms.not(); }
                 Player player = Bukkit.getPlayer(args[0]);
 
                 if (player == null) {
@@ -77,7 +77,7 @@ public class NickCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (new SecurityUtil().hasSpecialCharacters(args[1])) {
+                if (new Security(this.plugin.config).hasSpecialCharacters(args[1])) {
                     msg.send("nick","specialchars");
                     return true;
                 }

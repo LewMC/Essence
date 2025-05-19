@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Permissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -31,11 +32,7 @@ public class PermissionHandler {
      * @return boolean - If the user has a permission (true/false)
      */
     public boolean has(String node) {
-        if (this.cs instanceof Player p) {
-            return p.hasPermission(node);
-        } else {
-            return true;
-        }
+        return new Permissions(this.cs).has(node);
     }
 
     /**

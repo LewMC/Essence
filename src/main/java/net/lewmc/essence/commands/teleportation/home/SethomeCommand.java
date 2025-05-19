@@ -2,7 +2,8 @@ package net.lewmc.essence.commands.teleportation.home;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
-import net.lewmc.foundry.utils.SecurityUtil;
+import net.lewmc.foundry.Logger;
+import net.lewmc.foundry.Security;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SethomeCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
+    private final Logger log;
 
     /**
      * Constructor for the SethomeCommand class.
@@ -21,7 +22,7 @@ public class SethomeCommand implements CommandExecutor {
      */
     public SethomeCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
+        this.log = new Logger(plugin.config);
     }
 
     /**
@@ -57,10 +58,10 @@ public class SethomeCommand implements CommandExecutor {
                 FileUtil playerData = new FileUtil(this.plugin);
                 playerData.load(playerData.playerDataFile(p));
 
-                SecurityUtil securityUtil = new SecurityUtil();
+                Security sec = new Security(this.plugin.config);
                 MessageUtil msg = new MessageUtil(this.plugin, cs);
 
-                if (securityUtil.hasSpecialCharacters(name.toLowerCase())) {
+                if (sec.hasSpecialCharacters(name.toLowerCase())) {
                     playerData.close();
                     msg.send("home", "specialchars");
                     return true;

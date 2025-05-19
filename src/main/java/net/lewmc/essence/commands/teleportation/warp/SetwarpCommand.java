@@ -2,7 +2,8 @@ package net.lewmc.essence.commands.teleportation.warp;
 
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
-import net.lewmc.foundry.utils.SecurityUtil;
+import net.lewmc.foundry.Logger;
+import net.lewmc.foundry.Security;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SetwarpCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
+    private final Logger log;
 
     /**
      * Constructor for the SetwarpCommand class.
@@ -21,7 +22,7 @@ public class SetwarpCommand implements CommandExecutor {
      */
     public SetwarpCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
+        this.log = new Logger(plugin.config);
     }
 
     /**
@@ -59,8 +60,7 @@ public class SetwarpCommand implements CommandExecutor {
 
                 String warpName = args[0].toLowerCase();
 
-                SecurityUtil securityUtil = new SecurityUtil();
-                if (securityUtil.hasSpecialCharacters(warpName)) {
+                if (new Security(this.plugin.config).hasSpecialCharacters(warpName)) {
                     warpsData.close();
                     msg.send("warp", "specialchars");
                     return true;

@@ -2,6 +2,7 @@ package net.lewmc.essence.utils;
 
 import com.tchristofferson.configupdater.ConfigUpdater;
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import java.util.Scanner;
  */
 public class UpdateUtil {
     private final Essence plugin;
-    private final LogUtil log;
+    private final Logger log;
 
     /**
      * Constructor for UpdateUtil class.
@@ -23,7 +24,7 @@ public class UpdateUtil {
      */
     public UpdateUtil(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
+        this.log = new Logger(plugin.config);
     }
 
     /**
@@ -175,7 +176,7 @@ public class UpdateUtil {
         FileUtil f = new FileUtil(this.plugin);
         f.load("config.yml");
         if (f.getInt("config-version") == 1) {
-            LogUtil log = new LogUtil(this.plugin);
+            Logger log = new Logger(this.plugin.config);
             log.info("Essence is updating your configuration file, please wait...");
 
             log.info("[1/4] Updating first join message...");

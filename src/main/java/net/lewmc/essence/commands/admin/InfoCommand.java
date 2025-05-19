@@ -45,9 +45,9 @@ public class InfoCommand implements CommandExecutor {
             CommandUtil cmd = new CommandUtil(this.plugin, cs);
             if (cmd.isDisabled("info")) { return cmd.disabled(); }
 
-            PermissionHandler permission = new PermissionHandler(this.plugin, cs);
+            PermissionHandler perms = new PermissionHandler(this.plugin, cs);
 
-            if (permission.has("essence.playerinfo.info")) {
+            if (perms.has("essence.playerinfo.info")) {
                 MessageUtil message = new MessageUtil(this.plugin, cs);
                 if (args.length == 1) {
                     OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
@@ -74,7 +74,7 @@ public class InfoCommand implements CommandExecutor {
                 }
                 return true;
             } else {
-                return permission.not();
+                return perms.not();
             }
         }
 

@@ -2,6 +2,7 @@ package net.lewmc.essence.utils.placeholders;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,7 +34,7 @@ public class PlaceholderUtil {
     public String replaceAll(String text) {
         // Old MTs, to remove in 1.10.0
         if (text.contains("{{") && text.contains("}}")) {
-            LogUtil lu = new LogUtil(this.plugin);
+            Logger lu = new Logger(this.plugin.config);
             lu.warn("You are using Message Tags. These have been deprecated and will be removed in the next version of Essence.");
             lu.warn("Please replace them with Placeholders.");
             lu.warn("For more information, please visit https://wiki.lewmc.net/es-placeholders.html.");

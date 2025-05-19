@@ -2,9 +2,9 @@ package net.lewmc.essence.commands.stats;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.CommandUtil;
-import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
+import net.lewmc.foundry.Logger;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,7 +36,7 @@ public class RepairCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender cs, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if (command.getName().equalsIgnoreCase("repair")) {
-            if (!(cs instanceof Player p)) { return new LogUtil(this.plugin).noConsole(); }
+            if (!(cs instanceof Player p)) { return new Logger(this.plugin.config).noConsole(); }
 
             CommandUtil cmd = new CommandUtil(this.plugin, cs);
             if (cmd.isDisabled("repair")) {

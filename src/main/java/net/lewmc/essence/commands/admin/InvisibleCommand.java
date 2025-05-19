@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.admin;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -43,7 +44,7 @@ public class InvisibleCommand implements CommandExecutor {
             CommandUtil cmd = new CommandUtil(this.plugin, cs);
             if (cmd.isDisabled("invisible")) { return cmd.disabled(); }
 
-            if (!(cs instanceof Player)) { return new LogUtil(this.plugin).noConsole(); }
+            if (!(cs instanceof Player)) { return new Logger(this.plugin.config).noConsole(); }
 
             PermissionHandler perm = new PermissionHandler(this.plugin, cs);
             if (!perm.has("essence.admin.invisible")) { return perm.not(); }

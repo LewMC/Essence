@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Logger;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SetspawnCommand implements CommandExecutor {
     private final Essence plugin;
-    private final LogUtil log;
+    private final Logger log;
 
     /**
      * Constructor for the SetspawnCommand class.
@@ -20,7 +21,7 @@ public class SetspawnCommand implements CommandExecutor {
      */
     public SetspawnCommand(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
+        this.log = new Logger(plugin.config);
     }
 
     /**

@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.tp;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,7 +41,7 @@ public class TpahereCommand implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("tpahere")) {
             CommandUtil cmd = new CommandUtil(this.plugin, cs);
             if (cmd.isDisabled("tpahere")) { return cmd.disabled(); }
-            if (cmd.console(cs)) { return new LogUtil(this.plugin).noConsole(); }
+            if (cmd.console(cs)) { return new Logger(this.plugin.config).noConsole(); }
 
             PermissionHandler perms = new PermissionHandler(this.plugin, cs);
 

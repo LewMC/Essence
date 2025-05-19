@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.home;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,7 +38,7 @@ public class HomesCommand implements CommandExecutor {
             CommandUtil cmd = new CommandUtil(this.plugin, cs);
             if (cmd.isDisabled("homes")) { return cmd.disabled(); }
 
-            if (!(cs instanceof Player p)) { return new LogUtil(this.plugin).noConsole(); }
+            if (!(cs instanceof Player p)) { return new Logger(this.plugin.config).noConsole(); }
 
             PermissionHandler permission = new PermissionHandler(this.plugin, cs);
 

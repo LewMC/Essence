@@ -3,6 +3,7 @@ package net.lewmc.essence.events;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
+import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.WorldCreator;
@@ -34,7 +35,7 @@ public class JoinEvent implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         this.playerJoinMessage(event);
 
-        LogUtil log = new LogUtil(this.plugin);
+        Logger log = new Logger(this.plugin.config);
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getPlayer().getName());
         boolean firstJoin = !offlinePlayer.hasPlayedBefore();
@@ -84,9 +85,9 @@ public class JoinEvent implements Listener {
     /**
      * Spawns the player.
      * @param event PlayerJoinEvent - The event
-     * @param log LogUtil - Logging system.
+     * @param log Logger - Logging system.
      */
-    private void spawn(PlayerJoinEvent event, LogUtil log) {
+    private void spawn(PlayerJoinEvent event, Logger log) {
         MessageUtil message = new MessageUtil(this.plugin, event.getPlayer());
 
         FileUtil essenceConfiguration = new FileUtil(this.plugin);
@@ -150,9 +151,9 @@ public class JoinEvent implements Listener {
     /**
      * Managers a player's first join.
      * @param event PlayerJoinEvent - The event
-     * @param log LogUtil - Logging system.
+     * @param log Logger - Logging system.
      */
-    private void firstJoin(PlayerJoinEvent event, LogUtil log) {
+    private void firstJoin(PlayerJoinEvent event, Logger log) {
         KitUtil kit = new KitUtil(this.plugin, event.getPlayer());
         if (this.plugin.getConfig().getList("spawn-kits") != null && !Objects.equals(this.plugin.getConfig().getString("spawn-kits"), "false")) {
             for (Object giveKit : this.plugin.getConfig().getList("spawn-kits")) {

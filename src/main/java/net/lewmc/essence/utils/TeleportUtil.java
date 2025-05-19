@@ -2,6 +2,7 @@ package net.lewmc.essence.utils;
 
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Logger;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -17,7 +18,7 @@ import java.util.Objects;
  */
 public class TeleportUtil {
     private final Essence plugin;
-    private final LogUtil log;
+    private final Logger log;
 
     /**
      * Used to communicate the type of teleportation to commands where this may be ambiguous.
@@ -32,7 +33,7 @@ public class TeleportUtil {
      */
     public TeleportUtil(Essence plugin) {
         this.plugin = plugin;
-        this.log = new LogUtil(plugin);
+        this.log = new Logger(plugin.config);
     }
 
     /**

@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -86,7 +87,7 @@ public class PlayerUtil {
         FileUtil playerFile = new FileUtil(this.plugin);
         Player player = (Player) this.cs;
 
-        LogUtil log = new LogUtil(this.plugin);
+        Logger log = new Logger(this.plugin.config);
 
         if (!playerFile.exists(playerFile.playerDataFile(player.getUniqueId()))) {
             playerFile.create(playerFile.playerDataFile(player.getUniqueId()));
@@ -131,7 +132,7 @@ public class PlayerUtil {
         FileUtil playerFile = new FileUtil(this.plugin);
         Player player = (Player) this.cs;
 
-        LogUtil log = new LogUtil(this.plugin);
+        Logger log = new Logger(this.plugin.config);
 
         if (!playerFile.exists(playerFile.playerDataFile(player.getUniqueId()))) {
             playerFile.create(playerFile.playerDataFile(player.getUniqueId()));

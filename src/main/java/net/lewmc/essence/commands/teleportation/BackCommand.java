@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.*;
+import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,7 +42,7 @@ public class BackCommand implements CommandExecutor {
             CommandUtil cmd = new CommandUtil(this.plugin, cs);
             if (cmd.isDisabled("back")) { return cmd.disabled(); }
 
-            if (!(cs instanceof Player p)) { return new LogUtil(this.plugin).noConsole(); }
+            if (!(cs instanceof Player p)) { return new Logger(this.plugin.config).noConsole(); }
 
             PermissionHandler perms = new PermissionHandler(this.plugin, cs);
 

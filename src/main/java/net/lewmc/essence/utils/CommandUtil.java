@@ -1,6 +1,7 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -48,8 +49,7 @@ public class CommandUtil {
         }
 
         if (this.plugin.verbose) {
-            LogUtil log = new LogUtil(this.plugin);
-            log.warn("Attempted to execute disabled command.");
+            new Logger(this.plugin.config).warn("Attempted to execute disabled command.");
             return false;
         }
 

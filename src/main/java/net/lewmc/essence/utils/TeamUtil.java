@@ -1,7 +1,8 @@
 package net.lewmc.essence.utils;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.foundry.utils.SecurityUtil;
+import net.lewmc.foundry.Logger;
+import net.lewmc.foundry.Security;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -33,8 +34,7 @@ public class TeamUtil {
      * @param leader UUID - Leader's UUID
      */
     public void create(String name, UUID leader) {
-        SecurityUtil su = new SecurityUtil();
-        if (su.hasSpecialCharacters(name)) {
+        if (new Security(this.plugin.config).hasSpecialCharacters(name)) {
             message.send("team", "specialchars");
             return;
         }
@@ -66,8 +66,7 @@ public class TeamUtil {
                 message.send("team", "created", new String[] { name });
             } else {
                 message.send("generic", "exception");
-                LogUtil log = new LogUtil(this.plugin);
-                log.warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
+                new Logger(this.plugin.config).warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
             }
         } else {
             message.send("team", "exists");

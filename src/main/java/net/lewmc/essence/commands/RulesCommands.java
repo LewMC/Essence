@@ -2,10 +2,10 @@ package net.lewmc.essence.commands;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.utils.CommandUtil;
-import net.lewmc.essence.utils.LogUtil;
 import net.lewmc.essence.utils.MessageUtil;
 import net.lewmc.essence.utils.PermissionHandler;
 import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
+import net.lewmc.foundry.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -54,7 +54,7 @@ public class RulesCommands implements CommandExecutor {
                         msg.send("other", "rule", new String[] {pu.replaceAll(rule)});
                     }
                 } catch (IOException e) {
-                    LogUtil log = new LogUtil(this.plugin);
+                    Logger log = new Logger(this.plugin.config);
                     msg.send("generic", "exception");
                     log.severe("Unable to display rules.");
                     log.severe(e.getMessage());
