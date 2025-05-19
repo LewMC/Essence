@@ -3,14 +3,13 @@ package net.lewmc.essence.commands;
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
 import net.lewmc.foundry.Files;
+import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class EssenceCommands implements CommandExecutor {
+public class EssenceCommands extends FoundryCommand {
     private final Essence plugin;
 
     /**
@@ -22,53 +21,54 @@ public class EssenceCommands implements CommandExecutor {
     }
 
     /**
-    * /essence command handler.
-    * @param cs Information about who sent the command - player or console.
+     * Permission required to execute.
+     * @return String - The permission string.
+     */
+    @Override
+    protected String requiredPermission() {
+        return null;
+    }
+
+    /**
+     * /essence command handler.
+     * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
      * @param args The command's arguments.
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(
-        @NotNull CommandSender cs,
-        @NotNull Command command,
-        @NotNull String s,
-        String[] args
-    ) {
-        MessageUtil message = new MessageUtil(this.plugin, cs);
+    protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
+        CommandUtil cmd = new CommandUtil(this.plugin, cs);
+        if (cmd.isDisabled("essence")) { return cmd.disabled(); }
 
-        if (command.getName().equalsIgnoreCase("essence")) {
-            CommandUtil cmd = new CommandUtil(this.plugin, cs);
-            if (cmd.isDisabled("essence")) { return cmd.disabled(); }
+        MessageUtil msg = new MessageUtil(this.plugin, cs);
 
-            if (args.length > 0) {
-                if ("help".equals(args[0])) {
-                    HelpCommand helpCommand = new HelpCommand(this.plugin, message, args, cs);
-                    return helpCommand.runHelpCommand();
-                } else if ("reload".equals(args[0])) {
-                    return this.reloadCommand(cs, message);
-                } else if ("import".equals(args[0])) {
-                    return this.importCommand(args, message, cs);
-                }
-            } else {
-                message.send("about", "version", new String[] { plugin.getDescription().getVersion() });
-                message.send("about", "description");
-                message.send("about", "author");
-                if (!Objects.equals(this.plugin.getConfig().getString("language"), "en-GB")) {
-                    Files lang = new Files(this.plugin.config, this.plugin);
-                    lang.load("language/"+this.plugin.getConfig().getString("language")+".yml");
-                    message.send("about", "authorLang", new String[] { lang.getString("meta.language"), lang.getString("meta.author") });
-                    lang.close();
-                }
-                message.send("about", "issues");
-                message.send("about", "more");
-
-                return true;
+        if (args.length > 0) {
+            if ("help".equals(args[0])) {
+                HelpCommand helpCommand = new HelpCommand(this.plugin, msg, args, cs);
+                return helpCommand.runHelpCommand();
+            } else if ("reload".equals(args[0])) {
+                return this.reloadCommand(cs, msg);
+            } else if ("import".equals(args[0])) {
+                return this.importCommand(args, msg, cs);
             }
-        }
+        } else {
+            msg.send("about", "version", new String[] { plugin.getDescription().getVersion() });
+            msg.send("about", "description");
+            msg.send("about", "author");
+            if (!Objects.equals(this.plugin.getConfig().getString("language"), "en-GB")) {
+                Files lang = new Files(this.plugin.config, this.plugin);
+                lang.load("language/"+this.plugin.getConfig().getString("language")+".yml");
+                msg.send("about", "authorLang", new String[] { lang.getString("meta.language"), lang.getString("meta.author") });
+                lang.close();
+            }
+            msg.send("about", "issues");
+            msg.send("about", "more");
 
-        return false;
+            return true;
+        }
+        return true;
     }
 
     /**
