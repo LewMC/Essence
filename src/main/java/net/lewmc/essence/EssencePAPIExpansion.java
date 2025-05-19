@@ -1,7 +1,7 @@
 package net.lewmc.essence;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import net.lewmc.essence.global.UtilPlaceholder;
+import net.lewmc.essence.core.UtilPlaceholder;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
