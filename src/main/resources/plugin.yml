@@ -8,6 +8,7 @@ website: https://lewmc.net
 load: POSTWORLD
 folia-supported: true
 softdepend: ["Vault","PlaceholderAPI"]
+depend: ["Foundry"]
 commands:
   essence:
     description: Main command

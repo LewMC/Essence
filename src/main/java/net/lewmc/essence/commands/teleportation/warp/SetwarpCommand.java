@@ -2,6 +2,7 @@ package net.lewmc.essence.commands.teleportation.warp;
 
 import net.lewmc.essence.utils.*;
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.utils.SecurityUtil;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
