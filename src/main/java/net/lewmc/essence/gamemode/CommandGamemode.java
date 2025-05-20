@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Gamemode commands class.
+ * @deprecated Need to move to Foundry!
  */
 public class CommandGamemode implements CommandExecutor {
     private final Essence plugin;
