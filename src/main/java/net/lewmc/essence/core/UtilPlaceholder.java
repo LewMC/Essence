@@ -48,7 +48,7 @@ public class UtilPlaceholder {
         }
 
         // New placeholder system.
-        if (this.plugin.usingPAPI) {
+        if (this.plugin.integrations.PAPIEnabled) {
             if (this.cs instanceof Player) {
                 return new UtilPlaceholderAPI().invokePAPI((Player) this.cs, text);
             } else {

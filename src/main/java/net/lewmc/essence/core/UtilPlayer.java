@@ -164,9 +164,9 @@ public class UtilPlayer {
      * @return String - The player's prefix (might be blank).
      */
     public String getPlayerPrefix() {
-        if (this.plugin.chat != null) {
+        if (this.plugin.integrations.chat != null) {
             if (this.cs instanceof Player p) {
-                String prefix = this.plugin.chat.getPlayerPrefix(p);
+                String prefix = this.plugin.integrations.chat.getPlayerPrefix(p);
                 if (prefix != null && !prefix.isEmpty()) {
                     return "[" +  prefix + "]";
                 } else {
@@ -185,9 +185,9 @@ public class UtilPlayer {
      * @return String - The player's suffix (might be blank).
      */
     public String getPlayerSuffix() {
-        if (this.plugin.chat != null) {
+        if (this.plugin.integrations.chat != null) {
             if (this.cs instanceof Player p) {
-                String suffix = this.plugin.chat.getPlayerSuffix(p);
+                String suffix = this.plugin.integrations.chat.getPlayerSuffix(p);
                 if (suffix != null && !suffix.isEmpty()) {
                     return " " +  suffix;
                 } else {

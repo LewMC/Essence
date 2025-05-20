@@ -1,25 +1,21 @@
 package net.lewmc.essence;
 
 import com.tcoded.folialib.FoliaLib;
-import net.lewmc.essence.admin.*;
-import net.lewmc.essence.chat.*;
-import net.lewmc.essence.core.*;
-import net.lewmc.essence.economy.*;
+import net.lewmc.essence.admin.ModuleAdmin;
+import net.lewmc.essence.chat.ModuleChat;
+import net.lewmc.essence.core.ModuleCore;
+import net.lewmc.essence.core.UtilCommand;
+import net.lewmc.essence.core.UtilUpdate;
+import net.lewmc.essence.economy.ModuleEconomy;
 import net.lewmc.essence.gamemode.ModuleGamemode;
-import net.lewmc.essence.inventory.*;
+import net.lewmc.essence.inventory.ModuleInventory;
 import net.lewmc.essence.kit.ModuleKit;
-import net.lewmc.essence.stats.*;
+import net.lewmc.essence.stats.ModuleStats;
 import net.lewmc.essence.team.ModuleTeam;
-import net.lewmc.essence.teleportation.*;
-import net.lewmc.essence.economy.UtilVaultEconomy;
+import net.lewmc.essence.teleportation.ModuleTeleportation;
 import net.lewmc.foundry.*;
-import net.milkbowl.vault.chat.Chat;
-import net.milkbowl.vault.economy.Economy;
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -43,11 +39,6 @@ public class Essence extends JavaPlugin {
      * The config.yml's disabled-commands-feedback value is stored here.
      */
     public boolean disabledCommandsFeedback;
-
-    /**
-     * The Vault economy handler.
-     */
-    private Economy economy = null;
 
     /**
      * Stores pending teleport requests.
@@ -86,11 +77,6 @@ public class Essence extends JavaPlugin {
     public Random rand = new Random();
 
     /**
-     * Stores if PlaceholderAPI is being used.
-     */
-    public boolean usingPAPI = false;
-
-    /**
      * The nameFormat to use in chats.
      */
     public String chat_nameFormat;
@@ -106,11 +92,6 @@ public class Essence extends JavaPlugin {
     public boolean chat_allowMessageFormatting;
 
     /**
-     * Vault chat
-     */
-    public Chat chat;
-
-    /**
      * Economy symbol.
      */
     public String economySymbol = "$";
@@ -119,6 +100,11 @@ public class Essence extends JavaPlugin {
      * Holds the Foundry configuration.
      */
     public FoundryConfig config;
+
+    /**
+     * Holds Essence's integrations.
+     */
+    public EssenceIntegrations integrations;
 
     /**
      * This function runs when Essence is enabled.
@@ -166,27 +152,21 @@ public class Essence extends JavaPlugin {
 
         this.checkForEssentials();
         this.checkForPaper();
-        
         this.initFileSystem();
-        
-        this.loadModules();
-
         this.loadChatFormat();
-
-        if (!setupEconomy()) {
-            this.log.warn("Vault not found! Using local economy.");
-        }
-
-        if (!setupChat()) {
-            this.log.warn("Vault not found! Using local chat.");
-        }
+        this.loadModules();
 
         UtilUpdate update = new UtilUpdate(this);
         update.VersionCheck();
         update.UpdateConfig();
         update.UpdateLanguage();
 
-        this.registerPAPIExpansion();
+        this.integrations = new EssenceIntegrations(this);
+        this.integrations.loadPlaceholderAPI();
+        if (!this.integrations.loadVaultEconomy()) { this.log.warn("Vault not found! Using local economy."); }
+        if (!this.integrations.loadVaultChat()) { this.log.warn("Vault not found! Using local chat."); }
+        this.integrations.loadMetrics();
+
         this.checkLanguageSystem();
 
         this.log.info("");
@@ -209,64 +189,6 @@ public class Essence extends JavaPlugin {
         }
 
         System.setProperty("ESSENCE_LOADED", "TRUE");
-
-        int pluginId = 20768;
-        Metrics metrics = new Metrics(this, pluginId);
-        metrics.addCustomChart(new SimplePie("language", () -> getConfig().getString("language")));
-        if (economy == null) {
-            metrics.addCustomChart(new SimplePie("economy_enabled", () -> "false"));
-        } else {
-            metrics.addCustomChart(new SimplePie("economy_enabled", () -> "true"));
-        }
-    }
-
-    /**
-     * Sets up Vault to use Essence's economy.
-     *
-     * @return boolean - If it could be setup correctly.
-     */
-    private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        this.log.info("Vault found, setting up economy service...");
-
-        getServer().getServicesManager().register(Economy.class, new UtilVaultEconomy(this), this, ServicePriority.Highest);
-
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            log.severe("No economy service provider found after registration!");
-            return false;
-        }
-
-        this.economy = rsp.getProvider();
-
-        this.log.info("");
-
-        this.economySymbol = this.getConfig().getString("economy.symbol");
-
-        return this.economy != null;
-    }
-
-    /**
-     * Sets up Vault to use Essence's economy.
-     *
-     * @return boolean - If it could be setup correctly.
-     */
-    private boolean setupChat() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        this.log.info("Vault found, setting up chat service...");
-
-        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        if (rsp != null) {
-            this.chat = rsp.getProvider();
-        }
-
-        this.log.info("");
-
-        return this.chat != null;
     }
 
     /**
@@ -371,22 +293,6 @@ public class Essence extends JavaPlugin {
         new ModuleStats(this, reg);
         new ModuleTeam(this, reg);
         new ModuleTeleportation(this, reg);
-    }
-
-    /**
-     * Registers Essence's PlaceholderAPIExpansion
-     */
-    private void registerPAPIExpansion() {
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            new EssencePAPIExpansion(this).register();
-            usingPAPI = true;
-            this.log.info("Placeholder API is installed, registered placeholders.");
-        } else {
-            usingPAPI = false;
-            if (this.verbose) {
-                this.log.info("Placeholder API is not installed, placeholders not registered.");
-            }
-        }
     }
 
     private void loadChatFormat() {
