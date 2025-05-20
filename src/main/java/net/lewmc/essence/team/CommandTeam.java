@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
  */
 public class CommandTeam extends FoundryPlayerCommand {
     private final Essence plugin;
+
     /**
      * Constructor for the GamemodeCommands class.
      *
@@ -23,6 +24,10 @@ public class CommandTeam extends FoundryPlayerCommand {
         this.plugin = plugin;
     }
 
+    /**
+     * The required permission.
+     * @return String - The permission string.
+     */
     @Override
     protected String requiredPermission() {
         return null;
