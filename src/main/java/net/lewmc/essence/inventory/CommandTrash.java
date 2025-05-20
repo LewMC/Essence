@@ -2,19 +2,16 @@ package net.lewmc.essence.inventory;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.core.UtilPermission;
-import net.lewmc.foundry.Logger;
+import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * /trash command.
  */
-public class CommandTrash implements CommandExecutor {
+public class CommandTrash extends FoundryPlayerCommand {
     private final Essence plugin;
 
     /**
@@ -26,6 +23,15 @@ public class CommandTrash implements CommandExecutor {
     }
 
     /**
+     * The required permission
+     * @return String - the permission string
+     */
+    @Override
+    protected String requiredPermission() {
+        return "essence.inventory.trash";
+    }
+
+    /**
      * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
@@ -33,29 +39,12 @@ public class CommandTrash implements CommandExecutor {
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(
-        @NotNull CommandSender cs,
-        @NotNull Command command,
-        @NotNull String s,
-        String[] args
-    ) {
-        if (command.getName().equalsIgnoreCase("trash")) {
-            if (cs instanceof Player p) {
-                UtilCommand cmd = new UtilCommand(this.plugin, cs);
-                if (cmd.isDisabled("trash")) {return cmd.disabled();}
+    protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
+        UtilCommand cmd = new UtilCommand(this.plugin, cs);
+        if (cmd.isDisabled("trash")) {return cmd.disabled();}
 
-                UtilPermission permission = new UtilPermission(this.plugin, cs);
-                if (permission.has("essence.inventory.trash")) {
-                    p.openInventory(Bukkit.createInventory(p, 27, "Trash"));
-                    return true;
-                } else {
-                    return permission.not();
-                }
-            } else {
-                return new Logger(this.plugin.config).noConsole();
-            }
-        }
-
-        return false;
+        Player p = (Player) cs;
+        p.openInventory(Bukkit.createInventory(p, 27, "Trash"));
+        return true;
     }
 }

@@ -2,18 +2,15 @@ package net.lewmc.essence.inventory;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.core.UtilPermission;
-import net.lewmc.foundry.Logger;
+import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * /smithing command.
  */
-public class CommandSmithing implements CommandExecutor {
+public class CommandSmithing extends FoundryPlayerCommand {
     private final Essence plugin;
 
     /**
@@ -25,36 +22,28 @@ public class CommandSmithing implements CommandExecutor {
     }
 
     /**
-     * @param cs Information about who sent the command - player or console.
-     * @param command Information about what command was sent.
-     * @param s Command label - not used here.
-     * @param args The command's arguments.
+     * The required permission
+     * @return String - the permission string
+     */
+    @Override
+    protected String requiredPermission() {
+        return "essence.inventory.smithing";
+    }
+
+    /**
+     * @param cs        Information about who sent the command - player or console.
+     * @param command   Information about what command was sent.
+     * @param s         Command label - not used here.
+     * @param args      The command's arguments.
      * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
-    public boolean onCommand(
-        @NotNull CommandSender cs,
-        @NotNull Command command,
-        @NotNull String s,
-        String[] args
-    ) {
-        if (command.getName().equalsIgnoreCase("smithing")) {
-            if (cs instanceof Player p) {
-                UtilCommand cmd = new UtilCommand(this.plugin, cs);
-                if (cmd.isDisabled("smithing")) {return cmd.disabled();}
+    protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
+        UtilCommand cmd = new UtilCommand(this.plugin, cs);
+        if (cmd.isDisabled("smithing")) {return cmd.disabled();}
 
-                UtilPermission permission = new UtilPermission(this.plugin, cs);
-                if (permission.has("essence.inventory.smithing")) {
-                    p.openSmithingTable(null, true);
-                    return true;
-                } else {
-                    return permission.not();
-                }
-            } else {
-                return new Logger(this.plugin.config).noConsole();
-            }
-        }
-
-        return false;
+        Player p = (Player) cs;
+        p.openSmithingTable(null, true);
+        return true;
     }
 }
