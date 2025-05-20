@@ -41,7 +41,7 @@ public class CommandKit extends FoundryPlayerCommand {
      * @param command   Information about what command was sent.
      * @param s         Command label - not used here.
      * @param args      The command's arguments.
-     * @return boolean true/false - was the command accepted and processed or not?
+     * @return boolean  true/false - was the command accepted and processed or not?
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
