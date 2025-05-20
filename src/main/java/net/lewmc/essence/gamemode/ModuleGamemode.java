@@ -25,7 +25,11 @@ public class ModuleGamemode extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        reg.command(new String[] {"gamemode", "gmc", "gms", "gma", "gmsp"}, new CommandGamemode((Essence) plugin));
+        reg.command("gamemode", new CommandGamemode((Essence) plugin));
+        reg.command("gma", new CommandGma((Essence) plugin));
+        reg.command("gmc", new CommandGmc((Essence) plugin));
+        reg.command("gms", new CommandGms((Essence) plugin));
+        reg.command("gmsp", new CommandGmsp((Essence) plugin));
     }
 
     /**
