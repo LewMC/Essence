@@ -5,18 +5,15 @@ import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.Essence;
 import net.lewmc.foundry.Files;
-import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.Security;
+import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class CommandSetwarp implements CommandExecutor {
+public class CommandSetwarp extends FoundryPlayerCommand {
     private final Essence plugin;
-    private final Logger log;
 
     /**
      * Constructor for the SetwarpCommand class.
@@ -25,70 +22,65 @@ public class CommandSetwarp implements CommandExecutor {
      */
     public CommandSetwarp(Essence plugin) {
         this.plugin = plugin;
-        this.log = new Logger(plugin.config);
     }
 
     /**
-     * @param cs            Information about who sent the command - player or console.
-     * @param command       Information about what command was sent.
-     * @param s             Command label - not used here.
-     * @param args          The command's arguments.
-     * @return boolean true/false - was the command accepted and processed or not?
+     * Required permissions.
+     * @return String - The permission string.
      */
     @Override
-    public boolean onCommand(
-        @NotNull CommandSender cs,
-        @NotNull Command command,
-        @NotNull String s,
-        String[] args
-    ) {
-        if (command.getName().equalsIgnoreCase("setwarp")) {
-            UtilCommand cmd = new UtilCommand(this.plugin, cs);
-            if (cmd.isDisabled("setwarp")) { return cmd.disabled(); }
+    protected String requiredPermission() {
+        return "essence.warp.create";
+    }
 
-            if (!(cs instanceof Player p)) { return this.log.noConsole(); }
+    /**
+     * @param cs        Information about who sent the command - player or console.
+     * @param command   Information about what command was sent.
+     * @param s         Command label - not used here.
+     * @param args      The command's arguments.
+     * @return boolean  true/false - was the command accepted and processed or not?
+     */
+    @Override
+    protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
+        UtilCommand cmd = new UtilCommand(this.plugin, cs);
+        if (cmd.isDisabled("setwarp")) {
+            return cmd.disabled();
+        }
 
-            UtilPermission permission = new UtilPermission(this.plugin, cs);
+        Player p = (Player) cs;
 
-            if (permission.has("essence.warp.create")) {
-                UtilMessage msg = new UtilMessage(this.plugin, cs);
+        UtilMessage msg = new UtilMessage(this.plugin, cs);
 
-                if (args.length == 0) {
-                    msg.send("warp", "setusage");
-                    return true;
-                }
-                Location loc = p.getLocation();
-                Files warpsData = new Files(this.plugin.config, this.plugin);
-                warpsData.load("data/warps.yml");
+        if (args.length == 0) {
+            msg.send("warp", "setusage");
+            return true;
+        }
+        Location loc = p.getLocation();
+        Files warpsData = new Files(this.plugin.config, this.plugin);
+        warpsData.load("data/warps.yml");
 
-                String warpName = args[0].toLowerCase();
+        String warpName = args[0].toLowerCase();
 
-                if (new Security(this.plugin.config).hasSpecialCharacters(warpName)) {
-                    warpsData.close();
-                    msg.send("warp", "specialchars");
-                    return true;
-                }
-
-                UtilWarp wu = new UtilWarp(this.plugin);
-                int warpLimit = permission.getWarpsLimit(p);
-                if (wu.getWarpCount(p) >= warpLimit && warpLimit != -1) {
-                    msg.send("warp", "hitlimit");
-                    return true;
-                }
-
-                if (wu.create(warpName, p.getUniqueId(), loc)) {
-                    msg.send("warp", "created", new String[] { args[0] });
-                } else {
-                    msg.send("warp", "cantcreate", new String[] { args[0] });
-                }
-
-                warpsData.close();
-            } else {
-                permission.not();
-            }
+        if (new Security(this.plugin.config).hasSpecialCharacters(warpName)) {
+            warpsData.close();
+            msg.send("warp", "specialchars");
             return true;
         }
 
-        return false;
+        UtilWarp wu = new UtilWarp(this.plugin);
+        int warpLimit = new UtilPermission(this.plugin, cs).getWarpsLimit(p);
+        if (wu.getWarpCount(p) >= warpLimit && warpLimit != -1) {
+            msg.send("warp", "hitlimit");
+            return true;
+        }
+
+        if (wu.create(warpName, p.getUniqueId(), loc)) {
+            msg.send("warp", "created", new String[]{args[0]});
+        } else {
+            msg.send("warp", "cantcreate", new String[]{args[0]});
+        }
+
+        warpsData.close();
+        return true;
     }
 }
