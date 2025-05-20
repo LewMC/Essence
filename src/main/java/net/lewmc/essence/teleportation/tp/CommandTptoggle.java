@@ -3,19 +3,16 @@ package net.lewmc.essence.teleportation.tp;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
-import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.Files;
-import net.lewmc.foundry.Logger;
+import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * /tpaccept command.
+ * /tptoggle command.
  */
-public class CommandTptoggle implements CommandExecutor {
+public class CommandTptoggle extends FoundryPlayerCommand {
     private final Essence plugin;
 
     /**
@@ -28,49 +25,42 @@ public class CommandTptoggle implements CommandExecutor {
     }
 
     /**
-     * @param cs            Information about who sent the command - player or console.
-     * @param command       Information about what command was sent.
-     * @param s             Command label - not used here.
-     * @param args          The command's arguments.
-     * @return boolean true/false - was the command accepted and processed or not?
+     * The required permission.
+     * @return String - The permission string.
      */
     @Override
-    public boolean onCommand(
-            @NotNull CommandSender cs,
-            @NotNull Command command,
-            @NotNull String s,
-            String[] args
-    ) {
-        if (command.getName().equalsIgnoreCase("tptoggle")) {
+    protected String requiredPermission() {
+        return "essence.teleport.request.toggle";
+    }
 
-            UtilCommand cmd = new UtilCommand(this.plugin, cs);
-            if (cmd.isDisabled("tptoggle")) { return cmd.disabled(); }
-            if (cmd.console(cs)) { return new Logger(this.plugin.config).noConsole(); }
+    /**
+     * @param cs        Information about who sent the command - player or console.
+     * @param command   Information about what command was sent.
+     * @param s         Command label - not used here.
+     * @param args      The command's arguments.
+     * @return boolean  true/false - was the command accepted and processed or not?
+     */
+    @Override
+    protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
+        UtilCommand cmd = new UtilCommand(this.plugin, cs);
+        if (cmd.isDisabled("tptoggle")) { return cmd.disabled(); }
 
-            UtilPermission perms = new UtilPermission(this.plugin, cs);
+        Files file = new Files(this.plugin.config, this.plugin);
 
-            if (perms.has("essence.teleport.request.toggle")) {
-                Files file = new Files(this.plugin.config, this.plugin);
+        Player p = (Player) cs;
+        file.load(file.playerDataFile(p.getUniqueId()));
 
-                Player p = (Player) cs;
-                file.load(file.playerDataFile(p.getUniqueId()));
+        UtilMessage msg = new UtilMessage(this.plugin, cs);
 
-                UtilMessage msg = new UtilMessage(this.plugin, cs);
-
-                if (file.getBoolean("user.accepting-teleport-requests")) {
-                    file.set("user.accepting-teleport-requests", false);
-                    msg.send("teleport", "toggled", new String[] { "disabled" });
-                } else {
-                    file.set("user.accepting-teleport-requests", true);
-                    msg.send("teleport", "toggled", new String[] { "enabled" });
-                }
-
-                file.save();
-                return true;
-            } else {
-                return perms.not();
-            }
+        if (file.getBoolean("user.accepting-teleport-requests")) {
+            file.set("user.accepting-teleport-requests", false);
+            msg.send("teleport", "toggled", new String[] { "disabled" });
+        } else {
+            file.set("user.accepting-teleport-requests", true);
+            msg.send("teleport", "toggled", new String[] { "enabled" });
         }
-        return false;
+
+        file.save();
+        return true;
     }
 }

@@ -3,21 +3,18 @@ package net.lewmc.essence.teleportation.tp;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
-import net.lewmc.essence.core.UtilPermission;
-import net.lewmc.foundry.Logger;
+import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * /tpaccept command.
  */
-public class CommandTpaccept implements CommandExecutor {
+public class CommandTpaccept extends FoundryPlayerCommand {
     private final Essence plugin;
 
     /**
-     * Constructor for the TpaCommand class.
+     * Constructor for the TpacceptCommand class.
      *
      * @param plugin References to the main plugin class.
      */
@@ -26,37 +23,29 @@ public class CommandTpaccept implements CommandExecutor {
     }
 
     /**
-     * @param cs            Information about who sent the command - player or console.
-     * @param command       Information about what command was sent.
-     * @param s             Command label - not used here.
-     * @param args          The command's arguments.
-     * @return boolean true/false - was the command accepted and processed or not?
+     * The required permission.
+     * @return String - The permission string.
      */
     @Override
-    public boolean onCommand(
-            @NotNull CommandSender cs,
-            @NotNull Command command,
-            @NotNull String s,
-            String[] args
-    ) {
-        if (command.getName().equalsIgnoreCase("tpaccept")) {
-            UtilCommand cmd = new UtilCommand(this.plugin, cs);
-            if (cmd.isDisabled("tpaccept")) { return cmd.disabled(); }
-            if (cmd.console(cs)) {
-                return new Logger(this.plugin.config).noConsole();
-            }
+    protected String requiredPermission() {
+        return "essence.teleport.request.accept";
+    }
 
-            UtilPermission permission = new UtilPermission(this.plugin, cs);
+    /**
+     * @param cs        Information about who sent the command - player or console.
+     * @param command   Information about what command was sent.
+     * @param s         Command label - not used here.
+     * @param args      The command's arguments.
+     * @return boolean  true/false - was the command accepted and processed or not?
+     */
+    @Override
+    protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
+        UtilCommand cmd = new UtilCommand(this.plugin, cs);
+        if (cmd.isDisabled("tpaccept")) { return cmd.disabled(); }
 
-            if (permission.has("essence.teleport.request.accept")) {
-                if (!new UtilTeleportRequest(plugin).acceptRequest(cs.getName())) {
-                    new UtilMessage(this.plugin, cs).send("teleport", "acceptnone");
-                }
-                return true;
-            } else {
-                return permission.not();
-            }
+        if (!new UtilTeleportRequest(plugin).acceptRequest(cs.getName())) {
+            new UtilMessage(this.plugin, cs).send("teleport", "acceptnone");
         }
-        return false;
+        return true;
     }
 }
