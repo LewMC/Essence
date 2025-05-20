@@ -6,11 +6,23 @@ import net.lewmc.foundry.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Essence's Inventory module.
+ */
 public class ModuleInventory extends FoundryModule {
+
+    /**
+     * Constructor for the module.
+     * @param plugin    JavaPlugin - Reference to the main Essence class.
+     * @param reg       Registry - Reference to the Foundry Registry.
+     */
     public ModuleInventory(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
     }
 
+    /**
+     * Registers commands.
+     */
     @Override
     public void registerCommands() {
         reg.command("anvil", new CommandAnvil((Essence) plugin));
@@ -24,9 +36,15 @@ public class ModuleInventory extends FoundryModule {
         reg.command("trash", new CommandTrash((Essence) plugin));
     }
 
+    /**
+     * Registers Tab Completers
+     */
     @Override
     public void registerTabCompleters() {}
 
+    /**
+     * Registers Events
+     */
     @Override
     public void registerEvents() {}
 }

@@ -6,11 +6,23 @@ import net.lewmc.foundry.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The Stats Module
+ */
 public class ModuleStats extends FoundryModule {
+
+    /**
+     * Constructor for the module.
+     * @param plugin    JavaPlugin - Reference to the main Essence class.
+     * @param reg       Registry - Reference to the Foundry Registry.
+     */
     public ModuleStats(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
     }
 
+    /**
+     * Registers Commands
+     */
     @Override
     public void registerCommands() {
         reg.command("feed", new CommandFeed((Essence) plugin));
@@ -18,9 +30,15 @@ public class ModuleStats extends FoundryModule {
         reg.command("repair", new CommandRepair((Essence) plugin));
     }
 
+    /**
+     * Registers Tab Completers
+     */
     @Override
     public void registerTabCompleters() {}
 
+    /**
+     * Registers Events
+     */
     @Override
     public void registerEvents() {}
 }

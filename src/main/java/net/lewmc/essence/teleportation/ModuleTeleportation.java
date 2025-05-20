@@ -11,11 +11,23 @@ import net.lewmc.foundry.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The Teleportation Module
+ */
 public class ModuleTeleportation extends FoundryModule {
+
+    /**
+     * Constructor for the module.
+     * @param plugin    JavaPlugin - Reference to the main Essence class.
+     * @param reg       Registry - Reference to the Foundry Registry.
+     */
     public ModuleTeleportation(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
     }
 
+    /**
+     * Registers Commands
+     */
     @Override
     public void registerCommands() {
         reg.command("tp", new CommandTeleport((Essence) plugin));
@@ -43,6 +55,9 @@ public class ModuleTeleportation extends FoundryModule {
         reg.command("back", new CommandBack((Essence) plugin));
     }
 
+    /**
+     * Registers Tab Completers
+     */
     @Override
     public void registerTabCompleters() {
         reg.tabCompleter(new String[] { "warp", "delwarp" }, new TabCompleterWarp((Essence) plugin));
@@ -50,6 +65,9 @@ public class ModuleTeleportation extends FoundryModule {
         reg.tabCompleter(new String[] { "tp" }, new TabCompleterTp());
     }
 
+    /**
+     * Registers Events
+     */
     @Override
     public void registerEvents() {}
 }

@@ -6,11 +6,23 @@ import net.lewmc.foundry.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The Team Module
+ */
 public class ModuleTeam extends FoundryModule {
+
+    /**
+     * Constructor for the module.
+     * @param plugin    JavaPlugin - Reference to the main Essence class.
+     * @param reg       Registry - Reference to the Foundry Registry.
+     */
     public ModuleTeam(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
     }
 
+    /**
+     * Registers Commands
+     */
     @Override
     public void registerCommands() {
         reg.command("team", new CommandTeam((Essence) plugin));
@@ -20,11 +32,17 @@ public class ModuleTeam extends FoundryModule {
         reg.command("delthome", new CommandDelthomes((Essence) plugin));
     }
 
+    /**
+     * Registers Tab Completers
+     */
     @Override
     public void registerTabCompleters() {
         reg.tabCompleter("team", new TabCompleterTeam());
     }
 
+    /**
+     * Registers Events
+     */
     @Override
     public void registerEvents() {}
 }
