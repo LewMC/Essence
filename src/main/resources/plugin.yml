@@ -251,7 +251,7 @@ commands:
   msg:
     description: Send a private message to another player.
     usage: /msg <user> <message>
-    aliases: ['message', 'pm']
+    aliases: ['message', 'pm', 'tell', 'w']
     permission: essence.chat.msg
   reply:
     description: Reply to the last private message sent to you.
