@@ -1,7 +1,7 @@
 package net.lewmc.essence;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import net.lewmc.essence.utils.placeholders.PlaceholderUtil;
+import net.lewmc.essence.core.UtilPlaceholder;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +58,7 @@ public class EssencePAPIExpansion extends PlaceholderExpansion {
      */
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String param) {
-        PlaceholderUtil pu = new PlaceholderUtil(this.plugin, (Player) player);
+        UtilPlaceholder pu = new UtilPlaceholder(this.plugin, (Player) player);
 
         if (param.equalsIgnoreCase("version")) { return pu.replaceSingle("version"); }
         if (param.equalsIgnoreCase("minecraft_version")) { return pu.replaceSingle("minecraft_version"); }

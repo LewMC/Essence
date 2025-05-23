@@ -8,6 +8,7 @@ website: https://lewmc.net
 load: POSTWORLD
 folia-supported: true
 softdepend: ["Vault","PlaceholderAPI"]
+depend: ["Foundry"]
 commands:
   essence:
     description: Main command
@@ -251,7 +252,7 @@ commands:
   msg:
     description: Send a private message to another player.
     usage: /msg <user> <message>
-    aliases: ['message', 'pm']
+    aliases: ['message', 'pm', 'tell', 'w']
     permission: essence.chat.msg
   reply:
     description: Reply to the last private message sent to you.

@@ -1,12 +1,12 @@
 ![Essence](https://cdn.modrinth.com/data/cached_images/1a9959eb6d98d5e50f561c021de086a8212cc7cc.png)
 
 - 💾 **Download Essence** - https://lewmc.net/plugin/essence
-- 🔧 **View the JavaDocs** - https://lewmc.github.io/Essence
 - 🌐 **Help Translate Essence** - https://crowdin.com/project/lewmc-essence
-- 📊 **Code Analysis** - https://sonarcloud.io/project/overview?id=LewMC_Essence
 - ⭐ Enjoying Essence? We'd love to hear your feedback on Spigot. Leave us a review [here](https://www.spigotmc.org/resources/essence.114553/).
 
-[![Crowdin](https://badges.crowdin.net/lewmc-essence/localized.svg)](https://crowdin.com/project/lewmc-essence) [![Maven Build](https://github.com/LewMC/Essence/actions/workflows/maven.yml/badge.svg)](https://github.com/LewMC/Essence/actions/workflows/maven.yml)
+[Maven Repository](https://repo.lewmc.net) - [Documentation](https://wiki.lewmc.net/foundry.html) - [JavaDocs](https://lewmc.github.io/Essence) - [Code Analysis](https://sonarcloud.io/project/overview?id=LewMC_Essence)
+
+[![Crowdin](https://badges.crowdin.net/lewmc-essence/localized.svg)](https://crowdin.com/project/lewmc-essence)
 
 # Contributing
 We welcome contributions from the community. Please fork the repository, make your changes, and submit a pull request.
