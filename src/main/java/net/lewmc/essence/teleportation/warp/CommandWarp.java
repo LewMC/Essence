@@ -80,8 +80,6 @@ public class CommandWarp extends FoundryPlayerCommand {
                 this.log.warn("Error: world is null, please check configuration file.");
                 return true;
             }
-            UtilLocation locationUtil = new UtilLocation(this.plugin);
-            locationUtil.UpdateLastLocation(p);
 
             teleUtil.setCooldown(p, "warp");
 

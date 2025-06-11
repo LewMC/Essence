@@ -132,9 +132,6 @@ public class CommandThome extends FoundryPlayerCommand {
             return true;
         }
 
-        UtilLocation locationUtil = new UtilLocation(this.plugin);
-        locationUtil.UpdateLastLocation(p);
-
         teleUtil.setCooldown(p, "home");
 
         if (Bukkit.getServer().getWorld(dataUtil.getString(homeName + ".world")) == null) {

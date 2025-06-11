@@ -58,7 +58,6 @@ public class CommandBack extends FoundryPlayerCommand {
             return true;
         }
 
-        new UtilLocation(this.plugin).UpdateLastLocation(p);
         new UtilTeleport(this.plugin).doTeleport(
                 p,
                 Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString("last-location.world"))),

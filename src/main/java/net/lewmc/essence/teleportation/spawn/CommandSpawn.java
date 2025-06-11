@@ -109,7 +109,6 @@ public class CommandSpawn extends FoundryPlayerCommand {
             if (this.plugin.verbose) {
                 this.log.info("Spawn implicitly set for world '" + spawnName + "'.");
             }
-            new UtilLocation(this.plugin).UpdateLastLocation(p);
 
             if (Bukkit.getServer().getWorld(spawnName) == null) {
                 new WorldCreator(spawnName).createWorld();
