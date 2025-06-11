@@ -51,6 +51,8 @@ public class CommandEssence extends FoundryCommand {
                 return this.reloadCommand(cs, msg);
             } else if ("import".equals(args[0])) {
                 return this.importCommand(args, msg, cs);
+            } else if ("restore".equals(args[0])) {
+                return this.restoreCommand(args, msg, cs);
             }
         } else {
             msg.send("about", "version", new String[] { plugin.getDescription().getVersion() });
@@ -68,6 +70,27 @@ public class CommandEssence extends FoundryCommand {
             return true;
         }
         return true;
+    }
+
+    /**
+     * Restores Essence's files (experimental).
+     * @param cs CommandSender - The entity that sent the command.
+     * @param message MessageUtil - The message utility.
+     * @return boolean - If the operation was successful.
+     */
+    private boolean restoreCommand(String[] args, UtilMessage message, CommandSender cs) {
+        UtilPermission perms = new UtilPermission(this.plugin, cs);
+        if (perms.has("essence.admin.restore")) {
+            this.plugin.saveResource("language/en-GB.yml", true);
+            this.plugin.saveResource("language/zh-CN.yml", true);
+            this.plugin.saveResource("language/fr-FR.yml", true);
+            this.plugin.saveResource("language/es-ES.yml", true);
+            this.plugin.saveResource("language/ko-KR.yml", true);
+            message.send("generic","done");
+            return true;
+        } else {
+            return perms.not();
+        }
     }
 
     /**

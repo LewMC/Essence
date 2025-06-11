@@ -523,6 +523,7 @@ permissions:
       essence.admin.info: true
       essence.admin.info.viewip: true
       essence.admin.reload: true
+      essence.admin.restore: true
       essence.admin.import: true
       essence.admin.invisible: true
       essence.admin.updates: true
@@ -534,6 +535,8 @@ permissions:
     description: Allows players to see other player's IP addresses.
   essence.admin.reload:
     description: Allows players to reload Essence.
+  essence.admin.restore:
+    description: Allows players to restore Essence's files.
   essence.admin.import:
     description: Allows players to reload Essence.
   essence.admin.invisible:

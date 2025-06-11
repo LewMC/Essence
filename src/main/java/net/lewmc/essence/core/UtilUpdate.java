@@ -96,6 +96,8 @@ public class UtilUpdate {
     public void UpdateLanguage() {
         this.migrate();
 
+        // WHEN ADDING MORE HERE, ALSO PUT IN COMMANDESSENCE.RESTORE.
+
         // en-GB
         File enGB = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "en-GB.yml");
         if (!enGB.exists()) {
