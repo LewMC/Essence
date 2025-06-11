@@ -131,7 +131,8 @@ back:
 home:
   notfound: "§4[Essence] §cEl hogar {{1}} no existe. Usa /homes para una lista de hogares."
   deleted: "§2[Essence] §aEl hogar {{1}} ha sido eliminado."
-  teleporting: "§2[Essence] §aTeletransportándose a el hogar {{1}} en {{2}} segundos..."
+  teleportingin: "§2[Essence] §aTeleporting to home {{1}} in {{2}} seconds..."
+  teleportingnow: "§2[Essence] §aTeleporting to home {{1}}..."
   noneset: "§4[Essence] §cNo has establecido ningun hogar."
   list: "§6[Essence] §eHogares: {{1}}"
   specialchars: "§4[Essence] §c¡Los hogares no pueden contener caracteres especiales!"
@@ -142,7 +143,8 @@ home:
 teamhome:
   notfound: "§4[Essence] §cEl hogar del equipo {{1}} no existe. Usa /homes para una lista de hogares."
   deleted: "§2[Essence] §aEl hogar del equipo {{1}} ha sido eliminado."
-  teleporting: "§2[Essence] §aTeletransportándose a el hogar del equipo {{1}} en {{2}} segundos..."
+  teleportingin: "§2[Essence] §aTeleporting to team home {{1}} in {{2}} seconds..."
+  teleportingnow: "§2[Essence] §aTeleporting to team home {{1}}..."
   noneset: "§4[Essence] §cNo has establecido ningun hogar de equipo."
   list: "§6[Essence] §eHogares del equipo: {{1}}"
   specialchars: "§4[Essence] §cLos hogares del equipo no pueden contener caracteres especiales!"
@@ -159,7 +161,8 @@ warp:
   alreadyexists: "§4[Essence] §cYa existe un warps con este nombre!"
   created: "§2[Essence] §aWarp creado '{{1}}'."
   cantcreate: "§4[Essence] §cNo se pudo crear el warp '{{1}}'."
-  teleporting: "§2[Essence] §aTeletransportando a '{{1}}' en {{2}} segundos..."
+  teleportingin: "§2[Essence] §aWarping to '{{1}}' in {{2}} seconds..."
+  teleportingnow: "§2[Essence] §aWarping to '{{1}}'..."
   noneset: "§4[Essence] §cNo hay warps establecidos."
   list: "§6[Essence] §eWarps: {{1}}"
   hitlimit: "§4[Essence] §cNo puedes crear más warps."
@@ -243,7 +246,8 @@ team:
   disallowedhomes: "§4[Essence] §cTu equipo ha deshabilitado los hogares del equipo."
 spawn:
   set: "§2[Essence] §aSpawn establecido."
-  teleporting: "§2[Essence] §aTeletransportándose en {{1}} segundos..."
+  teleportingin: "§2[Essence] §aTeleporting in {{1}} seconds..."
+  teleportingnow: "§2[Essence] §aTeleporting..."
   notexist: "§4[Essence] §cEl mundo solicitado no existe o no pudo ser cargado."
   worldnoperms: "§4[Essence] §cNo tienes permiso para cambiar de mundos."
 repair:
