@@ -49,19 +49,19 @@
           <relocations>
             <relocation>
               <pattern>org.bstats</pattern>
-              <shadedPattern>net.lewmc.essence</shadedPattern>
+              <shadedPattern>net.lewmc.essence.shadedbstats</shadedPattern>
             </relocation>
             <relocation>
               <pattern>com.tcoded</pattern>
-              <shadedPattern>net.lewmc.essence</shadedPattern>
+              <shadedPattern>net.lewmc.essence.shadedtcoded</shadedPattern>
             </relocation>
             <relocation>
               <pattern>com.tchristofferson</pattern>
-              <shadedPattern>net.lewmc.essence</shadedPattern>
+              <shadedPattern>net.lewmc.essence.shadedtchristofferson</shadedPattern>
             </relocation>
             <relocation>
               <pattern>net.lewmc.foundry</pattern>
-              <shadedPattern>net.lewmc.essence</shadedPattern>
+              <shadedPattern>net.lewmc.essence.shadedfoundry</shadedPattern>
             </relocation>
           </relocations>
         </configuration>

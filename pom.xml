@@ -49,19 +49,19 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>net.lewmc.essence</shadedPattern>
+                            <shadedPattern>net.lewmc.essence.shadedbstats</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.tcoded</pattern>
-                            <shadedPattern>net.lewmc.essence</shadedPattern>
+                            <shadedPattern>net.lewmc.essence.shadedtcoded</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.tchristofferson</pattern>
-                            <shadedPattern>net.lewmc.essence</shadedPattern>
+                            <shadedPattern>net.lewmc.essence.shadedtchristofferson</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net.lewmc.foundry</pattern>
-                            <shadedPattern>net.lewmc.essence</shadedPattern>
+                            <shadedPattern>net.lewmc.essence.shadedfoundry</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -114,9 +114,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>26.0.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
@@ -128,11 +135,13 @@
             <groupId>com.tchristofferson</groupId>
             <artifactId>ConfigUpdater</artifactId>
             <version>2.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.technicallycoded</groupId>
             <artifactId>FoliaLib</artifactId>
             <version>0.4.4</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>

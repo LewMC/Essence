@@ -8,7 +8,6 @@ website: https://lewmc.net
 load: POSTWORLD
 folia-supported: true
 softdepend: ["Vault","PlaceholderAPI"]
-depend: ["Foundry"]
 commands:
   essence:
     description: Main command
@@ -541,7 +540,7 @@ permissions:
     description: Toggles invisibility.
   essence.bypass.*:
     description: Allows bypassing of various limits.
-    default: op
+    default: false
     children:
       essence.bypass.teleportcooldown: true
       essence.bypass.teleportdelay: true

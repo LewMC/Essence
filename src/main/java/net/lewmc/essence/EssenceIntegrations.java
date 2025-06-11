@@ -109,9 +109,8 @@ public class EssenceIntegrations {
 
     /**
      * Sets up Essence to use bStats Metrics.
-     * @return boolean - If it could be setup correctly.
      */
-    public boolean loadMetrics() {
+    public void loadMetrics() {
         int pluginId = 20768;
         Metrics metrics = new Metrics(this.plugin, pluginId);
         metrics.addCustomChart(new SimplePie("language", () -> this.plugin.getConfig().getString("language")));
@@ -120,6 +119,15 @@ public class EssenceIntegrations {
         } else {
             metrics.addCustomChart(new SimplePie("economy_enabled", () -> "true"));
         }
-        return true;
+        if (this.chat == null) {
+            metrics.addCustomChart(new SimplePie("chat_enabled", () -> "false"));
+        } else {
+            metrics.addCustomChart(new SimplePie("chat_enabled", () -> "true"));
+        }
+        if (!this.PAPIEnabled) {
+            metrics.addCustomChart(new SimplePie("papi_enabled", () -> "false"));
+        } else {
+            metrics.addCustomChart(new SimplePie("papi_enabled", () -> "true"));
+        }
     }
 }
