@@ -57,6 +57,7 @@ teleportation:
     cooldown: 10
     default-enabled: true
   extended-toggle: false
+  move-to-cancel: true
 
 # LANGUAGE - The file that will be used to display messages.
 # Please ensure the file exists in the 'language' sub-folder before changing this value.
