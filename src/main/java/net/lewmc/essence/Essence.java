@@ -162,9 +162,9 @@ public class Essence extends JavaPlugin {
         update.UpdateLanguage();
 
         this.integrations = new EssenceIntegrations(this);
-        this.integrations.loadPlaceholderAPI();
-        if (!this.integrations.loadVaultEconomy()) { this.log.warn("Vault not found! Using local economy."); }
-        if (!this.integrations.loadVaultChat()) { this.log.warn("Vault not found! Using local chat."); }
+        if (!this.integrations.loadPlaceholderAPI() && verbose) { this.log.warn("PlaceholderAPI not found! Using local placeholders."); }
+        if (!this.integrations.loadVaultEconomy() && verbose) { this.log.warn("Vault not found! Using local economy."); }
+        if (!this.integrations.loadVaultChat() && verbose) { this.log.warn("Vault not found! Using local chat."); }
         this.integrations.loadMetrics();
 
         this.checkLanguageSystem();
