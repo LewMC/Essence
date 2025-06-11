@@ -2,7 +2,6 @@ package net.lewmc.essence.team;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.core.UtilLocation;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.teleportation.home.UtilHome;
 import net.lewmc.essence.teleportation.tp.UtilTeleport;

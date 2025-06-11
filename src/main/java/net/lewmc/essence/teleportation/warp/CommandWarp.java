@@ -1,7 +1,6 @@
 package net.lewmc.essence.teleportation.warp;
 
 import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.core.UtilLocation;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.teleportation.tp.UtilTeleport;
 import net.lewmc.essence.Essence;
