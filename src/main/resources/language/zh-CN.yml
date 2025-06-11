@@ -260,10 +260,14 @@ kit:
   done: "§2[Essence] §a您现在有了 {{1}} 礼包."
   max: "§4[Essence] §cYou have claimed this kit too many times."
 info:
+  uuid: "§6[Essence] §e--- {{1}} ---"
   lastname: "§6[Essence] §e最后的已知玩家名: {{1}}."
-  uuid: "§6[Essence] §eUUID: {{1}}"
   lastseen: "§6[Essence] §e最后登录时间: {{1}}."
-  neverseen: "§6[Essence] §e最后登录时间: 从未."
+  neverseen: "§4[Essence] §cLast logged in: Never."
+  nickname: "§6[Essence] §eNickname: {{1}}."
+  team: "§6[Essence] §eTeam: {{1}}."
+  ip: "§6[Essence] §eIP address: {{1}}."
+  noip: "§4[Essence] §cIP address: No permission."
 seen:
   lastseen: "§6[Essence] §e{{1}} 最后登录在 {{2}}."
   neverseen: "§6[Essence] §e{{1}} 没有记录最后的登录日期."
