@@ -34,30 +34,7 @@ public class EventJoin implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        this.playerJoinMessage(event);
-
         Logger log = new Logger(this.plugin.config);
-
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getPlayer().getName());
-        boolean firstJoin = !offlinePlayer.hasPlayedBefore();
-
-        if (firstJoin) { this.firstJoin(event, log); }
-
-        plugin.reloadConfig();
-
-        if (plugin.getConfig().getBoolean("motd.enabled")) { this.motd(event); }
-
-        if (plugin.getConfig().getBoolean("teleportation.spawn.always-spawn") || firstJoin) {
-            try {
-                this.spawn(event, log);
-            } catch (Exception e) {
-                log.severe("Unknown exception: " + e.getMessage());
-            }
-        }
-
-        if (this.plugin.hasPendingUpdate) {
-            this.showUpdateAlert(event);
-        }
 
         Files playerFile = new Files(plugin.config, this.plugin);
         String playerDataFile = playerFile.playerDataFile(event.getPlayer());
@@ -80,6 +57,29 @@ public class EventJoin implements Listener {
             } else {
                 log.severe("Unable to create player data.");
             }
+        }
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getPlayer().getName());
+        boolean firstJoin = !offlinePlayer.hasPlayedBefore();
+
+        if (firstJoin) { this.firstJoin(event, log); }
+
+        this.playerJoinMessage(event);
+
+        plugin.reloadConfig();
+
+        if (plugin.getConfig().getBoolean("motd.enabled")) { this.motd(event); }
+
+        if (plugin.getConfig().getBoolean("teleportation.spawn.always-spawn") || firstJoin) {
+            try {
+                this.spawn(event, log);
+            } catch (Exception e) {
+                log.severe("Unknown exception: " + e.getMessage());
+            }
+        }
+
+        if (this.plugin.hasPendingUpdate) {
+            this.showUpdateAlert(event);
         }
     }
 
