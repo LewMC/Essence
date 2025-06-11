@@ -260,10 +260,14 @@ kit:
   done: "§2[Essence] §aAhora tienes el kit {{1}}."
   max: "§4[Essence] §cYou have claimed this kit too many times."
 info:
+  uuid: "§6[Essence] §e--- {{1}} ---"
   lastname: "§6[Essence] §eÚltimo nombre conocido: {{1}}."
-  uuid: "§6[Essence] §eUUID: {{1}}"
   lastseen: "§6[Essence] §eÚltima sesión: {{1}}."
-  neverseen: "§6[Essence] §eÚltima sesión: Nunca."
+  neverseen: "§4[Essence] §cLast logged in: Never."
+  nickname: "§6[Essence] §eNickname: {{1}}."
+  team: "§6[Essence] §eTeam: {{1}}."
+  ip: "§6[Essence] §eIP address: {{1}}."
+  noip: "§4[Essence] §cIP address: No permission."
 seen:
   lastseen: "§6[Essence] §e{{1}} última sesión {{2}}."
   neverseen: "§6[Essence] §e{{1}} no tiene una fecha de inicio de sesión registrada."
