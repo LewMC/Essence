@@ -71,6 +71,11 @@ disabled-commands:
 # Should disabled commands tell users they're disabled when they're executed?
 disabled-commands-feedback: true
 
+# PLAYERDATA - What types of player data to store
+# This does not change what is already stored
+playerdata:
+  store-ip-address: true
+
 # VERBOSE - Outputs more information to the console. If you're having issues, enable this. Creates a lot of console spam.
 verbose: false
 
