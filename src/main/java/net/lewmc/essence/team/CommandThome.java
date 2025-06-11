@@ -154,7 +154,11 @@ public class CommandThome extends FoundryPlayerCommand {
         );
         dataUtil.close();
 
-        message.send("teamhome", "teleporting", new String[]{chatHomeName, waitTime + ""});
+        if (waitTime > 0) {
+            message.send("warp", "teleportingin", new String[]{chatHomeName, waitTime + ""});
+        } else {
+            message.send("warp", "teleportingnow", new String[]{chatHomeName});
+        }
         return true;
     }
 }

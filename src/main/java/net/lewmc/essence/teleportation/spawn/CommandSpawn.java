@@ -127,7 +127,11 @@ public class CommandSpawn extends FoundryPlayerCommand {
 
         teleUtil.setCooldown(p, "spawn");
 
-        msg.send("spawn", "teleporting", new String[]{String.valueOf(waitTime)});
+        if (waitTime > 0) {
+            msg.send("spawn", "teleportingin", new String[]{String.valueOf(waitTime)});
+        } else {
+            msg.send("spawn", "teleportingnow");
+        }
 
         teleUtil.doTeleport(p, teleportLocation, waitTime);
 

@@ -197,7 +197,7 @@ public class UtilTeleport {
             return;
         }
 
-        if (delay > 0) {
+        if (delay > 0 && this.plugin.getConfig().getBoolean("teleportation.move-to-cancel")) {
             message.send("teleport", "movetocancel");
         }
         this.setTeleportStatus(player, true);

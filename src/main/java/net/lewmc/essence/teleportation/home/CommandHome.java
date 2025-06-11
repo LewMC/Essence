@@ -124,7 +124,11 @@ public class CommandHome extends FoundryPlayerCommand {
                 new WorldCreator(playerData.getString(homeName + ".world")).createWorld();
             }
 
-            msg.send("home", "teleporting", new String[] { chatHomeName, waitTime + "" });
+            if (waitTime > 0) {
+                msg.send("warp", "teleportingin", new String[]{chatHomeName, waitTime + ""});
+            } else {
+                msg.send("warp", "teleportingnow", new String[]{chatHomeName});
+            }
 
             teleUtil.doTeleport(
                     (Player) cs,
