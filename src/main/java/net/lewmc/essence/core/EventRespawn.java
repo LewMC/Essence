@@ -42,9 +42,6 @@ public class EventRespawn implements Listener {
         Files playerData = new Files(this.plugin.config, this.plugin);
         playerData.load(config.playerDataFile(event.getPlayer()));
 
-        UtilLocation locationUtil = new UtilLocation(this.plugin);
-        locationUtil.UpdateLastLocation(event.getPlayer());
-
         if ((playerData.getString("user.last-sleep-location") != null) && !alwaysSpawn) {
             UtilTeleport tp = new UtilTeleport(plugin);
             tp.doTeleport(
