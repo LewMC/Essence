@@ -91,9 +91,9 @@ public class CommandWarp extends FoundryPlayerCommand {
             }
 
             if (waitTime > 0) {
-                msg.send("warp", "teleportingin", new String[]{String.valueOf(waitTime)});
+                msg.send("warp", "teleporting", new String[]{args[0], waitTime + ""});
             } else {
-                msg.send("warp", "teleportingnow");
+                msg.send("warp", "teleportingnow", new String[]{args[0]});
             }
 
             teleUtil.doTeleport(
