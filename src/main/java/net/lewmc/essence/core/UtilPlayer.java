@@ -33,23 +33,23 @@ public class UtilPlayer {
      * Sets the player's gamemode.
      *
      * @param cs       CommandSender - The executor of the command.
-     * @param player   Player - The target player (might be self).
+     * @param p        Player - The target player (might be self).
      * @param gamemode GameMode - The gamemode to set the player to.
      * @return boolean - Success
      */
-    public boolean setGamemode(CommandSender cs, Player player, GameMode gamemode) {
+    public boolean setGamemode(CommandSender cs, Player p, GameMode gamemode) {
         UtilPermission permission = new UtilPermission(this.plugin, cs);
         UtilMessage message = new UtilMessage(this.plugin, cs);
         if (permission.has("essence.gamemode." + gamemode.toString().toLowerCase())) {
-            if (cs == player) {
+            if (cs == p) {
                 message.send("gamemode", "done", new String[]{gamemode.toString().toLowerCase()});
-                player.setGameMode(gamemode);
+                p.setGameMode(gamemode);
                 return true;
             } else {
                 if (permission.has("essence.gamemode.other")) {
-                    message.send("gamemode", "doneother", new String[]{player.getName(), gamemode.toString().toLowerCase()});
-                    message.sendTo(player, "gamemode", "doneby", new String[]{gamemode.toString().toLowerCase(), cs.getName()});
-                    player.setGameMode(gamemode);
+                    message.send("gamemode", "doneother", new String[]{p.getName(), gamemode.toString().toLowerCase()});
+                    message.sendTo(p, "gamemode", "doneby", new String[]{gamemode.toString().toLowerCase(), cs.getName()});
+                    p.setGameMode(gamemode);
                     return true;
                 } else {
                     return permission.not();
@@ -61,27 +61,30 @@ public class UtilPlayer {
     }
 
     /**
-     * Creates a player data file for the given player.
+     * Creates a player data file for the given p.
      *
      * @return boolean - If the operation was successful.
      */
     public boolean createPlayerData() {
-        Files playerFile = new Files(this.plugin.config, this.plugin);
-        Player player = (Player) this.cs;
+        if (this.cs instanceof Player p) {
+            Files playerFile = new Files(this.plugin.config, this.plugin);
 
-        if (!playerFile.exists(playerFile.playerDataFile(player.getUniqueId()))) {
-            return this.updatePlayerData(
-                    plugin.getConfig().getBoolean("teleportation.requests.default-enabled"),
-                    plugin.getConfig().getDouble("economy.start-money"),
-                    true
-            );
+            if (!playerFile.exists(playerFile.playerDataFile(p.getUniqueId()))) {
+                return this.updatePlayerData(
+                        plugin.getConfig().getBoolean("teleportation.requests.default-enabled"),
+                        plugin.getConfig().getDouble("economy.start-money"),
+                        true
+                );
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
     }
 
     /**
-     * Updates a player data file for the given player.
+     * Updates a player data file for the given p.
      *
      * @return boolean - If the operation was successful.
      */
@@ -90,78 +93,84 @@ public class UtilPlayer {
             double balance,
             boolean acceptingPayments
     ) {
-        Files playerFile = new Files(this.plugin.config, this.plugin);
-        Player player = (Player) this.cs;
+        if (this.cs instanceof Player p) {
+            Files playerFile = new Files(this.plugin.config, this.plugin);
 
-        Logger log = new Logger(this.plugin.config);
+            Logger log = new Logger(this.plugin.config);
 
-        if (!playerFile.exists(playerFile.playerDataFile(player.getUniqueId()))) {
-            playerFile.create(playerFile.playerDataFile(player.getUniqueId()));
-            if (this.plugin.verbose) {
-                log.info("Player data does not exist, creating...");
+            if (!playerFile.exists(playerFile.playerDataFile(p.getUniqueId()))) {
+                playerFile.create(playerFile.playerDataFile(p.getUniqueId()));
+                if (this.plugin.verbose) {
+                    log.info("Player data does not exist, creating...");
+                }
+            } else {
+                if (this.plugin.verbose) {
+                    log.info("Player data exists.");
+                }
             }
+
+            if (!playerFile.load(playerFile.playerDataFile(p.getUniqueId()))) {
+                log.severe("Unable to load configuration file '" + playerFile.playerDataFile(p.getUniqueId()) + "'. Essence may be unable to teleport players to the correct spawn");
+                return false;
+            }
+
+            if (playerFile.get("user.accepting-teleport-requests") == null) {
+                playerFile.set("user.accepting-teleport-requests", acceptingTeleportRequests);
+            }
+
+            if (playerFile.get("economy.balance") == null) {
+                playerFile.set("economy.balance", balance);
+            }
+
+            if (playerFile.get("economy-accepting-payment") == null) {
+                playerFile.set("economy.accepting-payments", acceptingPayments);
+            }
+
+            playerFile.set("user.last-seen", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            playerFile.set("user.last-known-name", p.getName());
+
+            playerFile.save();
+            return true;
         } else {
-            if (this.plugin.verbose) {
-                log.info("Player data exists.");
-            }
-        }
-
-        if (!playerFile.load(playerFile.playerDataFile(player.getUniqueId()))) {
-            log.severe("Unable to load configuration file '" + playerFile.playerDataFile(player.getUniqueId()) + "'. Essence may be unable to teleport players to the correct spawn");
             return false;
         }
-
-        if (playerFile.get("user.accepting-teleport-requests") == null) {
-            playerFile.set("user.accepting-teleport-requests", acceptingTeleportRequests);
-        }
-
-        if (playerFile.get("economy.balance") == null) {
-            playerFile.set("economy.balance", balance);
-        }
-
-        if (playerFile.get("economy-accepting-payment") == null) {
-            playerFile.set("economy.accepting-payments", acceptingPayments);
-        }
-
-        playerFile.set("user.last-seen", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        playerFile.set("user.last-known-name", player.getName());
-
-        playerFile.save();
-        return true;
     }
 
     /**
-     * Updates a player data file for the given player.
+     * Updates a player data file for the given p.
      *
      * @return boolean - If the operation was successful.
      */
     public boolean updatePlayerData() {
-        Files playerFile = new Files(this.plugin.config, this.plugin);
-        Player player = (Player) this.cs;
+        if (this.cs instanceof Player p) {
+            Files playerFile = new Files(this.plugin.config, this.plugin);
 
-        Logger log = new Logger(this.plugin.config);
+            Logger log = new Logger(this.plugin.config);
 
-        if (!playerFile.exists(playerFile.playerDataFile(player.getUniqueId()))) {
-            playerFile.create(playerFile.playerDataFile(player.getUniqueId()));
-            if (this.plugin.verbose) {
-                log.info("Player data does not exist, creating...");
+            if (!playerFile.exists(playerFile.playerDataFile(p.getUniqueId()))) {
+                playerFile.create(playerFile.playerDataFile(p.getUniqueId()));
+                if (this.plugin.verbose) {
+                    log.info("Player data does not exist, creating...");
+                }
+            } else {
+                if (this.plugin.verbose) {
+                    log.info("Player data exists.");
+                }
             }
+
+            if (!playerFile.load(playerFile.playerDataFile(p.getUniqueId()))) {
+                log.severe("Unable to load configuration file '" + playerFile.playerDataFile(p.getUniqueId()) + "'. Essence may be unable to teleport players to the correct spawn");
+                return false;
+            }
+
+            playerFile.set("user.last-seen", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            playerFile.set("user.last-known-name", p.getName());
+
+            playerFile.save();
+            return true;
         } else {
-            if (this.plugin.verbose) {
-                log.info("Player data exists.");
-            }
-        }
-
-        if (!playerFile.load(playerFile.playerDataFile(player.getUniqueId()))) {
-            log.severe("Unable to load configuration file '" + playerFile.playerDataFile(player.getUniqueId()) + "'. Essence may be unable to teleport players to the correct spawn");
             return false;
         }
-
-        playerFile.set("user.last-seen", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        playerFile.set("user.last-known-name", player.getName());
-
-        playerFile.save();
-        return true;
     }
 
     /**
@@ -211,50 +220,62 @@ public class UtilPlayer {
     /**
      * Gets a player's display name.
      *
-     * @param p Player - The player to check.
+     * @param cs CommandSender - The player to check.
      * @return The display name.
      */
-    public String getPlayerDisplayname(Player p) {
-        Files pf = new Files(this.plugin.config, this.plugin);
-        pf.load(pf.playerDataFile(p));
-        String nickname = pf.getString("user.nickname");
-        pf.close();
+    public String getPlayerDisplayname(CommandSender cs) {
+        if (cs instanceof Player p) {
+            Files pf = new Files(this.plugin.config, this.plugin);
+            pf.load(pf.playerDataFile(p));
+            String nickname = pf.getString("user.nickname");
+            pf.close();
 
-        return Objects.requireNonNullElseGet(nickname, p::getName);
+            return Objects.requireNonNullElseGet(nickname, p::getName);
+        } else {
+            return cs.getName();
+        }
     }
 
     /**
      * Sets a player's display name.
      *
-     * @param p        Player - The player.
+     * @param cs       CommandSender - The p.
      * @param nickname String - The nickname
      * @return true/false success.
      */
-    public boolean setPlayerDisplayname(Player p, String nickname) {
-        Files pf = new Files(this.plugin.config, this.plugin);
-        pf.load(pf.playerDataFile(p));
+    public boolean setPlayerDisplayname(CommandSender cs, String nickname) {
+        if (cs instanceof Player p) {
+            Files pf = new Files(this.plugin.config, this.plugin);
+            pf.load(pf.playerDataFile(p));
 
-        boolean success = pf.set("user.nickname", nickname);
-        pf.save();
-        pf.close();
+            boolean success = pf.set("user.nickname", nickname);
+            pf.save();
+            pf.close();
 
-        return success;
+            return success;
+        } else {
+            return false;
+        }
     }
 
     /**
      * Sets a player's display name.
      *
-     * @param p Player - The player.
+     * @param cs CommandSender - The p.
      * @return true/false success.
      */
-    public boolean removePlayerDisplayname(Player p) {
-        Files pf = new Files(this.plugin.config, this.plugin);
-        pf.load(pf.playerDataFile(p));
+    public boolean removePlayerDisplayname(CommandSender cs) {
+        if (cs instanceof Player p) {
+            Files pf = new Files(this.plugin.config, this.plugin);
+            pf.load(pf.playerDataFile(p));
 
-        boolean success = pf.delete("user.nickname");
-        pf.save();
-        pf.close();
+            boolean success = pf.delete("user.nickname");
+            pf.save();
+            pf.close();
 
-        return success;
+            return success;
+        } else {
+            return false;
+        }
     }
 }
