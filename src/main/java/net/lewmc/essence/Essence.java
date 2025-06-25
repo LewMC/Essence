@@ -7,6 +7,7 @@ import net.lewmc.essence.core.ModuleCore;
 import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilUpdate;
 import net.lewmc.essence.economy.ModuleEconomy;
+import net.lewmc.essence.environment.ModuleEnvironment;
 import net.lewmc.essence.gamemode.ModuleGamemode;
 import net.lewmc.essence.inventory.ModuleInventory;
 import net.lewmc.essence.kit.ModuleKit;
@@ -287,6 +288,7 @@ public class Essence extends JavaPlugin {
         new ModuleChat(this, reg);
         new ModuleCore(this, reg);
         new ModuleEconomy(this, reg);
+        new ModuleEnvironment(this, reg);
         new ModuleGamemode(this, reg);
         new ModuleInventory(this, reg);
         new ModuleKit(this, reg);

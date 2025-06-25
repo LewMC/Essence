@@ -267,6 +267,22 @@ commands:
     usage: /nick
     aliases: ['nickname', 'displayname']
     permission: essence.chat.nick
+  time:
+    description: Change the time.
+    usage: /time [time]
+    permission: essence.environment.time
+  weather:
+    description: Change the weather.
+    usage: /weather [weather]
+    permission: essence.environment.weather
+  ptime:
+    description: Change your player time.
+    usage: /ptime [time]
+    permission: essence.environment.ptime
+  pweather:
+    description: Change your player weather.
+    usage: /pweather [weather]
+    permission: essence.environment.pweather
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -284,6 +300,7 @@ permissions:
       essence.team.*: true
       essence.spawn.*: true
       essence.kits.*: true
+      essence.environment.*: true
       essence.rules: true
   essence.gamemode.*:
     description: Allows players to switch to any gamemode.
@@ -560,3 +577,19 @@ permissions:
     description: Allows bypassing the maximum number of kit redemptions.
   essence.rules:
     description: Allows players to view the server rules.
+  essence.environment.*:
+    description: Allows changing environmental variables.
+    default: op
+    children:
+      essence.environment.time: true
+      essence.environment.weather: true
+      essence.environment.ptime: true
+      essence.environment.pweather: true
+  essence.environment.time:
+    description: Allows changing the time.
+  essence.environment.weather:
+    description: Allows changing the weather.
+  essence.environment.ptime:
+    description: Allows changing your player time.
+  essence.environment.pweather:
+    description: Allows changing your player weather.
