@@ -138,6 +138,15 @@ public class CommandExtensionHelp {
                 if (!cu.isDisabled("nick")) { this.message.send("help", "nickother"); } else { blank++; }
                 this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
+            } else if ("environment".equalsIgnoreCase(args[1])) {
+                int blank = 4;
+                this.message.send("help", "environment");
+                if (!cu.isDisabled("time")) { this.message.send("help", "time"); } else { blank++; }
+                if (!cu.isDisabled("weather")) { this.message.send("help", "weather"); } else { blank++; }
+                if (!cu.isDisabled("ptime")) { this.message.send("help", "ptime"); } else { blank++; }
+                if (!cu.isDisabled("pweather")) { this.message.send("help", "pweather"); } else { blank++; }
+                this.blank(blank);
+                this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("misc".equalsIgnoreCase(args[1])) {
                 int blank = 6;
                 this.message.send("help", "misc");
@@ -186,8 +195,9 @@ public class CommandExtensionHelp {
             this.message.send("help", "helpstats");
             this.message.send("help", "helpeconomy");
             if (!cu.isDisabled("team")) { this.message.send("help", "helpteam"); } else { blank++; }
-            this.message.send("help", "helpadmin");
+            this.message.send("help", "helpenvironment");
             if (blank != 0) {
+                this.message.send("help", "helpadmin");
                 this.message.send("help", "helpmisc");
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else {
