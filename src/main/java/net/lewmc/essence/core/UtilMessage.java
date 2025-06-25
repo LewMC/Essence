@@ -40,7 +40,7 @@ public class UtilMessage {
                 message = message.replace("{{"+i+"}}", item);
                 i++;
             }
-            this.cs.sendMessage(message);
+            this.cs.sendMessage(new UtilPlaceholder(this.plugin, this.cs).replaceAll(message));
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             new Logger(this.plugin.config).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
