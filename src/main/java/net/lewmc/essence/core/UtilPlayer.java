@@ -85,7 +85,9 @@ public class UtilPlayer {
 
     /**
      * Updates a player data file for the given p.
-     *
+     * @param acceptingPayments boolean - Is the player accepting payments?
+     * @param balance double - What is the player's balance?
+     * @param acceptingTeleportRequests boolean - Is the player accepting teleport requests?
      * @return boolean - If the operation was successful.
      */
     public boolean updatePlayerData(

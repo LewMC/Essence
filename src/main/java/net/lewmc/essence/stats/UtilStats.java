@@ -13,9 +13,14 @@ public class UtilStats {
     private final Player player;
     private final Essence plugin;
 
-    public UtilStats(Essence plugin, Player player) {
+    /**
+     * Constructor for the UtilStats class.
+     * @param plugin Essence - Main plugin class.
+     * @param p Player - The player
+     */
+    public UtilStats(Essence plugin, Player p) {
         this.plugin = plugin;
-        this.player = player;
+        this.player = p;
     }
 
     /**

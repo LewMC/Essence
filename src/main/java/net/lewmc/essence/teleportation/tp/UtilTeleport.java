@@ -264,6 +264,7 @@ public class UtilTeleport {
     /**
      * Gets a player's teleport status.
      * @param player Player - The player to teleport.
+     * @return boolean - Is valid?
      */
     public boolean teleportIsValid(Player player) {
         if (this.plugin.teleportingPlayers == null) {
