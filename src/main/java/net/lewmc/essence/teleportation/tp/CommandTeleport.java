@@ -4,9 +4,12 @@ import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -155,19 +158,41 @@ public class CommandTeleport extends FoundryCommand {
             }
 
             List<Player> toList = parseSelector(args[0], cs);
-            if (toList.isEmpty()) {
-                message.send("generic", "playernotfound");
+            if (!toList.isEmpty()) {
+                Player to = toList.getFirst();
+
+                if (!tp.teleportToggleCheck(player, to)) {
+                    message.send("teleport", "requestsdisabled", new String[] { to.getName() });
+                    return true;
+                }
+
+                tp.doTeleport(player, to.getLocation(), 0);
+                message.send("teleport", "to", new String[] { to.getName() });
                 return true;
             }
-            Player to = toList.getFirst();
 
-            if (!tp.teleportToggleCheck(player, to)) {
-                message.send("teleport", "requestsdisabled", new String[] { to.getName() });
-                return true;
+            OfflinePlayer offline = getOfflinePlayer(args[0]);
+            if (offline != null && offline.hasPlayedBefore()) {
+                Files opf = new Files(this.plugin.config, this.plugin);
+                if (opf.exists(opf.playerDataFile(offline.getUniqueId()))) {
+                    opf.load(opf.playerDataFile(offline.getUniqueId()));
+                    double x = opf.getDouble("last-location.x");
+                    double y = opf.getDouble("last-location.y");
+                    double z = opf.getDouble("last-location.z");
+                    World world = Bukkit.getWorld(String.valueOf(opf.getDouble("last-location.world")));
+
+                    Location offlineLoc = new Location(world, x, y, z);
+                    tp.doTeleport(player, offlineLoc, 0);
+                    message.send("teleport", "to", new String[]{offline.getName()});
+                    message.send("teleport", "tooffline");
+                    return true;
+                } else {
+                    message.send("teleport", "offlineplayernodata");
+                    return true;
+                }
             }
 
-            tp.doTeleport(player, to.getLocation(), 0);
-            message.send("teleport", "to", new String[] { to.getName() });
+            message.send("generic", "playernotfound");
             return true;
         }
 
@@ -229,4 +254,19 @@ public class CommandTeleport extends FoundryCommand {
             return new ArrayList<>();
         }
     }
+
+    /**
+     * Retrieves offline player information
+     * @param name Strin - The player's name.
+     * @return OfflinePlayer - The player.
+     */
+    private OfflinePlayer getOfflinePlayer(String name) {
+        for (OfflinePlayer op : Bukkit.getOfflinePlayers()) {
+            if (op.getName() != null && op.getName().equalsIgnoreCase(name)) {
+                return op;
+            }
+        }
+        return null;
+    }
+
 }

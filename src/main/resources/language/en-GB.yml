@@ -169,6 +169,7 @@ warp:
   hitlimit: "§4[Essence] §cYou can't create any more warps."
 teleport:
   to: "§2[Essence] §aTeleporting to {{1}}..."
+  tooffline: "§2[Essence] §aThis player is offline, so you won't see them when you arrive."
   toplayer: "§2[Essence] §aTeleporting {{1}} to {{2}}..."
   tocoord: "§2[Essence] §aTeleporting to {{1}}..."
   playertocoord: "§2[Essence] §aTeleporting {{1}} to {{2}}..."
@@ -188,6 +189,7 @@ teleport:
   movetocancel: "§6[Essence] §eMove to cancel teleportation."
   cancelled: "§4[Essence] §cTeleportation cancelled."
   exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this teleportation, please see console for details."
+  offlineplayernodata: "§4[Essence] §cUnable to teleport - The requested player is offline and Essence does not have their last location stored."
 feed:
   fed: "§2[Essence] §aYou fed {{1}}."
   serverfed: "§2[Essence] §aYou've been fed by a magical force."
@@ -299,17 +301,14 @@ environment:
   timeplayerusage: "§4[Essence] §cUsage: /time <time>"
   unknowntime: "§4[Essence] §cUnknown time {{1}}. Please enter a valid string or number."
   timehelp: "§4[Essence] §cSee https://wiki.lewmc.net/ES-Time-and-Weather.html for help."
-
   weather: "§6[Essence] §eWeather is {{1}} in {{2}}."
   weatherset: "§2[Essence] §aWeather set to {{1}} in {{2}}."
   weatherconsoleusage: "§4[Essence] §cUsage: /weather <world> <weather>"
   weatherplayerusage: "§4[Essence] §cUsage: /weather <weather>"
   unknownweather: "§4[Essence] §cUnknown weather type {{1}}. Options are clear, rain, or thunder."
-
   playerweather: "§6[Essence] §eYour player weather is {{1}}."
   playerweatherset: "§2[Essence] §aYour player weather is set to {{1}}."
   playerweatherreset: "§2[Essence] §aYour player weather now matches server weather."
-
   playertime: "§6[Essence] §eYour player time is {{1}}."
   playertimeset: "§2[Essence] §aYour player time is set to {{1}}."
   playertimereset: "§2[Essence] §aYour player time now matches server time."
