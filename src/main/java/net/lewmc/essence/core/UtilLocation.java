@@ -36,6 +36,12 @@ public class UtilLocation {
         playerData.save();
     }
 
+    /**
+     * Retrieves a random location around the player.
+     * @param player Player - The player to search around.
+     * @param wb WorldBorder - The end of the world
+     * @return Location - The location to return.
+     */
     public Location GetRandomLocation(Player player, WorldBorder wb) {
         World world = player.getWorld();
 
