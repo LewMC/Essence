@@ -179,8 +179,9 @@ public class CommandExtensionHelp {
                 }
             } else if ("2".equalsIgnoreCase(args[1])) {
                 this.message.send("help", "help");
+                this.message.send("help", "helpadmin");
                 this.message.send("help", "helpmisc");
-                this.blank(7);
+                this.blank(6);
                 this.message.send("help", "page", new String[] { "2", "2" });
             } else {
                 this.message.send("help", "nochapter");

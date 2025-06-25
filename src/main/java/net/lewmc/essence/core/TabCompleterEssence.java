@@ -35,7 +35,7 @@ public class TabCompleterEssence implements TabCompleter {
         } else if (args.length == 2 && args[1].equalsIgnoreCase("import")) {
             keys = new String[]{"Essentials"};
         } else if (args.length == 2) {
-            keys = new String[]{"2", "chat", "inventory", "gamemode", "teleport", "stats", "economy", "team", "admin", "misc"};
+            keys = new String[]{"2", "chat", "inventory", "gamemode", "teleport", "stats", "economy", "team", "environment", "admin", "misc"};
         } else if (args.length == 3 && args[1].equalsIgnoreCase("teleport")) {
             keys = new String[]{"1", "2", "3"};
         } else if (args.length == 3 && (
