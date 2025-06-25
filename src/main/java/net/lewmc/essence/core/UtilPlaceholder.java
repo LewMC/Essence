@@ -3,7 +3,6 @@ package net.lewmc.essence.core;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.team.UtilTeam;
 import net.lewmc.foundry.Files;
-import net.lewmc.foundry.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,21 +32,6 @@ public class UtilPlaceholder {
      * @return String - Resulting String
      */
     public String replaceAll(String text) {
-        // Old MTs, to remove in 1.10.0
-        if (text.contains("{{") && text.contains("}}")) {
-            Logger lu = new Logger(this.plugin.config);
-            lu.warn("You are using Message Tags. These have been deprecated and will be removed in the next version of Essence.");
-            lu.warn("Please replace them with Placeholders.");
-            lu.warn("For more information, please visit https://wiki.lewmc.net/es-placeholders.html.");
-            text = text.replace("{{essence-version}}", this.replaceSingle("version"));
-            text = text.replace("{{minecraft-version}}", this.replaceSingle("minecraft_version"));
-            text = text.replace("{{time}}", this.replaceSingle("time"));
-            text = text.replace("{{date}}", this.replaceSingle("date"));
-            text = text.replace("{{datetime}}", this.replaceSingle("datetime"));
-            text = text.replace("{{player}}", this.replaceSingle("player"));
-        }
-
-        // New placeholder system.
         if (this.plugin.integrations.PAPIEnabled) {
             if (this.cs instanceof Player) {
                 return new UtilPlaceholderAPI().invokePAPI((Player) this.cs, text);
