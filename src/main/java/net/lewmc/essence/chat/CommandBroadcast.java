@@ -8,6 +8,9 @@ import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+/**
+ * /broadcast command.
+ */
 public class CommandBroadcast extends FoundryCommand {
     private final Essence plugin;
 

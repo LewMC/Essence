@@ -9,6 +9,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * /delthomes command.
+ */
 public class CommandDelthomes extends FoundryPlayerCommand {
     private final Essence plugin;
 

@@ -13,6 +13,9 @@ import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
+/**
+ * /back command.
+ */
 public class CommandBack extends FoundryPlayerCommand {
     private final Essence plugin;
 
