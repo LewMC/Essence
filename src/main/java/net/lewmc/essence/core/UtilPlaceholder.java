@@ -80,8 +80,8 @@ public class UtilPlaceholder {
         } else if (placeholder.equalsIgnoreCase("datetime")) {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         } else if (placeholder.equalsIgnoreCase("player")) {
-            return new UtilPlayer(this.plugin, cs).getPlayerDisplayname((Player) cs);
-        } else if (placeholder.equalsIgnoreCase("userername")) {
+            return new UtilPlayer(this.plugin, this.cs).getPlayerDisplayname(this.cs);
+        } else if (placeholder.equalsIgnoreCase("username")) {
             return cs.getName();
         } else if (placeholder.equalsIgnoreCase("team_name")) {
             if (this.cs instanceof Player p) {
