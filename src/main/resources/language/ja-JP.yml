@@ -108,6 +108,11 @@ help:
   reply: "§6[Essence] §e/reply <message> - Reply to your last /msg."
   nickself: "§6[Essence] §e/nick <name> - Change your displayname."
   nickother: "§6[Essence] §e/nick <user> <name> - Change other nick."
+  environment: "§6[Essence] -------- Essence Help - Environment --------"
+  time: "§6[Essence] §e/time - View and set your world time."
+  weather: "§6[Essence] §e/weather - View and set your world weather."
+  ptime: "§6[Essence] §e/ptime - View and set your player time."
+  pweather: "§6[Essence] §e/pweather - View and set your player weather."
   misc: "§6[Essence] -------- Essence Help - Miscellaneous ------"
   rules: "§6[Essence] §e/rules - View the server rules."
   kit: "§6[Essence] §e/kit - Get a kit."
@@ -119,6 +124,7 @@ help:
   helpstats: "§6[Essence] §e/es help stats - Manage your stats."
   helpeconomy: "§6[Essence] §e/es help economy - Economy commands."
   helpteam: "§6[Essence] §e/es help team - Team commands."
+  helpenvironment: "§6[Essence] §e/es help environment - Environment commands."
   helpadmin: "§6[Essence] §e/es help admin - Administration."
   helpmisc: "§6[Essence] §e/es help misc - Miscellaneous."
 tprandom:
@@ -169,6 +175,8 @@ warp:
   hitlimit: "§4[Essence] §cYou can't create any more warps."
 teleport:
   to: "§2[Essence] §aTeleporting to {{1}}..."
+  tooffline: "§2[Essence] §aThis player is offline, so you won't see them when you arrive."
+  offlinenoworld: "§4[Essence] §cUnable to teleport due to the offline player's last known world being unknown."
   toplayer: "§2[Essence] §aTeleporting {{1}} to {{2}}..."
   tocoord: "§2[Essence] §aTeleporting to {{1}}..."
   playertocoord: "§2[Essence] §aTeleporting {{1}} to {{2}}..."
@@ -188,6 +196,7 @@ teleport:
   movetocancel: "§6[Essence] §eMove to cancel teleportation."
   cancelled: "§4[Essence] §cTeleportation cancelled."
   exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this teleportation, please see console for details."
+  offlineplayernodata: "§4[Essence] §cUnable to teleport - The requested player is offline and Essence does not have their last location stored."
 feed:
   fed: "§2[Essence] §aYou fed {{1}}."
   serverfed: "§2[Essence] §aYou've been fed by a magical force."
