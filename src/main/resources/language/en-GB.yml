@@ -170,6 +170,7 @@ warp:
 teleport:
   to: "§2[Essence] §aTeleporting to {{1}}..."
   tooffline: "§2[Essence] §aThis player is offline, so you won't see them when you arrive."
+  offlinenoworld: "§4[Essence] §cUnable to teleport due to the offline player's last known world being unknown."
   toplayer: "§2[Essence] §aTeleporting {{1}} to {{2}}..."
   tocoord: "§2[Essence] §aTeleporting to {{1}}..."
   playertocoord: "§2[Essence] §aTeleporting {{1}} to {{2}}..."

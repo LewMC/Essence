@@ -171,24 +171,32 @@ public class CommandTeleport extends FoundryCommand {
                 return true;
             }
 
-            OfflinePlayer offline = getOfflinePlayer(args[0]);
-            if (offline != null && offline.hasPlayedBefore()) {
-                Files opf = new Files(this.plugin.config, this.plugin);
-                if (opf.exists(opf.playerDataFile(offline.getUniqueId()))) {
-                    opf.load(opf.playerDataFile(offline.getUniqueId()));
-                    double x = opf.getDouble("last-location.x");
-                    double y = opf.getDouble("last-location.y");
-                    double z = opf.getDouble("last-location.z");
-                    World world = Bukkit.getWorld(String.valueOf(opf.getDouble("last-location.world")));
+            if (!permission.has("essence.teleport.offline")) {
+                OfflinePlayer offline = getOfflinePlayer(args[0]);
+                if (offline != null && offline.hasPlayedBefore()) {
+                    Files opf = new Files(this.plugin.config, this.plugin);
+                    if (opf.exists(opf.playerDataFile(offline.getUniqueId()))) {
+                        opf.load(opf.playerDataFile(offline.getUniqueId()));
+                        double x = opf.getDouble("last-location.X");
+                        double y = opf.getDouble("last-location.Y");
+                        double z = opf.getDouble("last-location.Z");
+                        World world = Bukkit.getWorld(opf.getString("last-location.world"));
+                        opf.close();
 
-                    Location offlineLoc = new Location(world, x, y, z);
-                    tp.doTeleport(player, offlineLoc, 0);
-                    message.send("teleport", "to", new String[]{offline.getName()});
-                    message.send("teleport", "tooffline");
-                    return true;
-                } else {
-                    message.send("teleport", "offlineplayernodata");
-                    return true;
+                        if (world == null) {
+                            message.send("teleport", "offlinenoworld");
+                            return true;
+                        }
+
+                        Location offlineLoc = new Location(world, x, y, z);
+                        tp.doTeleport(player, offlineLoc, 0);
+                        message.send("teleport", "to", new String[]{offline.getName()});
+                        message.send("teleport", "tooffline");
+                        return true;
+                    } else {
+                        message.send("teleport", "offlineplayernodata");
+                        return true;
+                    }
                 }
             }
 

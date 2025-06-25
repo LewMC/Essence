@@ -358,6 +358,7 @@ permissions:
     children:
       essence.teleport.coord: true
       essence.teleport.player: true
+      essence.teleport.offline: true
       essence.teleport.back: true
       essence.teleport.random: true
       essence.teleport.other: true
@@ -366,6 +367,8 @@ permissions:
     description: Allows players to teleport to coordinates.
   essence.teleport.player:
     description: Allows players to teleport to a player.
+  essence.teleport.offline:
+    description: Allows players to teleport to an offline player.
   essence.teleport.back:
     description: Go back to your last location before teleporting.
   essence.teleport.random:
