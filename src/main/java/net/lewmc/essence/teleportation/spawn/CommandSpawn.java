@@ -2,7 +2,6 @@ package net.lewmc.essence.teleportation.spawn;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.core.UtilLocation;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.teleportation.tp.UtilTeleport;
@@ -109,7 +108,6 @@ public class CommandSpawn extends FoundryPlayerCommand {
             if (this.plugin.verbose) {
                 this.log.info("Spawn implicitly set for world '" + spawnName + "'.");
             }
-            new UtilLocation(this.plugin).UpdateLastLocation(p);
 
             if (Bukkit.getServer().getWorld(spawnName) == null) {
                 new WorldCreator(spawnName).createWorld();

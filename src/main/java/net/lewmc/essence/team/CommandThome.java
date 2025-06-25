@@ -2,7 +2,6 @@ package net.lewmc.essence.team;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.core.UtilLocation;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.teleportation.home.UtilHome;
 import net.lewmc.essence.teleportation.tp.UtilTeleport;
@@ -131,9 +130,6 @@ public class CommandThome extends FoundryPlayerCommand {
             log.warn("Error: world is null, please check configuration file.");
             return true;
         }
-
-        UtilLocation locationUtil = new UtilLocation(this.plugin);
-        locationUtil.UpdateLastLocation(p);
 
         teleUtil.setCooldown(p, "home");
 

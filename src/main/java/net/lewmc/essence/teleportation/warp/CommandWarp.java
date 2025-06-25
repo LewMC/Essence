@@ -1,7 +1,6 @@
 package net.lewmc.essence.teleportation.warp;
 
 import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.core.UtilLocation;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.teleportation.tp.UtilTeleport;
 import net.lewmc.essence.Essence;
@@ -80,8 +79,6 @@ public class CommandWarp extends FoundryPlayerCommand {
                 this.log.warn("Error: world is null, please check configuration file.");
                 return true;
             }
-            UtilLocation locationUtil = new UtilLocation(this.plugin);
-            locationUtil.UpdateLastLocation(p);
 
             teleUtil.setCooldown(p, "warp");
 

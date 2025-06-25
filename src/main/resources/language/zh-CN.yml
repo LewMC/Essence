@@ -131,7 +131,8 @@ back:
 home:
   notfound: "§4[Essence] §c家 {{1}} 不存在. 使用 /homes 用于查看家列表."
   deleted: "§2[Essence] §a家 {{1}} 已被删除."
-  teleporting: "§2[Essence] §a将在 {{2}} 秒内传送至家 {{1}} ......"
+  teleportingin: "§2[Essence] §aTeleporting to home {{1}} in {{2}} seconds..."
+  teleportingnow: "§2[Essence] §aTeleporting to home {{1}}..."
   noneset: "§4[Essence] §c你没有家."
   list: "§6[Essence] §e家: {{1}}"
   specialchars: "§4[Essence] §c设置家不能包含特殊字符!"
@@ -142,7 +143,8 @@ home:
 teamhome:
   notfound: "§4[Essence] §c团队基地 {{1}} 已不存在. 使用 /homes 查看更多的家."
   deleted: "§2[Essence] §a团队基地 {{1}} 已被删除."
-  teleporting: "§2[Essence] §a将在 {{2}} 秒内传送至 {{1}} ......"
+  teleportingin: "§2[Essence] §aTeleporting to team home {{1}} in {{2}} seconds..."
+  teleportingnow: "§2[Essence] §aTeleporting to team home {{1}}..."
   noneset: "§4[Essence] §c你不能再设置更多的团队基地了."
   list: "§6[Essence] §e团队基地: {{1}}"
   specialchars: "§4[Essence] §c团队基地不能包含特殊字符!"
@@ -159,7 +161,8 @@ warp:
   alreadyexists: "§4[Essence] §c这个名称的传送点已经存在."
   created: "§2[Essence] §a已创建 '{{1}}'."
   cantcreate: "§4[Essence] §c不能传送传送点 '{{1}}'."
-  teleporting: "§2[Essence] §a将在 '{{2}}' 秒内传送至 {{1}} ......"
+  teleportingin: "§2[Essence] §aWarping to '{{1}}' in {{2}} seconds..."
+  teleportingnow: "§2[Essence] §aWarping to '{{1}}'..."
   noneset: "§4[Essence] §c没有传送点."
   list: "§6[Essence] §e传送点: {{1}}"
   hitlimit: "§4[Essence] §c你不能再创建更多传送点了."
@@ -243,7 +246,8 @@ team:
   disallowedhomes: "§4[Essence] §c你的团队已禁用了团队基地."
 spawn:
   set: "§2[Essence] §a出生点设置."
-  teleporting: "§2[Essence] §a将在 {{1}} 秒后传送..."
+  teleportingin: "§2[Essence] §aTeleporting in {{1}} seconds..."
+  teleportingnow: "§2[Essence] §aTeleporting..."
   notexist: "§4[Essence] §c所请求的世界要么不存在，要么未加载."
   worldnoperms: "§4[Essence] §c你没有改变世界的权限."
 repair:

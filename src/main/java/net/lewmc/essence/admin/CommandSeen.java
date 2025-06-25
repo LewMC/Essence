@@ -31,7 +31,7 @@ public class CommandSeen extends FoundryCommand {
      */
     @Override
     protected String requiredPermission() {
-        return "essence.playerinfo.seen";
+        return "essence.admin.seen";
     }
 
     /**

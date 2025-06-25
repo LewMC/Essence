@@ -147,9 +147,6 @@ public class CommandTprandom extends FoundryPlayerCommand {
     private void doTeleportation(Player player, Location teleportLocation) {
         this.teleUtil.setCooldown(player, "randomtp");
 
-        UtilLocation locationUtil = new UtilLocation(plugin);
-        locationUtil.UpdateLastLocation(player);
-
         UtilTeleport tp = new UtilTeleport(plugin);
         tp.doTeleport(player, teleportLocation, 0);
     }

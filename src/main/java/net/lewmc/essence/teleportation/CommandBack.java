@@ -2,7 +2,6 @@ package net.lewmc.essence.teleportation;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.core.UtilLocation;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.teleportation.tp.UtilTeleport;
 import net.lewmc.foundry.Files;
@@ -58,7 +57,6 @@ public class CommandBack extends FoundryPlayerCommand {
             return true;
         }
 
-        new UtilLocation(this.plugin).UpdateLastLocation(p);
         new UtilTeleport(this.plugin).doTeleport(
                 p,
                 Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString("last-location.world"))),

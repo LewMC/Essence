@@ -131,7 +131,8 @@ back:
 home:
   notfound: "§4[Essence] §cHome {{1}} does not exist. Use /homes for a list of homes."
   deleted: "§2[Essence] §aHome {{1}} has been deleted."
-  teleporting: "§2[Essence] §aTeleporting to home {{1}} in {{2}} seconds..."
+  teleportingin: "§2[Essence] §aTeleporting to home {{1}} in {{2}} seconds..."
+  teleportingnow: "§2[Essence] §aTeleporting to home {{1}}..."
   noneset: "§4[Essence] §cYou haven't set any homes."
   list: "§6[Essence] §eHomes: {{1}}"
   specialchars: "§4[Essence] §cHomes cannot contain special characters!"
@@ -142,7 +143,8 @@ home:
 teamhome:
   notfound: "§4[Essence] §cTeam home {{1}} does not exist. Use /homes for a list of homes."
   deleted: "§2[Essence] §aTeam home {{1}} has been deleted."
-  teleporting: "§2[Essence] §aTeleporting to team home {{1}} in {{2}} seconds..."
+  teleportingin: "§2[Essence] §aTeleporting to team home {{1}} in {{2}} seconds..."
+  teleportingnow: "§2[Essence] §aTeleporting to team home {{1}}..."
   noneset: "§4[Essence] §cYou haven't set any team homes."
   list: "§6[Essence] §eTeam homes: {{1}}"
   specialchars: "§4[Essence] §cTeam homes cannot contain special characters!"
@@ -159,7 +161,8 @@ warp:
   alreadyexists: "§4[Essence] §cA warp with this name already exists."
   created: "§2[Essence] §aCreated warp '{{1}}'."
   cantcreate: "§4[Essence] §cUnable to create warp '{{1}}'."
-  teleporting: "§2[Essence] §aWarping to '{{1}}' in {{2}} seconds..."
+  teleportingin: "§2[Essence] §aWarping to '{{1}}' in {{2}} seconds..."
+  teleportingnow: "§2[Essence] §aWarping to '{{1}}'..."
   noneset: "§4[Essence] §cThere are no warps set."
   list: "§6[Essence] §eWarps: {{1}}"
   hitlimit: "§4[Essence] §cYou can't create any more warps."
@@ -243,7 +246,8 @@ team:
   disallowedhomes: "§4[Essence] §cYour team has disabled team homes."
 spawn:
   set: "§2[Essence] §aSpawn set."
-  teleporting: "§2[Essence] §aTeleporting in {{1}} seconds..."
+  teleportingin: "§2[Essence] §aTeleporting in {{1}} seconds..."
+  teleportingnow: "§2[Essence] §aTeleporting..."
   notexist: "§4[Essence] §cThe world requested either does not exist or could not be loaded."
   worldnoperms: "§4[Essence] §cYou do not have permission to change worlds."
 repair:

@@ -3,7 +3,7 @@ package net.lewmc.essence.admin;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.stats.UtilStats;
-import net.lewmc.foundry.command.FoundryConsoleCommand;
+import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 /**
  * /visible command.
  */
-public class CommandInvisible extends FoundryConsoleCommand {
+public class CommandInvisible extends FoundryPlayerCommand {
     private final Essence plugin;
 
     /**

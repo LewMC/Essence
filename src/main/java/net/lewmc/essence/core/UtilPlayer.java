@@ -20,8 +20,9 @@ public class UtilPlayer {
 
     /**
      * The Player utility.
+     *
      * @param plugin Reference to the main Essence class.
-     * @param cs CommandSender - The user who sent the command.
+     * @param cs     CommandSender - The user who sent the command.
      */
     public UtilPlayer(Essence plugin, CommandSender cs) {
         this.plugin = plugin;
@@ -30,23 +31,24 @@ public class UtilPlayer {
 
     /**
      * Sets the player's gamemode.
-     * @param cs CommandSender - The executor of the command.
-     * @param player Player - The target player (might be self).
+     *
+     * @param cs       CommandSender - The executor of the command.
+     * @param player   Player - The target player (might be self).
      * @param gamemode GameMode - The gamemode to set the player to.
      * @return boolean - Success
      */
     public boolean setGamemode(CommandSender cs, Player player, GameMode gamemode) {
         UtilPermission permission = new UtilPermission(this.plugin, cs);
         UtilMessage message = new UtilMessage(this.plugin, cs);
-        if (permission.has("essence.gamemode."+gamemode.toString().toLowerCase())) {
+        if (permission.has("essence.gamemode." + gamemode.toString().toLowerCase())) {
             if (cs == player) {
-                message.send("gamemode", "done", new String[] { gamemode.toString().toLowerCase() });
+                message.send("gamemode", "done", new String[]{gamemode.toString().toLowerCase()});
                 player.setGameMode(gamemode);
                 return true;
             } else {
                 if (permission.has("essence.gamemode.other")) {
-                    message.send("gamemode", "doneother", new String[] { player.getName(), gamemode.toString().toLowerCase() });
-                    message.sendTo(player, "gamemode", "doneby", new String[] { gamemode.toString().toLowerCase(), cs.getName() });
+                    message.send("gamemode", "doneother", new String[]{player.getName(), gamemode.toString().toLowerCase()});
+                    message.sendTo(player, "gamemode", "doneby", new String[]{gamemode.toString().toLowerCase(), cs.getName()});
                     player.setGameMode(gamemode);
                     return true;
                 } else {
@@ -60,6 +62,7 @@ public class UtilPlayer {
 
     /**
      * Creates a player data file for the given player.
+     *
      * @return boolean - If the operation was successful.
      */
     public boolean createPlayerData() {
@@ -79,6 +82,7 @@ public class UtilPlayer {
 
     /**
      * Updates a player data file for the given player.
+     *
      * @return boolean - If the operation was successful.
      */
     public boolean updatePlayerData(
@@ -128,6 +132,7 @@ public class UtilPlayer {
 
     /**
      * Updates a player data file for the given player.
+     *
      * @return boolean - If the operation was successful.
      */
     public boolean updatePlayerData() {
@@ -161,6 +166,7 @@ public class UtilPlayer {
 
     /**
      * Fetches a player's prefix.
+     *
      * @return String - The player's prefix (might be blank).
      */
     public String getPlayerPrefix() {
@@ -168,7 +174,7 @@ public class UtilPlayer {
             if (this.cs instanceof Player p) {
                 String prefix = this.plugin.integrations.chat.getPlayerPrefix(p);
                 if (prefix != null && !prefix.isEmpty()) {
-                    return "[" +  prefix + "]";
+                    return "[" + prefix + "]";
                 } else {
                     return "";
                 }
@@ -182,6 +188,7 @@ public class UtilPlayer {
 
     /**
      * Fetches a player's suffix.
+     *
      * @return String - The player's suffix (might be blank).
      */
     public String getPlayerSuffix() {
@@ -189,7 +196,7 @@ public class UtilPlayer {
             if (this.cs instanceof Player p) {
                 String suffix = this.plugin.integrations.chat.getPlayerSuffix(p);
                 if (suffix != null && !suffix.isEmpty()) {
-                    return " " +  suffix;
+                    return " " + suffix;
                 } else {
                     return "";
                 }
@@ -203,6 +210,7 @@ public class UtilPlayer {
 
     /**
      * Gets a player's display name.
+     *
      * @param p Player - The player to check.
      * @return The display name.
      */
@@ -217,7 +225,8 @@ public class UtilPlayer {
 
     /**
      * Sets a player's display name.
-     * @param p Player - The player.
+     *
+     * @param p        Player - The player.
      * @param nickname String - The nickname
      * @return true/false success.
      */
@@ -234,6 +243,7 @@ public class UtilPlayer {
 
     /**
      * Sets a player's display name.
+     *
      * @param p Player - The player.
      * @return true/false success.
      */

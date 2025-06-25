@@ -4,6 +4,7 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.Files;
+import net.lewmc.foundry.Permissions;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -30,7 +31,7 @@ public class CommandInfo extends FoundryCommand {
      */
     @Override
     protected String requiredPermission() {
-        return "essence.playerinfo.info";
+        return "essence.admin.info";
     }
 
     /**
@@ -52,12 +53,41 @@ public class CommandInfo extends FoundryCommand {
                 Files fu = new Files(this.plugin.config, this.plugin);
                 if (fu.exists(fu.playerDataFile(p.getUniqueId()))) {
                     fu.load(fu.playerDataFile(p.getUniqueId()));
+
                     message.send("info", "uuid", new String[]{String.valueOf(p.getUniqueId())});
-                    message.send("info", "lastname", new String[]{fu.getString("user.last-known-name")});
-                    if (fu.getString("user.last-seen") != null) {
+
+                    if (fu.exists("user.nickname")) {
+                        message.send("info", "lastname", new String[]{fu.getString("user.last-known-name")});
+                    } else {
+                        message.send("info", "lastname", new String[]{"Unknown"});
+                    }
+
+                    if (fu.exists("user.nickname")) {
+                        message.send("info", "nickname", new String[]{fu.getString("user.nickname")});
+                    } else {
+                        message.send("info", "nickname", new String[]{"None"});
+                    }
+
+                    if (fu.exists("user.last-seen")) {
                         message.send("info", "lastseen", new String[]{fu.getString("user.last-seen")});
                     } else {
                         message.send("info", "neverseen");
+                    }
+
+                    if (new Permissions(cs).has("essence.admin.info.viewip")) {
+                        if (fu.exists("user.ip-address")) {
+                            message.send("info", "ip", new String[]{fu.getString("user.ip-address")});
+                        } else {
+                            message.send("info", "ip", new String[]{"Unknown"});
+                        }
+                    } else {
+                        message.send("info", "noip");
+                    }
+
+                    if (fu.exists("user.team")) {
+                        message.send("info", "team", new String[]{fu.getString("user.team")});
+                    } else {
+                        message.send("info", "team", new String[]{"None"});
                     }
                     fu.close();
                 } else {

@@ -96,10 +96,12 @@ public class UtilUpdate {
     public void UpdateLanguage() {
         this.migrate();
 
+        // WHEN ADDING MORE HERE, ALSO PUT IN COMMANDESSENCE.RESTORE.
+
         // en-GB
         File enGB = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "en-GB.yml");
         if (!enGB.exists()) {
-            this.plugin.saveResource("language/en-GB.yml", false);
+            this.plugin.saveResource("language/en-GB.yml", true);
         } else {
             try {
                 ConfigUpdater.update(plugin, "language/en-GB.yml", enGB);
@@ -111,7 +113,7 @@ public class UtilUpdate {
         // zh-CN
         File zhCN = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "zh-CN.yml");
         if (!zhCN.exists()) {
-            this.plugin.saveResource("language/zh-CN.yml", false);
+            this.plugin.saveResource("language/zh-CN.yml", true);
         } else {
             try {
                 ConfigUpdater.update(plugin, "language/zh-CN.yml", zhCN);
@@ -123,7 +125,7 @@ public class UtilUpdate {
         // fr-FR
         File frFR = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "fr-FR.yml");
         if (!frFR.exists()) {
-            this.plugin.saveResource("language/fr-FR.yml", false);
+            this.plugin.saveResource("language/fr-FR.yml", true);
         } else {
             try {
                 ConfigUpdater.update(plugin, "language/fr-FR.yml", frFR);
@@ -135,7 +137,7 @@ public class UtilUpdate {
         // es-ES
         File esES = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "es-ES.yml");
         if (!esES.exists()) {
-            this.plugin.saveResource("language/es-ES.yml", false);
+            this.plugin.saveResource("language/es-ES.yml", true);
         } else {
             try {
                 ConfigUpdater.update(plugin, "language/es-ES.yml", frFR);
@@ -147,7 +149,7 @@ public class UtilUpdate {
         // ko-KR
         File koKR = new File(this.plugin.getDataFolder() + File.separator + "language" + File.separator + "ko-KR.yml");
         if (!koKR.exists()) {
-            this.plugin.saveResource("language/ko-KR.yml", false);
+            this.plugin.saveResource("language/ko-KR.yml", true);
         } else {
             try {
                 ConfigUpdater.update(plugin, "language/ko-KR.yml", frFR);

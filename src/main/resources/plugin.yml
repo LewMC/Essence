@@ -281,7 +281,6 @@ permissions:
       essence.home.*: true
       essence.economy.*: true
       essence.chat.*: true
-      essence.playerinfo.*: true
       essence.team.*: true
       essence.spawn.*: true
       essence.kits.*: true
@@ -517,12 +516,14 @@ permissions:
   essence.kits.all:
     description: Allows players to access all kits.
   essence.admin.*:
-    description: Allows players to see information about other players.
+    description: Allows players to access admin commands.
     default: op
     children:
       essence.admin.seen: true
       essence.admin.info: true
+      essence.admin.info.viewip: true
       essence.admin.reload: true
+      essence.admin.restore: true
       essence.admin.import: true
       essence.admin.invisible: true
       essence.admin.updates: true
@@ -530,8 +531,12 @@ permissions:
     description: Allows players to see when the player was last online.
   essence.admin.info:
     description: Allows players to see information about the player.
+  essence.admin.info.viewip:
+    description: Allows players to see other player's IP addresses.
   essence.admin.reload:
     description: Allows players to reload Essence.
+  essence.admin.restore:
+    description: Allows players to restore Essence's files.
   essence.admin.import:
     description: Allows players to reload Essence.
   essence.admin.invisible:
