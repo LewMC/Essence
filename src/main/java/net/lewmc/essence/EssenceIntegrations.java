@@ -69,7 +69,7 @@ public class EssenceIntegrations {
             this.log.info("Config economy mode set to '" + this.plugin.economyMode + "'");
         }
         switch (this.plugin.economyMode) {
-            case "VAULT", "true" -> {
+            case "VAULT", "true", "default" -> {
                 if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
                     return false;
                 }
