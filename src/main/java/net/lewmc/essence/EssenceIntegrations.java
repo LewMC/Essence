@@ -75,7 +75,8 @@ public class EssenceIntegrations {
 
                 RegisteredServiceProvider<Economy> rsp = this.plugin.getServer().getServicesManager().getRegistration(Economy.class);
                 if (rsp == null) {
-                    log.severe("No economy service provider found after registration!");
+                    this.log.severe("Something went wrong whilst setting up economy service.");
+                    this.log.severe("Essence will fallback to internal-only economy mode.");
                     return false;
                 }
 
@@ -116,9 +117,10 @@ public class EssenceIntegrations {
         RegisteredServiceProvider<Chat> rsp = this.plugin.getServer().getServicesManager().getRegistration(Chat.class);
         if (rsp != null) {
             this.chat = rsp.getProvider();
+        } else {
+            this.log.severe("Something went wrong whilst setting up chat service.");
+            this.log.severe("Some chat features may be disabled.");
         }
-
-        this.log.info("");
 
         return this.chat != null;
     }
