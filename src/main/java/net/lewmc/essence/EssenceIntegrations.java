@@ -76,14 +76,14 @@ public class EssenceIntegrations {
 
                 this.plugin.getServer().getServicesManager().register(Economy.class, new UtilVaultEconomy(this.plugin), this.plugin, ServicePriority.Highest);
 
-                RegisteredServiceProvider<Economy> rsp = this.plugin.getServer().getServicesManager().getRegistration(Economy.class);
-                if (rsp == null) {
+                RegisteredServiceProvider<Economy> ersp = this.plugin.getServer().getServicesManager().getRegistration(Economy.class);
+                if (ersp == null) {
                     this.log.severe("Something went wrong whilst setting up economy service.");
                     this.log.severe("Essence will fallback to internal-only economy mode.");
                     return false;
                 }
 
-                this.economy = rsp.getProvider();
+                this.economy = ersp.getProvider();
 
                 this.log.info("Setup economy in Vault mode.");
 
@@ -117,9 +117,9 @@ public class EssenceIntegrations {
         }
         this.log.info("Vault found, setting up chat service...");
 
-        RegisteredServiceProvider<Chat> rsp = this.plugin.getServer().getServicesManager().getRegistration(Chat.class);
-        if (rsp != null) {
-            this.chat = rsp.getProvider();
+        RegisteredServiceProvider<Chat> crsp = this.plugin.getServer().getServicesManager().getRegistration(Chat.class);
+        if (crsp != null) {
+            this.chat = crsp.getProvider();
         } else {
             this.log.severe("Something went wrong whilst setting up chat service.");
             this.log.severe("Some chat features may be disabled.");
