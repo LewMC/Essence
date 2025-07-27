@@ -91,7 +91,7 @@ public class EssenceIntegrations {
 
                 return this.economy != null;
             }
-            case "ESSENCE", "INTERNAL" -> {
+            case "ESSENCE", "INTERNAL", "NOVAULT" -> {
                 this.log.warn("Setup economy in Essence-only mode.");
                 this.log.warn("Vault economy is disabled, but Essence commands will still use internal economy.");
                 return false;
