@@ -108,6 +108,11 @@ help:
   reply: "§6[Essence] §e/reply <message> - 回复你最近的一次消息（/msg）."
   nickself: "§6[Essence] §e/nick <name> - Change your displayname."
   nickother: "§6[Essence] §e/nick <user> <name> - Change other nick."
+  environment: "§6[Essence] -------- Essence Help - Environment --------"
+  time: "§6[Essence] §e/time - View and set your world time."
+  weather: "§6[Essence] §e/weather - View and set your world weather."
+  ptime: "§6[Essence] §e/ptime - View and set your player time."
+  pweather: "§6[Essence] §e/pweather - View and set your player weather."
   misc: "§6[Essence] -------- Essence 帮助 - 杂项 ------"
   rules: "§6[Essence] §e/rules - 查看服务器规则."
   kit: "§6[Essence] §e/kit - 得到一个礼包."
@@ -119,6 +124,7 @@ help:
   helpstats: "§6[Essence] §e/es help stats - 管理你的统计."
   helpeconomy: "§6[Essence] §e/es help economy - 经济命令."
   helpteam: "§6[Essence] §e/es help team - 团队命令."
+  helpenvironment: "§6[Essence] §e/es help environment - Environment commands."
   helpadmin: "§6[Essence] §e/es help admin - 管理员命令."
   helpmisc: "§6[Essence] §e/es help misc - 杂项."
 tprandom:
@@ -169,6 +175,8 @@ warp:
   hitlimit: "§4[Essence] §c你不能再创建更多传送点了."
 teleport:
   to: "§2[Essence] §a传送至 {{1}}..."
+  tooffline: "§2[Essence] §aThis player is offline, so you won't see them when you arrive."
+  offlinenoworld: "§4[Essence] §cUnable to teleport due to the offline player's last known world being unknown."
   toplayer: "§2[Essence] §a已将 {{1}} 传送至 {{2}}..."
   tocoord: "§2[Essence] §a传送至 {{1}}..."
   playertocoord: "§2[Essence] §a已将 {{1}} 传送至 {{2}}..."
@@ -188,6 +196,7 @@ teleport:
   movetocancel: "§6[Essence] §e移动来取消传送."
   cancelled: "§4[Essence] §c传送取消."
   exception: "§4[Essence] §cEssence 在尝试处理此传送时遇到问题，请参阅控制台了解详细信息."
+  offlineplayernodata: "§4[Essence] §cUnable to teleport - The requested player is offline and Essence does not have their last location stored."
 feed:
   fed: "§2[Essence] §a你将 {{1}} 喂饱了."
   serverfed: "§2[Essence] §a你被一种神奇的力量喂饱了."

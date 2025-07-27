@@ -108,6 +108,11 @@ help:
   reply: "§6[Essence] §e/reply <mensaje> - Responde a tu último /msg."
   nickself: "§6[Essence] §e/nick <name> - Change your displayname."
   nickother: "§6[Essence] §e/nick <user> <name> - Change other nick."
+  environment: "§6[Essence] -------- Essence Help - Environment --------"
+  time: "§6[Essence] §e/time - View and set your world time."
+  weather: "§6[Essence] §e/weather - View and set your world weather."
+  ptime: "§6[Essence] §e/ptime - View and set your player time."
+  pweather: "§6[Essence] §e/pweather - View and set your player weather."
   misc: "§6[Essence] ----- Ayuda de Essence - Miscellaneous -----"
   rules: "§6[Essence] §e/rules - Ver las reglas del servidor."
   kit: "§6[Essence] §e/kit - Obtener un kit."
@@ -119,6 +124,7 @@ help:
   helpstats: "§6[Essence] §e/es help stats - Comandos de estadisticas."
   helpeconomy: "§6[Essence] §e/es help economy - Comandos de economia."
   helpteam: "§6[Essence] §e/es help team - Comandos de equipo."
+  helpenvironment: "§6[Essence] §e/es help environment - Environment commands."
   helpadmin: "§6[Essence] §e/es help admin - Comandos de administracion."
   helpmisc: "§6[Essence] §e/es help misc - Comandos miscellaneous."
 tprandom:
@@ -169,6 +175,8 @@ warp:
   hitlimit: "§4[Essence] §cNo puedes crear más warps."
 teleport:
   to: "§2[Essence] §aTeletransportándose a {{1}}..."
+  tooffline: "§2[Essence] §aThis player is offline, so you won't see them when you arrive."
+  offlinenoworld: "§4[Essence] §cUnable to teleport due to the offline player's last known world being unknown."
   toplayer: "§2[Essence] §aTeletransportando {{1}} a {{2}}..."
   tocoord: "§2[Essence] §aTeletransportándose a {{1}}..."
   playertocoord: "§2[Essence] §aTeletransportando {{1}} a {{2}}..."
@@ -188,6 +196,7 @@ teleport:
   movetocancel: "§6[Essence] §eMuevete para cancelar la teletransportación."
   cancelled: "§4[Essence] §cTeletransportación cancelada."
   exception: "§4[Essence] §cEssence encontró un problema mientras intentaba procesar esta teletransportación, por favor consulta la consola para más detalles."
+  offlineplayernodata: "§4[Essence] §cUnable to teleport - The requested player is offline and Essence does not have their last location stored."
 feed:
   fed: "§2[Essence] §aHas alimentado a {{1}}."
   serverfed: "§2[Essence] §aHas sido alimentado por una fuerza mágica."
