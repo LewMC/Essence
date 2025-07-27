@@ -88,6 +88,11 @@ public class Essence extends JavaPlugin {
     public boolean chat_manage = false;
 
     /**
+     * Economy mode
+     */
+    public String economyMode;
+
+    /**
      * Should essence chat allow colours?
      */
     public boolean chat_allowMessageFormatting;
@@ -132,6 +137,7 @@ public class Essence extends JavaPlugin {
         this.log.info("");
 
         this.verbose = this.getConfig().getBoolean("verbose");
+        this.economyMode = this.getConfig().getString("economy.mode");
 
         if (this.verbose) {
             this.log.warn("Verbose mode is ENABLED.");
@@ -164,7 +170,7 @@ public class Essence extends JavaPlugin {
 
         this.integrations = new EssenceIntegrations(this);
         if (!this.integrations.loadPlaceholderAPI() && verbose) { this.log.warn("PlaceholderAPI not found! Using local placeholders."); }
-        if (!this.integrations.loadVaultEconomy() && verbose) { this.log.warn("Vault not found! Using local economy."); }
+        if (!this.integrations.loadVaultEconomy() && verbose) { this.log.warn("Vault not found or is disabled! Using local economy."); }
         if (!this.integrations.loadVaultChat() && verbose) { this.log.warn("Vault not found! Using local chat."); }
         this.integrations.loadMetrics();
 

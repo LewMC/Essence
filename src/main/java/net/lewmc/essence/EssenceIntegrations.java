@@ -65,26 +65,42 @@ public class EssenceIntegrations {
      * @return boolean - If it could be setup correctly.
      */
     public boolean loadVaultEconomy() {
-        if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
+        switch (this.plugin.economyMode) {
+            case "VAULT" -> {
+                if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
+                    return false;
+                }
+
+                this.plugin.getServer().getServicesManager().register(Economy.class, new UtilVaultEconomy(this.plugin), this.plugin, ServicePriority.Highest);
+
+                RegisteredServiceProvider<Economy> rsp = this.plugin.getServer().getServicesManager().getRegistration(Economy.class);
+                if (rsp == null) {
+                    log.severe("No economy service provider found after registration!");
+                    return false;
+                }
+
+                this.economy = rsp.getProvider();
+
+                this.log.info("Setup economy in Vault mode.");
+
+                this.plugin.economySymbol = this.plugin.getConfig().getString("economy.symbol");
+
+                return this.economy != null;
+            }
+            case "ESSENCE" -> {
+                this.log.warn("Setup economy in Essence-only mode.");
+                this.log.warn("Vault economy is disabled, but Essence commands will still use internal economy.");
+                return false;
+            }
+            case "OFF" -> {
+                this.log.warn("Economy is disabled.");
+                return false;
+            }
+            case null, default -> {
+                this.log.warn("Unknown economy mode, economy is disabled. Please set mode to 'VAULT', 'ESSENCE' or 'OFF'");
+                return false;
+            }
         }
-        this.log.info("Vault found, setting up economy service...");
-
-        this.plugin.getServer().getServicesManager().register(Economy.class, new UtilVaultEconomy(this.plugin), this.plugin, ServicePriority.Highest);
-
-        RegisteredServiceProvider<Economy> rsp = this.plugin.getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            log.severe("No economy service provider found after registration!");
-            return false;
-        }
-
-        this.economy = rsp.getProvider();
-
-        this.log.info("");
-
-        this.plugin.economySymbol = this.plugin.getConfig().getString("economy.symbol");
-
-        return this.economy != null;
     }
 
     /**

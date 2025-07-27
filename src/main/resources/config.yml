@@ -35,6 +35,7 @@ spawn-kits:
 
 # ECONOMY
 economy:
+  mode: VAULT
   start-money: 100.0
   symbol: $
 
