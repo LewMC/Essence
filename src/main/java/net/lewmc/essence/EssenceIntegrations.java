@@ -69,7 +69,7 @@ public class EssenceIntegrations {
             this.log.info("Config economy mode set to '" + this.plugin.economyMode + "'");
         }
         switch (this.plugin.economyMode) {
-            case "VAULT" -> {
+            case "VAULT", "true" -> {
                 if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
                     return false;
                 }
@@ -96,7 +96,7 @@ public class EssenceIntegrations {
                 this.log.warn("Vault economy is disabled, but Essence commands will still use internal economy.");
                 return false;
             }
-            case "OFF", "DISABLED", "DISABLE" -> {
+            case "OFF", "DISABLED", "DISABLE", "false" -> {
                 this.log.warn("Economy is disabled.");
                 return false;
             }
