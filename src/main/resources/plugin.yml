@@ -5,7 +5,7 @@ api-version: 1.20
 author: LewMC
 description: An Essentials alternative for LewMC servers.
 website: https://lewmc.net
-load: POSTWORLD
+load: STARTUP
 folia-supported: true
 softdepend: ["Vault","PlaceholderAPI"]
 commands:
@@ -251,7 +251,7 @@ commands:
   msg:
     description: Send a private message to another player.
     usage: /msg <user> <message>
-    aliases: ['message', 'pm']
+    aliases: ['message', 'pm', 'tell', 'w']
     permission: essence.chat.msg
   reply:
     description: Reply to the last private message sent to you.
@@ -267,6 +267,30 @@ commands:
     usage: /nick
     aliases: ['nickname', 'displayname']
     permission: essence.chat.nick
+  time:
+    description: Change the time.
+    usage: /time [time]
+    permission: essence.environment.time
+  weather:
+    description: Change the weather.
+    usage: /weather [weather]
+    permission: essence.environment.weather
+  ptime:
+    description: Change your player time.
+    usage: /ptime [time]
+    permission: essence.environment.ptime
+  pweather:
+    description: Change your player weather.
+    usage: /pweather [weather]
+    permission: essence.environment.pweather
+  fly:
+    description: Let yourself or someone else fly.
+    usage: /fly [username]
+    permission: essence.stats.fly
+  speed:
+    description: Set your (or someone else's) speed.
+    usage: /speed [username]
+    permission: essence.stats.speed
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -281,10 +305,10 @@ permissions:
       essence.home.*: true
       essence.economy.*: true
       essence.chat.*: true
-      essence.playerinfo.*: true
       essence.team.*: true
       essence.spawn.*: true
       essence.kits.*: true
+      essence.environment.*: true
       essence.rules: true
   essence.gamemode.*:
     description: Allows players to switch to any gamemode.
@@ -342,6 +366,7 @@ permissions:
     children:
       essence.teleport.coord: true
       essence.teleport.player: true
+      essence.teleport.offline: true
       essence.teleport.back: true
       essence.teleport.random: true
       essence.teleport.other: true
@@ -350,6 +375,8 @@ permissions:
     description: Allows players to teleport to coordinates.
   essence.teleport.player:
     description: Allows players to teleport to a player.
+  essence.teleport.offline:
+    description: Allows players to teleport to an offline player.
   essence.teleport.back:
     description: Go back to your last location before teleporting.
   essence.teleport.random:
@@ -401,22 +428,34 @@ permissions:
       essence.stats.heal: true
       essence.stats.feed: true
       essence.stats.repair: true
+      essence.stats.fly: true
+      essence.stats.speed: true
   essence.stats.heal:
     description: Allows you to heal yourself.
   essence.stats.feed:
     description: Allows you to feed yourself.
   essence.stats.repair:
     description: Allows you to repair items.
+  essence.stats.fly:
+    description: Allows you to fly.
+  essence.stats.speed:
+    description: Allows you to set your speed.
   essence.stats.other.*:
     description: Allows players to manage other player's stats such as health and hunger.
     default: op
     children:
       essence.stats.heal.other: true
       essence.stats.feed.other: true
+      essence.stats.fly.other: true
+      essence.stats.speed.other: true
   essence.stats.heal.other:
     description: Allows you to heal other players.
   essence.stats.feed.other:
     description: Allows you to feed other players.
+  essence.stats.fly.other:
+    description: Allows you to let other players fly.
+  essence.stats.speed.other:
+    description: Allows you to set other player's speed.
   essence.home.*:
     description: Allows players to use the home system.
     default: op
@@ -517,12 +556,14 @@ permissions:
   essence.kits.all:
     description: Allows players to access all kits.
   essence.admin.*:
-    description: Allows players to see information about other players.
+    description: Allows players to access admin commands.
     default: op
     children:
       essence.admin.seen: true
       essence.admin.info: true
+      essence.admin.info.viewip: true
       essence.admin.reload: true
+      essence.admin.restore: true
       essence.admin.import: true
       essence.admin.invisible: true
       essence.admin.updates: true
@@ -530,8 +571,12 @@ permissions:
     description: Allows players to see when the player was last online.
   essence.admin.info:
     description: Allows players to see information about the player.
+  essence.admin.info.viewip:
+    description: Allows players to see other player's IP addresses.
   essence.admin.reload:
     description: Allows players to reload Essence.
+  essence.admin.restore:
+    description: Allows players to restore Essence's files.
   essence.admin.import:
     description: Allows players to reload Essence.
   essence.admin.invisible:
@@ -540,7 +585,7 @@ permissions:
     description: Toggles invisibility.
   essence.bypass.*:
     description: Allows bypassing of various limits.
-    default: op
+    default: false
     children:
       essence.bypass.teleportcooldown: true
       essence.bypass.teleportdelay: true
@@ -555,3 +600,19 @@ permissions:
     description: Allows bypassing the maximum number of kit redemptions.
   essence.rules:
     description: Allows players to view the server rules.
+  essence.environment.*:
+    description: Allows changing environmental variables.
+    default: op
+    children:
+      essence.environment.time: true
+      essence.environment.weather: true
+      essence.environment.ptime: true
+      essence.environment.pweather: true
+  essence.environment.time:
+    description: Allows changing the time.
+  essence.environment.weather:
+    description: Allows changing the weather.
+  essence.environment.ptime:
+    description: Allows changing your player time.
+  essence.environment.pweather:
+    description: Allows changing your player weather.

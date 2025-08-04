@@ -4,7 +4,7 @@
   <groupId>net.lewmc</groupId>
   <artifactId>essence</artifactId>
   <name>Essence</name>
-  <version>1.9.0</version>
+  <version>1.10.0</version>
   <build>
     <resources>
       <resource>
@@ -28,7 +28,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.13.0</version>
+        <version>3.14.0</version>
         <configuration>
           <source>21</source>
           <target>21</target>
@@ -49,15 +49,19 @@
           <relocations>
             <relocation>
               <pattern>org.bstats</pattern>
-              <shadedPattern>net.lewmc.essence</shadedPattern>
+              <shadedPattern>net.lewmc.essence.external</shadedPattern>
             </relocation>
             <relocation>
               <pattern>com.tcoded</pattern>
-              <shadedPattern>net.lewmc.essence</shadedPattern>
+              <shadedPattern>net.lewmc.essence.external</shadedPattern>
             </relocation>
             <relocation>
               <pattern>com.tchristofferson</pattern>
-              <shadedPattern>net.lewmc.essence</shadedPattern>
+              <shadedPattern>net.lewmc.essence.external</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>net.lewmc.foundry</pattern>
+              <shadedPattern>net.lewmc.essence.external</shadedPattern>
             </relocation>
           </relocations>
         </configuration>
@@ -74,10 +78,6 @@
       <url>https://oss.sonatype.org/content/groups/public/</url>
     </repository>
     <repository>
-      <id>devmart-other</id>
-      <url>https://nexuslite.gcnt.net/repos/other/</url>
-    </repository>
-    <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
     </repository>
@@ -86,7 +86,13 @@
       <url>https://repo.extendedclip.com/releases/</url>
     </repository>
     <repository>
+      <id>lewmc</id>
+      <name>LewMC Repository</name>
+      <url>https://repo.lewmc.net/releases</url>
+    </repository>
+    <repository>
       <id>lewmc-snapshots</id>
+      <name>LewMC Repository</name>
       <url>https://repo.lewmc.net/snapshots</url>
     </repository>
   </repositories>
@@ -109,13 +115,17 @@
       <version>2.11.6</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>net.lewmc</groupId>
-      <artifactId>foundry</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
+  <distributionManagement>
+    <repository>
+      <id>lewmc</id>
+      <url>https://repo.lewmc.net/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>lewmc</id>
+      <url>https://repo.lewmc.net/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
   <properties>
     <java.version>21</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
