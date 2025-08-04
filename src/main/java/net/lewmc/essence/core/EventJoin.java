@@ -74,7 +74,7 @@ public class EventJoin implements Listener {
 
         plugin.reloadConfig();
 
-        if (plugin.getConfig().getBoolean("motd.enabled")) { this.motd(event); }
+        if (!Objects.equals(plugin.getConfig().getString("motd"), "false")) { this.motd(event); }
 
         if (plugin.getConfig().getBoolean("teleportation.spawn.always-spawn") || firstJoin) {
             try {
@@ -162,8 +162,8 @@ public class EventJoin implements Listener {
      */
     private void firstJoin(PlayerJoinEvent event, Logger log) {
         UtilKit kit = new UtilKit(this.plugin, event.getPlayer());
-        if (this.plugin.getConfig().getList("spawn-kits") != null && !Objects.equals(this.plugin.getConfig().getString("spawn-kits"), "false")) {
-            for (Object giveKit : this.plugin.getConfig().getList("spawn-kits")) {
+        if (this.plugin.getConfig().getList("kit.spawn-kits") != null && !Objects.equals(this.plugin.getConfig().getString("kit.spawn-kits"), "false")) {
+            for (Object giveKit : this.plugin.getConfig().getList("kit.spawn-kits")) {
                 log.info("Giving player '"+event.getPlayer().getName()+"' spawn kit '"+giveKit+"'");
                 kit.giveKit(giveKit.toString());
             }
@@ -175,8 +175,8 @@ public class EventJoin implements Listener {
      * @param event PlayerJoinEvent - The event
      */
     private void motd(PlayerJoinEvent event) {
-        if (plugin.getConfig().getString("motd.message") != null) {
-            String message = plugin.getConfig().getString("motd.message");
+        if (plugin.getConfig().getString("chat.motd") != null) {
+            String message = plugin.getConfig().getString("chat.motd");
             if (message != null) {
                 UtilPlaceholder tag = new UtilPlaceholder(plugin, event.getPlayer());
                 event.getPlayer().sendMessage(tag.replaceAll(message));
@@ -191,9 +191,9 @@ public class EventJoin implements Listener {
     private void playerJoinMessage(PlayerJoinEvent event) {
         UtilPlaceholder tag = new UtilPlaceholder(this.plugin, event.getPlayer());
         if (event.getPlayer().hasPlayedBefore()) {
-            event.setJoinMessage(tag.replaceAll(this.plugin.getConfig().getString("broadcasts.join")));
+            event.setJoinMessage(tag.replaceAll(this.plugin.getConfig().getString("chat.broadcasts.join")));
         } else {
-            event.setJoinMessage(tag.replaceAll(this.plugin.getConfig().getString("broadcasts.first-join")));
+            event.setJoinMessage(tag.replaceAll(this.plugin.getConfig().getString("chat.broadcasts.first-join")));
         }
     }
 

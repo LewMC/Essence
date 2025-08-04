@@ -107,7 +107,7 @@ public class CommandEssence extends FoundryCommand {
             this.plugin.disabledCommandsFeedback = this.plugin.getConfig().getBoolean("disabled-commands-feedback");
             this.plugin.verbose = this.plugin.getConfig().getBoolean("verbose");
             this.plugin.chat_nameFormat = this.plugin.getConfig().getString("chat.name-format");
-            this.plugin.chat_manage = this.plugin.getConfig().getBoolean("chat.enabled");
+            this.plugin.chat_manage = this.plugin.getConfig().getBoolean("chat.manage-chat");
             this.plugin.chat_allowMessageFormatting = this.plugin.getConfig().getBoolean("chat.allow-message-formatting");
             this.plugin.economySymbol = this.plugin.getConfig().getString("economy.symbol");
             message.send("generic", "reload");

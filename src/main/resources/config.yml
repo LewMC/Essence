@@ -2,45 +2,60 @@
 # Need help? Visit wiki.lewmc.net
 # Found a bug or want to request a feature? Open an issue at github.com/lewmc/essence
 
-# UPDATE CHECKING - Should Essence query the server to check for updates?
-update-check: true
-
-# PREFIXES
-console-prefix: "Essence"
-
-# MOTD - This is displayed to users in chat when they join the server.
-# You can use § colour codes here!
-motd:
+# ADMIN MODULE
+admin:
   enabled: true
-  message: |-
+
+# CHAT MODULE
+chat:
+  enabled: true
+  manage-chat: true
+  name-format: "%essence_combined_prefix% %essence_player%%essence_player_suffix%:"
+  allow-message-formatting: false
+  broadcasts:
+    first-join: "§a%essence_player% joined the server for the first time!"
+    join: "§e%essence_player% joined the server!"
+    leave: "§c%essence_player% left the server!"
+  motd: |-
     §2§lWelcome to the server!
     §aYou can change this message in Essence's config.yml
 
-# BROADCASTS - These are some predefined broadcasts that fire at specific times.
-broadcasts:
-  first-join: "§a%essence_player% joined the server for the first time!"
-  join: "§e%essence_player% joined the server!"
-  leave: "§c%essence_player% left the server!"
-
-# CHAT - You can use § colour codes here!
-chat:
-  enabled: true
-  name-format: "%essence_combined_prefix% %essence_player%%essence_player_suffix%:"
-  allow-message-formatting: false
-
-# SPAWN KITS - Players are given these kits when they first join the server.
-# Set to "false" to disable this feature.
-spawn-kits:
-  - wooden-tools
-
-# ECONOMY
+# ECONOMY MODULE
 economy:
+  enabled: true
   mode: VAULT
   start-money: 100.0
   symbol: $
 
-# TELEPORTATION
+# ENVIRONMENT MODULE
+environment:
+  enabled: true
+
+# GAMEMODE MODULE
+gamemode:
+  enabled: true
+
+# INVENTORY MODULE
+inventory:
+  enabled: true
+
+# KIT MODULE
+kit:
+  enabled: true
+  spawn-kits:
+    - wooden-tools
+
+# STATS MODULE
+stats:
+  enabled: true
+
+# TEAM MODULE
+team:
+  enabled: true
+
+# TELEPORTATION MODULE
 teleportation:
+  enabled: true
   home:
     wait: 3
     cooldown: 10
@@ -64,21 +79,21 @@ teleportation:
 # Please ensure the file exists in the 'language' sub-folder before changing this value.
 language: en-GB
 
-# DISABLED COMMANDS - See https://wiki.lewmc.net/es-disabling-commands.html for help.
-# PLEASE NOTE: This does not currently remove the command from /es help
+# DISABLED COMMANDS
+# Allows you to disable specific commands. Doesn't fully remove them from the server.
 disabled-commands:
-  - example
+  list:
+    - example
+  feedback-in-chat: true
 
-# Should disabled commands tell users they're disabled when they're executed?
-disabled-commands-feedback: true
-
-# PLAYERDATA - What types of player data to store
-# This does not change what is already stored
-playerdata:
-  store-ip-address: true
-
-# VERBOSE - Outputs more information to the console. If you're having issues, enable this. Creates a lot of console spam.
-verbose: false
+# ADVANCED SETTINGS
+# These settings should typically be left alone. Only change them if you know what you're doing.
+advanced:
+  playerdata:
+    store-ip-address: true
+  update-check: true
+  console-prefix: "Essence"
+  verbose: false
 
 # Do not change this!
 config-version: 2

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -94,8 +95,6 @@ public class UtilUpdate {
      * Updates Essence's language files.
      */
     public void UpdateLanguage() {
-        this.migrate();
-
         // WHEN ADDING MORE HERE, ALSO PUT IN COMMANDESSENCE.RESTORE.
 
         // en-GB
@@ -162,7 +161,7 @@ public class UtilUpdate {
     /**
      * Migrates old Essence files.
      */
-    private void migrate() {
+    public void migrate() {
         // NEW LANGUAGE FILES.
         if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
             Files config = new Files(this.plugin.config, this.plugin);
@@ -175,63 +174,120 @@ public class UtilUpdate {
             this.plugin.reloadConfig();
         }
 
+        Logger log = new Logger(this.plugin.config);
+
         // NEW PLACEHOLDER SYSTEM (1.9.0+)
         Files f = new Files(this.plugin.config, this.plugin);
         f.load("config.yml");
         if (f.getInt("config-version") == 1) {
-            Logger log = new Logger(this.plugin.config);
             log.info("Essence is updating your configuration file, please wait...");
 
             log.info("[1/4] Updating first join message...");
-            String firstJoin = f.getString("broadcasts.first-join");
+            String firstJoin = f.getString("chat.broadcasts.first-join");
             firstJoin = firstJoin.replace("{{essence-version}}", "%essence_version%");
             firstJoin = firstJoin.replace("{{minecraft-version}}", "%essence_minecraft_version%");
             firstJoin = firstJoin.replace("{{time}}", "%essence_time%");
             firstJoin = firstJoin.replace("{{date}}", "%essence_date%");
             firstJoin = firstJoin.replace("{{datetime}}", "%essence_datetime%");
             firstJoin = firstJoin.replace("{{player}}", "%essence_player%");
-            f.set("broadcasts.first-join", firstJoin);
+            f.set("chat.broadcasts.first-join", firstJoin);
             log.info("[1/4] Done.");
 
             log.info("[2/4] Updating join message...");
-            String join = f.getString("broadcasts.join");
+            String join = f.getString("chat.broadcasts.join");
             join = join.replace("{{essence-version}}", "%essence_version%");
             join = join.replace("{{minecraft-version}}", "%essence_minecraft_version%");
             join = join.replace("{{time}}", "%essence_time%");
             join = join.replace("{{date}}", "%essence_date%");
             join = join.replace("{{datetime}}", "%essence_datetime%");
             join = join.replace("{{player}}", "%essence_player%");
-            f.set("broadcasts.join", join);
+            f.set("chat.broadcasts.join", join);
             log.info("[2/4] Done.");
 
             log.info("[3/4] Updating leaving message...");
-            String leave = f.getString("broadcasts.leave");
+            String leave = f.getString("chat.broadcasts.leave");
             leave = leave.replace("{{essence-version}}", "%essence_version%");
             leave = leave.replace("{{minecraft-version}}", "%essence_minecraft_version%");
             leave = leave.replace("{{time}}", "%essence_time%");
             leave = leave.replace("{{date}}", "%essence_date%");
             leave = leave.replace("{{datetime}}", "%essence_datetime%");
             leave = leave.replace("{{player}}", "%essence_player%");
-            f.set("broadcasts.leave", leave);
+            f.set("chat.broadcasts.leave", leave);
             log.info("[3/4] Done.");
 
             log.info("[4/4] Updating MOTD...");
-            String motd = f.getString("motd.message");
+            String motd = f.getString("chat.motd");
             motd = motd.replace("{{essence-version}}", "%essence_version%");
             motd = motd.replace("{{minecraft-version}}", "%essence_minecraft_version%");
             motd = motd.replace("{{time}}", "%essence_time%");
             motd = motd.replace("{{date}}", "%essence_date%");
             motd = motd.replace("{{datetime}}", "%essence_datetime%");
             motd = motd.replace("{{player}}", "%essence_player%");
-            f.set("motd.message", motd);
+            f.set("chat.motd", motd);
             log.info("[4/4] Done.");
 
             f.set("config-version", 2);
-            f.save();
-            f.close();
 
             log.info("Done.");
             log.info("");
         }
+
+        if (f.getInt("config-version") == 2) {
+            log.info("Essence is updating your configuration file, please wait...");
+
+            log.info("[1/4] Migrating kit module...");
+            f.set("kit.spawn-kits", f.getStringList("spawn-kits"));
+            f.delete("spawn-kits");
+            log.info("[1/4] Done.");
+
+            log.info("[2/4] Migrating chat module...");
+            f.set("chat.manage-chat", f.getString("chat.enabled"));
+            f.set("chat.enabled", true);
+
+            f.set("chat.broadcasts.first-join", f.getString("broadcasts.first-join"));
+            f.set("chat.broadcasts.join", f.getString("broadcasts.join"));
+            f.set("chat.broadcasts.leave", f.getString("broadcasts.leave"));
+            f.delete("broadcasts.first-join");
+            f.delete("broadcasts.join");
+            f.delete("broadcasts.leave");
+
+            if (f.getBoolean("motd.enabled")) {
+                f.set("chat.motd", f.getString("motd.message"));
+            } else {
+                f.set("chat.motd", "false");
+            }
+            f.delete("motd.enabled");
+            f.delete("motd.message");
+            f.delete("motd");
+            log.info("[2/4] Done.");
+
+            log.info("[3/4] Migrating advanced settings...");
+            f.set("advanced.update-check", f.getBoolean("update-check"));
+            f.set("advanced.console-prefix", f.getBoolean("console-prefix"));
+            f.set("advanced.verbose", f.getBoolean("verbose"));
+            f.set("advanced.playerdata.store-ip-address", f.getBoolean("playerdata.store-ip-address"));
+            f.delete("update-check");
+            f.delete("console-prefix");
+            f.delete("verbose");
+            f.delete("playerdata.store-ip-address");
+            log.info("[3/4] Done.");
+
+            log.info("[4/4] Migrating disabled commands...");
+            List<String> dc = f.getStringList("disabled-commands");
+            f.delete("disabled-commands");
+
+            f.set("disabled-commands.list", dc);
+            f.set("disabled-commands.feedback", f.getBoolean("disabled-commands-feedback"));
+            f.delete("disabled-commands-feedback");
+            log.info("[4/4] Done.");
+
+            f.set("config-version", 3);
+
+            log.info("Done.");
+            log.info("");
+        }
+
+        f.save();
+        f.close();
     }
 }

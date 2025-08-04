@@ -29,6 +29,6 @@ public class EventLeave implements Listener {
         locationUtil.UpdateLastLocation(event.getPlayer());
 
         UtilPlaceholder tag = new UtilPlaceholder(this.plugin, event.getPlayer());
-        event.setQuitMessage(tag.replaceAll(this.plugin.getConfig().getString("broadcasts.leave")));
+        event.setQuitMessage(tag.replaceAll(this.plugin.getConfig().getString("chat.broadcasts.leave")));
     }
 }

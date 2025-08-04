@@ -164,6 +164,7 @@ public class Essence extends JavaPlugin {
         this.loadModules();
 
         UtilUpdate update = new UtilUpdate(this);
+        update.migrate();
         update.VersionCheck();
         update.UpdateConfig();
         update.UpdateLanguage();
@@ -289,23 +290,24 @@ public class Essence extends JavaPlugin {
      */
     private void loadModules() {
         Registry reg = new Registry(this.config, this);
-        
-        new ModuleAdmin(this, reg);
-        new ModuleChat(this, reg);
+
         new ModuleCore(this, reg);
-        new ModuleEconomy(this, reg);
-        new ModuleEnvironment(this, reg);
-        new ModuleGamemode(this, reg);
-        new ModuleInventory(this, reg);
-        new ModuleKit(this, reg);
-        new ModuleStats(this, reg);
-        new ModuleTeam(this, reg);
-        new ModuleTeleportation(this, reg);
+
+        if (this.getConfig().getBoolean("admin.enabled")) { new ModuleAdmin(this, reg); if (this.verbose) { this.log.info("Loaded module: ADMIN"); } } else { if (this.verbose) { this.log.warn("Disabled module: ADMIN"); } }
+        if (this.getConfig().getBoolean("chat.enabled")) { new ModuleChat(this, reg); if (this.verbose) { this.log.info("Loaded module: CHAT"); } } else { if (this.verbose) { this.log.warn("Disabled module: CHAT"); } }
+        if (this.getConfig().getBoolean("economy.enabled")) { new ModuleEconomy(this, reg); if (this.verbose) { this.log.info("Loaded module: ECONOMY"); } } else { if (this.verbose) { this.log.warn("Disabled module: ECONOMY"); } }
+        if (this.getConfig().getBoolean("environment.enabled")) { new ModuleEnvironment(this, reg); if (this.verbose) { this.log.info("Loaded module: ENVIRONMENT"); } } else { if (this.verbose) { this.log.warn("Disabled module: ENVIRONMENT"); } }
+        if (this.getConfig().getBoolean("gamemode.enabled")) { new ModuleGamemode(this, reg); if (this.verbose) { this.log.info("Loaded module: GAMEMODE"); } } else { if (this.verbose) { this.log.warn("Disabled module: GAMEMODE"); } }
+        if (this.getConfig().getBoolean("inventory.enabled")) { new ModuleInventory(this, reg); if (this.verbose) { this.log.info("Loaded module: INVENTORY"); } } else { if (this.verbose) { this.log.warn("Disabled module: INVENTORY"); } }
+        if (this.getConfig().getBoolean("kit.enabled")) { new ModuleKit(this, reg); if (this.verbose) { this.log.info("Loaded module: KIT"); } } else { if (this.verbose) { this.log.warn("Disabled module: KIT"); } }
+        if (this.getConfig().getBoolean("stats.enabled")) { new ModuleStats(this, reg); if (this.verbose) { this.log.info("Loaded module: STATS"); } } else { if (this.verbose) { this.log.warn("Disabled module: STATS"); } }
+        if (this.getConfig().getBoolean("team.enabled")) { new ModuleTeam(this, reg); if (this.verbose) { this.log.info("Loaded module: TEAM"); } } else { if (this.verbose) { this.log.warn("Disabled module: TEAM"); } }
+        if (this.getConfig().getBoolean("teleportation.enabled")) { new ModuleTeleportation(this, reg); if (this.verbose) { this.log.info("Loaded module: TELEPORTATION"); } } else { if (this.verbose) { this.log.warn("Disabled module: TELEPORTATION"); } }
     }
 
     private void loadChatFormat() {
         this.chat_nameFormat = this.getConfig().getString("chat.name-format");
-        this.chat_manage = this.getConfig().getBoolean("chat.enabled");
+        this.chat_manage = this.getConfig().getBoolean("chat.manage-chat");
         this.chat_allowMessageFormatting = this.getConfig().getBoolean("chat.allow-message-formatting");
     }
 }
