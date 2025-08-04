@@ -287,6 +287,10 @@ commands:
     description: Let yourself or someone else fly.
     usage: /fly [username]
     permission: essence.stats.fly
+  speed:
+    description: Set your (or someone else's) speed.
+    usage: /speed [username]
+    permission: essence.stats.speed
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -425,6 +429,7 @@ permissions:
       essence.stats.feed: true
       essence.stats.repair: true
       essence.stats.fly: true
+      essence.stats.speed: true
   essence.stats.heal:
     description: Allows you to heal yourself.
   essence.stats.feed:
@@ -433,18 +438,24 @@ permissions:
     description: Allows you to repair items.
   essence.stats.fly:
     description: Allows you to fly.
+  essence.stats.speed:
+    description: Allows you to set your speed.
   essence.stats.other.*:
     description: Allows players to manage other player's stats such as health and hunger.
     default: op
     children:
       essence.stats.heal.other: true
       essence.stats.feed.other: true
+      essence.stats.fly.other: true
+      essence.stats.speed.other: true
   essence.stats.heal.other:
     description: Allows you to heal other players.
   essence.stats.feed.other:
     description: Allows you to feed other players.
   essence.stats.fly.other:
     description: Allows you to let other players fly.
+  essence.stats.speed.other:
+    description: Allows you to set other player's speed.
   essence.home.*:
     description: Allows players to use the home system.
     default: op

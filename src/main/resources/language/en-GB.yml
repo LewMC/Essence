@@ -80,6 +80,7 @@ help:
   heal: "§6[Essence] §e/heal [user] - Feed yourself or another."
   repair: "§6[Essence] §e/repair - Repair the item you're holding."
   fly: "§6[Essence] §e/fly [user] - Let yourself or another fly!"
+  speed: "§6[Essence] §e/speed <speed> [user] - Set player speed."
   economy: "§6[Essence] ---------- Essence Help - Economy ----------"
   pay: "§6[Essence] §e/pay <user> <amount> - Pay someone!"
   bal: "§6[Essence] §e/bal - View your balance."
@@ -206,6 +207,14 @@ fly:
   flybyother: "§2[Essence] §a{{1}} has enabled flying for you!"
   stopbyother: "§2[Essence] §a{{1}} has disabled flying for you!"
   usage: "§4[Essence] §cUsage: /fly <player>"
+speed:
+  current: "§2[Essence] §aYour speed is {{1}}."
+  set: "§2[Essence] §aSet your speed to {{1}}."
+  setother: "§2[Essence] §aSet {{1}}'s speed to {{2}}."
+  setbyother: "§2[Essence] §a{{1}} set your speed to {{2}}."
+  reset: "§2[Essence] §aYour speed has been reset."
+  resetother: "§2[Essence] §aReset {{1}}'s speed."
+  resetbyother: "§2[Essence] §a{{1}} reset your speed."
 feed:
   fed: "§2[Essence] §aYou fed {{1}}."
   serverfed: "§2[Essence] §aYou've been fed by a magical force."
@@ -288,6 +297,7 @@ info:
   ip: "§6[Essence] §eIP address: {{1}}."
   noip: "§4[Essence] §cIP address: No permission."
   canfly: "§6[Essence] §eCan fly: {{1}}."
+  speed: "§6[Essence] §eMaximum speed: {{1}}."
 seen:
   lastseen: "§6[Essence] §e{{1}} last logged in at {{2}}."
   neverseen: "§6[Essence] §e{{1}} does not have a recorded last login date."

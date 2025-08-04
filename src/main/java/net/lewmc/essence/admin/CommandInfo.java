@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * /info command.
@@ -95,6 +96,13 @@ public class CommandInfo extends FoundryCommand {
                         message.send("info", "canfly", new String[]{ "Yes" });
                     } else {
                         message.send("info", "canfly", new String[]{ "No" });
+                    }
+
+                    if (p.isOnline()) {
+                        Player online = (Player) p;
+                        message.send("info", "speed", new String[]{String.valueOf(online.getWalkSpeed())});
+                    } else {
+                        message.send("info", "speed", new String[]{ "Unknown whilst offline." });
                     }
                 } else {
                     message.send("generic", "playernotfound");
