@@ -92,7 +92,7 @@ public class CommandInfo extends FoundryCommand {
                     }
                     fu.close();
 
-                    if (this.plugin.flyingPlayers.contains(p.getUniqueId())) {
+                    if (this.plugin.flyingPlayers != null && this.plugin.flyingPlayers.contains(p.getUniqueId())) {
                         message.send("info", "canfly", new String[]{ "Yes" });
                     } else {
                         message.send("info", "canfly", new String[]{ "No" });

@@ -63,7 +63,7 @@ public class CommandFly extends FoundryCommand {
      * @return boolean - If the operation was successful
      */
     private boolean flySelf(Player p, UtilMessage msg) {
-        if (this.plugin.flyingPlayers.contains(p.getUniqueId())) {
+        if (this.plugin.flyingPlayers != null && this.plugin.flyingPlayers.contains(p.getUniqueId())) {
             p.setFlying(false);
             p.setAllowFlight(false);
             this.plugin.flyingPlayers.remove(p.getUniqueId());
@@ -89,7 +89,7 @@ public class CommandFly extends FoundryCommand {
         if (perms.has("essence.stats.fly.other")) {
             Player p = Bukkit.getPlayer(args[0]);
             if (p != null) {
-                if (this.plugin.flyingPlayers.contains(p.getUniqueId())) {
+                if (this.plugin.flyingPlayers != null && this.plugin.flyingPlayers.contains(p.getUniqueId())) {
                     p.setFlying(false);
                     p.setAllowFlight(false);
                     msg.send("fly", "stopother", new String[] { p.getName() });
