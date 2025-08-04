@@ -241,7 +241,7 @@ public class UtilUpdate {
             log.info("[1/4] Done.");
 
             log.info("[2/4] Migrating chat module...");
-            f.set("chat.manage-chat", f.getString("chat.enabled"));
+            f.set("chat.manage-chat", f.getBoolean("chat.enabled"));
             f.set("chat.enabled", true);
 
             f.set("chat.broadcasts.first-join", f.getString("broadcasts.first-join"));

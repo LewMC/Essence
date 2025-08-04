@@ -283,6 +283,10 @@ commands:
     description: Change your player weather.
     usage: /pweather [weather]
     permission: essence.environment.pweather
+  fly:
+    description: Let yourself or someone else fly.
+    usage: /fly [username]
+    permission: essence.stats.fly
 permissions:
   essence.*:
     description: Access to all essence commands.
@@ -420,12 +424,15 @@ permissions:
       essence.stats.heal: true
       essence.stats.feed: true
       essence.stats.repair: true
+      essence.stats.fly: true
   essence.stats.heal:
     description: Allows you to heal yourself.
   essence.stats.feed:
     description: Allows you to feed yourself.
   essence.stats.repair:
     description: Allows you to repair items.
+  essence.stats.fly:
+    description: Allows you to fly.
   essence.stats.other.*:
     description: Allows players to manage other player's stats such as health and hunger.
     default: op
@@ -436,6 +443,8 @@ permissions:
     description: Allows you to heal other players.
   essence.stats.feed.other:
     description: Allows you to feed other players.
+  essence.stats.fly.other:
+    description: Allows you to let other players fly.
   essence.home.*:
     description: Allows players to use the home system.
     default: op

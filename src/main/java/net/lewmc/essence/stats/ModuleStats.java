@@ -28,6 +28,7 @@ public class ModuleStats extends FoundryModule {
         reg.command("feed", new CommandFeed((Essence) plugin));
         reg.command("heal", new CommandHeal((Essence) plugin));
         reg.command("repair", new CommandRepair((Essence) plugin));
+        reg.command("fly", new CommandFly((Essence) plugin));
     }
 
     /**
