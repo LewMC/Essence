@@ -67,6 +67,11 @@ public class Essence extends JavaPlugin {
     public List<String> disabledCommands;
 
     /**
+     * Stores which players are flying.
+     */
+    public List<UUID> flyingPlayers;
+
+    /**
      * Stores update status.
      */
     public boolean hasPendingUpdate = false;

@@ -287,6 +287,7 @@ info:
   team: "§6[Essence] §eTeam: {{1}}."
   ip: "§6[Essence] §eIP address: {{1}}."
   noip: "§4[Essence] §cIP address: No permission."
+  canfly: "§6[Essence] §eCan fly: {{1}}."
 seen:
   lastseen: "§6[Essence] §e{{1}} last logged in at {{2}}."
   neverseen: "§6[Essence] §e{{1}} does not have a recorded last login date."

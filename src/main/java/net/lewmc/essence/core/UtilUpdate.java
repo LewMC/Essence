@@ -179,6 +179,7 @@ public class UtilUpdate {
         // NEW PLACEHOLDER SYSTEM (1.9.0+)
         Files f = new Files(this.plugin.config, this.plugin);
         f.load("config.yml");
+
         if (f.getInt("config-version") == 1) {
             log.info("Essence is updating your configuration file, please wait...");
 
@@ -286,6 +287,5 @@ public class UtilUpdate {
         }
 
         f.save();
-        f.close();
     }
 }

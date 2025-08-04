@@ -63,12 +63,16 @@ public class CommandFly extends FoundryCommand {
      * @return boolean - If the operation was successful
      */
     private boolean flySelf(Player p, UtilMessage msg) {
-        if (p.isFlying()) {
-            p.setFlying(true);
-            msg.send("fly", "flying");
-        } else {
+        if (this.plugin.flyingPlayers.contains(p.getUniqueId())) {
             p.setFlying(false);
+            p.setAllowFlight(false);
+            this.plugin.flyingPlayers.remove(p.getUniqueId());
             msg.send("fly", "stopped");
+        } else {
+            p.setAllowFlight(true);
+            p.setFlying(true);
+            this.plugin.flyingPlayers.add(p.getUniqueId());
+            msg.send("fly", "flying");
         }
         return true;
     }
@@ -85,14 +89,18 @@ public class CommandFly extends FoundryCommand {
         if (perms.has("essence.stats.fly.other")) {
             Player p = Bukkit.getPlayer(args[0]);
             if (p != null) {
-                if (p.isFlying()) {
+                if (this.plugin.flyingPlayers.contains(p.getUniqueId())) {
                     p.setFlying(false);
+                    p.setAllowFlight(false);
                     msg.send("fly", "stopother", new String[] { p.getName() });
                     msg.sendTo(p, "fly", "stopbyother", new String[] { cs.getName() });
+                    this.plugin.flyingPlayers.remove(p.getUniqueId());
                 } else {
+                    p.setAllowFlight(true);
                     p.setFlying(true);
                     msg.send("fly", "flyother", new String[] { p.getName() });
                     msg.sendTo(p, "fly", "flybyother", new String[] { cs.getName() });
+                    this.plugin.flyingPlayers.add(p.getUniqueId());
                 }
             } else {
                 msg.send("generic", "playernotfound");
