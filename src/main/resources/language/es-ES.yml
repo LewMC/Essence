@@ -208,6 +208,7 @@ fly:
   stopbyother: "§2[Essence] §a{{1}} has disabled flying for you!"
   usage: "§4[Essence] §cUsage: /fly <player>"
 speed:
+  bounds: "§4[Essence] §cSpeed must be between -10 and 10."
   current: "§2[Essence] §aYour speed is {{1}}."
   set: "§2[Essence] §aSet your speed to {{1}}."
   setother: "§2[Essence] §aSet {{1}}'s speed to {{2}}."
