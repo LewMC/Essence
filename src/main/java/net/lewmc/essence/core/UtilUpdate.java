@@ -33,7 +33,7 @@ public class UtilUpdate {
      * Checks Essence's version.
      */
     public void VersionCheck() {
-        if (this.plugin.getConfig().getBoolean("update-check")) {
+        if (this.plugin.getConfig().getBoolean("advanced.update-check")) {
             try {
                 URL url;
                 if (this.plugin.getDescription().getVersion().contains("SNAPSHOT")) {
@@ -263,11 +263,9 @@ public class UtilUpdate {
 
             log.info("[3/4] Migrating advanced settings...");
             f.set("advanced.update-check", f.getBoolean("update-check"));
-            f.set("advanced.console-prefix", f.getBoolean("console-prefix"));
             f.set("advanced.verbose", f.getBoolean("verbose"));
             f.set("advanced.playerdata.store-ip-address", f.getBoolean("playerdata.store-ip-address"));
             f.delete("update-check");
-            f.delete("console-prefix");
             f.delete("verbose");
             f.delete("playerdata.store-ip-address");
             log.info("[3/4] Done.");

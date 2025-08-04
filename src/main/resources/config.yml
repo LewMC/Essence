@@ -92,8 +92,7 @@ advanced:
   playerdata:
     store-ip-address: true
   update-check: true
-  console-prefix: "Essence"
   verbose: false
 
 # Do not change this!
-config-version: 2
+config-version: 3

@@ -136,7 +136,7 @@ public class Essence extends JavaPlugin {
         this.log.info("Beginning startup...");
         this.log.info("");
 
-        this.verbose = this.getConfig().getBoolean("verbose");
+        this.verbose = this.getConfig().getBoolean("advanced.verbose");
         this.economyMode = this.getConfig().getString("economy.mode");
 
         if (this.verbose) {

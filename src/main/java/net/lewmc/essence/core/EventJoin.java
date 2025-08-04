@@ -64,7 +64,7 @@ public class EventJoin implements Listener {
 
         if (firstJoin) { this.firstJoin(event, log); }
 
-        if (this.plugin.getConfig().getBoolean("playerdata.store-ip-address")) {
+        if (this.plugin.getConfig().getBoolean("advanced.playerdata.store-ip-address")) {
             playerFile.load(playerDataFile);
             playerFile.set("user.ip-address", Objects.requireNonNull(event.getPlayer().getAddress()).getAddress().getHostAddress()+"");
             playerFile.save();

@@ -103,9 +103,9 @@ public class CommandEssence extends FoundryCommand {
         UtilPermission perms = new UtilPermission(this.plugin, cs);
         if (perms.has("essence.admin.reload")) {
             this.plugin.reloadConfig();
-            this.plugin.disabledCommands = this.plugin.getConfig().getStringList("disabled-commands");
-            this.plugin.disabledCommandsFeedback = this.plugin.getConfig().getBoolean("disabled-commands-feedback");
-            this.plugin.verbose = this.plugin.getConfig().getBoolean("verbose");
+            this.plugin.disabledCommands = this.plugin.getConfig().getStringList("disabled-commands.list");
+            this.plugin.disabledCommandsFeedback = this.plugin.getConfig().getBoolean("disabled-commands.feedback");
+            this.plugin.verbose = this.plugin.getConfig().getBoolean("advanced.verbose");
             this.plugin.chat_nameFormat = this.plugin.getConfig().getString("chat.name-format");
             this.plugin.chat_manage = this.plugin.getConfig().getBoolean("chat.manage-chat");
             this.plugin.chat_allowMessageFormatting = this.plugin.getConfig().getBoolean("chat.allow-message-formatting");
