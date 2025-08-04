@@ -10,6 +10,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 /**
  * /time command.
  */
@@ -49,7 +51,7 @@ public class CommandTime extends FoundryCommand {
         UtilEnvironment env = new UtilEnvironment();
         UtilMessage msg = new UtilMessage(plugin, cs);
 
-        if (args.length == 0) {
+        if (args.length == 0 || (args.length == 1 && (Objects.equals(args[0], "time") || Objects.equals(args[0], "get") || Objects.equals(args[0], "query") || Objects.equals(args[0], "current") || Objects.equals(args[0], "now")))) {
             if (cs instanceof Player p) {
                 // Player check time
                 msg.send("environment", "time", new String[]{String.valueOf(env.getTime(p.getWorld())), p.getWorld().getName()});
@@ -57,7 +59,11 @@ public class CommandTime extends FoundryCommand {
                 // Console didn't specify a world
                 msg.send("environment", "timeconsoleusage");
             }
-        } else if (args.length == 1) {
+        } else if (args.length == 1 || (args.length == 2 && Objects.equals(args[0], "set"))) {
+            if (Objects.equals(args[0], "set")) {
+                args[0] = args[1];
+            }
+
             if (cs instanceof Player p) {
                 // Player set time
                 if (new UtilPermission(plugin,cs).has("essence.environment.time.set")) {
