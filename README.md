@@ -28,11 +28,8 @@ Install JDK 21 before continuing. Click [here](https://docs.oracle.com/en/java/j
 # Clone the repository and move into it.
 git clone https://github.com/lewmc/essence && cd essence
 
-# Perform a clean build (optional if you're rebuilding).
-mvn clean package -Dmaven.test.skip=true
-
-# Build the package with an explicit version target of 21.
-mvn -B package --file pom.xml -Dmaven.compiler.source=21 -Dmaven.compiler.target=21
+# Perform a build
+mvn clean package
 ```
 
 # Licensing
