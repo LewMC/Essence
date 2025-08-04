@@ -49,7 +49,7 @@ public class CommandSpeed extends FoundryCommand {
 
         if (args.length == 1) {
             if (cs instanceof Player p) {
-                message.send("speed", "current", new String[]{ String.valueOf(p.getWalkSpeed()) });
+                return this.speedSelf(p, message, args);
             } else {
                 message.send("speed","usage");
                 return true;
@@ -58,10 +58,10 @@ public class CommandSpeed extends FoundryCommand {
         else if (args.length == 2) {
             return this.speedOther(new UtilPermission(this.plugin, cs), cs, message, args);
         } else {
-            if (!(cs instanceof Player)) {
-                message.send("speed","usage");
+            if (cs instanceof Player p) {
+                message.send("speed", "current", new String[]{ String.valueOf(p.getWalkSpeed()*10) });
             } else {
-                return this.speedSelf((Player) cs, message, args);
+                message.send("speed","usage");
             }
         }
         return true;
@@ -80,9 +80,16 @@ public class CommandSpeed extends FoundryCommand {
                 p.setFlySpeed(0.1F);
                 msg.send("speed", "reset");
             } else {
-                p.setWalkSpeed(Float.parseFloat(args[0]));
-                p.setFlySpeed(Float.parseFloat(args[0]));
-                msg.send("speed", "set", new String[]{args[0]});
+                float speed = Float.parseFloat(args[0]);
+
+                if (speed > 10 || speed < -10) {
+                    msg.send("speed", "bounds");
+                    return true;
+                }
+
+                p.setWalkSpeed(speed/10);
+                p.setFlySpeed(speed/10);
+                msg.send("speed", "set", new String[]{ args[0] });
             }
         } catch (NumberFormatException | NullPointerException e) {
             msg.send("speed", "usage");
@@ -112,8 +119,15 @@ public class CommandSpeed extends FoundryCommand {
                         msg.send("speed", "resetbyother", new String[]{cs.getName()});
                         msg.sendTo(cs, "speed", "resetother");
                     } else {
-                        p.setWalkSpeed(Float.parseFloat(args[0]));
-                        p.setFlySpeed(Float.parseFloat(args[0]));
+                        float speed = Float.parseFloat(args[0]);
+
+                        if (speed > 10 || speed < -10) {
+                            msg.send("speed", "bounds");
+                            return true;
+                        }
+
+                        p.setWalkSpeed(speed/10);
+                        p.setFlySpeed(speed/10);
                         msg.send("speed", "setbyother", new String[]{cs.getName(), args[0]});
                         msg.sendTo(cs, "speed", "setother", new String[]{args[1],args[0]});
                     }

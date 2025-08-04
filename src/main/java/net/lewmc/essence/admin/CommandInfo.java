@@ -100,7 +100,7 @@ public class CommandInfo extends FoundryCommand {
 
                     if (p.isOnline()) {
                         Player online = (Player) p;
-                        message.send("info", "speed", new String[]{String.valueOf(online.getWalkSpeed())});
+                        message.send("info", "speed", new String[]{String.valueOf(online.getWalkSpeed()*10)});
                     } else {
                         message.send("info", "speed", new String[]{ "Unknown whilst offline." });
                     }
