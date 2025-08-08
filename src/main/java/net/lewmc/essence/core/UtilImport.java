@@ -96,11 +96,17 @@ public class UtilImport {
                                     (float) file.getDouble("homes." + home + ".pitch")
                             );
 
-                            utilHome.create(
+                            if (utilHome.create(
                                     home,
-                                    this.plugin.getServer().getPlayer(file.getString("last-account-name")),
+                                    this.plugin.getServer().getPlayer(child.getName().replace(".yml", "")),
                                     loc
-                            );
+                            )) {
+                                if (this.plugin.verbose) {
+                                    this.log.info("Import > Home > "+child.getName().replace(".yml", "")+ " > "+home);
+                                }
+                            } else {
+                                this.log.severe("Unable to import home "+home+" for user "+child.getName().replace(".yml", ""));
+                            }
                         }
                     }
                 }

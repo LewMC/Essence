@@ -141,6 +141,10 @@ public class UtilHome {
      * @return boolean - If the operation was successful.
      */
     public boolean create(String homeName, Player player, Location loc) {
+        if (player == null) {
+            return false;
+        }
+
         Files playerData = new Files(this.plugin.config, this.plugin);
         playerData.load(playerData.playerDataFile(player));
 
