@@ -96,16 +96,18 @@ public class UtilImport {
                                     (float) file.getDouble("homes." + home + ".pitch")
                             );
 
+                            UUID uuid = UUID.fromString(child.getName().replace(".yml", ""));
+
                             if (utilHome.create(
                                     home,
-                                    this.plugin.getServer().getPlayer(child.getName().replace(".yml", "")),
+                                    this.plugin.getServer().getPlayer(uuid),
                                     loc
                             )) {
                                 if (this.plugin.verbose) {
                                     this.log.info("Import > Home > "+child.getName().replace(".yml", "")+ " > "+home);
                                 }
                             } else {
-                                this.log.severe("Unable to import home "+home+" for user "+child.getName().replace(".yml", ""));
+                                this.log.severe("Unable to import home "+home+" for user "+this.plugin.getServer().getPlayer(uuid)+" ("+child.getName().replace(".yml", "")+")");
                             }
                         }
                     }
