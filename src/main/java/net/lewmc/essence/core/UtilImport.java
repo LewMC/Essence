@@ -160,10 +160,10 @@ public class UtilImport {
             } else {
                 this.log.info("No Essentials spawns found!");
             }
+            file.close();
         } else {
             this.log.info("Essentials spawns file does not exist!");
         }
-        file.close();
         return success;
     }
 }
