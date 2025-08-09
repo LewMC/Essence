@@ -100,14 +100,14 @@ public class UtilImport {
 
                             if (utilHome.create(
                                     home,
-                                    this.plugin.getServer().getPlayer(uuid),
+                                    this.plugin.getServer().getOfflinePlayer(uuid),
                                     loc
                             )) {
                                 if (this.plugin.verbose) {
                                     this.log.info("Import > Home > "+child.getName().replace(".yml", "")+ " > "+home);
                                 }
                             } else {
-                                this.log.severe("Unable to import home "+home+" for user "+this.plugin.getServer().getPlayer(uuid)+" ("+child.getName().replace(".yml", "")+")");
+                                this.log.severe("Unable to import home "+home+" for user "+this.plugin.getServer().getOfflinePlayer(uuid)+" ("+child.getName().replace(".yml", "")+")");
                             }
                         }
                     }

@@ -5,6 +5,7 @@ import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.team.UtilTeam;
 import net.lewmc.foundry.Files;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
@@ -140,7 +141,7 @@ public class UtilHome {
      * @param loc Location - The location for the home.
      * @return boolean - If the operation was successful.
      */
-    public boolean create(String homeName, Player player, Location loc) {
+    public boolean create(String homeName, OfflinePlayer player, Location loc) {
         if (player == null) {
             return false;
         }
@@ -150,8 +151,10 @@ public class UtilHome {
 
         if (playerData.get(homeName) != null) {
             playerData.close();
-            UtilMessage message = new UtilMessage(this.plugin, player);
-            message.send("home", "alreadyexists");
+            if (player.isOnline()) {
+                UtilMessage message = new UtilMessage(this.plugin, (Player) player);
+                message.send("home", "alreadyexists");
+            }
             return false;
         }
 
