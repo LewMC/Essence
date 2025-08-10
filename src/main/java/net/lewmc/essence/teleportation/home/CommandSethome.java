@@ -60,7 +60,7 @@ public class CommandSethome extends FoundryPlayerCommand {
 
         UtilHome hu = new UtilHome(this.plugin);
         int homeLimit = new UtilPermission(this.plugin, cs).getHomesLimit(p);
-        if (hu.getHomeCount(p) >= homeLimit && homeLimit != -1) {
+        if (hu.getHomeCount(p) > homeLimit && homeLimit != -1) {
             msg.send("home", "hitlimit");
             return true;
         }
