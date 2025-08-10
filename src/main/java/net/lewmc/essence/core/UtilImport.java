@@ -78,6 +78,7 @@ public class UtilImport {
         if (directoryListing != null) {
             for (File child : directoryListing) {
                 Files file = new Files(this.plugin.config, this.plugin);
+                if (this.plugin.verbose) { this.log.info("Import > Home > Begin processing from " + child.getName()); }
                 file.loadNoReformat(child);
                 Set<String> homes = file.getKeys("homes", false);
 
@@ -96,22 +97,29 @@ public class UtilImport {
                                     (float) file.getDouble("homes." + home + ".pitch")
                             );
 
-                            UUID uuid = UUID.fromString(child.getName().replace(".yml", ""));
+                            try {
+                                UUID uuid = UUID.fromString(child.getName().replace(".yml", ""));
 
-                            if (utilHome.create(
-                                    home,
-                                    this.plugin.getServer().getOfflinePlayer(uuid),
-                                    loc
-                            )) {
-                                if (this.plugin.verbose) {
-                                    this.log.info("Import > Home > "+child.getName().replace(".yml", "")+ " > "+home);
+                                if (utilHome.create(
+                                        home,
+                                        this.plugin.getServer().getOfflinePlayer(uuid),
+                                        loc
+                                )) {
+                                    if (this.plugin.verbose) {
+                                        this.log.info("Import > Home > " + child.getName().replace(".yml", "") + " > " + home);
+                                    }
+                                } else {
+                                    this.log.severe("Import > Home > Unable to import home " + home + " for user " + this.plugin.getServer().getOfflinePlayer(uuid) + " (" + child.getName().replace(".yml", "") + ")");
                                 }
-                            } else {
-                                this.log.severe("Unable to import home "+home+" for user "+this.plugin.getServer().getOfflinePlayer(uuid)+" ("+child.getName().replace(".yml", "")+")");
+                            } catch (Exception e) {
+                                this.log.severe("Import > Home > Unable to import from " + child.getName() + " due to null UUID.");
+                                this.log.severe("Import > Home > Threw exception");
+                                this.log.severe(e.getMessage());
                             }
                         }
                     }
                 }
+                if (this.plugin.verbose) { this.log.info("Import > Home > End processing from " + child.getName()); }
                 file.close();
             }
         } else {
