@@ -84,6 +84,7 @@ public class UtilImport {
 
                 if (homes != null) {
                     for (String home : homes) {
+                        if (this.plugin.verbose) { this.log.info("Import > Home > Found home " + home); }
                         UtilHome utilHome = new UtilHome(this.plugin);
 
                         if (file.getString("homes." + home) != null) {
