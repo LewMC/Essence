@@ -32,14 +32,14 @@ public class ModuleTeleportation extends FoundryModule {
     @Override
     public void registerCommands() {
         UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
-        if (!cmd.isDisabled("tp")) { reg.runtimeCommand("tp", new CommandTeleport((Essence) plugin)); }
-        if (!cmd.isDisabled("tpa")) { reg.runtimeCommand("tpa", new CommandTpa((Essence) plugin)); }
+        if (!cmd.isDisabled("tp")) { reg.runtimeCommand("tp", new CommandTeleport((Essence) plugin), "teleport"); }
+        if (!cmd.isDisabled("tpa")) { reg.runtimeCommand("tpa", new CommandTpa((Essence) plugin), "tprequest"); }
         if (!cmd.isDisabled("tpaccept")) { reg.runtimeCommand("tpaccept", new CommandTpaccept((Essence) plugin)); }
-        if (!cmd.isDisabled("tpdeny")) { reg.runtimeCommand("tpdeny", new CommandTpdeny((Essence) plugin)); }
-        if (!cmd.isDisabled("tptoggle")) { reg.runtimeCommand("tptoggle", new CommandTptoggle((Essence) plugin)); }
+        if (!cmd.isDisabled("tpdeny")) { reg.runtimeCommand("tpdeny", new CommandTpdeny((Essence) plugin), "tpdecline"); }
+        if (!cmd.isDisabled("tptoggle")) { reg.runtimeCommand("tptoggle", new CommandTptoggle((Essence) plugin), "toggletp"); }
         if (!cmd.isDisabled("tpahere")) { reg.runtimeCommand("tpahere", new CommandTpahere((Essence) plugin)); }
-        if (!cmd.isDisabled("tpcancel")) { reg.runtimeCommand("tpcancel", new CommandTpcancel((Essence) plugin)); }
-        if (!cmd.isDisabled("tprandom")) { reg.runtimeCommand("tprandom", new CommandTprandom((Essence) plugin)); }
+        if (!cmd.isDisabled("tpcancel")) { reg.runtimeCommand("tpcancel", new CommandTpcancel((Essence) plugin), "canceltp"); }
+        if (!cmd.isDisabled("tprandom")) { reg.runtimeCommand("tprandom", new CommandTprandom((Essence) plugin), "tpr", "rtp", "randomtp"); }
 
         if (!cmd.isDisabled("home")) { reg.runtimeCommand("home", new CommandHome((Essence) plugin)); }
         if (!cmd.isDisabled("homes")) { reg.runtimeCommand("homes", new CommandHomes((Essence) plugin)); }
@@ -51,8 +51,8 @@ public class ModuleTeleportation extends FoundryModule {
         if (!cmd.isDisabled("setwarp")) { reg.runtimeCommand("setwarp", new CommandSetwarp((Essence) plugin)); }
         if (!cmd.isDisabled("delwarp")) { reg.runtimeCommand("delwarp", new CommandDelwarp((Essence) plugin)); }
 
-        if (!cmd.isDisabled("spawn")) { reg.runtimeCommand("spawn", new CommandSpawn((Essence) plugin)); }
-        if (!cmd.isDisabled("setspawn")) { reg.runtimeCommand("setspawn", new CommandSetspawn((Essence) plugin)); }
+        if (!cmd.isDisabled("spawn")) { reg.runtimeCommand("spawn", new CommandSpawn((Essence) plugin),"spawnpoint", "world", "worldspawn"); }
+        if (!cmd.isDisabled("setspawn")) { reg.runtimeCommand("setspawn", new CommandSetspawn((Essence) plugin), "spawnset", "setworldspawn"); }
 
         if (!cmd.isDisabled("back")) { reg.runtimeCommand("back", new CommandBack((Essence) plugin)); }
     }

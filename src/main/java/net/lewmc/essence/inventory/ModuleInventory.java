@@ -29,13 +29,13 @@ public class ModuleInventory extends FoundryModule {
         UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
         if (!cmd.isDisabled("anvil")) { reg.runtimeCommand("anvil", new CommandAnvil()); }
         if (!cmd.isDisabled("cartography")) { reg.runtimeCommand("cartography", new CommandCartography()); }
-        if (!cmd.isDisabled("craft")) { reg.runtimeCommand("craft", new CommandCraft()); }
-        if (!cmd.isDisabled("enderchest")) { reg.runtimeCommand("enderchest", new CommandEnderchest()); }
+        if (!cmd.isDisabled("craft")) { reg.runtimeCommand("craft", new CommandCraft(), "workbench"); }
+        if (!cmd.isDisabled("enderchest")) { reg.runtimeCommand("enderchest", new CommandEnderchest(), "echest"); }
         if (!cmd.isDisabled("grindstone")) { reg.runtimeCommand("grindstone", new CommandGrindstone()); }
         if (!cmd.isDisabled("loom")) { reg.runtimeCommand("loom", new CommandLoom()); }
         if (!cmd.isDisabled("smithing")) { reg.runtimeCommand("smithing", new CommandSmithing()); }
         if (!cmd.isDisabled("stonecutter")) { reg.runtimeCommand("stonecutter", new CommandStonecutter()); }
-        if (!cmd.isDisabled("trash")) { reg.runtimeCommand("trash", new CommandTrash()); }
+        if (!cmd.isDisabled("trash")) { reg.runtimeCommand("trash", new CommandTrash(), "disposal", "garbage"); }
     }
 
     /**

@@ -27,10 +27,10 @@ public class ModuleChat extends FoundryModule {
     @Override
     public void registerCommands() {
         UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
-        if (!cmd.isDisabled("broadcast")) { reg.runtimeCommand("broadcast", new CommandBroadcast((Essence) plugin)); }
-        if (!cmd.isDisabled("msg")) { reg.runtimeCommand("msg", new CommandMsg((Essence) plugin)); }
-        if (!cmd.isDisabled("nick")) { reg.runtimeCommand("nick", new CommandNick((Essence) plugin)); }
-        if (!cmd.isDisabled("reply")) { reg.runtimeCommand("reply", new CommandReply((Essence) plugin)); }
+        if (!cmd.isDisabled("broadcast")) { reg.runtimeCommand("broadcast", new CommandBroadcast((Essence) plugin), "shout"); }
+        if (!cmd.isDisabled("msg")) { reg.runtimeCommand("msg", new CommandMsg((Essence) plugin), "message","pm","tell","w"); }
+        if (!cmd.isDisabled("nick")) { reg.runtimeCommand("nick", new CommandNick((Essence) plugin), "nickname', 'displayname"); }
+        if (!cmd.isDisabled("reply")) { reg.runtimeCommand("reply", new CommandReply((Essence) plugin), "r"); }
     }
 
     /**

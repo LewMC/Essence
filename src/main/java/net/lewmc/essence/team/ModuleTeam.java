@@ -27,11 +27,11 @@ public class ModuleTeam extends FoundryModule {
     @Override
     public void registerCommands() {
         UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
-        if (!cmd.isDisabled("team")) { reg.runtimeCommand("team", new CommandTeam((Essence) plugin)); }
-        if (!cmd.isDisabled("thome")) { reg.runtimeCommand("thome", new CommandThome((Essence) plugin)); }
-        if (!cmd.isDisabled("thomes")) { reg.runtimeCommand("thomes", new CommandThomes((Essence) plugin)); }
-        if (!cmd.isDisabled("setthome")) { reg.runtimeCommand("setthome", new CommandSetthome((Essence) plugin)); }
-        if (!cmd.isDisabled("delthome")) { reg.runtimeCommand("delthome", new CommandDelthome((Essence) plugin)); }
+        if (!cmd.isDisabled("team")) { reg.runtimeCommand("team", new CommandTeam((Essence) plugin), "group"); }
+        if (!cmd.isDisabled("thome")) { reg.runtimeCommand("thome", new CommandThome((Essence) plugin), "teamhome","ghome","grouphome"); }
+        if (!cmd.isDisabled("thomes")) { reg.runtimeCommand("thomes", new CommandThomes((Essence) plugin), "teamhomes","ghomes","grouphomes"); }
+        if (!cmd.isDisabled("setthome")) { reg.runtimeCommand("setthome", new CommandSetthome((Essence) plugin), "setteamhome","setghome","setgrouphome"); }
+        if (!cmd.isDisabled("delthome")) { reg.runtimeCommand("delthome", new CommandDelthome((Essence) plugin), "delteamhome","delghome","delgrouphome"); }
 
     }
 

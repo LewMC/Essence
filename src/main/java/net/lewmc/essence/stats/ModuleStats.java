@@ -30,7 +30,7 @@ public class ModuleStats extends FoundryModule {
         if (!cmd.isDisabled("feed")) { reg.runtimeCommand("feed", new CommandFeed((Essence) plugin)); }
         if (!cmd.isDisabled("fly")) { reg.runtimeCommand("fly", new CommandFly((Essence) plugin)); }
         if (!cmd.isDisabled("heal")) { reg.runtimeCommand("heal", new CommandHeal((Essence) plugin)); }
-        if (!cmd.isDisabled("repair")) { reg.runtimeCommand("repair", new CommandRepair((Essence) plugin)); }
+        if (!cmd.isDisabled("repair")) { reg.runtimeCommand("repair", new CommandRepair((Essence) plugin), "fix"); }
         if (!cmd.isDisabled("speed")) { reg.runtimeCommand("speed", new CommandSpeed((Essence) plugin)); }
     }
 
