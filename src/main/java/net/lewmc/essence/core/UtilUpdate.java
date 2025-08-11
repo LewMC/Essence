@@ -159,7 +159,7 @@ public class UtilUpdate {
     }
 
     /**
-     * Migrates old Essence stuff (calls migrateFiles & migrateValues).
+     * Migrates old Essence stuff (calls migrateFiles and migrateValues).
      */
     public void migrate() {
         this.migrateValues();
