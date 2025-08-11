@@ -1,6 +1,7 @@
 package net.lewmc.essence.kit;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.foundry.FoundryModule;
 import net.lewmc.foundry.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,7 +26,8 @@ public class ModuleKit extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        reg.command("kit", new CommandKit((Essence) plugin));
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        if (!cmd.isDisabled("kit")) { reg.runtimeCommand("kit", new CommandKit((Essence) plugin)); }
     }
 
     /**

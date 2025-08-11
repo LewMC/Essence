@@ -1,7 +1,5 @@
 package net.lewmc.essence.inventory;
 
-import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,15 +9,10 @@ import org.bukkit.entity.Player;
  * /anvil command.
  */
 public class CommandAnvil extends FoundryPlayerCommand {
-    private final Essence plugin;
-
     /**
      * Constructor for the AnvilCommand class.
-     * @param plugin References to the main plugin class.
      */
-    public CommandAnvil(Essence plugin) {
-        this.plugin = plugin;
-    }
+    public CommandAnvil() {}
 
     /**
      * The required permission
@@ -39,9 +32,6 @@ public class CommandAnvil extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("anvil")) {return cmd.disabled();}
-
         Player p = (Player) cs;
         p.openAnvil(null, true);
         return true;

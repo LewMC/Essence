@@ -1,7 +1,5 @@
 package net.lewmc.essence.inventory;
 
-import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,15 +9,10 @@ import org.bukkit.entity.Player;
  * /echest command.
  */
 public class CommandEnderchest extends FoundryPlayerCommand {
-    private final Essence plugin;
-
     /**
      * Constructor for the EnderchestCommand class.
-     * @param plugin References to the main plugin class.
      */
-    public CommandEnderchest(Essence plugin) {
-        this.plugin = plugin;
-    }
+    public CommandEnderchest() {}
 
     /**
      * The required permission
@@ -39,9 +32,6 @@ public class CommandEnderchest extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("enderchest")) {return cmd.disabled();}
-
         Player p = (Player) cs;
         p.openInventory(p.getEnderChest());
         return true;

@@ -1,7 +1,6 @@
 package net.lewmc.essence.teleportation.spawn;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
@@ -40,9 +39,6 @@ public class CommandSetspawn extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("setspawn")) { return cmd.disabled(); }
-
         Player p = (Player) cs;
         Location loc = p.getLocation();
         Files spawnFile = new Files(this.plugin.config, this.plugin);

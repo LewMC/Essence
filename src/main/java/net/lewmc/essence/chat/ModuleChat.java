@@ -1,6 +1,7 @@
 package net.lewmc.essence.chat;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.foundry.FoundryModule;
 import net.lewmc.foundry.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,10 +26,11 @@ public class ModuleChat extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        reg.command("broadcast", new CommandBroadcast((Essence) plugin));
-        reg.command("msg", new CommandMsg((Essence) plugin));
-        reg.command("nick", new CommandNick((Essence) plugin));
-        reg.command("reply", new CommandReply((Essence) plugin));
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        if (!cmd.isDisabled("broadcast")) { reg.runtimeCommand("broadcast", new CommandBroadcast((Essence) plugin)); }
+        if (!cmd.isDisabled("msg")) { reg.runtimeCommand("msg", new CommandMsg((Essence) plugin)); }
+        if (!cmd.isDisabled("nick")) { reg.runtimeCommand("nick", new CommandNick((Essence) plugin)); }
+        if (!cmd.isDisabled("reply")) { reg.runtimeCommand("reply", new CommandReply((Essence) plugin)); }
     }
 
     /**
