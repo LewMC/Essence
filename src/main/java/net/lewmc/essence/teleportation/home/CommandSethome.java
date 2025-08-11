@@ -1,7 +1,6 @@
 package net.lewmc.essence.teleportation.home;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.Files;
@@ -37,9 +36,6 @@ public class CommandSethome extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("sethome")) { return cmd.disabled(); }
-
         Player p = (Player) cs;
 
         String name = "home";
