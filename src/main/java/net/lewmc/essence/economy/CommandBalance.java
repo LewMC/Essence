@@ -1,15 +1,12 @@
 package net.lewmc.essence.economy;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Objects;
 
 /**
  * /bal command.
@@ -44,10 +41,6 @@ public class CommandBalance extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("balance")) { return cmd.disabled(); }
-        if (Objects.equals(this.plugin.economyMode, "OFF")) { return cmd.disabled(); }
-
         if (cs instanceof Player p) {
             Files pf = new Files(this.plugin.config, this.plugin);
             pf.load(pf.playerDataFile(p));
