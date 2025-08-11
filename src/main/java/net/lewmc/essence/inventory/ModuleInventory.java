@@ -1,6 +1,7 @@
 package net.lewmc.essence.inventory;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.foundry.FoundryModule;
 import net.lewmc.foundry.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,15 +26,16 @@ public class ModuleInventory extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        reg.command("anvil", new CommandAnvil((Essence) plugin));
-        reg.command("cartography", new CommandCartography((Essence) plugin));
-        reg.command("craft", new CommandCraft((Essence) plugin));
-        reg.command("enderchest", new CommandEnderchest((Essence) plugin));
-        reg.command("grindstone", new CommandGrindstone((Essence) plugin));
-        reg.command("loom", new CommandLoom((Essence) plugin));
-        reg.command("smithing", new CommandSmithing((Essence) plugin));
-        reg.command("stonecutter", new CommandStonecutter((Essence) plugin));
-        reg.command("trash", new CommandTrash((Essence) plugin));
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        if (!cmd.isDisabled("anvil")) { reg.runtimeCommand("anvil", new CommandAnvil()); }
+        if (!cmd.isDisabled("cartography")) { reg.runtimeCommand("cartography", new CommandCartography()); }
+        if (!cmd.isDisabled("craft")) { reg.runtimeCommand("craft", new CommandCraft(), "workbench"); }
+        if (!cmd.isDisabled("enderchest")) { reg.runtimeCommand("enderchest", new CommandEnderchest(), "echest"); }
+        if (!cmd.isDisabled("grindstone")) { reg.runtimeCommand("grindstone", new CommandGrindstone()); }
+        if (!cmd.isDisabled("loom")) { reg.runtimeCommand("loom", new CommandLoom()); }
+        if (!cmd.isDisabled("smithing")) { reg.runtimeCommand("smithing", new CommandSmithing()); }
+        if (!cmd.isDisabled("stonecutter")) { reg.runtimeCommand("stonecutter", new CommandStonecutter()); }
+        if (!cmd.isDisabled("trash")) { reg.runtimeCommand("trash", new CommandTrash(), "disposal", "garbage"); }
     }
 
     /**

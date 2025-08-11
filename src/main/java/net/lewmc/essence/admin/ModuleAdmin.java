@@ -1,6 +1,7 @@
 package net.lewmc.essence.admin;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.foundry.FoundryModule;
 import net.lewmc.foundry.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,9 +26,10 @@ public class ModuleAdmin extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        reg.command("info", new CommandInfo((Essence) plugin));
-        reg.command("invisible", new CommandInvisible((Essence) plugin));
-        reg.command("seen", new CommandSeen((Essence) plugin));
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        if (!cmd.isDisabled("info")) { reg.runtimeCommand("info", new CommandInfo((Essence) plugin), "pinfo","playerinfo"); }
+        if (!cmd.isDisabled("invisible")) { reg.runtimeCommand("invisible", new CommandInvisible((Essence) plugin), "visible", "v"); }
+        if (!cmd.isDisabled("seen")) { reg.runtimeCommand("seen", new CommandSeen((Essence) plugin), "pseen","playerseen"); }
     }
 
     /**

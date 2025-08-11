@@ -37,7 +37,6 @@ public class UtilGamemode {
      */
     public boolean processShortCommand(String command, GameMode gm, CommandSender cs, String[] args, Essence plugin) {
         UtilCommand cmd = new UtilCommand(plugin, cs);
-        if (cmd.isDisabled(command)) { return cmd.disabled(); }
 
         Player player;
 

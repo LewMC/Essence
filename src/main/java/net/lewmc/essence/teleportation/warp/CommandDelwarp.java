@@ -1,6 +1,5 @@
 package net.lewmc.essence.teleportation.warp;
 
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.Essence;
 import net.lewmc.foundry.Files;
@@ -38,9 +37,6 @@ public class CommandDelwarp extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("delwarp")) { return cmd.disabled(); }
-
         UtilMessage msg = new UtilMessage(this.plugin, cs);
 
         if (args.length == 0) {
