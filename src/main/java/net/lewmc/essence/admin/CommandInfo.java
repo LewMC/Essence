@@ -1,7 +1,6 @@
 package net.lewmc.essence.admin;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Permissions;
@@ -44,9 +43,6 @@ public class CommandInfo extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("info")) { return cmd.disabled(); }
-
         UtilMessage message = new UtilMessage(this.plugin, cs);
         if (args.length == 1) {
             OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);

@@ -1,7 +1,6 @@
 package net.lewmc.essence.team;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.teleportation.home.UtilHome;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
@@ -9,14 +8,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandThomas extends FoundryPlayerCommand {
+public class CommandThomes extends FoundryPlayerCommand {
     private final Essence plugin;
 
     /**
      * Constructor for the ThomesCommand class.
      * @param plugin References to the main plugin class.
      */
-    public CommandThomas(Essence plugin) {
+    public CommandThomes(Essence plugin) {
         this.plugin = plugin;
     }
 
@@ -38,9 +37,6 @@ public class CommandThomas extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("thomes")) {return cmd.disabled();}
-
         Player p = (Player) cs;
 
         UtilMessage msg = new UtilMessage(this.plugin, cs);

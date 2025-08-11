@@ -1,7 +1,5 @@
 package net.lewmc.essence.inventory;
 
-import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.Essence;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,15 +9,11 @@ import org.bukkit.entity.Player;
  * /craft command.
  */
 public class CommandCraft extends FoundryPlayerCommand {
-    private final Essence plugin;
 
     /**
      * Constructor for the CraftCommand class.
-     * @param plugin References to the main plugin class.
      */
-    public CommandCraft(Essence plugin) {
-        this.plugin = plugin;
-    }
+    public CommandCraft() {}
 
     /**
      * The required permission
@@ -39,9 +33,6 @@ public class CommandCraft extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("craft")) {return cmd.disabled();}
-
         Player p = (Player) cs;
         p.openWorkbench(null, true);
         return true;

@@ -1,6 +1,7 @@
 package net.lewmc.essence.stats;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.foundry.FoundryModule;
 import net.lewmc.foundry.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,11 +26,12 @@ public class ModuleStats extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        reg.command("feed", new CommandFeed((Essence) plugin));
-        reg.command("fly", new CommandFly((Essence) plugin));
-        reg.command("heal", new CommandHeal((Essence) plugin));
-        reg.command("repair", new CommandRepair((Essence) plugin));
-        reg.command("speed", new CommandSpeed((Essence) plugin));
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        if (!cmd.isDisabled("feed")) { reg.runtimeCommand("feed", new CommandFeed((Essence) plugin)); }
+        if (!cmd.isDisabled("fly")) { reg.runtimeCommand("fly", new CommandFly((Essence) plugin)); }
+        if (!cmd.isDisabled("heal")) { reg.runtimeCommand("heal", new CommandHeal((Essence) plugin)); }
+        if (!cmd.isDisabled("repair")) { reg.runtimeCommand("repair", new CommandRepair((Essence) plugin), "fix"); }
+        if (!cmd.isDisabled("speed")) { reg.runtimeCommand("speed", new CommandSpeed((Essence) plugin)); }
     }
 
     /**

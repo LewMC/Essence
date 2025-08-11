@@ -1,6 +1,5 @@
 package net.lewmc.essence.teleportation.tp;
 
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.Essence;
@@ -47,9 +46,6 @@ public class CommandTeleport extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("tp")) { return cmd.disabled(); }
-
         UtilMessage message = new UtilMessage(this.plugin, cs);
 
         Player player = null;

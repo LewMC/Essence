@@ -39,9 +39,6 @@ public class CommandRules extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("rules")) { return cmd.disabled(); }
-
         UtilMessage msg = new UtilMessage(this.plugin, cs);
         try (BufferedReader br = new BufferedReader(new FileReader(this.plugin.getDataFolder() + File.separator + "rules.txt"))) {
             String rule;

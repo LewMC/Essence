@@ -1,6 +1,7 @@
 package net.lewmc.essence.economy;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.foundry.FoundryModule;
 import net.lewmc.foundry.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,8 +26,9 @@ public class ModuleEconomy extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        reg.command("balance", new CommandBalance((Essence) plugin));
-        reg.command("pay", new CommandPay((Essence) plugin));
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        if (!cmd.isDisabled("balance")) { reg.runtimeCommand("balance", new CommandBalance((Essence) plugin), "bal"); }
+        if (!cmd.isDisabled("pay")) { reg.runtimeCommand("pay", new CommandPay((Essence) plugin)); }
     }
 
     /**

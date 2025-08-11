@@ -63,8 +63,9 @@ public class UtilWarp {
 
         if (warpsData.get("warps." + warpName) != null) {
             warpsData.close();
-            UtilMessage message = new UtilMessage(this.plugin, this.plugin.getServer().getPlayer(playerUUID));
-            message.send("warp", "alreadyexists");
+            if (this.plugin.getServer().getOfflinePlayer(playerUUID).isOnline()) {
+                new UtilMessage(this.plugin, this.plugin.getServer().getPlayer(playerUUID)).send("warp", "alreadyexists");
+            }
             return false;
         }
 

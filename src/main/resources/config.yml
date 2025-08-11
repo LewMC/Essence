@@ -80,14 +80,14 @@ teleportation:
 language: en-GB
 
 # DISABLED COMMANDS
-# Allows you to disable specific commands. Doesn't fully remove them from the server.
+# Allows you to disable specific commands.
 disabled-commands:
   list:
     - example
   feedback-in-chat: true
 
 # ADVANCED SETTINGS
-# These settings should typically be left alone. Only change them if you know what you're doing.
+# These settings should usually be left alone. Only change them if you know what you're doing.
 advanced:
   playerdata:
     store-ip-address: true

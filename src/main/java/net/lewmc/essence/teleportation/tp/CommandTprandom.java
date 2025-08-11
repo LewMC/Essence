@@ -2,7 +2,6 @@ package net.lewmc.essence.teleportation.tp;
 
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilLocation;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.Logger;
@@ -54,11 +53,6 @@ public class CommandTprandom extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("tprandom")) {
-            return cmd.disabled();
-        }
-
         Player p = (Player) cs;
 
         UtilMessage message = new UtilMessage(this.plugin, cs);
@@ -79,7 +73,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
         UtilLocation loc = new UtilLocation(this.plugin);
 
         if (this.flib.isFolia()) {
-            this.flib.getImpl().runAsync(wrappedTask -> {
+            this.flib.getScheduler().runAsync(wrappedTask -> {
                 java.util.Random rand = new java.util.Random();
                 Location center = wb.getCenter();
                 double maxX = (center.getBlockX() + (wb.getSize() / 2));
@@ -90,7 +84,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
                 int z = (int) (minZ + (maxZ - minZ) * rand.nextDouble());
                 Location baseLoc = new Location(p.getWorld(), x, 0, z);
 
-                this.flib.getImpl().runAtLocation(baseLoc, wrappedTask2 -> {
+                this.flib.getScheduler().runAtLocation(baseLoc, wrappedTask2 -> {
                     int attempt = 1;
                     int y = loc.GetGroundY(p.getWorld(), x, z);
                     while (y == -64 && attempt != 3) {
@@ -104,7 +98,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
             return true;
         }
 
-        this.flib.getImpl().runAsync(wrappedTask -> {
+        this.flib.getScheduler().runAsync(wrappedTask -> {
             Location teleportLocation = loc.GetRandomLocation(p, wb);
             this.checkChunkLoaded(p, teleportLocation);
         });
@@ -128,7 +122,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
 
         Chunk chunk = teleportLocation.getChunk();
         if (this.flib.isFolia()) {
-            flib.getImpl().runAtLocation(teleportLocation, wrappedTask -> {
+            flib.getScheduler().runAtLocation(teleportLocation, wrappedTask -> {
                 if (!chunk.isLoaded()) {
                     message.send("tprandom", "generating");
                     chunk.load(true);

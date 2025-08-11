@@ -1,7 +1,6 @@
 package net.lewmc.essence.admin;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.stats.UtilStats;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.command.Command;
@@ -42,9 +41,6 @@ public class CommandInvisible extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("invisible")) { return cmd.disabled(); }
-
         return new UtilStats(this.plugin, (Player) cs).toggleInvisible();
     }
 }

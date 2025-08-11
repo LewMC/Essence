@@ -24,23 +24,19 @@ public class TabCompleterTp implements TabCompleter {
     ) {
         List<String> result = new ArrayList<>();
         if (args.length == 1) {
-            // 补全选择器和玩家名
             result.addAll(Arrays.asList("@a", "@s", "@p"));
             for (Player p : Bukkit.getOnlinePlayers()) {
                 result.add(p.getName());
             }
         } else if (args.length == 2) {
-            // 如果第一个参数是选择器，补全玩家名，否则补全坐标
             if (args[0].startsWith("@")) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     result.add(p.getName());
                 }
             } else {
-                // 补全坐标
                 result.add("~");
             }
         } else if (args.length == 3 || args.length == 4) {
-            // 补全坐标
             result.add("~");
         }
         return result;

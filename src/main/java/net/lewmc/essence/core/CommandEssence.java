@@ -38,9 +38,6 @@ public class CommandEssence extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("essence")) { return cmd.disabled(); }
-
         UtilMessage msg = new UtilMessage(this.plugin, cs);
 
         if (args.length > 0) {
@@ -52,7 +49,7 @@ public class CommandEssence extends FoundryCommand {
             } else if ("import".equals(args[0])) {
                 return this.importCommand(args, msg, cs);
             } else if ("restore".equals(args[0])) {
-                return this.restoreCommand(args, msg, cs);
+                return this.restoreCommand(msg, cs);
             }
         } else {
             msg.send("about", "version", new String[] { plugin.getDescription().getVersion() });
@@ -78,7 +75,7 @@ public class CommandEssence extends FoundryCommand {
      * @param message MessageUtil - The message utility.
      * @return boolean - If the operation was successful.
      */
-    private boolean restoreCommand(String[] args, UtilMessage message, CommandSender cs) {
+    private boolean restoreCommand(UtilMessage message, CommandSender cs) {
         UtilPermission perms = new UtilPermission(this.plugin, cs);
         if (perms.has("essence.admin.restore")) {
             this.plugin.saveResource("language/en-GB.yml", true);

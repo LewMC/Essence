@@ -1,6 +1,8 @@
 name: Publish project to LewMC Repo
 on:
   push:
+permissions:
+  contents: read
 jobs:
   publish:
     runs-on: ubuntu-latest
