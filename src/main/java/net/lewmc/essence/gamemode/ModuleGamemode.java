@@ -39,7 +39,7 @@ public class ModuleGamemode extends FoundryModule {
      */
     @Override
     public void registerTabCompleters() {
-        reg.tabCompleter(new String[] { "gamemode", "gm" }, new TabCompleterGamemode());
+        reg.tabCompleter("gamemode", new TabCompleterGamemode());
     }
 
     /**
