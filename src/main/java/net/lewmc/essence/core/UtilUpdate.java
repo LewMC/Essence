@@ -159,9 +159,32 @@ public class UtilUpdate {
     }
 
     /**
-     * Migrates old Essence files.
+     * Migrates old Essence stuff (calls migrateFiles & migrateValues).
      */
     public void migrate() {
+        this.migrateValues();
+        this.migrateFiles();
+    }
+
+    /**
+     * Migrates old Essence config values.
+     */
+    private void migrateValues() {
+        // ECONOMY MODE
+        Files config = new Files(this.plugin.config, this.plugin);
+        config.load("config.yml");
+
+        if (Objects.equals(config.get("economy.mode"), "OFF") || Objects.equals(config.get("economy.mode"), false)) {
+            config.set("economy.mode", "ESSENCE");
+            config.set("economy.enabled", false);
+            config.save();
+        }
+    }
+
+    /**
+     * Migrates old Essence files.
+     */
+    private void migrateFiles() {
         // NEW LANGUAGE FILES.
         if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
             Files config = new Files(this.plugin.config, this.plugin);
