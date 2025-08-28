@@ -264,7 +264,7 @@ public class Essence extends JavaPlugin {
 
         if ((boolean) this.config.get("admin.enabled")) { new ModuleAdmin(this, reg); if (this.verbose) { this.log.info("Loaded module: ADMIN"); } } else { if (this.verbose) { this.log.warn("Disabled module: ADMIN"); } }
         if ((boolean) this.config.get("chat.enabled")) { new ModuleChat(this, reg); if (this.verbose) { this.log.info("Loaded module: CHAT"); } } else { if (this.verbose) { this.log.warn("Disabled module: CHAT"); } }
-        if ((boolean) this.config.get("economy.enabled")) { new ModuleEconomy(this, reg); if (this.verbose) { this.log.info("Loaded module: ECONOMY"); } } else { if (this.verbose) { this.log.warn("Disabled module: ECONOMY"); } }
+        if ((boolean) this.config.get("economy.enabled") && !Objects.equals(this.config.get("economy.mode"), "OFF")) { new ModuleEconomy(this, reg); if (this.verbose) { this.log.info("Loaded module: ECONOMY"); } } else { if (this.verbose) { this.log.warn("Disabled module: ECONOMY"); } }
         if ((boolean) this.config.get("environment.enabled")) { new ModuleEnvironment(this, reg); if (this.verbose) { this.log.info("Loaded module: ENVIRONMENT"); } } else { if (this.verbose) { this.log.warn("Disabled module: ENVIRONMENT"); } }
         if ((boolean) this.config.get("gamemode.enabled")) { new ModuleGamemode(this, reg); if (this.verbose) { this.log.info("Loaded module: GAMEMODE"); } } else { if (this.verbose) { this.log.warn("Disabled module: GAMEMODE"); } }
         if ((boolean) this.config.get("inventory.enabled")) { new ModuleInventory(this, reg); if (this.verbose) { this.log.info("Loaded module: INVENTORY"); } } else { if (this.verbose) { this.log.warn("Disabled module: INVENTORY"); } }
