@@ -309,6 +309,11 @@ public class UtilUpdate {
             log.info("");
         }
 
+        // 1.10.1
+        if (Objects.equals(f.getString("economy.mode"), "OFF")) {
+            f.set("economy.enabled", false);
+        }
+
         f.save();
     }
 }
