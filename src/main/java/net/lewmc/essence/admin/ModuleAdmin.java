@@ -26,7 +26,7 @@ public class ModuleAdmin extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
         if (!cmd.isDisabled("info")) { reg.runtimeCommand("info", new CommandInfo((Essence) plugin), "pinfo","playerinfo"); }
         if (!cmd.isDisabled("invisible")) { reg.runtimeCommand("invisible", new CommandInvisible((Essence) plugin), "visible", "v"); }
         if (!cmd.isDisabled("seen")) { reg.runtimeCommand("seen", new CommandSeen((Essence) plugin), "pseen","playerseen"); }

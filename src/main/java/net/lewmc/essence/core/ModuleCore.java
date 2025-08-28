@@ -25,7 +25,7 @@ public class ModuleCore extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
         if (!cmd.isDisabled("essence")) { reg.runtimeCommand("essence", new CommandEssence((Essence) plugin), "es", "ess"); }
         if (!cmd.isDisabled("rules")) { reg.runtimeCommand("rules", new CommandRules((Essence) plugin)); }
     }

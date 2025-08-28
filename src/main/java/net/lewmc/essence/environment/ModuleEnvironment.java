@@ -26,7 +26,7 @@ public class ModuleEnvironment extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
         if (!cmd.isDisabled("time")) { reg.runtimeCommand("time", new CommandTime((Essence) plugin)); }
         if (!cmd.isDisabled("weather")) { reg.runtimeCommand("weather", new CommandWeather((Essence) plugin)); }
         if (!cmd.isDisabled("ptime")) { reg.runtimeCommand("ptime", new CommandPTime((Essence) plugin)); }

@@ -26,7 +26,7 @@ public class ModuleEconomy extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
         if (!cmd.isDisabled("balance")) { reg.runtimeCommand("balance", new CommandBalance((Essence) plugin), "bal"); }
         if (!cmd.isDisabled("pay")) { reg.runtimeCommand("pay", new CommandPay((Essence) plugin)); }
     }

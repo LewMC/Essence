@@ -31,7 +31,7 @@ public class ModuleTeleportation extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
         if (!cmd.isDisabled("tp")) { reg.runtimeCommand("tp", new CommandTeleport((Essence) plugin), "teleport"); }
         if (!cmd.isDisabled("tpa")) { reg.runtimeCommand("tpa", new CommandTpa((Essence) plugin), "tprequest"); }
         if (!cmd.isDisabled("tpaccept")) { reg.runtimeCommand("tpaccept", new CommandTpaccept((Essence) plugin)); }

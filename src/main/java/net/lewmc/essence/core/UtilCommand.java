@@ -14,15 +14,13 @@ import java.util.Objects;
  */
 public class UtilCommand {
     private final Essence plugin;
-    private final CommandSender cs;
 
     /**
      * The constructor for the CommandUtil.
      * @param plugin Reference to the main Essence class.
      */
-    public UtilCommand(Essence plugin, CommandSender cs) {
+    public UtilCommand(Essence plugin) {
         this.plugin = plugin;
-        this.cs = cs;
     }
 
     /**
@@ -31,6 +29,10 @@ public class UtilCommand {
      * @return Boolean - if the command is enabled.
      */
     public boolean isDisabled(String command) {
+        if (command.equalsIgnoreCase("nick") && !((boolean) this.plugin.config.get("chat.manage-chat"))) { return true; }
+        if (command.equalsIgnoreCase("balance") && Objects.equals(this.plugin.config.get("economy.mode").toString(), "OFF")) { return true; }
+        if (command.equalsIgnoreCase("pay") && Objects.equals(this.plugin.config.get("economy.mode").toString(), "OFF")) { return true; }
+
         for (String key : (List<String>) this.plugin.config.get("disabled-commands.list")) {
             if (Objects.equals(key, command)) {
                 return true;
@@ -38,23 +40,6 @@ public class UtilCommand {
         }
 
         return false;
-    }
-
-    /**
-     * Responds to disabled command usage.
-     * @return boolean - Verbose mode (false) or not (true)
-     */
-    public boolean disabled() {
-        if ((boolean) this.plugin.config.get("disabled-commands.feedback-in-chat")) {
-            new UtilMessage(this.plugin, cs).send("generic", "commanddisabled");
-        }
-
-        if (this.plugin.verbose) {
-            new Logger(this.plugin.foundryConfig).warn("Attempted to execute disabled command.");
-            return false;
-        }
-
-        return true;
     }
 
     /**

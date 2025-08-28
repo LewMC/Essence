@@ -26,7 +26,7 @@ public class ModuleGamemode extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
         if (!cmd.isDisabled("gamemode")) { reg.runtimeCommand("gamemode", new CommandGamemode((Essence) plugin), "gm"); }
         if (!cmd.isDisabled("gma")) { reg.runtimeCommand("gma", new CommandGma((Essence) plugin)); }
         if (!cmd.isDisabled("gmc")) { reg.runtimeCommand("gmc", new CommandGmc((Essence) plugin)); }

@@ -26,7 +26,7 @@ public class ModuleKit extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
         if (!cmd.isDisabled("kit")) { reg.runtimeCommand("kit", new CommandKit((Essence) plugin), "kits"); }
     }
 

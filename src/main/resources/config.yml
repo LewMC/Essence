@@ -84,7 +84,6 @@ language: en-GB
 disabled-commands:
   list:
     - example
-  feedback-in-chat: true
 
 # ADVANCED SETTINGS
 # These settings should usually be left alone. Only change them if you know what you're doing.

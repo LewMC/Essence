@@ -26,7 +26,7 @@ public class ModuleInventory extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin, null);
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
         if (!cmd.isDisabled("anvil")) { reg.runtimeCommand("anvil", new CommandAnvil()); }
         if (!cmd.isDisabled("cartography")) { reg.runtimeCommand("cartography", new CommandCartography()); }
         if (!cmd.isDisabled("craft")) { reg.runtimeCommand("craft", new CommandCraft(), "workbench"); }

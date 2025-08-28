@@ -46,7 +46,7 @@ public class CommandGamemode extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
+        UtilCommand cmd = new UtilCommand(this.plugin);
 
         Player player;
         GameMode gamemode;

@@ -42,10 +42,6 @@ public class CommandPay extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("pay")) { return cmd.disabled(); }
-        if (Objects.equals(this.plugin.config.get("economy.mode"), "OFF")) { return cmd.disabled(); }
-
         UtilMessage message = new UtilMessage(this.plugin, cs);
         if (args.length == 2) {
             Files senderDataFile = new Files(this.plugin.foundryConfig, this.plugin);

@@ -36,7 +36,7 @@ public class UtilGamemode {
      * @return          true/false - Success?
      */
     public boolean processShortCommand(String command, GameMode gm, CommandSender cs, String[] args, Essence plugin) {
-        UtilCommand cmd = new UtilCommand(plugin, cs);
+        UtilCommand cmd = new UtilCommand(plugin);
 
         Player player;
 

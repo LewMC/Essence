@@ -44,10 +44,6 @@ public class CommandBalance extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("balance")) { return cmd.disabled(); }
-        if (Objects.equals(this.plugin.config.get("economy.mode"), "OFF")) { return cmd.disabled(); }
-
         if (cs instanceof Player p) {
             Files pf = new Files(this.plugin.foundryConfig, this.plugin);
             pf.load(pf.playerDataFile(p));

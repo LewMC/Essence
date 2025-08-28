@@ -172,7 +172,7 @@ public class Essence extends JavaPlugin {
      * Checks if the server is running Paper, and informs the user that they should upgrade if not.
      */
     private void checkForPaper() {
-        UtilCommand cmd = new UtilCommand(this, null);
+        UtilCommand cmd = new UtilCommand(this);
         if (!cmd.isPaperCompatible()) {
             this.log.severe("You are running " + this.getServer().getName());
             this.log.severe("Some commands have been disabled, please see https://bit.ly/essencepaper for help.");
