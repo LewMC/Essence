@@ -46,6 +46,6 @@ public class ModuleChat extends FoundryModule {
      */
     @Override
     public void registerEvents() {
-
+        reg.event(new EventPlayerChat((Essence) plugin));
     }
 }

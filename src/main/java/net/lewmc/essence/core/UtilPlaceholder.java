@@ -80,7 +80,11 @@ public class UtilPlaceholder {
         } else if (placeholder.equalsIgnoreCase("datetime")) {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         } else if (placeholder.equalsIgnoreCase("player")) {
-            return new UtilPlayer(this.plugin, this.cs).getPlayerDisplayname(this.cs);
+            if ((boolean) this.plugin.config.get("chat.manage-chat")) {
+                return new UtilPlayer(this.plugin, this.cs).getPlayerDisplayname(this.cs);
+            } else {
+                return cs.getName();
+            }
         } else if (placeholder.equalsIgnoreCase("username")) {
             return cs.getName();
         } else if (placeholder.equalsIgnoreCase("team_name")) {

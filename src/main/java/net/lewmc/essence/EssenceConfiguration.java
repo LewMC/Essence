@@ -49,7 +49,7 @@ public class EssenceConfiguration {
 
         putBoolean("chat.enabled");
         putString("chat.name-format");
-        putString("chat.allow-message-formatting");
+        putBoolean("chat.allow-message-formatting");
         putString("chat.broadcasts.first-join");
         putString("chat.broadcasts.join");
         putString("chat.broadcasts.leave");
@@ -96,6 +96,7 @@ public class EssenceConfiguration {
 
         putInt("config-version");
 
+        this.configFile.close();
         return this.config;
     }
 
