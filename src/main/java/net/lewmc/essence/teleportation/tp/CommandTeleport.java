@@ -170,7 +170,7 @@ public class CommandTeleport extends FoundryCommand {
             if (!permission.has("essence.teleport.offline")) {
                 OfflinePlayer offline = getOfflinePlayer(args[0]);
                 if (offline != null && offline.hasPlayedBefore()) {
-                    Files opf = new Files(this.plugin.config, this.plugin);
+                    Files opf = new Files(this.plugin.foundryConfig, this.plugin);
                     if (opf.exists(opf.playerDataFile(offline.getUniqueId()))) {
                         opf.load(opf.playerDataFile(offline.getUniqueId()));
                         double x = opf.getDouble("last-location.X");

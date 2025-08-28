@@ -43,7 +43,7 @@ public class CommandDelwarp extends FoundryPlayerCommand {
             msg.send("warp", "delusage");
             return true;
         }
-        Files config = new Files(this.plugin.config, this.plugin);
+        Files config = new Files(this.plugin.foundryConfig, this.plugin);
         config.load("data/warps.yml");
 
         String warpName = args[0].toLowerCase();

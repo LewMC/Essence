@@ -41,7 +41,7 @@ public class CommandTptoggle extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        Files file = new Files(this.plugin.config, this.plugin);
+        Files file = new Files(this.plugin.foundryConfig, this.plugin);
 
         Player p = (Player) cs;
         file.load(file.playerDataFile(p.getUniqueId()));

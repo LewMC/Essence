@@ -63,7 +63,7 @@ public class CommandDelthome extends FoundryPlayerCommand {
             name = args[0];
         }
 
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load("data/teams/" + team + ".yml");
 
         String homeName = name.toLowerCase();

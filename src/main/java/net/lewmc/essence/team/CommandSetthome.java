@@ -66,10 +66,10 @@ public class CommandSetthome extends FoundryPlayerCommand {
         }
 
         Location loc = p.getLocation();
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load("data/teams/" + team + ".yml");
 
-        if (new Security(this.plugin.config).hasSpecialCharacters(name.toLowerCase())) {
+        if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(name.toLowerCase())) {
             dataUtil.close();
             msg.send("teamhome", "specialchars");
             return true;

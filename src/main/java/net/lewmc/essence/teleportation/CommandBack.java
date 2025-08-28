@@ -48,7 +48,7 @@ public class CommandBack extends FoundryPlayerCommand {
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         Player p =  (Player) cs;
 
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(p));
 
         if (playerData.get("last-location") == null) {

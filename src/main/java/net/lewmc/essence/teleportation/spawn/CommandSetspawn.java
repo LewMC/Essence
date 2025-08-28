@@ -41,7 +41,7 @@ public class CommandSetspawn extends FoundryPlayerCommand {
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         Player p = (Player) cs;
         Location loc = p.getLocation();
-        Files spawnFile = new Files(this.plugin.config, this.plugin);
+        Files spawnFile = new Files(this.plugin.foundryConfig, this.plugin);
 
         String spawnName = loc.getWorld().getName();
 

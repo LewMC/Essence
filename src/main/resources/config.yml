@@ -9,7 +9,6 @@ admin:
 # CHAT MODULE
 chat:
   enabled: true
-  manage-chat: true
   name-format: "%essence_combined_prefix% %essence_player%%essence_player_suffix%:"
   allow-message-formatting: false
   broadcasts:
@@ -19,6 +18,7 @@ chat:
   motd: |-
     §2§lWelcome to the server!
     §aYou can change this message in Essence's config.yml
+  manage-chat: true
 
 # ECONOMY MODULE
 economy:

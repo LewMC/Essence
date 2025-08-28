@@ -48,7 +48,7 @@ public class CommandDelhome extends FoundryPlayerCommand {
             name = args[0];
         }
 
-        Files config = new Files(this.plugin.config, this.plugin);
+        Files config = new Files(this.plugin.foundryConfig, this.plugin);
         config.load(config.playerDataFile((Player) cs));
 
         String homeName = name.toLowerCase();

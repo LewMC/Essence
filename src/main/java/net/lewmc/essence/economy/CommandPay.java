@@ -44,11 +44,11 @@ public class CommandPay extends FoundryPlayerCommand {
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         UtilCommand cmd = new UtilCommand(this.plugin, cs);
         if (cmd.isDisabled("pay")) { return cmd.disabled(); }
-        if (Objects.equals(this.plugin.economyMode, "OFF")) { return cmd.disabled(); }
+        if (Objects.equals(this.plugin.config.get("economy.mode"), "OFF")) { return cmd.disabled(); }
 
         UtilMessage message = new UtilMessage(this.plugin, cs);
         if (args.length == 2) {
-            Files senderDataFile = new Files(this.plugin.config, this.plugin);
+            Files senderDataFile = new Files(this.plugin.foundryConfig, this.plugin);
             senderDataFile.load(senderDataFile.playerDataFile((Player) cs));
 
             double balance = senderDataFile.getDouble("economy.balance");
@@ -60,15 +60,15 @@ public class CommandPay extends FoundryPlayerCommand {
                 senderDataFile.save();
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                        Files recieverDataFile = new Files(this.plugin.config, this.plugin);
+                        Files recieverDataFile = new Files(this.plugin.foundryConfig, this.plugin);
 
                         recieverDataFile.load(senderDataFile.playerDataFile(p));
                         double newBalance = recieverDataFile.getDouble("economy.balance") + amount;
                         recieverDataFile.set("economy.balance", newBalance);
                         recieverDataFile.save();
 
-                        message.send("economy", "sent", new String[] { plugin.getConfig().getString("economy.symbol") + amount, p.getName() });
-                        message.sendTo(p, "economy", "received", new String[] { (plugin.getConfig().getString("economy.symbol") + amount), cs.getName() });
+                        message.send("economy", "sent", new String[] { plugin.config.get("economy.symbol").toString() + amount, p.getName() });
+                        message.sendTo(p, "economy", "received", new String[] { (plugin.config.get("economy.symbol").toString() + amount), cs.getName() });
                         return true;
                     }
                 }

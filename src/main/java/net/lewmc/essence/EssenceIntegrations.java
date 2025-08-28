@@ -38,7 +38,7 @@ public class EssenceIntegrations {
      */
     public EssenceIntegrations(Essence plugin) {
         this.plugin = plugin;
-        this.log = new Logger(plugin.config);
+        this.log = new Logger(plugin.foundryConfig);
     }
 
     /**
@@ -66,9 +66,9 @@ public class EssenceIntegrations {
      */
     public boolean loadVaultEconomy() {
         if (this.plugin.verbose) {
-            this.log.info("Config economy mode set to '" + this.plugin.economyMode + "'");
+            this.log.info("Config economy mode set to '" + this.plugin.config.get("economy.mode") + "'");
         }
-        switch (this.plugin.economyMode) {
+        switch ((String) this.plugin.config.get("economy.mode")) {
             case "VAULT", "true", "default" -> {
                 if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
                     return false;
@@ -86,8 +86,6 @@ public class EssenceIntegrations {
                 this.economy = ersp.getProvider();
 
                 this.log.info("Setup economy in Vault mode.");
-
-                this.plugin.economySymbol = this.plugin.getConfig().getString("economy.symbol");
 
                 return this.economy != null;
             }
@@ -112,20 +110,25 @@ public class EssenceIntegrations {
      * @return boolean - If it could be setup correctly.
      */
     public boolean loadVaultChat() {
-        if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
+        if ((boolean) this.plugin.config.get("chat.manage-chat")) {
+            if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
+                return false;
+            }
+            this.log.info("Vault found, setting up chat service...");
+
+            RegisteredServiceProvider<Chat> crsp = this.plugin.getServer().getServicesManager().getRegistration(Chat.class);
+            if (crsp != null) {
+                this.chat = crsp.getProvider();
+            } else {
+                this.log.severe("Something went wrong whilst setting up chat service.");
+                this.log.severe("Some chat features may be disabled.");
+            }
+
+            return this.chat != null;
+        } else {
+            this.log.warn("Chat management is disabled.");
             return false;
         }
-        this.log.info("Vault found, setting up chat service...");
-
-        RegisteredServiceProvider<Chat> crsp = this.plugin.getServer().getServicesManager().getRegistration(Chat.class);
-        if (crsp != null) {
-            this.chat = crsp.getProvider();
-        } else {
-            this.log.severe("Something went wrong whilst setting up chat service.");
-            this.log.severe("Some chat features may be disabled.");
-        }
-
-        return this.chat != null;
     }
 
     /**
@@ -134,7 +137,7 @@ public class EssenceIntegrations {
     public void loadMetrics() {
         int pluginId = 20768;
         Metrics metrics = new Metrics(this.plugin, pluginId);
-        metrics.addCustomChart(new SimplePie("language", () -> this.plugin.getConfig().getString("language")));
+        metrics.addCustomChart(new SimplePie("language", () -> (String) this.plugin.config.get("language")));
         if (this.economy == null) {
             metrics.addCustomChart(new SimplePie("economy_enabled", () -> "false"));
         } else {

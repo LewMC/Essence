@@ -31,7 +31,7 @@ public class UtilHome {
      * @return StringBuilder|null - List of homes or null.
      */
     public StringBuilder getHomesList(Player player) {
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load(dataUtil.playerDataFile(player));
 
         Set<String> keys = dataUtil.getKeys("homes", false);
@@ -63,7 +63,7 @@ public class UtilHome {
      * @return StringBuilder|null - List of homes or null.
      */
     public StringBuilder getTeamHomesList(String team) {
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load("data/teams/"+team+".yml");
 
         Set<String> keys = dataUtil.getKeys("homes", false);
@@ -95,7 +95,7 @@ public class UtilHome {
      * @return int - The number of homes.
      */
     public int getHomeCount(Player player) {
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load(dataUtil.playerDataFile(player));
 
         Set<String> homes = dataUtil.getKeys("homes", false);
@@ -114,7 +114,7 @@ public class UtilHome {
      */
     public int getTeamHomeCount(Player player) {
         UtilTeam teamUtil = new UtilTeam(this.plugin, new UtilMessage(this.plugin, player));
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load("data/teams/"+teamUtil.getPlayerTeam(player.getUniqueId())+".yml");
 
         Set<String> keys = dataUtil.getKeys("homes", false);
@@ -146,7 +146,7 @@ public class UtilHome {
             return false;
         }
 
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(player));
 
         if (playerData.get(homeName) != null) {

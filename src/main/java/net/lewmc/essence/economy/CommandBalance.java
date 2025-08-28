@@ -46,14 +46,14 @@ public class CommandBalance extends FoundryCommand {
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         UtilCommand cmd = new UtilCommand(this.plugin, cs);
         if (cmd.isDisabled("balance")) { return cmd.disabled(); }
-        if (Objects.equals(this.plugin.economyMode, "OFF")) { return cmd.disabled(); }
+        if (Objects.equals(this.plugin.config.get("economy.mode"), "OFF")) { return cmd.disabled(); }
 
         if (cs instanceof Player p) {
-            Files pf = new Files(this.plugin.config, this.plugin);
+            Files pf = new Files(this.plugin.foundryConfig, this.plugin);
             pf.load(pf.playerDataFile(p));
-            new UtilMessage(this.plugin, cs).send("economy", "balance", new String[]{this.plugin.economySymbol + pf.getDouble("economy.balance")});
+            new UtilMessage(this.plugin, cs).send("economy", "balance", new String[]{this.plugin.config.get("economy.symbol").toString() + pf.getDouble("economy.balance")});
         } else {
-            new UtilMessage(this.plugin, cs).send("economy", "balance", new String[]{this.plugin.economySymbol + "Infinity"});
+            new UtilMessage(this.plugin, cs).send("economy", "balance", new String[]{this.plugin.config.get("economy.symbol").toString() + "Infinity"});
         }
         return true;
     }

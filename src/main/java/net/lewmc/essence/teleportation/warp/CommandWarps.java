@@ -41,7 +41,7 @@ public class CommandWarps extends FoundryCommand {
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         UtilMessage msg = new UtilMessage(this.plugin, cs);
 
-        Files data = new Files(this.plugin.config, this.plugin);
+        Files data = new Files(this.plugin.foundryConfig, this.plugin);
         data.load("/data/warps.yml");
 
         Set<String> keys = data.getKeys("warps", false);

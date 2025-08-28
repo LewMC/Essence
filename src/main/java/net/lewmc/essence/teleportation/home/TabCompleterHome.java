@@ -40,7 +40,7 @@ public class TabCompleterHome implements TabCompleter {
             @NotNull String arg,
             String[] args
     ) {
-        Files data = new Files(this.plugin.config, this.plugin);
+        Files data = new Files(this.plugin.foundryConfig, this.plugin);
 
         data.load(data.playerDataFile((Player) sender));
         Set<String> keys = data.getKeys("homes", false);

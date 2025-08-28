@@ -55,9 +55,9 @@ public class CommandEssence extends FoundryCommand {
             msg.send("about", "version", new String[] { plugin.getDescription().getVersion() });
             msg.send("about", "description");
             msg.send("about", "author");
-            if (!Objects.equals(this.plugin.getConfig().getString("language"), "en-GB")) {
-                Files lang = new Files(this.plugin.config, this.plugin);
-                lang.load("language/"+this.plugin.getConfig().getString("language")+".yml");
+            if (!Objects.equals(this.plugin.config.get("language"), "en-GB")) {
+                Files lang = new Files(this.plugin.foundryConfig, this.plugin);
+                lang.load("language/"+this.plugin.config.get("language")+".yml");
                 msg.send("about", "authorLang", new String[] { lang.getString("meta.language"), lang.getString("meta.author") });
                 lang.close();
             }
@@ -100,13 +100,6 @@ public class CommandEssence extends FoundryCommand {
         UtilPermission perms = new UtilPermission(this.plugin, cs);
         if (perms.has("essence.admin.reload")) {
             this.plugin.reloadConfig();
-            this.plugin.disabledCommands = this.plugin.getConfig().getStringList("disabled-commands.list");
-            this.plugin.disabledCommandsFeedback = this.plugin.getConfig().getBoolean("disabled-commands.feedback");
-            this.plugin.verbose = this.plugin.getConfig().getBoolean("advanced.verbose");
-            this.plugin.chat_nameFormat = this.plugin.getConfig().getString("chat.name-format");
-            this.plugin.chat_manage = this.plugin.getConfig().getBoolean("chat.manage-chat");
-            this.plugin.chat_allowMessageFormatting = this.plugin.getConfig().getBoolean("chat.allow-message-formatting");
-            this.plugin.economySymbol = this.plugin.getConfig().getString("economy.symbol");
             message.send("generic", "reload");
             return true;
         } else {

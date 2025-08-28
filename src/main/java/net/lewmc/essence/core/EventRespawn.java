@@ -30,16 +30,16 @@ public class EventRespawn implements Listener {
      */
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        Logger log = new Logger(this.plugin.config);
+        Logger log = new Logger(this.plugin.foundryConfig);
         UtilMessage message = new UtilMessage(this.plugin, event.getPlayer());
 
-        Files config = new Files(this.plugin.config, this.plugin);
+        Files config = new Files(this.plugin.foundryConfig, this.plugin);
         config.load("config.yml");
         String spawnName = config.getString("teleportation.spawn.main-spawn-world");
         boolean alwaysSpawn = config.getBoolean("teleportation.spawn.always-spawn");
         config.close();
 
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(config.playerDataFile(event.getPlayer()));
 
         if ((playerData.getString("user.last-sleep-location") != null) && !alwaysSpawn) {
@@ -60,7 +60,7 @@ public class EventRespawn implements Listener {
 
         playerData.close();
 
-        Files spawns = new Files(this.plugin.config, this.plugin);
+        Files spawns = new Files(this.plugin.foundryConfig, this.plugin);
         spawns.load("data/spawns.yml");
 
         if (spawns.get("spawn."+spawnName) == null) {

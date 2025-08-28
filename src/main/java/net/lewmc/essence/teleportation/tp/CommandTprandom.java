@@ -66,7 +66,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
         try {
             wb = Objects.requireNonNull(Bukkit.getWorld(p.getWorld().getUID())).getWorldBorder();
         } catch (NullPointerException e) {
-            new Logger(this.plugin.config).warn("NullPointerException randomly teleporting: " + e);
+            new Logger(this.plugin.foundryConfig).warn("NullPointerException randomly teleporting: " + e);
             message.send("generic", "exception");
             return true;
         }

@@ -67,12 +67,12 @@ public class UtilPlayer {
      */
     public boolean createPlayerData() {
         if (this.cs instanceof Player p) {
-            Files playerFile = new Files(this.plugin.config, this.plugin);
+            Files playerFile = new Files(this.plugin.foundryConfig, this.plugin);
 
             if (!playerFile.exists(playerFile.playerDataFile(p.getUniqueId()))) {
                 return this.updatePlayerData(
-                        plugin.getConfig().getBoolean("teleportation.requests.default-enabled"),
-                        plugin.getConfig().getDouble("economy.start-money"),
+                        (boolean) plugin.config.get("teleportation.requests.default-enabled"),
+                        (double) plugin.config.get("economy.start-money"),
                         true
                 );
             } else {
@@ -96,9 +96,9 @@ public class UtilPlayer {
             boolean acceptingPayments
     ) {
         if (this.cs instanceof Player p) {
-            Files playerFile = new Files(this.plugin.config, this.plugin);
+            Files playerFile = new Files(this.plugin.foundryConfig, this.plugin);
 
-            Logger log = new Logger(this.plugin.config);
+            Logger log = new Logger(this.plugin.foundryConfig);
 
             if (!playerFile.exists(playerFile.playerDataFile(p.getUniqueId()))) {
                 playerFile.create(playerFile.playerDataFile(p.getUniqueId()));
@@ -145,9 +145,9 @@ public class UtilPlayer {
      */
     public boolean updatePlayerData() {
         if (this.cs instanceof Player p) {
-            Files playerFile = new Files(this.plugin.config, this.plugin);
+            Files playerFile = new Files(this.plugin.foundryConfig, this.plugin);
 
-            Logger log = new Logger(this.plugin.config);
+            Logger log = new Logger(this.plugin.foundryConfig);
 
             if (!playerFile.exists(playerFile.playerDataFile(p.getUniqueId()))) {
                 playerFile.create(playerFile.playerDataFile(p.getUniqueId()));
@@ -227,7 +227,7 @@ public class UtilPlayer {
      */
     public String getPlayerDisplayname(CommandSender cs) {
         if (cs instanceof Player p) {
-            Files pf = new Files(this.plugin.config, this.plugin);
+            Files pf = new Files(this.plugin.foundryConfig, this.plugin);
             pf.load(pf.playerDataFile(p));
             String nickname = pf.getString("user.nickname");
             pf.close();
@@ -247,7 +247,7 @@ public class UtilPlayer {
      */
     public boolean setPlayerDisplayname(CommandSender cs, String nickname) {
         if (cs instanceof Player p) {
-            Files pf = new Files(this.plugin.config, this.plugin);
+            Files pf = new Files(this.plugin.foundryConfig, this.plugin);
             pf.load(pf.playerDataFile(p));
 
             boolean success = pf.set("user.nickname", nickname);
@@ -268,7 +268,7 @@ public class UtilPlayer {
      */
     public boolean removePlayerDisplayname(CommandSender cs) {
         if (cs instanceof Player p) {
-            Files pf = new Files(this.plugin.config, this.plugin);
+            Files pf = new Files(this.plugin.foundryConfig, this.plugin);
             pf.load(pf.playerDataFile(p));
 
             boolean success = pf.delete("user.nickname");

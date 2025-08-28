@@ -64,7 +64,7 @@ public class UtilVaultEconomy implements Economy {
      */
     @Override
     public String format(double v) {
-        return this.plugin.getConfig().getString("economy.symbol") + " " + v;
+        return this.plugin.config.get("economy.symbol") + " " + v;
     }
 
     /**
@@ -82,7 +82,7 @@ public class UtilVaultEconomy implements Economy {
      */
     @Override
     public String currencyNameSingular() {
-        return this.plugin.getConfig().getString("economy.symbol");
+        return this.plugin.config.get("economy.symbol").toString();
     }
 
     /**
@@ -107,7 +107,7 @@ public class UtilVaultEconomy implements Economy {
      */
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         return playerData.exists(playerData.playerDataFile(offlinePlayer.getUniqueId()));
     }
 
@@ -153,7 +153,7 @@ public class UtilVaultEconomy implements Economy {
      */
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        Files fileUtil = new Files(this.plugin.config, this.plugin);
+        Files fileUtil = new Files(this.plugin.foundryConfig, this.plugin);
 
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
@@ -207,7 +207,7 @@ public class UtilVaultEconomy implements Economy {
      */
     @Override
     public boolean has(OfflinePlayer offlinePlayer, double v) {
-        Files fileUtil = new Files(this.plugin.config, this.plugin);
+        Files fileUtil = new Files(this.plugin.foundryConfig, this.plugin);
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
         fileUtil.close();
@@ -262,7 +262,7 @@ public class UtilVaultEconomy implements Economy {
      */
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
-        Files fileUtil = new Files(this.plugin.config, this.plugin);
+        Files fileUtil = new Files(this.plugin.foundryConfig, this.plugin);
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
         if (fileUtil.set("economy.balance", bal - v)) {
@@ -322,7 +322,7 @@ public class UtilVaultEconomy implements Economy {
      */
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
-        Files fileUtil = new Files(this.plugin.config, this.plugin);
+        Files fileUtil = new Files(this.plugin.foundryConfig, this.plugin);
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
         if (fileUtil.set("economy.balance", bal + v)) {

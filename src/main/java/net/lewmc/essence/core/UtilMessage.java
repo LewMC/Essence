@@ -43,7 +43,7 @@ public class UtilMessage {
             this.cs.sendMessage(new UtilPlaceholder(this.plugin, this.cs).replaceAll(message));
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            new Logger(this.plugin.config).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -59,7 +59,7 @@ public class UtilMessage {
             this.cs.sendMessage(message);
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            new Logger(this.plugin.config).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -77,7 +77,7 @@ public class UtilMessage {
         } else {
             cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            new Logger(this.plugin.config).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -101,7 +101,7 @@ public class UtilMessage {
         } else {
             cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            new Logger(this.plugin.config).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -120,8 +120,8 @@ public class UtilMessage {
      * @return String - The message from the language file.
      */
     private String getMessage(String code, String group) {
-        String language = this.plugin.getConfig().getString("language");
-        Files data = new Files(this.plugin.config, this.plugin);
+        String language = (String) this.plugin.config.get("language");
+        Files data = new Files(this.plugin.foundryConfig, this.plugin);
         data.load("language/"+language+".yml");
 
         if (data.get(group) != null) {

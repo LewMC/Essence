@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,7 +31,7 @@ public class UtilCommand {
      * @return Boolean - if the command is enabled.
      */
     public boolean isDisabled(String command) {
-        for (String key : this.plugin.disabledCommands) {
+        for (String key : (List<String>) this.plugin.config.get("disabled-commands.list")) {
             if (Objects.equals(key, command)) {
                 return true;
             }
@@ -44,12 +45,12 @@ public class UtilCommand {
      * @return boolean - Verbose mode (false) or not (true)
      */
     public boolean disabled() {
-        if (this.plugin.disabledCommandsFeedback) {
+        if ((boolean) this.plugin.config.get("disabled-commands.feedback-in-chat")) {
             new UtilMessage(this.plugin, cs).send("generic", "commanddisabled");
         }
 
         if (this.plugin.verbose) {
-            new Logger(this.plugin.config).warn("Attempted to execute disabled command.");
+            new Logger(this.plugin.foundryConfig).warn("Attempted to execute disabled command.");
             return false;
         }
 

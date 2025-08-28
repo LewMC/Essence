@@ -105,11 +105,11 @@ public class UtilPlaceholder {
             return new UtilPlayer(this.plugin, cs).getPlayerSuffix();
         } else if (placeholder.equalsIgnoreCase("balance")) {
             if (cs instanceof Player p) {
-                Files pf = new Files(this.plugin.config, this.plugin);
+                Files pf = new Files(this.plugin.foundryConfig, this.plugin);
                 pf.load(pf.playerDataFile(p));
-                return this.plugin.economySymbol + pf.getDouble("economy.balance");
+                return this.plugin.config.get("economy.symbol").toString() + pf.getDouble("economy.balance");
             } else {
-                return this.plugin.economySymbol + "Infinity";
+                return this.plugin.config.get("economy.symbol").toString() + "Infinity";
             }
         } else {
             return placeholder;

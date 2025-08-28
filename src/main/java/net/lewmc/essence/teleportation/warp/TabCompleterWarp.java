@@ -39,7 +39,7 @@ public class TabCompleterWarp implements TabCompleter {
         @NotNull String arg,
         String[] args
     ) {
-        Files data = new Files(this.plugin.config, this.plugin);
+        Files data = new Files(this.plugin.foundryConfig, this.plugin);
         data.load("data/warps.yml");
         Set<String> keys = data.getKeys("warps", false);
 

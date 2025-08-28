@@ -25,7 +25,7 @@ public class UtilImport {
      */
     public UtilImport(Essence plugin) {
         this.plugin = plugin;
-        this.log = new Logger(this.plugin.config);
+        this.log = new Logger(this.plugin.foundryConfig);
     }
 
     /**
@@ -37,7 +37,7 @@ public class UtilImport {
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
             for (File child : directoryListing) {
-                Files file = new Files(this.plugin.config, this.plugin);
+                Files file = new Files(this.plugin.foundryConfig, this.plugin);
                 file.loadNoReformat(child);
                 UtilWarp warp = new UtilWarp(this.plugin);
 
@@ -77,7 +77,7 @@ public class UtilImport {
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
             for (File child : directoryListing) {
-                Files file = new Files(this.plugin.config, this.plugin);
+                Files file = new Files(this.plugin.foundryConfig, this.plugin);
                 if (this.plugin.verbose) { this.log.info("Import > Home > Begin processing from " + child.getName()); }
                 file.loadNoReformat(child);
                 Set<String> homes = file.getKeys("homes", false);
@@ -136,7 +136,7 @@ public class UtilImport {
      */
     public boolean essentialsSpawns() {
         boolean success = false;
-        Files file = new Files(this.plugin.config, this.plugin);
+        Files file = new Files(this.plugin.foundryConfig, this.plugin);
 
         if (file.exists(this.plugin.getServer().getPluginsFolder() + "/Essentials/spawn.yml")) {
             file.loadNoReformat(new File(this.plugin.getServer().getPluginsFolder() + "/Essentials/spawn.yml"));
@@ -145,7 +145,7 @@ public class UtilImport {
             if (spawns != null) {
                 for (String esxName : spawns) {
                     if (file.getString("spawns." + esxName) != null) {
-                        Files spawnFile = new Files(this.plugin.config, this.plugin);
+                        Files spawnFile = new Files(this.plugin.foundryConfig, this.plugin);
 
 
                         spawnFile.load("data/spawns.yml");

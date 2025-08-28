@@ -43,12 +43,12 @@ public class CommandSethome extends FoundryPlayerCommand {
             name = args[0];
         }
 
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(p));
 
         UtilMessage msg = new UtilMessage(this.plugin, cs);
 
-        if (new Security(this.plugin.config).hasSpecialCharacters(name.toLowerCase())) {
+        if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(name.toLowerCase())) {
             playerData.close();
             msg.send("home", "specialchars");
             return true;

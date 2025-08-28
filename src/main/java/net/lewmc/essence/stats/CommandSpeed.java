@@ -90,8 +90,8 @@ public class CommandSpeed extends FoundryCommand {
         } catch (NumberFormatException | NullPointerException e) {
             msg.send("speed", "usage");
             msg.send("generic", "exception");
-            new Logger(this.plugin.config).severe("Unable to set player speed due to error:");
-            new Logger(this.plugin.config).severe(e.getMessage());
+            new Logger(this.plugin.foundryConfig).severe("Unable to set player speed due to error:");
+            new Logger(this.plugin.foundryConfig).severe(e.getMessage());
         }
         return true;
     }
@@ -130,8 +130,8 @@ public class CommandSpeed extends FoundryCommand {
                 } catch (NumberFormatException | NullPointerException e) {
                     msg.send("speed", "usage");
                     msg.send("generic", "exception");
-                    new Logger(this.plugin.config).severe("Unable to set player speed due to error:");
-                    new Logger(this.plugin.config).severe(e.getMessage());
+                    new Logger(this.plugin.foundryConfig).severe("Unable to set player speed due to error:");
+                    new Logger(this.plugin.foundryConfig).severe(e.getMessage());
                 }
                 return true;
             } else {

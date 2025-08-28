@@ -46,7 +46,7 @@ public class CommandSeen extends FoundryCommand {
         if (args.length == 1) {
             OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
             if (p.hasPlayedBefore()) {
-                Files fu = new Files(this.plugin.config, this.plugin);
+                Files fu = new Files(this.plugin.foundryConfig, this.plugin);
                 if (fu.exists(fu.playerDataFile(p.getUniqueId()))) {
                     fu.load(fu.playerDataFile(p.getUniqueId()));
                     if (fu.getString("user.last-seen") != null) {

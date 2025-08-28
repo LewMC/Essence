@@ -53,7 +53,7 @@ public class CommandNick extends FoundryCommand {
                 return true;
             }
 
-            if (new Security(this.plugin.config).hasSpecialCharacters(args[0])) {
+            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[0])) {
                 msg.send("nick","specialchars");
                 return true;
             }
@@ -78,7 +78,7 @@ public class CommandNick extends FoundryCommand {
                 return true;
             }
 
-            if (new Security(this.plugin.config).hasSpecialCharacters(args[1])) {
+            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[1])) {
                 msg.send("nick","specialchars");
                 return true;
             }

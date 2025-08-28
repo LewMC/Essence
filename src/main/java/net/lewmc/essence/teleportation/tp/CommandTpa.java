@@ -52,7 +52,7 @@ public class CommandTpa extends FoundryPlayerCommand {
                 return true;
             }
 
-            Files playerData = new Files(this.plugin.config, this.plugin);
+            Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
             playerData.load(playerData.playerDataFile(playerToRequest));
             if (!playerData.getBoolean("user.accepting-teleport-requests")) {
                 msg.send("teleport", "requestsdisabled", new String[] { playerToRequest.getName() });

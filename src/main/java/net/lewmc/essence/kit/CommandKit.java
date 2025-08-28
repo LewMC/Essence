@@ -49,7 +49,7 @@ public class CommandKit extends FoundryPlayerCommand {
         if (args.length == 0) {
             StringBuilder kits = new StringBuilder("No kits found.");
 
-            Files kitData = new Files(this.plugin.config, this.plugin);
+            Files kitData = new Files(this.plugin.foundryConfig, this.plugin);
             kitData.load("data/kits.yml");
             Set<String> keys = kitData.getKeys("kits", false);
 

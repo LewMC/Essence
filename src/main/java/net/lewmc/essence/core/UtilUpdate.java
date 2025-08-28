@@ -26,14 +26,14 @@ public class UtilUpdate {
      */
     public UtilUpdate(Essence plugin) {
         this.plugin = plugin;
-        this.log = new Logger(plugin.config);
+        this.log = new Logger(plugin.foundryConfig);
     }
 
     /**
      * Checks Essence's version.
      */
     public void VersionCheck() {
-        if (this.plugin.getConfig().getBoolean("advanced.update-check")) {
+        if ((boolean) this.plugin.config.get("advanced.update-check")) {
             try {
                 URL url;
                 if (this.plugin.getDescription().getVersion().contains("SNAPSHOT")) {
@@ -171,7 +171,7 @@ public class UtilUpdate {
      */
     private void migrateValues() {
         // ECONOMY MODE
-        Files config = new Files(this.plugin.config, this.plugin);
+        Files config = new Files(this.plugin.foundryConfig, this.plugin);
         config.load("config.yml");
 
         if (Objects.equals(config.get("economy.mode"), "OFF") || Objects.equals(config.get("economy.mode"), false)) {
@@ -186,8 +186,8 @@ public class UtilUpdate {
      */
     private void migrateFiles() {
         // NEW LANGUAGE FILES.
-        if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
-            Files config = new Files(this.plugin.config, this.plugin);
+        if (Objects.equals(this.plugin.config.get("language"), "en-gb")) {
+            Files config = new Files(this.plugin.foundryConfig, this.plugin);
             config.load("config.yml");
             if (config.exists("language/en-gb.yml")) {
                 config.delete("language/en-gb.yml");
@@ -197,10 +197,10 @@ public class UtilUpdate {
             this.plugin.reloadConfig();
         }
 
-        Logger log = new Logger(this.plugin.config);
+        Logger log = new Logger(this.plugin.foundryConfig);
 
         // NEW PLACEHOLDER SYSTEM (1.9.0+)
-        Files f = new Files(this.plugin.config, this.plugin);
+        Files f = new Files(this.plugin.foundryConfig, this.plugin);
         f.load("config.yml");
 
         if (f.getInt("config-version") == 1) {

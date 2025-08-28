@@ -47,7 +47,7 @@ public class CommandRules extends FoundryCommand {
                 msg.send("other", "rule", new String[] {pu.replaceAll(rule)});
             }
         } catch (IOException e) {
-            Logger log = new Logger(this.plugin.config);
+            Logger log = new Logger(this.plugin.foundryConfig);
             msg.send("generic", "exception");
             log.severe("Unable to display rules.");
             log.severe(e.getMessage());

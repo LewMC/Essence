@@ -27,7 +27,7 @@ public class CommandSpawn extends FoundryPlayerCommand {
      */
     public CommandSpawn(Essence plugin) {
         this.plugin = plugin;
-        this.log = new Logger(plugin.config);
+        this.log = new Logger(plugin.foundryConfig);
     }
 
     /**
@@ -48,7 +48,7 @@ public class CommandSpawn extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        int waitTime = plugin.getConfig().getInt("teleportation.spawn.wait");
+        int waitTime = (int) plugin.config.get("teleportation.spawn.wait");
         UtilTeleport teleUtil = new UtilTeleport(this.plugin);
 
         UtilMessage msg = new UtilMessage(this.plugin, cs);
@@ -75,7 +75,7 @@ public class CommandSpawn extends FoundryPlayerCommand {
             spawnName = loc.getWorld().getName();
         }
 
-        Files spawnData = new Files(this.plugin.config, this.plugin);
+        Files spawnData = new Files(this.plugin.foundryConfig, this.plugin);
         spawnData.load("data/spawns.yml");
 
         Location teleportLocation;

@@ -49,13 +49,13 @@ public class CommandHome extends FoundryPlayerCommand {
         UtilTeleport teleUtil = new UtilTeleport(this.plugin);
         UtilMessage msg = new UtilMessage(this.plugin, cs);
 
-        int waitTime = plugin.getConfig().getInt("teleportation.home.wait");
+        int waitTime = (int) plugin.config.get("teleportation.home.wait");
         if (!teleUtil.cooldownSurpassed((Player) cs, "home")) {
             msg.send("teleport", "tryagain", new String[]{String.valueOf(teleUtil.cooldownRemaining((Player) cs, "home"))});
             return true;
         }
 
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile((Player) cs));
 
         String homeName;
@@ -95,7 +95,7 @@ public class CommandHome extends FoundryPlayerCommand {
         if (playerData.get(homeName) == null) {
             playerData.close();
             msg.send("generic", "exception");
-            Logger log = new Logger(this.plugin.config);
+            Logger log = new Logger(this.plugin.foundryConfig);
             log.warn("Player " + cs + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
             log.warn("Error: Unable to load from configuration file, please check configuration file.");
             return true;
@@ -104,7 +104,7 @@ public class CommandHome extends FoundryPlayerCommand {
         if (playerData.getString(homeName + ".world") == null) {
             playerData.close();
             msg.send("generic", "exception");
-            Logger log = new Logger(this.plugin.config);
+            Logger log = new Logger(this.plugin.foundryConfig);
             log.warn("Player " + cs + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
             log.warn("Error: world is null, please check configuration file.");
             return true;

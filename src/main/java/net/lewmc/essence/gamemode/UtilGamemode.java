@@ -48,7 +48,7 @@ public class UtilGamemode {
             }
         } else {
             if (cmd.console(cs)) {
-                new Logger(plugin.config).warn("Usage: "+command+" <player>");
+                new Logger(plugin.foundryConfig).warn("Usage: "+command+" <player>");
                 return true;
             } else {
                 player = (Player) cs;

@@ -77,7 +77,7 @@ public class CommandGamemode extends FoundryCommand {
             }
         } else {
             if (cmd.console(cs)) {
-                new Logger(this.plugin.config).warn("Usage: /gamemode "+gamemode.toString().toLowerCase()+" <player>");
+                new Logger(this.plugin.foundryConfig).warn("Usage: /gamemode "+gamemode.toString().toLowerCase()+" <player>");
                 return true;
             } else {
                 player = (Player) cs;
