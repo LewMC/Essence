@@ -26,12 +26,12 @@ public class EventPlayerChat implements Listener {
      */
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if (this.plugin.chat_manage) {
+        if ((boolean) this.plugin.config.get("chat.manage")) {
             String msg = event.getMessage();
 
-            msg = new UtilPlaceholder(this.plugin, event.getPlayer()).replaceAll(this.plugin.chat_nameFormat + " " + msg);
+            msg = new UtilPlaceholder(this.plugin, event.getPlayer()).replaceAll(this.plugin.config.get("chat.name-format") + " " + msg);
 
-            if (this.plugin.chat_allowMessageFormatting) {
+            if ((boolean) this.plugin.config.get("chat.allow-message-formatting")) {
                 msg = ChatColor.translateAlternateColorCodes('&', msg);
             }
 
