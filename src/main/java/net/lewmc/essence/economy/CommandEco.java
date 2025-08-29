@@ -82,29 +82,17 @@ public class CommandEco extends FoundryCommand {
             return true;
         }
         
-        String playerName = args[1];
-        double amount;
-        
-        try {
-            amount = Double.parseDouble(args[2]);
-        } catch (NumberFormatException e) {
-            message.send("economy", "invalidamount");
+        Double amount = validateAmount(args[2], message, true);
+        if (amount == null) {
             return true;
         }
         
-        if (amount < 0) {
-            message.send("economy", "negativeamount");
-            return true;
-        }
-        
-        Player targetPlayer = Bukkit.getPlayer(playerName);
+        Player targetPlayer = findPlayer(args[1], message);
         if (targetPlayer == null) {
-            message.send("generic", "playernotfound");
             return true;
         }
         
-        Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-        playerDataFile.load(playerDataFile.playerDataFile(targetPlayer));
+        Files playerDataFile = getPlayerDataFile(targetPlayer);
         playerDataFile.set("economy.balance", amount);
         playerDataFile.save();
         
@@ -127,29 +115,17 @@ public class CommandEco extends FoundryCommand {
             return true;
         }
         
-        String playerName = args[1];
-        double amount;
-        
-        try {
-            amount = Double.parseDouble(args[2]);
-        } catch (NumberFormatException e) {
-            message.send("economy", "invalidamount");
+        Double amount = validateAmount(args[2], message, false);
+        if (amount == null) {
             return true;
         }
         
-        if (amount <= 0) {
-            message.send("economy", "positiveamount");
-            return true;
-        }
-        
-        Player targetPlayer = Bukkit.getPlayer(playerName);
+        Player targetPlayer = findPlayer(args[1], message);
         if (targetPlayer == null) {
-            message.send("generic", "playernotfound");
             return true;
         }
         
-        Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-        playerDataFile.load(playerDataFile.playerDataFile(targetPlayer));
+        Files playerDataFile = getPlayerDataFile(targetPlayer);
         double currentBalance = playerDataFile.getDouble("economy.balance");
         playerDataFile.set("economy.balance", currentBalance + amount);
         playerDataFile.save();
@@ -173,29 +149,17 @@ public class CommandEco extends FoundryCommand {
             return true;
         }
         
-        String playerName = args[1];
-        double amount;
-        
-        try {
-            amount = Double.parseDouble(args[2]);
-        } catch (NumberFormatException e) {
-            message.send("economy", "invalidamount");
+        Double amount = validateAmount(args[2], message, false);
+        if (amount == null) {
             return true;
         }
         
-        if (amount <= 0) {
-            message.send("economy", "positiveamount");
-            return true;
-        }
-        
-        Player targetPlayer = Bukkit.getPlayer(playerName);
+        Player targetPlayer = findPlayer(args[1], message);
         if (targetPlayer == null) {
-            message.send("generic", "playernotfound");
             return true;
         }
         
-        Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-        playerDataFile.load(playerDataFile.playerDataFile(targetPlayer));
+        Files playerDataFile = getPlayerDataFile(targetPlayer);
         double currentBalance = playerDataFile.getDouble("economy.balance");
         
         // Check if the player has sufficient balance
@@ -212,6 +176,60 @@ public class CommandEco extends FoundryCommand {
         message.send("economy", "ecotake", new String[]{symbol + amount, targetPlayer.getName()});
         
         return true;
+    }
+    
+    /**
+     * Validate and parse amount from string
+     * @param amountStr String representation of amount
+     * @param message UtilMessage instance for error reporting
+     * @param allowZero Whether zero is allowed
+     * @return Double amount if valid, null if invalid
+     */
+    private Double validateAmount(String amountStr, UtilMessage message, boolean allowZero) {
+        double amount;
+        
+        try {
+            amount = Double.parseDouble(amountStr);
+        } catch (NumberFormatException e) {
+            message.send("economy", "invalidamount");
+            return null;
+        }
+        
+        if (allowZero && amount < 0) {
+            message.send("economy", "negativeamount");
+            return null;
+        } else if (!allowZero && amount <= 0) {
+            message.send("economy", "positiveamount");
+            return null;
+        }
+        
+        return amount;
+    }
+    
+    /**
+     * Find and validate player
+     * @param playerName Player name to find
+     * @param message UtilMessage instance for error reporting
+     * @return Player if found, null if not found
+     */
+    private Player findPlayer(String playerName, UtilMessage message) {
+        Player targetPlayer = Bukkit.getPlayer(playerName);
+        if (targetPlayer == null) {
+            message.send("generic", "playernotfound");
+            return null;
+        }
+        return targetPlayer;
+    }
+    
+    /**
+     * Get player data file for economy operations
+     * @param player Target player
+     * @return Files instance loaded with player data
+     */
+    private Files getPlayerDataFile(Player player) {
+        Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
+        playerDataFile.load(playerDataFile.playerDataFile(player));
+        return playerDataFile;
     }
     
     /**
