@@ -30,6 +30,42 @@ public class UtilUpdate {
     }
 
     /**
+     * Compares two version strings to determine if the first version is newer than the second.
+     * Supports semantic versioning format (major.minor.patch).
+     * 
+     * @param version1 The first version string (potential newer version)
+     * @param version2 The second version string (current version)
+     * @return true if version1 is newer than version2, false otherwise
+     */
+    private boolean isNewerVersion(String version1, String version2) {
+        if (version1 == null || version2 == null) {
+            return false;
+        }
+        
+        // Remove any non-numeric suffixes (like -SNAPSHOT)
+        String cleanVersion1 = version1.split("-")[0];
+        String cleanVersion2 = version2.split("-")[0];
+        
+        String[] parts1 = cleanVersion1.split("\\.");
+        String[] parts2 = cleanVersion2.split("\\.");
+        
+        // Compare each part of the version number
+        int maxLength = Math.max(parts1.length, parts2.length);
+        for (int i = 0; i < maxLength; i++) {
+            int part1 = i < parts1.length ? Integer.parseInt(parts1[i]) : 0;
+            int part2 = i < parts2.length ? Integer.parseInt(parts2[i]) : 0;
+            
+            if (part1 > part2) {
+                return true;
+            } else if (part1 < part2) {
+                return false;
+            }
+        }
+        
+        return false; // Versions are equal
+    }
+
+    /**
      * Checks Essence's version.
      */
     public void VersionCheck() {
@@ -54,12 +90,17 @@ public class UtilUpdate {
                     } else if (response.equals(this.plugin.getDescription().getVersion())) {
                         log.info("You are running the latest version of Essence.");
                         this.log.info("");
-                    } else {
+                    } else if (isNewerVersion(response, this.plugin.getDescription().getVersion())) {
                         log.warn("UPDATE > There's a new version of Essence available.");
                         log.warn("UPDATE > Your version: "+this.plugin.getDescription().getVersion()+" - latest version: "+response);
                         log.warn("UPDATE > You can download the latest version from lewmc.net/essence");
                         this.log.info("");
                         this.plugin.hasPendingUpdate = true;
+                    } else {
+                        log.warn("DEVELOPMENT > You are running a development version ahead of the official release.");
+                        log.warn("DEVELOPMENT > Your version: "+this.plugin.getDescription().getVersion()+" - latest stable: "+response);
+                        log.warn("DEVELOPMENT > Please be aware of potential stability risks and report any issues.");
+                        this.log.info("");
                     }
                 } else {
                     log.severe("Unable to perform update check: There was no response from the server.");
