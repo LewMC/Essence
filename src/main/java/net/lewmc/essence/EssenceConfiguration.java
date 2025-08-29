@@ -73,7 +73,6 @@ public class EssenceConfiguration {
      * @since 1.10.1
      */
     public Map<String, Object> reload() {
-
         if (!this.configFile.exists("config.yml")) {
             this.plugin.saveDefaultConfig();
             if (!this.configFile.exists("config.yml")) {
