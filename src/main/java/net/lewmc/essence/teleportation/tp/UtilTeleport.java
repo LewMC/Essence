@@ -37,7 +37,7 @@ public class UtilTeleport {
      */
     public UtilTeleport(Essence plugin) {
         this.plugin = plugin;
-        this.log = new Logger(plugin.config);
+        this.log = new Logger(plugin.foundryConfig);
     }
 
     /**
@@ -53,10 +53,10 @@ public class UtilTeleport {
             return true;
         }
 
-        int cooldown = this.plugin.getConfig().getInt("teleportation."+type+".cooldown");
+        int cooldown = (int) this.plugin.config.get("teleportation."+type+".cooldown");
         if (cooldown < 0) { return true; }
 
-        Files data = new Files(this.plugin.config, this.plugin);
+        Files data = new Files(this.plugin.foundryConfig, this.plugin);
         data.load(data.playerDataFile(player));
 
         if (data.get("cooldown."+type) == null) { return true; }
@@ -88,7 +88,7 @@ public class UtilTeleport {
      * @param type String - The type of cooldown.
      */
     public void setCooldown(Player player, String type) {
-        Files data = new Files(this.plugin.config, this.plugin);
+        Files data = new Files(this.plugin.foundryConfig, this.plugin);
         data.load(data.playerDataFile(player));
 
         LocalDateTime currentTime = LocalDateTime.now();
@@ -112,13 +112,13 @@ public class UtilTeleport {
             return 0;
         }
 
-        int cooldown = this.plugin.getConfig().getInt("teleportation."+type + ".cooldown");
+        int cooldown = (int) this.plugin.config.get("teleportation."+type + ".cooldown");
 
         if (cooldown <= 0) {
             return 0;
         }
 
-        Files data = new Files(this.plugin.config, this.plugin);
+        Files data = new Files(this.plugin.foundryConfig, this.plugin);
         data.load(data.playerDataFile(player));
 
         if (data.getString("cooldown."+type) == null) { return 0; }
@@ -197,7 +197,7 @@ public class UtilTeleport {
             return;
         }
 
-        if (delay > 0 && this.plugin.getConfig().getBoolean("teleportation.move-to-cancel")) {
+        if (delay > 0 && (boolean) this.plugin.config.get("teleportation.move-to-cancel")) {
             message.send("teleport", "movetocancel");
         }
         this.setTeleportStatus(player, true);
@@ -281,10 +281,10 @@ public class UtilTeleport {
      * @return true - Teleport can proceed, false - Teleport should be blocked.
      */
     public boolean teleportToggleCheck(Player requester, Player target) {
-        Files targetPd = new Files(this.plugin.config, this.plugin);
+        Files targetPd = new Files(this.plugin.foundryConfig, this.plugin);
         targetPd.load(targetPd.playerDataFile(target));
 
-        Files config = new Files(this.plugin.config, this.plugin);
+        Files config = new Files(this.plugin.foundryConfig, this.plugin);
         config.load("config.yml");
 
         UtilPermission ph = new UtilPermission(this.plugin, requester);

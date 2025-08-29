@@ -1,7 +1,6 @@
 package net.lewmc.essence.stats;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.Logger;
@@ -42,9 +41,6 @@ public class CommandSpeed extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("speed")) { return cmd.disabled(); }
-
         UtilMessage message = new UtilMessage(this.plugin, cs);
 
         if (args.length == 1) {
@@ -94,8 +90,8 @@ public class CommandSpeed extends FoundryCommand {
         } catch (NumberFormatException | NullPointerException e) {
             msg.send("speed", "usage");
             msg.send("generic", "exception");
-            new Logger(this.plugin.config).severe("Unable to set player speed due to error:");
-            new Logger(this.plugin.config).severe(e.getMessage());
+            new Logger(this.plugin.foundryConfig).severe("Unable to set player speed due to error:");
+            new Logger(this.plugin.foundryConfig).severe(e.getMessage());
         }
         return true;
     }
@@ -134,8 +130,8 @@ public class CommandSpeed extends FoundryCommand {
                 } catch (NumberFormatException | NullPointerException e) {
                     msg.send("speed", "usage");
                     msg.send("generic", "exception");
-                    new Logger(this.plugin.config).severe("Unable to set player speed due to error:");
-                    new Logger(this.plugin.config).severe(e.getMessage());
+                    new Logger(this.plugin.foundryConfig).severe("Unable to set player speed due to error:");
+                    new Logger(this.plugin.foundryConfig).severe(e.getMessage());
                 }
                 return true;
             } else {

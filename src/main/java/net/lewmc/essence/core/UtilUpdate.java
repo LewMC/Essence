@@ -26,14 +26,14 @@ public class UtilUpdate {
      */
     public UtilUpdate(Essence plugin) {
         this.plugin = plugin;
-        this.log = new Logger(plugin.config);
+        this.log = new Logger(plugin.foundryConfig);
     }
 
     /**
      * Checks Essence's version.
      */
     public void VersionCheck() {
-        if (this.plugin.getConfig().getBoolean("advanced.update-check")) {
+        if ((boolean) this.plugin.config.get("advanced.update-check")) {
             try {
                 URL url;
                 if (this.plugin.getDescription().getVersion().contains("SNAPSHOT")) {
@@ -75,19 +75,6 @@ public class UtilUpdate {
         } else {
             log.warn("Unable to perform update check: Update checking is disabled.");
             this.log.info("");
-        }
-    }
-
-    /**
-     * Updates Essence's configuration.
-     */
-    public void UpdateConfig() {
-        File configFile = new File(this.plugin.getDataFolder(), "config.yml");
-
-        try {
-            ConfigUpdater.update(plugin, "config.yml", configFile);
-        } catch (IOException e) {
-            this.log.warn("Unable to update configuration: "+e);
         }
     }
 
@@ -159,27 +146,57 @@ public class UtilUpdate {
     }
 
     /**
-     * Migrates old Essence files.
+     * Migrates old Essence stuff (calls migrateFiles and migrateValues).
      */
     public void migrate() {
-        // NEW LANGUAGE FILES.
-        if (Objects.equals(this.plugin.getConfig().getString("language"), "en-gb")) {
-            Files config = new Files(this.plugin.config, this.plugin);
-            config.load("config.yml");
-            if (config.exists("language/en-gb.yml")) {
-                config.delete("language/en-gb.yml");
-            }
-            config.set("language", "en-GB");
+        this.migrateValues();
+        this.migrateFiles();
+    }
+
+    /**
+     * Migrates old Essence config values.
+     */
+    private void migrateValues() {
+        // ECONOMY MODE (1.10.1)
+        Files config = new Files(this.plugin.foundryConfig, this.plugin);
+        config.load("config.yml");
+
+        if (Objects.equals(config.get("economy.mode"), "OFF") || Objects.equals(config.get("economy.mode"), false)) {
+            config.set("economy.mode", "ESSENCE");
+            config.set("economy.enabled", false);
             config.save();
-            this.plugin.reloadConfig();
         }
+    }
 
-        Logger log = new Logger(this.plugin.config);
-
-        // NEW PLACEHOLDER SYSTEM (1.9.0+)
-        Files f = new Files(this.plugin.config, this.plugin);
+    /**
+     * Migrates old Essence files.
+     */
+    private void migrateFiles() {
+        Files f = new Files(this.plugin.foundryConfig, this.plugin);
         f.load("config.yml");
 
+        // NEW LANGUAGE FILES.
+        if (f.getInt("config-version") == 1) {
+            Files lf = new Files(this.plugin.foundryConfig, this.plugin);
+            lf.load("config.yml");
+
+            if (Objects.equals(lf.get("language"), "en-gb")) {
+                Files config = new Files(this.plugin.foundryConfig, this.plugin);
+                config.load("config.yml");
+                if (config.exists("language/en-gb.yml")) {
+                    config.delete("language/en-gb.yml");
+                }
+                config.set("language", "en-GB");
+                config.save();
+                this.plugin.reloadConfig();
+            }
+
+            lf.close();
+        }
+
+        Logger log = new Logger(this.plugin.foundryConfig);
+
+        // NEW PLACEHOLDER SYSTEM (1.9.0+)
         if (f.getInt("config-version") == 1) {
             log.info("Essence is updating your configuration file, please wait...");
 

@@ -23,7 +23,7 @@ public class UtilLocation {
     }
 
     public void UpdateLastLocation(Player player) {
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(player));
 
         playerData.set("last-location.world", player.getLocation().getWorld().getName());

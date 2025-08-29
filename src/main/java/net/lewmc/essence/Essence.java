@@ -32,16 +32,6 @@ public class Essence extends JavaPlugin {
     private Logger log;
 
     /**
-     * The config.yml's verbose value is stored here.
-     */
-    public boolean verbose;
-
-    /**
-     * The config.yml's disabled-commands-feedback value is stored here.
-     */
-    public boolean disabledCommandsFeedback;
-
-    /**
      * Stores pending teleport requests.
      * String = The requested player's name.
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
@@ -62,9 +52,9 @@ public class Essence extends JavaPlugin {
     public Map<CommandSender, CommandSender> msgHistory = new HashMap<>();
 
     /**
-     * Stores which commands are disabled.
+     * Store's Essence's configuration.
      */
-    public List<String> disabledCommands;
+    public Map<String, Object> config;
 
     /**
      * Stores which players are flying.
@@ -83,34 +73,9 @@ public class Essence extends JavaPlugin {
     public Random rand = new Random();
 
     /**
-     * The nameFormat to use in chats.
-     */
-    public String chat_nameFormat;
-
-    /**
-     * Stores if Essence should manage chat messages or not
-     */
-    public boolean chat_manage = false;
-
-    /**
-     * Economy mode
-     */
-    public String economyMode;
-
-    /**
-     * Should essence chat allow colours?
-     */
-    public boolean chat_allowMessageFormatting;
-
-    /**
-     * Economy symbol.
-     */
-    public String economySymbol = "$";
-
-    /**
      * Holds the Foundry configuration.
      */
-    public FoundryConfig config;
+    public FoundryConfig foundryConfig;
 
     /**
      * Holds Essence's integrations.
@@ -118,12 +83,17 @@ public class Essence extends JavaPlugin {
     public EssenceIntegrations integrations;
 
     /**
+     * Handles if Essence should be verbose.
+     */
+    public boolean verbose;
+
+    /**
      * This function runs when Essence is enabled.
      */
     @Override
     public void onEnable() {
-        this.config = new FoundryConfig(this);
-        this.log = new Logger(this.config);
+        this.foundryConfig = new FoundryConfig(this);
+        this.log = new Logger(this.foundryConfig);
 
         this.log.info("");
         this.log.info("███████╗░██████╗░██████╗███████╗███╗░░██╗░█████╗░███████╗");
@@ -136,13 +106,17 @@ public class Essence extends JavaPlugin {
         this.log.info("Running Essence version " + this.getDescription().getVersion() + ".");
         this.log.info("Please report any issues with Essence to our GitHub repository: https://github.com/lewmc/essence/issues");
         this.log.info("");
-        this.log.info("Please consider leaving us a review at https://www.spigotmc.org/resources/essence.114553");
+        this.log.info("Please consider leaving us a review at https://lewmc.net/support/review");
         this.log.info("");
         this.log.info("Beginning startup...");
         this.log.info("");
 
-        this.verbose = this.getConfig().getBoolean("advanced.verbose");
-        this.economyMode = this.getConfig().getString("economy.mode");
+        // Load order is sensitive - TEST IF CHANGING!
+        UtilUpdate update = new UtilUpdate(this);
+        update.migrate();
+        this.startupConfig();
+        update.VersionCheck();
+        update.UpdateLanguage();
 
         if (this.verbose) {
             this.log.warn("Verbose mode is ENABLED.");
@@ -151,8 +125,6 @@ public class Essence extends JavaPlugin {
             this.log.info("");
         }
 
-        this.disabledCommandsFeedback = this.getConfig().getBoolean("disabled-commands-feedback");
-
         if (!Bukkit.getOnlineMode()) {
             this.log.severe(">> Your server is running in offline mode.");
             this.log.warn(">> Homes set in offline mode may not save properly if you switch back to online mode.");
@@ -160,19 +132,10 @@ public class Essence extends JavaPlugin {
             this.log.info("");
         }
 
-        this.disabledCommands = this.getConfig().getStringList("disabled-commands");
-
         this.checkForEssentials();
         this.checkForPaper();
         this.initFileSystem();
-        this.loadChatFormat();
         this.loadModules();
-
-        UtilUpdate update = new UtilUpdate(this);
-        update.migrate();
-        update.VersionCheck();
-        update.UpdateConfig();
-        update.UpdateLanguage();
 
         this.integrations = new EssenceIntegrations(this);
         if (!this.integrations.loadPlaceholderAPI() && verbose) { this.log.warn("PlaceholderAPI not found! Using local placeholders."); }
@@ -208,7 +171,7 @@ public class Essence extends JavaPlugin {
      * Checks if the server is running Paper, and informs the user that they should upgrade if not.
      */
     private void checkForPaper() {
-        UtilCommand cmd = new UtilCommand(this, null);
+        UtilCommand cmd = new UtilCommand(this);
         if (!cmd.isPaperCompatible()) {
             this.log.severe("You are running " + this.getServer().getName());
             this.log.severe("Some commands have been disabled, please see https://bit.ly/essencepaper for help.");
@@ -240,9 +203,8 @@ public class Essence extends JavaPlugin {
      * Initialise the file system.
      */
     private void initFileSystem() {
-        saveDefaultConfig();
-
         // Language files are in UpdateUtil!
+        // Config is in EssenceConfiguration.java
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
         if (!statsFolder.exists() && !statsFolder.mkdirs()) {
@@ -281,9 +243,9 @@ public class Essence extends JavaPlugin {
      * Checks the language system.
      */
     private void checkLanguageSystem() {
-        File setLang = new File(getDataFolder() + File.separator + "language" + File.separator + getConfig().getString("language") + ".yml");
+        File setLang = new File(getDataFolder() + File.separator + "language" + File.separator + this.config.get("language") + ".yml");
         if (!setLang.exists()) {
-            this.log.severe("Language file '" + getConfig().getString("language") + "' does not exist!");
+            this.log.severe("Language file '" + this.config.get("language") + "' does not exist!");
             this.log.severe("Please check the file and try again.");
             getServer().getPluginManager().disablePlugin(this);
         }
@@ -294,25 +256,28 @@ public class Essence extends JavaPlugin {
      * @since 1.10.0
      */
     private void loadModules() {
-        Registry reg = new Registry(this.config, this);
+        Registry reg = new Registry(this.foundryConfig, this);
 
         new ModuleCore(this, reg);
 
-        if (this.getConfig().getBoolean("admin.enabled")) { new ModuleAdmin(this, reg); if (this.verbose) { this.log.info("Loaded module: ADMIN"); } } else { if (this.verbose) { this.log.warn("Disabled module: ADMIN"); } }
-        if (this.getConfig().getBoolean("chat.enabled")) { new ModuleChat(this, reg); if (this.verbose) { this.log.info("Loaded module: CHAT"); } } else { if (this.verbose) { this.log.warn("Disabled module: CHAT"); } }
-        if (this.getConfig().getBoolean("economy.enabled")) { new ModuleEconomy(this, reg); if (this.verbose) { this.log.info("Loaded module: ECONOMY"); } } else { if (this.verbose) { this.log.warn("Disabled module: ECONOMY"); } }
-        if (this.getConfig().getBoolean("environment.enabled")) { new ModuleEnvironment(this, reg); if (this.verbose) { this.log.info("Loaded module: ENVIRONMENT"); } } else { if (this.verbose) { this.log.warn("Disabled module: ENVIRONMENT"); } }
-        if (this.getConfig().getBoolean("gamemode.enabled")) { new ModuleGamemode(this, reg); if (this.verbose) { this.log.info("Loaded module: GAMEMODE"); } } else { if (this.verbose) { this.log.warn("Disabled module: GAMEMODE"); } }
-        if (this.getConfig().getBoolean("inventory.enabled")) { new ModuleInventory(this, reg); if (this.verbose) { this.log.info("Loaded module: INVENTORY"); } } else { if (this.verbose) { this.log.warn("Disabled module: INVENTORY"); } }
-        if (this.getConfig().getBoolean("kit.enabled")) { new ModuleKit(this, reg); if (this.verbose) { this.log.info("Loaded module: KIT"); } } else { if (this.verbose) { this.log.warn("Disabled module: KIT"); } }
-        if (this.getConfig().getBoolean("stats.enabled")) { new ModuleStats(this, reg); if (this.verbose) { this.log.info("Loaded module: STATS"); } } else { if (this.verbose) { this.log.warn("Disabled module: STATS"); } }
-        if (this.getConfig().getBoolean("team.enabled")) { new ModuleTeam(this, reg); if (this.verbose) { this.log.info("Loaded module: TEAM"); } } else { if (this.verbose) { this.log.warn("Disabled module: TEAM"); } }
-        if (this.getConfig().getBoolean("teleportation.enabled")) { new ModuleTeleportation(this, reg); if (this.verbose) { this.log.info("Loaded module: TELEPORTATION"); } } else { if (this.verbose) { this.log.warn("Disabled module: TELEPORTATION"); } }
+        if ((boolean) this.config.get("admin.enabled")) { new ModuleAdmin(this, reg); if (this.verbose) { this.log.info("Loaded module: ADMIN"); } } else { if (this.verbose) { this.log.warn("Disabled module: ADMIN"); } }
+        if ((boolean) this.config.get("chat.enabled")) { new ModuleChat(this, reg); if (this.verbose) { this.log.info("Loaded module: CHAT"); } } else { if (this.verbose) { this.log.warn("Disabled module: CHAT"); } }
+        if ((boolean) this.config.get("economy.enabled")) { new ModuleEconomy(this, reg); if (this.verbose) { this.log.info("Loaded module: ECONOMY"); } } else { if (this.verbose) { this.log.warn("Disabled module: ECONOMY"); } }
+        if ((boolean) this.config.get("environment.enabled")) { new ModuleEnvironment(this, reg); if (this.verbose) { this.log.info("Loaded module: ENVIRONMENT"); } } else { if (this.verbose) { this.log.warn("Disabled module: ENVIRONMENT"); } }
+        if ((boolean) this.config.get("gamemode.enabled")) { new ModuleGamemode(this, reg); if (this.verbose) { this.log.info("Loaded module: GAMEMODE"); } } else { if (this.verbose) { this.log.warn("Disabled module: GAMEMODE"); } }
+        if ((boolean) this.config.get("inventory.enabled")) { new ModuleInventory(this, reg); if (this.verbose) { this.log.info("Loaded module: INVENTORY"); } } else { if (this.verbose) { this.log.warn("Disabled module: INVENTORY"); } }
+        if ((boolean) this.config.get("kit.enabled")) { new ModuleKit(this, reg); if (this.verbose) { this.log.info("Loaded module: KIT"); } } else { if (this.verbose) { this.log.warn("Disabled module: KIT"); } }
+        if ((boolean) this.config.get("stats.enabled")) { new ModuleStats(this, reg); if (this.verbose) { this.log.info("Loaded module: STATS"); } } else { if (this.verbose) { this.log.warn("Disabled module: STATS"); } }
+        if ((boolean) this.config.get("team.enabled")) { new ModuleTeam(this, reg); if (this.verbose) { this.log.info("Loaded module: TEAM"); } } else { if (this.verbose) { this.log.warn("Disabled module: TEAM"); } }
+        if ((boolean) this.config.get("teleportation.enabled")) { new ModuleTeleportation(this, reg); if (this.verbose) { this.log.info("Loaded module: TELEPORTATION"); } } else { if (this.verbose) { this.log.warn("Disabled module: TELEPORTATION"); } }
     }
 
-    private void loadChatFormat() {
-        this.chat_nameFormat = this.getConfig().getString("chat.name-format");
-        this.chat_manage = this.getConfig().getBoolean("chat.manage-chat");
-        this.chat_allowMessageFormatting = this.getConfig().getBoolean("chat.allow-message-formatting");
+    /**
+     * Starts Essence's config.
+     * @since 1.10.1
+     */
+    public void startupConfig() {
+        this.config = new EssenceConfiguration(this).startup();
+        this.verbose = (boolean) this.config.get("advanced.verbose");
     }
 }

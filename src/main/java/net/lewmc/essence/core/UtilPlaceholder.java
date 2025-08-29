@@ -80,7 +80,11 @@ public class UtilPlaceholder {
         } else if (placeholder.equalsIgnoreCase("datetime")) {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         } else if (placeholder.equalsIgnoreCase("player")) {
-            return new UtilPlayer(this.plugin, this.cs).getPlayerDisplayname(this.cs);
+            if ((boolean) this.plugin.config.get("chat.manage-chat")) {
+                return new UtilPlayer(this.plugin, this.cs).getPlayerDisplayname(this.cs);
+            } else {
+                return cs.getName();
+            }
         } else if (placeholder.equalsIgnoreCase("username")) {
             return cs.getName();
         } else if (placeholder.equalsIgnoreCase("team_name")) {
@@ -105,11 +109,11 @@ public class UtilPlaceholder {
             return new UtilPlayer(this.plugin, cs).getPlayerSuffix();
         } else if (placeholder.equalsIgnoreCase("balance")) {
             if (cs instanceof Player p) {
-                Files pf = new Files(this.plugin.config, this.plugin);
+                Files pf = new Files(this.plugin.foundryConfig, this.plugin);
                 pf.load(pf.playerDataFile(p));
-                return this.plugin.economySymbol + pf.getDouble("economy.balance");
+                return this.plugin.config.get("economy.symbol").toString() + pf.getDouble("economy.balance");
             } else {
-                return this.plugin.economySymbol + "Infinity";
+                return this.plugin.config.get("economy.symbol").toString() + "Infinity";
             }
         } else {
             return placeholder;

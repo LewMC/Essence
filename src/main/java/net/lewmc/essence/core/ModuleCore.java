@@ -25,8 +25,9 @@ public class ModuleCore extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        reg.command("essence", new CommandEssence((Essence) plugin));
-        reg.command("rules", new CommandRules((Essence) plugin));
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
+        if (!cmd.isDisabled("essence")) { reg.runtimeCommand("essence", new CommandEssence((Essence) plugin), "es", "ess"); }
+        if (!cmd.isDisabled("rules")) { reg.runtimeCommand("rules", new CommandRules((Essence) plugin)); }
     }
 
     /**
@@ -49,6 +50,5 @@ public class ModuleCore extends FoundryModule {
         reg.event(new EventPlayerBedEnter((Essence) plugin));
         reg.event(new EventLeave((Essence) plugin));
         reg.event(new EventPlayerMove((Essence) plugin));
-        reg.event(new EventPlayerChat((Essence) plugin));
     }
 }

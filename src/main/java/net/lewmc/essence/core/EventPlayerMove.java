@@ -28,7 +28,7 @@ public class EventPlayerMove implements Listener {
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
         if (
             event.hasChangedBlock() &&
-            this.plugin.getConfig().getBoolean("teleportation.move-to-cancel") &&
+            (boolean) this.plugin.config.get("teleportation.move-to-cancel") &&
             this.plugin.teleportingPlayers.contains(event.getPlayer().getUniqueId())
         ) {
             UtilTeleport tp = new UtilTeleport(this.plugin);

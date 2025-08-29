@@ -1,7 +1,6 @@
 package net.lewmc.essence.teleportation.spawn;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.teleportation.tp.UtilTeleport;
@@ -15,6 +14,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 public class CommandSpawn extends FoundryPlayerCommand {
     private final Essence plugin;
     private final Logger log;
@@ -26,7 +27,7 @@ public class CommandSpawn extends FoundryPlayerCommand {
      */
     public CommandSpawn(Essence plugin) {
         this.plugin = plugin;
-        this.log = new Logger(plugin.config);
+        this.log = new Logger(plugin.foundryConfig);
     }
 
     /**
@@ -47,10 +48,7 @@ public class CommandSpawn extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("spawn")) { return cmd.disabled(); }
-
-        int waitTime = plugin.getConfig().getInt("teleportation.spawn.wait");
+        int waitTime = (int) plugin.config.get("teleportation.spawn.wait");
         UtilTeleport teleUtil = new UtilTeleport(this.plugin);
 
         UtilMessage msg = new UtilMessage(this.plugin, cs);
@@ -77,7 +75,7 @@ public class CommandSpawn extends FoundryPlayerCommand {
             spawnName = loc.getWorld().getName();
         }
 
-        Files spawnData = new Files(this.plugin.config, this.plugin);
+        Files spawnData = new Files(this.plugin.foundryConfig, this.plugin);
         spawnData.load("data/spawns.yml");
 
         Location teleportLocation;
@@ -94,11 +92,11 @@ public class CommandSpawn extends FoundryPlayerCommand {
             if (Bukkit.getServer().getWorld(spawnName) != null) {
                 teleportLocation = new Location(
                         Bukkit.getServer().getWorld(spawnName),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getX(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getZ(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getYaw(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch()
+                        Objects.requireNonNull(Bukkit.getServer().getWorld(spawnName)).getSpawnLocation().getX(),
+                        Objects.requireNonNull(Bukkit.getServer().getWorld(spawnName)).getSpawnLocation().getY(),
+                        Objects.requireNonNull(Bukkit.getServer().getWorld(spawnName)).getSpawnLocation().getZ(),
+                        Objects.requireNonNull(Bukkit.getServer().getWorld(spawnName)).getSpawnLocation().getYaw(),
+                        Objects.requireNonNull(Bukkit.getServer().getWorld(spawnName)).getSpawnLocation().getPitch()
                 );
             } else {
                 msg.send("spawn", "notexist");

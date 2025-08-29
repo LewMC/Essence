@@ -9,7 +9,6 @@ admin:
 # CHAT MODULE
 chat:
   enabled: true
-  manage-chat: true
   name-format: "%essence_combined_prefix% %essence_player%%essence_player_suffix%:"
   allow-message-formatting: false
   broadcasts:
@@ -19,6 +18,7 @@ chat:
   motd: |-
     §2§lWelcome to the server!
     §aYou can change this message in Essence's config.yml
+  manage-chat: true
 
 # ECONOMY MODULE
 economy:
@@ -80,14 +80,13 @@ teleportation:
 language: en-GB
 
 # DISABLED COMMANDS
-# Allows you to disable specific commands. Doesn't fully remove them from the server.
+# Allows you to disable specific commands.
 disabled-commands:
   list:
     - example
-  feedback-in-chat: true
 
 # ADVANCED SETTINGS
-# These settings should typically be left alone. Only change them if you know what you're doing.
+# These settings should usually be left alone. Only change them if you know what you're doing.
 advanced:
   playerdata:
     store-ip-address: true

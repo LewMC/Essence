@@ -33,7 +33,7 @@ public class UtilKit {
      * @return int - Result of operation. 0 = Successful, 1 = No Permission, 2 = Kit is missing, 3 = Claimed too many times.
      */
     public int giveKit(String kit) {
-        Files kitData = new Files(this.plugin.config, this.plugin);
+        Files kitData = new Files(this.plugin.foundryConfig, this.plugin);
 
         kitData.load("data/kits.yml");
 
@@ -49,7 +49,7 @@ public class UtilKit {
 
         Object max = kitData.get("kits."+kit+".maxclaims");
 
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(this.player));
 
         Object claims = playerData.get("kits." + kit + ".claims");

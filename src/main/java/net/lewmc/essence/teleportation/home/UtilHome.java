@@ -5,6 +5,7 @@ import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.team.UtilTeam;
 import net.lewmc.foundry.Files;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
@@ -30,7 +31,7 @@ public class UtilHome {
      * @return StringBuilder|null - List of homes or null.
      */
     public StringBuilder getHomesList(Player player) {
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load(dataUtil.playerDataFile(player));
 
         Set<String> keys = dataUtil.getKeys("homes", false);
@@ -62,7 +63,7 @@ public class UtilHome {
      * @return StringBuilder|null - List of homes or null.
      */
     public StringBuilder getTeamHomesList(String team) {
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load("data/teams/"+team+".yml");
 
         Set<String> keys = dataUtil.getKeys("homes", false);
@@ -94,7 +95,7 @@ public class UtilHome {
      * @return int - The number of homes.
      */
     public int getHomeCount(Player player) {
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load(dataUtil.playerDataFile(player));
 
         Set<String> homes = dataUtil.getKeys("homes", false);
@@ -113,7 +114,7 @@ public class UtilHome {
      */
     public int getTeamHomeCount(Player player) {
         UtilTeam teamUtil = new UtilTeam(this.plugin, new UtilMessage(this.plugin, player));
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load("data/teams/"+teamUtil.getPlayerTeam(player.getUniqueId())+".yml");
 
         Set<String> keys = dataUtil.getKeys("homes", false);
@@ -140,14 +141,20 @@ public class UtilHome {
      * @param loc Location - The location for the home.
      * @return boolean - If the operation was successful.
      */
-    public boolean create(String homeName, Player player, Location loc) {
-        Files playerData = new Files(this.plugin.config, this.plugin);
+    public boolean create(String homeName, OfflinePlayer player, Location loc) {
+        if (player == null) {
+            return false;
+        }
+
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(player));
 
         if (playerData.get(homeName) != null) {
             playerData.close();
-            UtilMessage message = new UtilMessage(this.plugin, player);
-            message.send("home", "alreadyexists");
+            if (player.isOnline()) {
+                UtilMessage message = new UtilMessage(this.plugin, (Player) player);
+                message.send("home", "alreadyexists");
+            }
             return false;
         }
 

@@ -1,6 +1,5 @@
 package net.lewmc.essence.teleportation.warp;
 
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.teleportation.tp.UtilTeleport;
 import net.lewmc.essence.Essence;
@@ -26,7 +25,7 @@ public class CommandWarp extends FoundryPlayerCommand {
      */
     public CommandWarp(Essence plugin) {
         this.plugin = plugin;
-        this.log = new Logger(plugin.config);
+        this.log = new Logger(plugin.foundryConfig);
     }
 
     /**
@@ -48,12 +47,9 @@ public class CommandWarp extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("warp")) { return cmd.disabled(); }
-
         Player p = (Player) cs;
 
-        int waitTime = plugin.getConfig().getInt("teleportation.warp.wait");
+        int waitTime = (int) plugin.config.get("teleportation.warp.wait");
         UtilMessage msg = new UtilMessage(this.plugin, cs);
 
         if (args.length > 0) {
@@ -64,7 +60,7 @@ public class CommandWarp extends FoundryPlayerCommand {
                 return true;
             }
 
-            Files config = new Files(this.plugin.config, this.plugin);
+            Files config = new Files(this.plugin.foundryConfig, this.plugin);
             config.load("data/warps.yml");
 
             if (config.get("warps." + args[0].toLowerCase()) == null) {

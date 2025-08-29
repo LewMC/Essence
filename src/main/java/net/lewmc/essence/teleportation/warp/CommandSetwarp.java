@@ -1,6 +1,5 @@
 package net.lewmc.essence.teleportation.warp;
 
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.Essence;
@@ -42,11 +41,6 @@ public class CommandSetwarp extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("setwarp")) {
-            return cmd.disabled();
-        }
-
         Player p = (Player) cs;
 
         UtilMessage msg = new UtilMessage(this.plugin, cs);
@@ -56,12 +50,12 @@ public class CommandSetwarp extends FoundryPlayerCommand {
             return true;
         }
         Location loc = p.getLocation();
-        Files warpsData = new Files(this.plugin.config, this.plugin);
+        Files warpsData = new Files(this.plugin.foundryConfig, this.plugin);
         warpsData.load("data/warps.yml");
 
         String warpName = args[0].toLowerCase();
 
-        if (new Security(this.plugin.config).hasSpecialCharacters(warpName)) {
+        if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(warpName)) {
             warpsData.close();
             msg.send("warp", "specialchars");
             return true;

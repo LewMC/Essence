@@ -30,7 +30,7 @@ public class UtilWarp {
      * @return int - The number of warps.
      */
     public int getWarpCount(Player player) {
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load("data/warps.yml");
 
         Set<String> keys = dataUtil.getKeys("warps", false);
@@ -58,13 +58,14 @@ public class UtilWarp {
      * @return boolean - If the operation was successful.
      */
     public boolean create(String warpName, UUID playerUUID, Location loc) {
-        Files warpsData = new Files(this.plugin.config, this.plugin);
+        Files warpsData = new Files(this.plugin.foundryConfig, this.plugin);
         warpsData.load("data/warps.yml");
 
         if (warpsData.get("warps." + warpName) != null) {
             warpsData.close();
-            UtilMessage message = new UtilMessage(this.plugin, this.plugin.getServer().getPlayer(playerUUID));
-            message.send("warp", "alreadyexists");
+            if (this.plugin.getServer().getOfflinePlayer(playerUUID).isOnline()) {
+                new UtilMessage(this.plugin, this.plugin.getServer().getPlayer(playerUUID)).send("warp", "alreadyexists");
+            }
             return false;
         }
 

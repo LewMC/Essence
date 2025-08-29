@@ -1,6 +1,7 @@
 package net.lewmc.essence.teleportation;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.teleportation.home.*;
 import net.lewmc.essence.teleportation.spawn.CommandSetspawn;
 import net.lewmc.essence.teleportation.spawn.CommandSpawn;
@@ -30,29 +31,30 @@ public class ModuleTeleportation extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        reg.command("tp", new CommandTeleport((Essence) plugin));
-        reg.command("tpa", new CommandTpa((Essence) plugin));
-        reg.command("tpaccept", new CommandTpaccept((Essence) plugin));
-        reg.command("tpdeny", new CommandTpdeny((Essence) plugin));
-        reg.command("tptoggle", new CommandTptoggle((Essence) plugin));
-        reg.command("tpahere", new CommandTpahere((Essence) plugin));
-        reg.command("tpcancel", new CommandTpcancel((Essence) plugin));
-        reg.command("tprandom", new CommandTprandom((Essence) plugin));
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
+        if (!cmd.isDisabled("tp")) { reg.runtimeCommand("tp", new CommandTeleport((Essence) plugin), "teleport"); }
+        if (!cmd.isDisabled("tpa")) { reg.runtimeCommand("tpa", new CommandTpa((Essence) plugin), "tprequest"); }
+        if (!cmd.isDisabled("tpaccept")) { reg.runtimeCommand("tpaccept", new CommandTpaccept((Essence) plugin)); }
+        if (!cmd.isDisabled("tpdeny")) { reg.runtimeCommand("tpdeny", new CommandTpdeny((Essence) plugin), "tpdecline"); }
+        if (!cmd.isDisabled("tptoggle")) { reg.runtimeCommand("tptoggle", new CommandTptoggle((Essence) plugin), "toggletp"); }
+        if (!cmd.isDisabled("tpahere")) { reg.runtimeCommand("tpahere", new CommandTpahere((Essence) plugin)); }
+        if (!cmd.isDisabled("tpcancel")) { reg.runtimeCommand("tpcancel", new CommandTpcancel((Essence) plugin), "canceltp"); }
+        if (!cmd.isDisabled("tprandom")) { reg.runtimeCommand("tprandom", new CommandTprandom((Essence) plugin), "tpr", "rtp", "randomtp"); }
 
-        reg.command("home", new CommandHome((Essence) plugin));
-        reg.command("homes", new CommandHomes((Essence) plugin));
-        reg.command("sethome", new CommandSethome((Essence) plugin));
-        reg.command("delhome", new CommandDelhome((Essence) plugin));
+        if (!cmd.isDisabled("home")) { reg.runtimeCommand("home", new CommandHome((Essence) plugin)); }
+        if (!cmd.isDisabled("homes")) { reg.runtimeCommand("homes", new CommandHomes((Essence) plugin)); }
+        if (!cmd.isDisabled("sethome")) { reg.runtimeCommand("sethome", new CommandSethome((Essence) plugin)); }
+        if (!cmd.isDisabled("delhome")) { reg.runtimeCommand("delhome", new CommandDelhome((Essence) plugin)); }
 
-        reg.command("warp", new CommandWarp((Essence) plugin));
-        reg.command("warps", new CommandWarps((Essence) plugin));
-        reg.command("setwarp", new CommandSetwarp((Essence) plugin));
-        reg.command("delwarp", new CommandDelwarp((Essence) plugin));
+        if (!cmd.isDisabled("warp")) { reg.runtimeCommand("warp", new CommandWarp((Essence) plugin)); }
+        if (!cmd.isDisabled("warps")) { reg.runtimeCommand("warps", new CommandWarps((Essence) plugin)); }
+        if (!cmd.isDisabled("setwarp")) { reg.runtimeCommand("setwarp", new CommandSetwarp((Essence) plugin)); }
+        if (!cmd.isDisabled("delwarp")) { reg.runtimeCommand("delwarp", new CommandDelwarp((Essence) plugin)); }
 
-        reg.command("spawn", new CommandSpawn((Essence) plugin));
-        reg.command("setspawn", new CommandSetspawn((Essence) plugin));
+        if (!cmd.isDisabled("spawn")) { reg.runtimeCommand("spawn", new CommandSpawn((Essence) plugin),"spawnpoint", "world", "worldspawn"); }
+        if (!cmd.isDisabled("setspawn")) { reg.runtimeCommand("setspawn", new CommandSetspawn((Essence) plugin), "spawnset", "setworldspawn"); }
 
-        reg.command("back", new CommandBack((Essence) plugin));
+        if (!cmd.isDisabled("back")) { reg.runtimeCommand("back", new CommandBack((Essence) plugin)); }
     }
 
     /**

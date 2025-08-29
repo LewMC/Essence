@@ -46,8 +46,7 @@ public class CommandGamemode extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("gamemode")) { return cmd.disabled(); }
+        UtilCommand cmd = new UtilCommand(this.plugin);
 
         Player player;
         GameMode gamemode;
@@ -78,7 +77,7 @@ public class CommandGamemode extends FoundryCommand {
             }
         } else {
             if (cmd.console(cs)) {
-                new Logger(this.plugin.config).warn("Usage: /gamemode "+gamemode.toString().toLowerCase()+" <player>");
+                new Logger(this.plugin.foundryConfig).warn("Usage: /gamemode "+gamemode.toString().toLowerCase()+" <player>");
                 return true;
             } else {
                 player = (Player) cs;

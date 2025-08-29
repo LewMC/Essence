@@ -1,7 +1,6 @@
 package net.lewmc.essence.team;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.teleportation.home.UtilHome;
 import net.lewmc.essence.teleportation.tp.UtilTeleport;
@@ -47,11 +46,6 @@ public class CommandThome extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("thome")) {
-            return cmd.disabled();
-        }
-
         Player p = (Player) cs;
 
         UtilMessage message = new UtilMessage(this.plugin, cs);
@@ -70,13 +64,13 @@ public class CommandThome extends FoundryPlayerCommand {
             return true;
         }
 
-        int waitTime = plugin.getConfig().getInt("teleportation.home.wait");
+        int waitTime = (int) plugin.config.get("teleportation.home.wait");
         if (!teleUtil.cooldownSurpassed(p, "home")) {
             message.send("teleport", "tryagain", new String[]{String.valueOf(teleUtil.cooldownRemaining(p, "home"))});
             return true;
         }
 
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load("data/teams/" + team + ".yml");
 
         String homeName;
@@ -116,7 +110,7 @@ public class CommandThome extends FoundryPlayerCommand {
         if (dataUtil.get(homeName) == null) {
             dataUtil.close();
             message.send("generic", "exception");
-            Logger log = new Logger(this.plugin.config);
+            Logger log = new Logger(this.plugin.foundryConfig);
             log.warn("Player " + p + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
             log.warn("Error: Unable to load from configuration file, please check configuration file.");
             return true;
@@ -125,7 +119,7 @@ public class CommandThome extends FoundryPlayerCommand {
         if (dataUtil.getString(homeName + ".world") == null) {
             dataUtil.close();
             message.send("generic", "exception");
-            Logger log = new Logger(this.plugin.config);
+            Logger log = new Logger(this.plugin.foundryConfig);
             log.warn("Player " + p + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
             log.warn("Error: world is null, please check configuration file.");
             return true;

@@ -1,7 +1,6 @@
 package net.lewmc.essence.environment;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.command.FoundryCommand;
@@ -43,9 +42,6 @@ public class CommandWeather extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("weather")) { return cmd.disabled(); }
-
         UtilEnvironment env = new UtilEnvironment();
         UtilMessage msg = new UtilMessage(plugin, cs);
 

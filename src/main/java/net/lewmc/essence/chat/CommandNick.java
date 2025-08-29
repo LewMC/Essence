@@ -42,8 +42,7 @@ public class CommandNick extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("nick")) { return cmd.disabled(); }
+        UtilCommand cmd = new UtilCommand(this.plugin);
 
         UtilMessage msg = new UtilMessage(this.plugin, cs);
         UtilPlayer pu = new UtilPlayer(this.plugin, cs);
@@ -54,19 +53,19 @@ public class CommandNick extends FoundryCommand {
                 return true;
             }
 
-            if (new Security(this.plugin.config).hasSpecialCharacters(args[0])) {
+            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[0])) {
                 msg.send("nick","specialchars");
                 return true;
             }
 
             if (args[0].equalsIgnoreCase("off")) {
-                if (pu.removePlayerDisplayname((Player) cs)) {
+                if (pu.removePlayerDisplayname(cs)) {
                     msg.send("nick","success", new String[]{cs.getName()});
                 }
                 return true;
             }
 
-            if (pu.setPlayerDisplayname((Player) cs, args[0])) {
+            if (pu.setPlayerDisplayname(cs, args[0])) {
                 msg.send("nick","success", new String[]{args[0]});
             }
         } else if (args.length == 2) {
@@ -79,7 +78,7 @@ public class CommandNick extends FoundryCommand {
                 return true;
             }
 
-            if (new Security(this.plugin.config).hasSpecialCharacters(args[1])) {
+            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[1])) {
                 msg.send("nick","specialchars");
                 return true;
             }

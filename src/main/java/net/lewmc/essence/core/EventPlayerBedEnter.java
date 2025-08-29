@@ -26,7 +26,7 @@ public class EventPlayerBedEnter implements Listener {
     public void onPlayerBedEnterEvent(PlayerBedEnterEvent event) {
         Location bedLocation = event.getBed().getLocation();
 
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(event.getPlayer()));
 
         playerData.set("user.last-sleep-location.world", bedLocation.getWorld().getName());

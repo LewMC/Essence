@@ -1,7 +1,6 @@
 package net.lewmc.essence.team;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
@@ -12,7 +11,7 @@ import org.bukkit.entity.Player;
 /**
  * /delthomes command.
  */
-public class CommandDelthomes extends FoundryPlayerCommand {
+public class CommandDelthome extends FoundryPlayerCommand {
     private final Essence plugin;
 
     /**
@@ -20,7 +19,7 @@ public class CommandDelthomes extends FoundryPlayerCommand {
      *
      * @param plugin References to the main plugin class.
      */
-    public CommandDelthomes(Essence plugin) {
+    public CommandDelthome(Essence plugin) {
         this.plugin = plugin;
     }
 
@@ -42,9 +41,6 @@ public class CommandDelthomes extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("delthome")) { return cmd.disabled(); }
-
         Player p = (Player) cs;
 
         UtilMessage msg = new UtilMessage(this.plugin, cs);
@@ -67,7 +63,7 @@ public class CommandDelthomes extends FoundryPlayerCommand {
             name = args[0];
         }
 
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load("data/teams/" + team + ".yml");
 
         String homeName = name.toLowerCase();

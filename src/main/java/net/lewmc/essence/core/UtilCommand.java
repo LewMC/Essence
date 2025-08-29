@@ -1,11 +1,11 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.foundry.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,15 +13,13 @@ import java.util.Objects;
  */
 public class UtilCommand {
     private final Essence plugin;
-    private final CommandSender cs;
 
     /**
      * The constructor for the CommandUtil.
      * @param plugin Reference to the main Essence class.
      */
-    public UtilCommand(Essence plugin, CommandSender cs) {
+    public UtilCommand(Essence plugin) {
         this.plugin = plugin;
-        this.cs = cs;
     }
 
     /**
@@ -30,30 +28,19 @@ public class UtilCommand {
      * @return Boolean - if the command is enabled.
      */
     public boolean isDisabled(String command) {
-        for (String key : this.plugin.disabledCommands) {
-            if (Objects.equals(key, command)) {
-                return true;
+        if (command.equalsIgnoreCase("nick") && !((boolean) this.plugin.config.get("chat.manage-chat"))) { return true; }
+        if (command.equalsIgnoreCase("balance") && Objects.equals(this.plugin.config.get("economy.mode").toString(), "OFF")) { return true; }
+        if (command.equalsIgnoreCase("pay") && Objects.equals(this.plugin.config.get("economy.mode").toString(), "OFF")) { return true; }
+
+        if (this.plugin.config.get("disabled-commands.list") != null) {
+            for (String key : (List<String>) this.plugin.config.get("disabled-commands.list")) {
+                if (Objects.equals(key, command)) {
+                    return true;
+                }
             }
         }
 
         return false;
-    }
-
-    /**
-     * Responds to disabled command usage.
-     * @return boolean - Verbose mode (false) or not (true)
-     */
-    public boolean disabled() {
-        if (this.plugin.disabledCommandsFeedback) {
-            new UtilMessage(this.plugin, cs).send("generic", "commanddisabled");
-        }
-
-        if (this.plugin.verbose) {
-            new Logger(this.plugin.config).warn("Attempted to execute disabled command.");
-            return false;
-        }
-
-        return true;
     }
 
     /**

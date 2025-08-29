@@ -30,7 +30,7 @@ public class CommandExtensionHelp {
      * @return If the command was executed correctly.
      */
     public boolean runHelpCommand() {
-        UtilCommand cu = new UtilCommand(this.plugin, this.cs);
+        UtilCommand cu = new UtilCommand(this.plugin);
         if (args.length > 1) {
             if ("inventory".equalsIgnoreCase(args[1])) {
                 if (args.length < 3 || args[2].equals("1")) {

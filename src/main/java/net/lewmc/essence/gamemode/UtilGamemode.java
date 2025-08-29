@@ -36,8 +36,7 @@ public class UtilGamemode {
      * @return          true/false - Success?
      */
     public boolean processShortCommand(String command, GameMode gm, CommandSender cs, String[] args, Essence plugin) {
-        UtilCommand cmd = new UtilCommand(plugin, cs);
-        if (cmd.isDisabled(command)) { return cmd.disabled(); }
+        UtilCommand cmd = new UtilCommand(plugin);
 
         Player player;
 
@@ -49,7 +48,7 @@ public class UtilGamemode {
             }
         } else {
             if (cmd.console(cs)) {
-                new Logger(plugin.config).warn("Usage: "+command+" <player>");
+                new Logger(plugin.foundryConfig).warn("Usage: "+command+" <player>");
                 return true;
             } else {
                 player = (Player) cs;

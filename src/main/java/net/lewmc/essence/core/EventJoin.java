@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -34,9 +35,9 @@ public class EventJoin implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Logger log = new Logger(this.plugin.config);
+        Logger log = new Logger(this.plugin.foundryConfig);
 
-        Files playerFile = new Files(plugin.config, this.plugin);
+        Files playerFile = new Files(plugin.foundryConfig, this.plugin);
         String playerDataFile = playerFile.playerDataFile(event.getPlayer());
 
         UtilPlayer pu = new UtilPlayer(this.plugin, event.getPlayer());
@@ -64,7 +65,7 @@ public class EventJoin implements Listener {
 
         if (firstJoin) { this.firstJoin(event, log); }
 
-        if (this.plugin.getConfig().getBoolean("advanced.playerdata.store-ip-address")) {
+        if ((boolean) this.plugin.config.get("advanced.playerdata.store-ip-address")) {
             playerFile.load(playerDataFile);
             playerFile.set("user.ip-address", Objects.requireNonNull(event.getPlayer().getAddress()).getAddress().getHostAddress()+"");
             playerFile.save();
@@ -74,9 +75,9 @@ public class EventJoin implements Listener {
 
         plugin.reloadConfig();
 
-        if (!Objects.equals(plugin.getConfig().getString("motd"), "false")) { this.motd(event); }
+        if (!Objects.equals(plugin.config.get("motd"), "false") && !Objects.equals(plugin.config.get("motd"), false)) { this.motd(event); }
 
-        if (plugin.getConfig().getBoolean("teleportation.spawn.always-spawn") || firstJoin) {
+        if ((boolean) plugin.config.get("teleportation.spawn.always-spawn") || firstJoin) {
             try {
                 this.spawn(event, log);
             } catch (Exception e) {
@@ -97,7 +98,7 @@ public class EventJoin implements Listener {
     private void spawn(PlayerJoinEvent event, Logger log) {
         UtilMessage message = new UtilMessage(this.plugin, event.getPlayer());
 
-        Files essenceConfiguration = new Files(this.plugin.config, this.plugin);
+        Files essenceConfiguration = new Files(this.plugin.foundryConfig, this.plugin);
         if (!essenceConfiguration.load("config.yml")) {
             log.severe("Unable to load configuration file 'config.yml'. Essence may be unable to set some player data");
             return;
@@ -106,7 +107,7 @@ public class EventJoin implements Listener {
         String spawnName = essenceConfiguration.get("teleportation.spawn.main-spawn-world").toString();
         essenceConfiguration.close();
 
-        Files spawnConfiguration = new Files(this.plugin.config, this.plugin);
+        Files spawnConfiguration = new Files(this.plugin.foundryConfig, this.plugin);
         if (!spawnConfiguration.load("data/spawns.yml")) {
             log.severe("Unable to load configuration file 'data/spawns.yml'. Essence may be unable to teleport players to the correct spawn");
             return;
@@ -162,10 +163,10 @@ public class EventJoin implements Listener {
      */
     private void firstJoin(PlayerJoinEvent event, Logger log) {
         UtilKit kit = new UtilKit(this.plugin, event.getPlayer());
-        if (this.plugin.getConfig().getList("kit.spawn-kits") != null && !Objects.equals(this.plugin.getConfig().getString("kit.spawn-kits"), "false")) {
-            for (Object giveKit : this.plugin.getConfig().getList("kit.spawn-kits")) {
+        if (this.plugin.config.get("kit.spawn-kits") != null && !Objects.equals(this.plugin.config.get("kit.spawn-kits"), "false")) {
+            for (String giveKit : (List<String>) this.plugin.config.get("kit.spawn-kits")) {
                 log.info("Giving player '"+event.getPlayer().getName()+"' spawn kit '"+giveKit+"'");
-                kit.giveKit(giveKit.toString());
+                kit.giveKit(giveKit);
             }
         }
     }
@@ -175,8 +176,8 @@ public class EventJoin implements Listener {
      * @param event PlayerJoinEvent - The event
      */
     private void motd(PlayerJoinEvent event) {
-        if (plugin.getConfig().getString("chat.motd") != null) {
-            String message = plugin.getConfig().getString("chat.motd");
+        if (plugin.config.get("chat.motd") != null) {
+            String message = plugin.config.get("chat.motd").toString();
             if (message != null) {
                 UtilPlaceholder tag = new UtilPlaceholder(plugin, event.getPlayer());
                 event.getPlayer().sendMessage(tag.replaceAll(message));
@@ -191,9 +192,9 @@ public class EventJoin implements Listener {
     private void playerJoinMessage(PlayerJoinEvent event) {
         UtilPlaceholder tag = new UtilPlaceholder(this.plugin, event.getPlayer());
         if (event.getPlayer().hasPlayedBefore()) {
-            event.setJoinMessage(tag.replaceAll(this.plugin.getConfig().getString("chat.broadcasts.join")));
+            event.setJoinMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.join")));
         } else {
-            event.setJoinMessage(tag.replaceAll(this.plugin.getConfig().getString("chat.broadcasts.first-join")));
+            event.setJoinMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.first-join")));
         }
     }
 

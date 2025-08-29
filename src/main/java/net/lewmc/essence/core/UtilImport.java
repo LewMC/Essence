@@ -25,7 +25,7 @@ public class UtilImport {
      */
     public UtilImport(Essence plugin) {
         this.plugin = plugin;
-        this.log = new Logger(this.plugin.config);
+        this.log = new Logger(this.plugin.foundryConfig);
     }
 
     /**
@@ -37,7 +37,7 @@ public class UtilImport {
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
             for (File child : directoryListing) {
-                Files file = new Files(this.plugin.config, this.plugin);
+                Files file = new Files(this.plugin.foundryConfig, this.plugin);
                 file.loadNoReformat(child);
                 UtilWarp warp = new UtilWarp(this.plugin);
 
@@ -77,12 +77,14 @@ public class UtilImport {
         File[] directoryListing = dir.listFiles();
         if (directoryListing != null) {
             for (File child : directoryListing) {
-                Files file = new Files(this.plugin.config, this.plugin);
+                Files file = new Files(this.plugin.foundryConfig, this.plugin);
+                if (this.plugin.verbose) { this.log.info("Import > Home > Begin processing from " + child.getName()); }
                 file.loadNoReformat(child);
                 Set<String> homes = file.getKeys("homes", false);
 
                 if (homes != null) {
                     for (String home : homes) {
+                        if (this.plugin.verbose) { this.log.info("Import > Home > Found home " + home); }
                         UtilHome utilHome = new UtilHome(this.plugin);
 
                         if (file.getString("homes." + home) != null) {
@@ -96,14 +98,29 @@ public class UtilImport {
                                     (float) file.getDouble("homes." + home + ".pitch")
                             );
 
-                            utilHome.create(
-                                    home,
-                                    this.plugin.getServer().getPlayer(file.getString("last-account-name")),
-                                    loc
-                            );
+                            try {
+                                UUID uuid = UUID.fromString(child.getName().replace(".yml", ""));
+
+                                if (utilHome.create(
+                                        home,
+                                        this.plugin.getServer().getOfflinePlayer(uuid),
+                                        loc
+                                )) {
+                                    if (this.plugin.verbose) {
+                                        this.log.info("Import > Home > " + child.getName().replace(".yml", "") + " > " + home);
+                                    }
+                                } else {
+                                    this.log.severe("Import > Home > Unable to import home " + home + " for user " + this.plugin.getServer().getOfflinePlayer(uuid) + " (" + child.getName().replace(".yml", "") + ")");
+                                }
+                            } catch (Exception e) {
+                                this.log.severe("Import > Home > Unable to import from " + child.getName() + " due to null UUID.");
+                                this.log.severe("Import > Home > Threw exception");
+                                this.log.severe(e.getMessage());
+                            }
                         }
                     }
                 }
+                if (this.plugin.verbose) { this.log.info("Import > Home > End processing from " + child.getName()); }
                 file.close();
             }
         } else {
@@ -119,7 +136,7 @@ public class UtilImport {
      */
     public boolean essentialsSpawns() {
         boolean success = false;
-        Files file = new Files(this.plugin.config, this.plugin);
+        Files file = new Files(this.plugin.foundryConfig, this.plugin);
 
         if (file.exists(this.plugin.getServer().getPluginsFolder() + "/Essentials/spawn.yml")) {
             file.loadNoReformat(new File(this.plugin.getServer().getPluginsFolder() + "/Essentials/spawn.yml"));
@@ -128,7 +145,7 @@ public class UtilImport {
             if (spawns != null) {
                 for (String esxName : spawns) {
                     if (file.getString("spawns." + esxName) != null) {
-                        Files spawnFile = new Files(this.plugin.config, this.plugin);
+                        Files spawnFile = new Files(this.plugin.foundryConfig, this.plugin);
 
 
                         spawnFile.load("data/spawns.yml");
@@ -152,10 +169,10 @@ public class UtilImport {
             } else {
                 this.log.info("No Essentials spawns found!");
             }
+            file.close();
         } else {
             this.log.info("Essentials spawns file does not exist!");
         }
-        file.close();
         return success;
     }
 }

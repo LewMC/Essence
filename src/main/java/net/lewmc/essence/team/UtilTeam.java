@@ -36,7 +36,7 @@ public class UtilTeam {
      * @param leader UUID - Leader's UUID
      */
     public void create(String name, UUID leader) {
-        if (new Security(this.plugin.config).hasSpecialCharacters(name)) {
+        if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(name)) {
             message.send("team", "specialchars");
             return;
         }
@@ -45,7 +45,7 @@ public class UtilTeam {
             message.send("team", "longname");
         }
 
-        Files teamsFile = new Files(this.plugin.config, this.plugin);
+        Files teamsFile = new Files(this.plugin.foundryConfig, this.plugin);
 
         if (!teamsFile.exists("data/teams/"+name+".yml")) {
             if (teamsFile.create("data/teams/"+name+".yml")) {
@@ -59,7 +59,7 @@ public class UtilTeam {
 
                 teamsFile.save();
 
-                Files playerDataFile = new Files(this.plugin.config, this.plugin);
+                Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
                 playerDataFile.load(playerDataFile.playerDataFile(leader));
 
                 playerDataFile.set("user.team", name);
@@ -68,7 +68,7 @@ public class UtilTeam {
                 message.send("team", "created", new String[] { name });
             } else {
                 message.send("generic", "exception");
-                new Logger(this.plugin.config).warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
+                new Logger(this.plugin.foundryConfig).warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
             }
         } else {
             message.send("team", "exists");
@@ -81,7 +81,7 @@ public class UtilTeam {
      * @param player UUID - UUID of the player requesting to join.
      */
     public void requestJoin(String team, UUID player) {
-        Files teamsFile = new Files(this.plugin.config, this.plugin);
+        Files teamsFile = new Files(this.plugin.foundryConfig, this.plugin);
         if (teamsFile.exists("data/teams/"+team+".yml")) {
             teamsFile.load("data/teams/"+team+".yml");
             List<String> requests = teamsFile.getStringList("members.requests");
@@ -100,7 +100,7 @@ public class UtilTeam {
      * @return String - list of join requests as a String
      */
     public String requestsToJoin(String team) {
-        Files teamsFile = new Files(this.plugin.config, this.plugin);
+        Files teamsFile = new Files(this.plugin.foundryConfig, this.plugin);
         if (teamsFile.exists("data/teams/"+team+".yml")) {
             teamsFile.load("data/teams/"+team+".yml");
 
@@ -111,7 +111,7 @@ public class UtilTeam {
             int i = 0;
 
             for (String key : requests) {
-                Files playerFile = new Files(this.plugin.config, this.plugin);
+                Files playerFile = new Files(this.plugin.foundryConfig, this.plugin);
                 playerFile.load(playerFile.playerDataFile(UUID.fromString(key)));
                 if (i == 0) {
                     requestList.append(playerFile.getString("user.last-known-name"));
@@ -136,7 +136,7 @@ public class UtilTeam {
      * @return boolean - If they are the leader.
      */
     public boolean isLeader(String team, UUID player) {
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         if (teamData.exists("data/teams/"+team+".yml")) {
             teamData.load("data/teams/"+team+".yml");
             String leader = teamData.getString("members.leader");
@@ -153,7 +153,7 @@ public class UtilTeam {
      * @return String - Name of the player's team.
      */
     public @Nullable String getPlayerTeam(UUID player) {
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(player));
         if (playerData.getString("user.team") == null) {
             playerData.close();
@@ -174,13 +174,13 @@ public class UtilTeam {
     public boolean acceptRequest(String team, String player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(op.getUniqueId()));
 
         playerData.set("user.team", team);
         playerData.save();
 
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");
 
         List<String> defaultMembers = teamData.getStringList("members.default");
@@ -204,7 +204,7 @@ public class UtilTeam {
     public boolean declineRequest(String team, String player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");
 
         List<String> requestedMembers = teamData.getStringList("members.requests");
@@ -223,7 +223,7 @@ public class UtilTeam {
      */
     public boolean leave(String playerTeam, UUID uuid) {
 
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(uuid));
 
         if (playerData.get("team") != null) {
@@ -232,7 +232,7 @@ public class UtilTeam {
 
         playerData.save();
 
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+playerTeam+".yml");
 
         List<String> defaultMembers = teamData.getStringList("members.default");
@@ -254,7 +254,7 @@ public class UtilTeam {
     public boolean changeLeader(String playerTeam, String newLeader, String oldLeader) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(newLeader);
 
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+playerTeam+".yml");
 
         teamData.set("members.leader", String.valueOf(op.getUniqueId()));
@@ -276,13 +276,13 @@ public class UtilTeam {
      */
     public String getTeamLeader(String team) {
         if (team != null) {
-            Files teamData = new Files(this.plugin.config, this.plugin);
+            Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
             teamData.load("data/teams/" + team + ".yml");
             String leader = teamData.getString("members.leader");
             teamData.close();
 
             if (leader != null) {
-                Files playerData = new Files(this.plugin.config, this.plugin);
+                Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
                 playerData.load(playerData.playerDataFile(UUID.fromString(leader)));
                 leader = playerData.getString("user.last-known-name");
                 playerData.close();
@@ -302,7 +302,7 @@ public class UtilTeam {
      * @return String - List of team members as a string.
      */
     public String getTeamMembers(String team) {
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");
         List<String> requests = teamData.getStringList("members.default");
         teamData.close();
@@ -311,7 +311,7 @@ public class UtilTeam {
         int i = 0;
 
         for (String key : requests) {
-            Files playerDataFile = new Files(this.plugin.config, this.plugin);
+            Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
             playerDataFile.load(playerDataFile.playerDataFile(UUID.fromString(key)));
             if (i == 0) {
                 membersList.append(playerDataFile.getString("user.last-known-name"));
@@ -346,7 +346,7 @@ public class UtilTeam {
         OfflinePlayer op = Bukkit.getOfflinePlayer(username);
         String uuid = op.getUniqueId().toString();
 
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");
         List<String> members = teamData.getStringList("members.default");
         teamData.close();
@@ -370,7 +370,7 @@ public class UtilTeam {
         OfflinePlayer op = Bukkit.getOfflinePlayer(username);
         String uuid = op.getUniqueId().toString();
 
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");
         List<String> members = teamData.getStringList("members.requests");
         teamData.close();
@@ -391,19 +391,19 @@ public class UtilTeam {
      * @return boolean - If the operation was successful.
      */
     public boolean disband(String team, String teamLeader) {
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");
         List<String> members = teamData.getStringList("members.default");
         teamData.close();
 
         for (String key : members) {
-            Files playerData = new Files(this.plugin.config, this.plugin);
+            Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
             playerData.load(playerData.playerDataFile(UUID.fromString(key)));
             playerData.set("user.team", null);
             playerData.save();
         }
 
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(UUID.fromString(teamLeader)));
         playerData.set("user.team", null);
         playerData.save();
@@ -418,13 +418,13 @@ public class UtilTeam {
      * @return boolean - If the players are in the same team.
      */
     public boolean areTeammates(Player p1, Player p2) {
-        Files p1data = new Files(this.plugin.config, this.plugin);
+        Files p1data = new Files(this.plugin.foundryConfig, this.plugin);
         p1data.load(p1data.playerDataFile(p1));
         if (p1data.getString("user.team") == null) { return false; }
         String p1team = p1data.getString("user.team");
         p1data.close();
 
-        Files p2data = new Files(this.plugin.config, this.plugin);
+        Files p2data = new Files(this.plugin.foundryConfig, this.plugin);
         p2data.load(p2data.playerDataFile(p2));
         if (p2data.getString("user.team") == null) { return false; }
         String p2team = p2data.getString("user.team");
@@ -440,7 +440,7 @@ public class UtilTeam {
      * @return boolean - If the rule is set to true or false.
      */
     public boolean getRule(String team, String rule) {
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");
 
         boolean result = teamData.getBoolean("rules."+rule);
@@ -458,7 +458,7 @@ public class UtilTeam {
      */
     public boolean setRule(String team, String rule, boolean value) {
 
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");
 
         teamData.set("rules."+rule, value);
@@ -473,7 +473,7 @@ public class UtilTeam {
      * @return boolean - If the team exists.
      */
     public boolean exists(String team) {
-        Files teamData = new Files(this.plugin.config, this.plugin);
+        Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         return teamData.exists("data/teams/"+team+".yml");
     }
 

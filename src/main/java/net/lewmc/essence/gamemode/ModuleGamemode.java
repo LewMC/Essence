@@ -1,6 +1,7 @@
 package net.lewmc.essence.gamemode;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.foundry.FoundryModule;
 import net.lewmc.foundry.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,11 +26,12 @@ public class ModuleGamemode extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        reg.command("gamemode", new CommandGamemode((Essence) plugin));
-        reg.command("gma", new CommandGma((Essence) plugin));
-        reg.command("gmc", new CommandGmc((Essence) plugin));
-        reg.command("gms", new CommandGms((Essence) plugin));
-        reg.command("gmsp", new CommandGmsp((Essence) plugin));
+        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
+        if (!cmd.isDisabled("gamemode")) { reg.runtimeCommand("gamemode", new CommandGamemode((Essence) plugin), "gm"); }
+        if (!cmd.isDisabled("gma")) { reg.runtimeCommand("gma", new CommandGma((Essence) plugin)); }
+        if (!cmd.isDisabled("gmc")) { reg.runtimeCommand("gmc", new CommandGmc((Essence) plugin)); }
+        if (!cmd.isDisabled("gms")) { reg.runtimeCommand("gms", new CommandGms((Essence) plugin)); }
+        if (!cmd.isDisabled("gmsp")) { reg.runtimeCommand("gmsp", new CommandGmsp((Essence) plugin)); }
     }
 
     /**
@@ -37,7 +39,7 @@ public class ModuleGamemode extends FoundryModule {
      */
     @Override
     public void registerTabCompleters() {
-        reg.tabCompleter(new String[] { "gamemode", "gm" }, new TabCompleterGamemode());
+        reg.tabCompleter("gamemode", new TabCompleterGamemode());
     }
 
     /**

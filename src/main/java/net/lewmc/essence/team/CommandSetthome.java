@@ -1,7 +1,6 @@
 package net.lewmc.essence.team;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.teleportation.home.UtilHome;
@@ -43,11 +42,6 @@ public class CommandSetthome extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("setthome")) {
-            return cmd.disabled();
-        }
-
         Player p = (Player) cs;
 
         UtilMessage msg = new UtilMessage(this.plugin, cs);
@@ -72,10 +66,10 @@ public class CommandSetthome extends FoundryPlayerCommand {
         }
 
         Location loc = p.getLocation();
-        Files dataUtil = new Files(this.plugin.config, this.plugin);
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
         dataUtil.load("data/teams/" + team + ".yml");
 
-        if (new Security(this.plugin.config).hasSpecialCharacters(name.toLowerCase())) {
+        if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(name.toLowerCase())) {
             dataUtil.close();
             msg.send("teamhome", "specialchars");
             return true;

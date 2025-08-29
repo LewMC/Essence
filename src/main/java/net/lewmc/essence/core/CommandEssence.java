@@ -1,6 +1,7 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.EssenceConfiguration;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.command.Command;
@@ -38,9 +39,6 @@ public class CommandEssence extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("essence")) { return cmd.disabled(); }
-
         UtilMessage msg = new UtilMessage(this.plugin, cs);
 
         if (args.length > 0) {
@@ -52,15 +50,15 @@ public class CommandEssence extends FoundryCommand {
             } else if ("import".equals(args[0])) {
                 return this.importCommand(args, msg, cs);
             } else if ("restore".equals(args[0])) {
-                return this.restoreCommand(args, msg, cs);
+                return this.restoreCommand(msg, cs);
             }
         } else {
             msg.send("about", "version", new String[] { plugin.getDescription().getVersion() });
             msg.send("about", "description");
             msg.send("about", "author");
-            if (!Objects.equals(this.plugin.getConfig().getString("language"), "en-GB")) {
-                Files lang = new Files(this.plugin.config, this.plugin);
-                lang.load("language/"+this.plugin.getConfig().getString("language")+".yml");
+            if (!Objects.equals(this.plugin.config.get("language"), "en-GB")) {
+                Files lang = new Files(this.plugin.foundryConfig, this.plugin);
+                lang.load("language/"+this.plugin.config.get("language")+".yml");
                 msg.send("about", "authorLang", new String[] { lang.getString("meta.language"), lang.getString("meta.author") });
                 lang.close();
             }
@@ -78,7 +76,7 @@ public class CommandEssence extends FoundryCommand {
      * @param message MessageUtil - The message utility.
      * @return boolean - If the operation was successful.
      */
-    private boolean restoreCommand(String[] args, UtilMessage message, CommandSender cs) {
+    private boolean restoreCommand(UtilMessage message, CommandSender cs) {
         UtilPermission perms = new UtilPermission(this.plugin, cs);
         if (perms.has("essence.admin.restore")) {
             this.plugin.saveResource("language/en-GB.yml", true);
@@ -102,14 +100,8 @@ public class CommandEssence extends FoundryCommand {
     private boolean reloadCommand(CommandSender cs, UtilMessage message) {
         UtilPermission perms = new UtilPermission(this.plugin, cs);
         if (perms.has("essence.admin.reload")) {
-            this.plugin.reloadConfig();
-            this.plugin.disabledCommands = this.plugin.getConfig().getStringList("disabled-commands.list");
-            this.plugin.disabledCommandsFeedback = this.plugin.getConfig().getBoolean("disabled-commands.feedback");
-            this.plugin.verbose = this.plugin.getConfig().getBoolean("advanced.verbose");
-            this.plugin.chat_nameFormat = this.plugin.getConfig().getString("chat.name-format");
-            this.plugin.chat_manage = this.plugin.getConfig().getBoolean("chat.manage-chat");
-            this.plugin.chat_allowMessageFormatting = this.plugin.getConfig().getBoolean("chat.allow-message-formatting");
-            this.plugin.economySymbol = this.plugin.getConfig().getString("economy.symbol");
+            this.plugin.config = new EssenceConfiguration(this.plugin).reload();
+            this.plugin.verbose = (boolean) this.plugin.config.get("advanced.verbose");
             message.send("generic", "reload");
             return true;
         } else {

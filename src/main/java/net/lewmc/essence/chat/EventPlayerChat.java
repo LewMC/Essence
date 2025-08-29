@@ -1,6 +1,7 @@
-package net.lewmc.essence.core;
+package net.lewmc.essence.chat;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilPlaceholder;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,12 +27,12 @@ public class EventPlayerChat implements Listener {
      */
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if (this.plugin.chat_manage) {
+        if ((boolean) this.plugin.config.get("chat.manage-chat")) {
             String msg = event.getMessage();
 
-            msg = new UtilPlaceholder(this.plugin, event.getPlayer()).replaceAll(this.plugin.chat_nameFormat + " " + msg);
+            msg = new UtilPlaceholder(this.plugin, event.getPlayer()).replaceAll(this.plugin.config.get("chat.name-format") + " " + msg);
 
-            if (this.plugin.chat_allowMessageFormatting) {
+            if ((boolean) this.plugin.config.get("chat.allow-message-formatting")) {
                 msg = ChatColor.translateAlternateColorCodes('&', msg);
             }
 

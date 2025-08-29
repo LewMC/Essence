@@ -1,7 +1,6 @@
 package net.lewmc.essence.teleportation.home;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.Files;
@@ -37,9 +36,6 @@ public class CommandSethome extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("sethome")) { return cmd.disabled(); }
-
         Player p = (Player) cs;
 
         String name = "home";
@@ -47,12 +43,12 @@ public class CommandSethome extends FoundryPlayerCommand {
             name = args[0];
         }
 
-        Files playerData = new Files(this.plugin.config, this.plugin);
+        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
         playerData.load(playerData.playerDataFile(p));
 
         UtilMessage msg = new UtilMessage(this.plugin, cs);
 
-        if (new Security(this.plugin.config).hasSpecialCharacters(name.toLowerCase())) {
+        if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(name.toLowerCase())) {
             playerData.close();
             msg.send("home", "specialchars");
             return true;
@@ -60,7 +56,7 @@ public class CommandSethome extends FoundryPlayerCommand {
 
         UtilHome hu = new UtilHome(this.plugin);
         int homeLimit = new UtilPermission(this.plugin, cs).getHomesLimit(p);
-        if (hu.getHomeCount(p) >= homeLimit && homeLimit != -1) {
+        if (hu.getHomeCount(p) > homeLimit && homeLimit != -1) {
             msg.send("home", "hitlimit");
             return true;
         }

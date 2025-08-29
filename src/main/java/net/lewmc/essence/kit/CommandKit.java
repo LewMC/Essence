@@ -1,7 +1,6 @@
 package net.lewmc.essence.kit;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.Files;
@@ -45,15 +44,12 @@ public class CommandKit extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilCommand cmd = new UtilCommand(this.plugin, cs);
-        if (cmd.isDisabled("kit")) { return cmd.disabled(); }
-
         Player p = (Player) cs;
 
         if (args.length == 0) {
             StringBuilder kits = new StringBuilder("No kits found.");
 
-            Files kitData = new Files(this.plugin.config, this.plugin);
+            Files kitData = new Files(this.plugin.foundryConfig, this.plugin);
             kitData.load("data/kits.yml");
             Set<String> keys = kitData.getKeys("kits", false);
 
