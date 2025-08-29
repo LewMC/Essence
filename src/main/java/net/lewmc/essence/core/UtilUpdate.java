@@ -185,24 +185,31 @@ public class UtilUpdate {
      * Migrates old Essence files.
      */
     private void migrateFiles() {
+        Files f = new Files(this.plugin.foundryConfig, this.plugin);
+        f.load("config.yml");
+
         // NEW LANGUAGE FILES.
-        if (Objects.equals(this.plugin.config.get("language"), "en-gb")) {
-            Files config = new Files(this.plugin.foundryConfig, this.plugin);
-            config.load("config.yml");
-            if (config.exists("language/en-gb.yml")) {
-                config.delete("language/en-gb.yml");
+        if (f.getInt("config-version") == 1) {
+            Files lf = new Files(this.plugin.foundryConfig, this.plugin);
+            lf.load("config.yml");
+
+            if (Objects.equals(lf.get("language"), "en-gb")) {
+                Files config = new Files(this.plugin.foundryConfig, this.plugin);
+                config.load("config.yml");
+                if (config.exists("language/en-gb.yml")) {
+                    config.delete("language/en-gb.yml");
+                }
+                config.set("language", "en-GB");
+                config.save();
+                this.plugin.reloadConfig();
             }
-            config.set("language", "en-GB");
-            config.save();
-            this.plugin.reloadConfig();
+
+            lf.close();
         }
 
         Logger log = new Logger(this.plugin.foundryConfig);
 
         // NEW PLACEHOLDER SYSTEM (1.9.0+)
-        Files f = new Files(this.plugin.foundryConfig, this.plugin);
-        f.load("config.yml");
-
         if (f.getInt("config-version") == 1) {
             log.info("Essence is updating your configuration file, please wait...");
 
