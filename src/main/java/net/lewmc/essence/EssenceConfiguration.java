@@ -3,7 +3,9 @@ package net.lewmc.essence;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,62 +41,72 @@ public class EssenceConfiguration {
     }
 
     public Map<String, Object> reload() {
+        if (!this.configFile.exists("config.yml")) {
+            this.plugin.saveDefaultConfig();
+            if (!this.configFile.exists("config.yml")) {
+                Logger log = new Logger(plugin.foundryConfig);
+                log.severe("The server was unable to create Essence's configuration file!");
+                log.severe("You can download a blank config file from the link below.");
+                log.severe("https://github.com/LewMC/Essence/blob/main/src/main/resources/config.yml");
+                log.severe("Please contact lewmc.net/help for help and to report the issue.");
+            }
+        }
+
         this.configFile.load("config.yml");
 
-        putBoolean("advanced.verbose");
-        putBoolean("advanced.playerdata.store-ip-address");
-        putBoolean("advanced.update-check");
+        putBoolean("advanced.verbose", (boolean) getValue("advanced.verbose", true, Boolean.class));
+        putBoolean("advanced.playerdata.store-ip-address", (boolean) getValue("advanced.playerdata.store-ip-address", true, Boolean.class));
+        putBoolean("advanced.update-check", (boolean) getValue("advanced.update-check", true, Boolean.class));
 
-        putBoolean("admin.enabled");
+        putBoolean("admin.enabled", (boolean) getValue("admin.enabled", true, Boolean.class));
 
-        putBoolean("chat.enabled");
-        putString("chat.name-format");
-        putBoolean("chat.allow-message-formatting");
-        putString("chat.broadcasts.first-join");
-        putString("chat.broadcasts.join");
-        putString("chat.broadcasts.leave");
-        putString("chat.motd");
-        putBoolean("chat.manage-chat");
+        putBoolean("chat.enabled", (boolean) getValue("chat.enabled", true, Boolean.class));
+        putString("chat.name-format", (String) getValue("chat.name-format", "%essence_combined_prefix% %essence_player%%essence_player_suffix%:", String.class));
+        putBoolean("chat.allow-message-formatting", (boolean) getValue("chat.allow-message-formatting", true, Boolean.class));
+        putString("chat.broadcasts.first-join", (String) getValue("chat.broadcasts.first-join", "§a%essence_player% joined the server for the first time!", String.class));
+        putString("chat.broadcasts.join", (String) getValue("chat.broadcasts.join", "§e%essence_player% joined the server!", String.class));
+        putString("chat.broadcasts.leave", (String) getValue("chat.broadcasts.leave", "§c%essence_player% left the server!", String.class));
+        putString("chat.motd", (String) getValue("chat.motd", "§2§lWelcome to the server!", String.class));
+        putBoolean("chat.manage-chat", (boolean) getValue("chat.manage-chat", true, Boolean.class));
 
-        putBoolean("economy.enabled");
-        putString("economy.mode");
-        putDouble("economy.start-money");
-        putString("economy.symbol");
+        putBoolean("economy.enabled", (boolean) getValue("economy.enabled", true, Boolean.class));
+        putString("economy.mode", (String) getValue("economy.mode", "VAULT", String.class));
+        putDouble("economy.start-money", (Double) getValue("economy.start-money", 100.00, Double.class));
+        putString("economy.symbol", (String) getValue("economy.symbol", "$", String.class));
 
-        putBoolean("environment.enabled");
+        putBoolean("environment.enabled", (boolean) getValue("environment.enabled", true, Boolean.class));
 
-        putBoolean("gamemode.enabled");
+        putBoolean("gamemode.enabled", (boolean) getValue("gamemode.enabled", true, Boolean.class));
 
-        putBoolean("inventory.enabled");
+        putBoolean("inventory.enabled", (boolean) getValue("inventory.enabled", true, Boolean.class));
 
-        putBoolean("kit.enabled");
-        putStringList("kit.spawn-kits");
+        putBoolean("kit.enabled", (boolean) getValue("kit.enabled", true, Boolean.class));
+        putStringList("kit.spawn-kits", (List<String>) getValue("kit.spawn-kits", List.of("wooden-tools"), List.class));
 
-        putBoolean("stats.enabled");
+        putBoolean("stats.enabled", (boolean) getValue("stats.enabled", true, Boolean.class));
 
-        putBoolean("team.enabled");
+        putBoolean("team.enabled", (boolean) getValue("team.enabled", true, Boolean.class));
 
-        putBoolean("teleportation.enabled");
-        putInt("teleportation.home.wait");
-        putInt("teleportation.home.cooldown");
-        putInt("teleportation.warp.wait");
-        putInt("teleportation.warp.cooldown");
-        putInt("teleportation.randomtp.cooldown");
-        putInt("teleportation.spawn.wait");
-        putInt("teleportation.spawn.cooldown");
-        putString("teleportation.spawn.main-spawn-world");
-        putBoolean("teleportation.spawn.always-spawn");
-        putInt("teleportation.requests.cooldown");
-        putBoolean("teleportation.requests.default-enabled");
-        putBoolean("teleportation.extended-toggle");
-        putBoolean("teleportation.move-to-cancel");
+        putBoolean("teleportation.enabled", (boolean) getValue("teleportation.enabled", true, Boolean.class));
+        putInt("teleportation.home.wait", (Integer) getValue("teleportation.home.wait", 3, Integer.class));
+        putInt("teleportation.home.cooldown", (Integer) getValue("teleportation.home.cooldown", 10, Integer.class));
+        putInt("teleportation.warp.wait", (Integer) getValue("teleportation.warp.wait", 3, Integer.class));
+        putInt("teleportation.warp.cooldown", (Integer) getValue("teleportation.warp.cooldown", 10, Integer.class));
+        putInt("teleportation.randomtp.cooldown", (Integer) getValue("teleportation.randomtp.cooldown", 60, Integer.class));
+        putInt("teleportation.spawn.wait", (Integer) getValue("teleportation.spawn.wait", 3, Integer.class));
+        putInt("teleportation.spawn.cooldown", (Integer) getValue("teleportation.spawn.cooldown", 10, Integer.class));
+        putString("teleportation.spawn.main-spawn-world", (String) getValue("teleportation.spawn.main-spawn-world", "world", String.class));
+        putBoolean("teleportation.spawn.always-spawn", (boolean) getValue("teleportation.spawn.always-spawn", false, Boolean.class));
+        putInt("teleportation.requests.cooldown", (Integer) getValue("teleportation.requests.cooldown", 10, Integer.class));
+        putBoolean("teleportation.requests.default-enabled", (boolean) getValue("teleportation.requests.default-enabled", true, Boolean.class));
+        putBoolean("teleportation.extended-toggle", (boolean) getValue("teleportation.extended-toggle", false, Boolean.class));
+        putBoolean("teleportation.move-to-cancel", (boolean) getValue("teleportation.move-to-cancel", true, Boolean.class));
 
-        putString("language");
+        putString("language", (String) getValue("language", "en-GB", String.class));
 
-        putStringList("disabled-commands.list");
-        putBoolean("disabled-commands.feedback-in-chat");
+        putStringList("disabled-commands.list", (List<String>) getValue("disabled-commands.list", List.of("example"), List.class));
 
-        putInt("config-version");
+        putInt("config-version", (Integer) getValue("config-version", 3, Integer.class));
 
         this.configFile.close();
         return this.config;
@@ -104,9 +116,10 @@ public class EssenceConfiguration {
      * Updates the value of a string.
      *
      * @param key String - The key
+     * @param value String - The value
      */
-    private void putString(String key) {
-        config.put(key, this.configFile.getString(key));
+    private void putString(String key, String value) {
+        config.put(key, value);
         verboseLog(key);
     }
 
@@ -114,9 +127,10 @@ public class EssenceConfiguration {
      * Updates the value of a string list.
      *
      * @param key String - The key
+     * @param value List of Strings - The string list value
      */
-    private void putStringList(String key) {
-        config.put(key, this.configFile.getStringList(key));
+    private void putStringList(String key, List<String> value) {
+        config.put(key, value);
         verboseLog(key);
     }
 
@@ -124,9 +138,10 @@ public class EssenceConfiguration {
      * Updates the value of an integer.
      *
      * @param key String - The key
+     * @param value Integer - The integer value.
      */
-    private void putInt(String key) {
-        config.put(key, this.configFile.getInt(key));
+    private void putInt(String key, Integer value) {
+        config.put(key, value);
         verboseLog(key);
     }
 
@@ -134,9 +149,10 @@ public class EssenceConfiguration {
      * Updates the value of a double.
      *
      * @param key String - The key
+     * @param value Double - The double value.
      */
-    private void putDouble(String key) {
-        config.put(key, this.configFile.getDouble(key));
+    private void putDouble(String key, Double value) {
+        config.put(key, value);
         verboseLog(key);
     }
 
@@ -144,10 +160,28 @@ public class EssenceConfiguration {
      * Updates the value of a boolean.
      *
      * @param key String - The key
+     * @param value Boolean - The boolean value
      */
-    private void putBoolean(String key) {
-        config.put(key, this.configFile.getBoolean(key));
+    private void putBoolean(String key, Boolean value) {
+        config.put(key, value);
         verboseLog(key);
+    }
+
+    private Object getValue(String key, Object defaultValue, Class<?> clazz) {
+        if (config.containsKey(key)) {
+            Object value = config.get(key);
+            if (clazz.isInstance(value)) {
+                return clazz.cast(value);
+            } else {
+                config.put(key, defaultValue);
+                this.log.warn("Config value '"+key+"' had invalid type and was reset to the default.");
+                this.log.warn("Please double-check your configuration is correct.");
+                return clazz.cast(defaultValue);
+            }
+        } else {
+            config.put(key, defaultValue);
+            return defaultValue;
+        }
     }
 
     /**

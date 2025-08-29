@@ -170,7 +170,7 @@ public class UtilUpdate {
      * Migrates old Essence config values.
      */
     private void migrateValues() {
-        // ECONOMY MODE
+        // ECONOMY MODE (1.10.1)
         Files config = new Files(this.plugin.foundryConfig, this.plugin);
         config.load("config.yml");
 
@@ -307,11 +307,6 @@ public class UtilUpdate {
 
             log.info("Done.");
             log.info("");
-        }
-
-        // 1.10.1
-        if (Objects.equals(f.getString("economy.mode"), "OFF")) {
-            f.set("economy.enabled", false);
         }
 
         f.save();

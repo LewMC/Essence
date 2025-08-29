@@ -111,6 +111,11 @@ public class Essence extends JavaPlugin {
         this.log.info("Beginning startup...");
         this.log.info("");
 
+        UtilUpdate update = new UtilUpdate(this);
+        update.migrate();
+        update.VersionCheck();
+        update.UpdateConfig();
+        update.UpdateLanguage();
         this.reloadConfig();
 
         if (this.verbose) {
@@ -131,12 +136,6 @@ public class Essence extends JavaPlugin {
         this.checkForPaper();
         this.initFileSystem();
         this.loadModules();
-
-        UtilUpdate update = new UtilUpdate(this);
-        update.migrate();
-        update.VersionCheck();
-        update.UpdateConfig();
-        update.UpdateLanguage();
 
         this.integrations = new EssenceIntegrations(this);
         if (!this.integrations.loadPlaceholderAPI() && verbose) { this.log.warn("PlaceholderAPI not found! Using local placeholders."); }
@@ -204,9 +203,8 @@ public class Essence extends JavaPlugin {
      * Initialise the file system.
      */
     private void initFileSystem() {
-        saveDefaultConfig();
-
         // Language files are in UpdateUtil!
+        // Config is in EssenceConfiguration.java
 
         File statsFolder = new File(getDataFolder() + File.separator + "data" + File.separator + "players");
         if (!statsFolder.exists() && !statsFolder.mkdirs()) {

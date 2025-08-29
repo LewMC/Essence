@@ -1,7 +1,6 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.foundry.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,9 +32,11 @@ public class UtilCommand {
         if (command.equalsIgnoreCase("balance") && Objects.equals(this.plugin.config.get("economy.mode").toString(), "OFF")) { return true; }
         if (command.equalsIgnoreCase("pay") && Objects.equals(this.plugin.config.get("economy.mode").toString(), "OFF")) { return true; }
 
-        for (String key : (List<String>) this.plugin.config.get("disabled-commands.list")) {
-            if (Objects.equals(key, command)) {
-                return true;
+        if (this.plugin.config.get("disabled-commands.list") != null) {
+            for (String key : (List<String>) this.plugin.config.get("disabled-commands.list")) {
+                if (Objects.equals(key, command)) {
+                    return true;
+                }
             }
         }
 
