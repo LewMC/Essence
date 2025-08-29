@@ -53,26 +53,26 @@ public class CommandInfo extends FoundryCommand {
 
                     message.send("info", "uuid", new String[]{String.valueOf(p.getUniqueId())});
 
-                    if (fu.exists("user.nickname")) {
+                    if (fu.get("user.last-known-name") != null) {
                         message.send("info", "lastname", new String[]{fu.getString("user.last-known-name")});
                     } else {
                         message.send("info", "lastname", new String[]{"Unknown"});
                     }
 
-                    if (fu.exists("user.nickname")) {
+                    if (fu.get("user.nickname") != null) {
                         message.send("info", "nickname", new String[]{fu.getString("user.nickname")});
                     } else {
                         message.send("info", "nickname", new String[]{"None"});
                     }
 
-                    if (fu.exists("user.last-seen")) {
+                    if (fu.get("user.last-seen") != null) {
                         message.send("info", "lastseen", new String[]{fu.getString("user.last-seen")});
                     } else {
                         message.send("info", "neverseen");
                     }
 
                     if (new Permissions(cs).has("essence.admin.info.viewip")) {
-                        if (fu.exists("user.ip-address")) {
+                        if (fu.get("user.ip-address") != null) {
                             message.send("info", "ip", new String[]{fu.getString("user.ip-address")});
                         } else {
                             message.send("info", "ip", new String[]{"Unknown"});
@@ -81,7 +81,7 @@ public class CommandInfo extends FoundryCommand {
                         message.send("info", "noip");
                     }
 
-                    if (fu.exists("user.team")) {
+                    if (fu.get("user.team") != null) {
                         message.send("info", "team", new String[]{fu.getString("user.team")});
                     } else {
                         message.send("info", "team", new String[]{"None"});
@@ -98,7 +98,7 @@ public class CommandInfo extends FoundryCommand {
                         Player online = (Player) p;
                         message.send("info", "speed", new String[]{String.valueOf(online.getWalkSpeed()*10)});
                     } else {
-                        message.send("info", "speed", new String[]{ "Unknown whilst offline." });
+                        message.send("info", "speed", new String[]{ "Unknown whilst offline" });
                     }
                 } else {
                     message.send("generic", "playernotfound");
