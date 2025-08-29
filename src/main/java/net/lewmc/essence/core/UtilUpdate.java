@@ -79,19 +79,6 @@ public class UtilUpdate {
     }
 
     /**
-     * Updates Essence's configuration.
-     */
-    public void UpdateConfig() {
-        File configFile = new File(this.plugin.getDataFolder(), "config.yml");
-
-        try {
-            ConfigUpdater.update(plugin, "config.yml", configFile);
-        } catch (IOException e) {
-            this.log.warn("Unable to update configuration: "+e);
-        }
-    }
-
-    /**
      * Updates Essence's language files.
      */
     public void UpdateLanguage() {

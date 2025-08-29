@@ -1,8 +1,11 @@
 package net.lewmc.essence;
 
+import com.tchristofferson.configupdater.ConfigUpdater;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +43,30 @@ public class EssenceConfiguration {
         this.log = new Logger(plugin.foundryConfig);
     }
 
+    /**
+     * Handles Essence's configuration during startup.
+     * @return Map (String, Object) - The new configuration.
+     * @since 1.10.1
+     */
+    public Map<String, Object> startup() {
+        File configFile = new File(this.plugin.getDataFolder(), "config.yml");
+
+        try {
+            ConfigUpdater.update(plugin, "config.yml", configFile);
+        } catch (IOException e) {
+            this.log.warn("Unable to update configuration: "+e);
+        }
+
+        return this.reload();
+    }
+
+    /**
+     * Reload's Essence's configuration.
+     * @return Map (String, Object) - The new configuration.
+     * @since 1.10.1
+     */
     public Map<String, Object> reload() {
+
         if (!this.configFile.exists("config.yml")) {
             this.plugin.saveDefaultConfig();
             if (!this.configFile.exists("config.yml")) {
@@ -167,6 +193,13 @@ public class EssenceConfiguration {
         verboseLog(key);
     }
 
+    /**
+     * Gets the current value of a configuration item and type checks it.
+     * @param key String - The key
+     * @param defaultValue Object - The default value if type checking fails.
+     * @param clazz Class(?) - The class it should be.
+     * @return Object - The value (will match type of clazz)
+     */
     private Object getValue(String key, Object defaultValue, Class<?> clazz) {
         if (config.containsKey(key)) {
             Object value = config.get(key);

@@ -111,12 +111,12 @@ public class Essence extends JavaPlugin {
         this.log.info("Beginning startup...");
         this.log.info("");
 
+        // Load order is sensitive - TEST IF CHANGING!
         UtilUpdate update = new UtilUpdate(this);
         update.migrate();
+        this.startupConfig();
         update.VersionCheck();
-        update.UpdateConfig();
         update.UpdateLanguage();
-        this.reloadConfig();
 
         if (this.verbose) {
             this.log.warn("Verbose mode is ENABLED.");
@@ -273,12 +273,11 @@ public class Essence extends JavaPlugin {
     }
 
     /**
-     * Reloads Essence's config.
+     * Starts Essence's config.
      * @since 1.10.1
      */
-    public void reloadConfig() {
-        EssenceConfiguration ec = new EssenceConfiguration(this);
-        this.config = ec.reload();
+    public void startupConfig() {
+        this.config = new EssenceConfiguration(this).startup();
         this.verbose = (boolean) this.config.get("advanced.verbose");
     }
 }

@@ -1,6 +1,7 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.EssenceConfiguration;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.command.Command;
@@ -99,7 +100,8 @@ public class CommandEssence extends FoundryCommand {
     private boolean reloadCommand(CommandSender cs, UtilMessage message) {
         UtilPermission perms = new UtilPermission(this.plugin, cs);
         if (perms.has("essence.admin.reload")) {
-            this.plugin.reloadConfig();
+            this.plugin.config = new EssenceConfiguration(this.plugin).reload();
+            this.plugin.verbose = (boolean) this.plugin.config.get("advanced.verbose");
             message.send("generic", "reload");
             return true;
         } else {
