@@ -4,7 +4,7 @@
   <groupId>net.lewmc</groupId>
   <artifactId>essence</artifactId>
   <name>Essence</name>
-  <version>1.10.1-SNAPSHOT</version>
+  <version>1.10.2-SNAPSHOT</version>
   <build>
     <resources>
       <resource>
@@ -15,7 +15,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.11.2</version>
+        <version>3.11.3</version>
         <executions>
           <execution>
             <id>generate-javadoc</id>
@@ -100,7 +100,7 @@
     <dependency>
       <groupId>io.papermc.paper</groupId>
       <artifactId>paper-api</artifactId>
-      <version>1.21.5-R0.1-SNAPSHOT</version>
+      <version>1.21-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

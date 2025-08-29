@@ -112,6 +112,7 @@ public class Essence extends JavaPlugin {
         this.log.info("");
 
         // Load order is sensitive - TEST IF CHANGING!
+        this.checkConfigExists();
         UtilUpdate update = new UtilUpdate(this);
         update.migrate();
         this.startupConfig();
@@ -279,5 +280,24 @@ public class Essence extends JavaPlugin {
     public void startupConfig() {
         this.config = new EssenceConfiguration(this).startup();
         this.verbose = (boolean) this.config.get("advanced.verbose");
+    }
+
+    /**
+     * Checks if the configuration file exists. If it doesn't, it creates it.
+     * @since 1.10.2
+     */
+    private void checkConfigExists() {
+        Files configFile = new Files(this.foundryConfig, this);
+
+        if (!configFile.exists("config.yml")) {
+            this.saveDefaultConfig();
+            if (!configFile.exists("config.yml")) {
+                Logger log = new Logger(this.foundryConfig);
+                log.severe("The server was unable to create Essence's configuration file!");
+                log.severe("You can download a blank config file from the link below.");
+                log.severe("https://github.com/LewMC/Essence/blob/main/src/main/resources/config.yml");
+                log.severe("Please contact lewmc.net/help for help and to report the issue.");
+            }
+        }
     }
 }
