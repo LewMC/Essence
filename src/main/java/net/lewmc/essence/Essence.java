@@ -106,7 +106,7 @@ public class Essence extends JavaPlugin {
         this.log.info("Running Essence version " + this.getDescription().getVersion() + ".");
         this.log.info("Please report any issues with Essence to our GitHub repository: https://github.com/lewmc/essence/issues");
         this.log.info("");
-        this.log.info("Please consider leaving us a review at https://www.spigotmc.org/resources/essence.114553");
+        this.log.info("Please consider leaving us a review at https://lewmc.net/support/review");
         this.log.info("");
         this.log.info("Beginning startup...");
         this.log.info("");

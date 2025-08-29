@@ -200,18 +200,21 @@ public class EssenceConfiguration {
      * @return Object - The value (will match type of clazz)
      */
     private Object getValue(String key, Object defaultValue, Class<?> clazz) {
-        if (config.containsKey(key)) {
-            Object value = config.get(key);
+        if (this.configFile.get(key) != null) {
+            Object value = this.configFile.get(key);
             if (clazz.isInstance(value)) {
                 return clazz.cast(value);
             } else {
-                config.put(key, defaultValue);
-                this.log.warn("Config value '"+key+"' had invalid type and was reset to the default.");
-                this.log.warn("Please double-check your configuration is correct.");
+                this.configFile.set(key, defaultValue);
+                this.log.warn("Config > Value '"+key+"' had invalid type.");
+                this.log.warn("Config > Value '"+key+"' was reset to '"+defaultValue+"'.");
+                this.log.warn("Config > Please double-check your configuration is correct.");
                 return clazz.cast(defaultValue);
             }
         } else {
-            config.put(key, defaultValue);
+            this.log.warn("Config > Value '"+key+"' did not exist in the config file.");
+            this.log.warn("Config > Value '"+key+"' was reset to '"+defaultValue+"'.");
+            this.configFile.set(key, defaultValue);
             return defaultValue;
         }
     }
