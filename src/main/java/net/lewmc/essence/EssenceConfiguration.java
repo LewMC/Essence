@@ -29,7 +29,15 @@ public class EssenceConfiguration {
      */
     private final Files configFile;
 
+    /**
+     * Logging system.
+     */
     private final Logger log;
+
+    /**
+     * Checks if changes were made - should save or close?
+     */
+    private boolean changesMade = false;
 
     /**
      * Constructs the EssenceConfiguration class.
@@ -133,7 +141,11 @@ public class EssenceConfiguration {
 
         putInt("config-version", (Integer) getValue("config-version", 3, Integer.class));
 
-        this.configFile.close();
+        if (this.changesMade) {
+            this.configFile.save();
+        } else {
+            this.configFile.close();
+        }
         return this.config;
     }
 
@@ -205,6 +217,7 @@ public class EssenceConfiguration {
             if (clazz.isInstance(value)) {
                 return clazz.cast(value);
             } else {
+                this.changesMade = true;
                 this.configFile.set(key, defaultValue);
                 this.log.warn("Config > Value '"+key+"' had invalid type.");
                 this.log.warn("Config > Value '"+key+"' was reset to '"+defaultValue+"'.");
@@ -212,9 +225,10 @@ public class EssenceConfiguration {
                 return clazz.cast(defaultValue);
             }
         } else {
+            this.changesMade = true;
+            this.configFile.set(key, defaultValue);
             this.log.warn("Config > Value '"+key+"' did not exist in the config file.");
             this.log.warn("Config > Value '"+key+"' was reset to '"+defaultValue+"'.");
-            this.configFile.set(key, defaultValue);
             return defaultValue;
         }
     }
