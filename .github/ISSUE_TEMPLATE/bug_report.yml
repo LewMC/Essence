@@ -2,7 +2,7 @@
 name: Bug report
 description: Create a report to help us improve our software.
 title: Bug report
-labels: bug
+type: Bug
 assignees: "LewMilburn"
 body:
 - type: textarea
