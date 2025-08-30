@@ -64,7 +64,7 @@ help:
   homes: "§6[Essence] §e/homes - 家的列表."
   sethome: "§6[Essence] §e/sethome [name] - 在当前位置创建一个家."
   delhome: "§6[Essence] §e/delhome [name] - 删除一个家."
-  back: "§6[Essence] §e/back - 去上个地方."
+  back: "§6[Essence] §e/back [玩家] - 回到上个位置或传送其他玩家回去."
   setspawn: "§6[Essence] §e/setspawn - 设置世界出生点."
   spawn: "§6[Essence] §e/spawn - 传送至出生点."
   world: "§6[Essence] §e/world - 传送至世界."
@@ -135,8 +135,12 @@ tprandom:
   generating: "§6[Essence] §e生成区块中...... (这可能需要点时间)"
   nosafe: "§4[Essence] §c找不到合适的位置，请重试."
 back:
-  cant: "§4[Essence] §c你以前没有传送过任何地方，所以无处可去 back to!"
+  usage: "§4[Essence] §c用法: /back [玩家]"
+  cant: "§4[Essence] §c你以前没有传送过任何地方，所以无处可去!"
+  cantother: "§4[Essence] §c{{1}} 以前没有传送过任何地方，所以无处可去!"
   going: "§2[Essence] §a回去......"
+  goingother: "§2[Essence] §a已将 {{1}} 传送回上个位置."
+  sentby: "§2[Essence] §a{{1}} 将你传送回了上个位置."
 home:
   notfound: "§4[Essence] §c家 {{1}} 不存在. 使用 /homes 用于查看家列表."
   deleted: "§2[Essence] §a家 {{1}} 已被删除."
