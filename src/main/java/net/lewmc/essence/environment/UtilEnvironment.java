@@ -1,13 +1,33 @@
 package net.lewmc.essence.environment;
 
+import org.bukkit.Bukkit;
 import org.bukkit.WeatherType;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import java.lang.reflect.Method;
 
 /**
  * The environment utility.
  */
 public class UtilEnvironment {
+    private final Plugin plugin;
+    
+    /**
+     * Constructor for UtilEnvironment with plugin instance
+     * @param plugin The plugin instance
+     */
+    public UtilEnvironment(Plugin plugin) {
+        this.plugin = plugin;
+    }
+    
+    /**
+     * Default constructor for backward compatibility
+     */
+    public UtilEnvironment() {
+        this.plugin = null;
+    }
     /**
      * Stores preset weather.
      */
@@ -159,11 +179,80 @@ public class UtilEnvironment {
      */
     public boolean setTime(World wo, long t) {
         if (wo != null) {
-            wo.setTime(t);
+            // Check if we're running on Folia (Paper with regionized multithreading)
+            if (isFoliaServer()) {
+                // Use GlobalRegionScheduler for world time changes on Folia
+                try {
+                     Object globalRegionScheduler = getGlobalRegionScheduler();
+                     if (globalRegionScheduler != null) {
+                         Method executeMethod = globalRegionScheduler.getClass().getMethod("execute", Plugin.class, Runnable.class);
+                         Runnable task = () -> wo.setTime(t);
+                         executeMethod.invoke(globalRegionScheduler, getPlugin(), task);
+                         return true;
+                     } else {
+                         // GlobalRegionScheduler is null, cannot proceed safely on Folia
+                         return false;
+                     }
+                 } catch (Exception e) {
+                    // On Folia, we cannot fallback to direct call as it will cause IllegalStateException
+                    // Log the error and return false
+                    e.printStackTrace();
+                    return false;
+                }
+            } else {
+                // Direct call for non-Folia servers
+                wo.setTime(t);
+            }
             return true;
         } else {
             return false;
         }
+    }
+    
+    /**
+     * Check if the server is running Folia (Paper with regionized multithreading)
+     * @return boolean - true if Folia, false otherwise
+     */
+    private boolean isFoliaServer() {
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+    
+    /**
+     * Get the GlobalRegionScheduler instance for Folia
+     * @return Object - GlobalRegionScheduler instance or null
+     */
+    private Object getGlobalRegionScheduler() {
+        try {
+            Method getGlobalRegionSchedulerMethod = Bukkit.class.getMethod("getGlobalRegionScheduler");
+            return getGlobalRegionSchedulerMethod.invoke(null);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    /**
+     * Get the plugin instance
+     * @return Plugin - plugin instance
+     */
+    private Plugin getPlugin() {
+        if (this.plugin != null) {
+            return this.plugin;
+        }
+        
+        // Fallback: try to get Essence plugin from plugin manager
+        Plugin[] plugins = Bukkit.getPluginManager().getPlugins();
+        for (Plugin plugin : plugins) {
+            if (plugin.getName().equals("Essence")) {
+                return plugin;
+            }
+        }
+        // Last resort: return first available plugin
+        return plugins.length > 0 ? plugins[0] : null;
     }
 
     /**
