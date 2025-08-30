@@ -3,7 +3,6 @@ name: Feature request
 description: Request or suggest a new feature.
 title: Feature request
 type: Feature
-assignees: "LewMilburn"
 body:
 - type: textarea
   attributes:
