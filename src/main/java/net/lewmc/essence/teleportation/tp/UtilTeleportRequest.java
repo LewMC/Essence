@@ -46,12 +46,14 @@ public class UtilTeleportRequest {
             return false;
         }
 
-        for (Map.Entry<String, String[]> entry : this.plugin.teleportRequests.entrySet()) {
+        // 使用Iterator来安全地遍历和删除元素，避免ConcurrentModificationException
+        java.util.Iterator<Map.Entry<String, String[]>> iterator = this.plugin.teleportRequests.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, String[]> entry = iterator.next();
             String[] values = entry.getValue();
-            String key = entry.getKey();
 
             if (values.length > 0 && values[0].equalsIgnoreCase(requester)) {
-                this.plugin.teleportRequests.remove(key);
+                iterator.remove(); // 使用Iterator的remove方法安全删除
                 found = true;
             }
         }
