@@ -53,10 +53,11 @@ public class CommandNick extends FoundryCommand {
                 return true;
             }
 
-            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[0])) {
-                msg.send("nick","specialchars");
-                return true;
-            }
+            // 移除特殊字符检查以支持中文昵称
+            // if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[0])) {
+            //     msg.send("nick","specialchars");
+            //     return true;
+            // }
 
             if (args[0].equalsIgnoreCase("off")) {
                 if (pu.removePlayerDisplayname(cs)) {
@@ -78,10 +79,11 @@ public class CommandNick extends FoundryCommand {
                 return true;
             }
 
-            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[1])) {
-                msg.send("nick","specialchars");
-                return true;
-            }
+            // 移除特殊字符检查以支持中文昵称
+            // if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[1])) {
+            //     msg.send("nick","specialchars");
+            //     return true;
+            // }
 
             if (args[1].equalsIgnoreCase("off")) {
                 if (pu.removePlayerDisplayname(player)) {
