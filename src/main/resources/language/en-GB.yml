@@ -206,6 +206,8 @@ teleport:
   accepthover: "Click to accept the teleport request"
   denyhover: "Click to deny the teleport request"
   acceptnone: "§4[Essence] §cYou have no pending teleport requests to accept."
+  requestaccepted: "§2[Essence] §a{{1}} has accepted your teleport request."
+  requestdenied: "§4[Essence] §c{{1}} has denied your teleport request."
   requestsent: "§2[Essence] §aTeleport request sent."
   canceldone: "§2[Essence] §aCancelled pending teleport requests."
   cancelnone: "§4[Essence] §cYou have no pending teleport requests to cancel."
