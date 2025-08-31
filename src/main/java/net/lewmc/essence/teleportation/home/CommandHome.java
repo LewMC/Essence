@@ -8,6 +8,7 @@ import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -112,8 +113,10 @@ public class CommandHome extends FoundryPlayerCommand {
 
         teleUtil.setCooldown((Player) cs, "home");
 
-        if (Bukkit.getServer().getWorld(playerData.getString(homeName + ".world")) == null) {
-            new WorldCreator(playerData.getString(homeName + ".world")).createWorld();
+        World world = Bukkit.getServer().getWorld(playerData.getString(homeName + ".world"));
+
+        if (world == null) {
+            world = new WorldCreator(playerData.getString(homeName + ".world")).createWorld();
         }
 
         if (waitTime > 0) {
@@ -124,7 +127,7 @@ public class CommandHome extends FoundryPlayerCommand {
 
         teleUtil.doTeleport(
                 (Player) cs,
-                Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString(homeName + ".world"))),
+                world,
                 playerData.getDouble(homeName + ".X"),
                 playerData.getDouble(homeName + ".Y"),
                 playerData.getDouble(homeName + ".Z"),
