@@ -205,8 +205,11 @@ public class UtilTeleport {
             flib.getImpl().runAtEntityLater(player, () -> {
                 if (teleportIsValid(player)) {
                     new UtilLocation(plugin).UpdateLastLocation(player);
-                    // 使用同步传送以避免异步区块加载问题
-                    player.teleport(location);
+                    // 在Folia环境下使用teleportAsync，并确保目标位置的区块已加载
+                    if (location.getWorld() != null) {
+                        location.getWorld().getChunkAt(location).load();
+                    }
+                    player.teleportAsync(location);
                     setTeleportStatus(player, false);
                 }
             }, delay * 20L);
