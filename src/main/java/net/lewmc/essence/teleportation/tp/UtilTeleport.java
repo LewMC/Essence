@@ -205,7 +205,8 @@ public class UtilTeleport {
             flib.getImpl().runAtEntityLater(player, () -> {
                 if (teleportIsValid(player)) {
                     new UtilLocation(plugin).UpdateLastLocation(player);
-                    player.teleportAsync(location);
+                    // 使用同步传送以避免异步区块加载问题
+                    player.teleport(location);
                     setTeleportStatus(player, false);
                 }
             }, delay * 20L);
