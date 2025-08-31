@@ -85,11 +85,20 @@ public class CommandBack extends FoundryCommand {
             return true;
         }
 
-        int waitTime = (int) plugin.config.get("teleportation.back.wait");
+        int waitTime = plugin.config.get("teleportation.back.wait") != null ? 
+                (int) plugin.config.get("teleportation.back.wait") : 0;
+        
+        // 检查目标世界是否存在
+        String worldName = playerData.getString("last-location.world");
+        if (worldName == null || Bukkit.getServer().getWorld(worldName) == null) {
+            msg.send("back", "cant");
+            playerData.close();
+            return true;
+        }
         
         new UtilTeleport(this.plugin).doTeleport(
                 p,
-                Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString("last-location.world"))),
+                Bukkit.getServer().getWorld(worldName),
                 playerData.getDouble("last-location.X"),
                 playerData.getDouble("last-location.Y"),
                 playerData.getDouble("last-location.Z"),
@@ -99,7 +108,11 @@ public class CommandBack extends FoundryCommand {
         );
 
         playerData.close();
-        msg.send("back", "going");
+        
+        // 只有在延迟为0时才立即显示消息，否则让UtilTeleport处理
+        if (waitTime == 0) {
+            msg.send("back", "going");
+        }
         return true;
     }
 
@@ -127,11 +140,20 @@ public class CommandBack extends FoundryCommand {
             return true;
         }
 
-        int waitTime = (int) plugin.config.get("teleportation.back.wait");
+        int waitTime = plugin.config.get("teleportation.back.wait") != null ? 
+                (int) plugin.config.get("teleportation.back.wait") : 0;
+        
+        // 检查目标世界是否存在
+        String worldName = playerData.getString("last-location.world");
+        if (worldName == null || Bukkit.getServer().getWorld(worldName) == null) {
+            msg.send("back", "cantother", new String[]{targetPlayer.getName()});
+            playerData.close();
+            return true;
+        }
         
         new UtilTeleport(this.plugin).doTeleport(
                 targetPlayer,
-                Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString("last-location.world"))),
+                Bukkit.getServer().getWorld(worldName),
                 playerData.getDouble("last-location.X"),
                 playerData.getDouble("last-location.Y"),
                 playerData.getDouble("last-location.Z"),
@@ -142,9 +164,12 @@ public class CommandBack extends FoundryCommand {
 
         playerData.close();
         
-        // 通知命令发送者和目标玩家
-        msg.send("back", "goingother", new String[]{targetPlayer.getName()});
-        new UtilMessage(this.plugin, targetPlayer).send("back", "sentby", new String[]{cs.getName()});
+        // 只有在延迟为0时才立即显示消息，否则让UtilTeleport处理
+        if (waitTime == 0) {
+            // 通知命令发送者和目标玩家
+            msg.send("back", "goingother", new String[]{targetPlayer.getName()});
+            new UtilMessage(this.plugin, targetPlayer).send("back", "sentby", new String[]{cs.getName()});
+        }
         
         return true;
     }
