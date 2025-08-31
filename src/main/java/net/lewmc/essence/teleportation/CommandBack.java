@@ -85,6 +85,8 @@ public class CommandBack extends FoundryCommand {
             return true;
         }
 
+        int waitTime = (int) plugin.config.get("teleportation.back.wait");
+        
         new UtilTeleport(this.plugin).doTeleport(
                 p,
                 Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString("last-location.world"))),
@@ -93,7 +95,7 @@ public class CommandBack extends FoundryCommand {
                 playerData.getDouble("last-location.Z"),
                 (float) playerData.getDouble("last-location.yaw"),
                 (float) playerData.getDouble("last-location.pitch"),
-                0
+                waitTime
         );
 
         playerData.close();
@@ -125,6 +127,8 @@ public class CommandBack extends FoundryCommand {
             return true;
         }
 
+        int waitTime = (int) plugin.config.get("teleportation.back.wait");
+        
         new UtilTeleport(this.plugin).doTeleport(
                 targetPlayer,
                 Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString("last-location.world"))),
@@ -133,7 +137,7 @@ public class CommandBack extends FoundryCommand {
                 playerData.getDouble("last-location.Z"),
                 (float) playerData.getDouble("last-location.yaw"),
                 (float) playerData.getDouble("last-location.pitch"),
-                0
+                waitTime
         );
 
         playerData.close();
