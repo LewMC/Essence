@@ -67,8 +67,7 @@ public class CommandTpahere extends FoundryPlayerCommand {
             new UtilTeleportRequest(this.plugin).createRequest(cs.getName(), playerToRequest.getName(), true);
 
             msg.send("teleport", "requestsent");
-            msg.sendTo(playerToRequest, "teleport", "requestedhere", new String[] { cs.getName() });
-            msg.sendTo(playerToRequest, "teleport", "acceptdeny");
+            msg.sendToWithButtons(playerToRequest, "teleport", "requestedhere", new String[] { cs.getName() }, "/tpaccept", "/tpdeny");
         }
         return true;
     }

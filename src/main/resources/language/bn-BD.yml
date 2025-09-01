@@ -146,8 +146,12 @@ tprandom:
   generating: "§6[Essence] §eGenerating chunk... (this may take some time)"
   nosafe: "§4[Essence] §cCouldn't find suitable location, please try again."
 back:
+  usage: "§4[Essence] §cUsage: /back [player]"
   cant: "§4[Essence] §cYou've not teleported anywhere before, so there's nowhere to go back to!"
+  cantother: "§4[Essence] §c{{1}} hasn't teleported anywhere before, so there's nowhere to go back to!"
   going: "§2[Essence] §aGoing back..."
+  goingother: "§2[Essence] §aSent {{1}} back to their last location."
+  sentby: "§2[Essence] §a{{1}} sent you back to your last location."
 home:
   notfound: "§4[Essence] §cHome {{1}} does not exist. Use /homes for a list of homes."
   deleted: "§2[Essence] §aHome {{1}} has been deleted."

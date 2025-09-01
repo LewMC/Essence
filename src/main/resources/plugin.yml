@@ -85,6 +85,7 @@ permissions:
       essence.teleport.player: true
       essence.teleport.offline: true
       essence.teleport.back: true
+      essence.teleport.back.other: true
       essence.teleport.random: true
       essence.teleport.other: true
       essence.teleport.request.*: true
@@ -96,6 +97,8 @@ permissions:
     description: Allows players to teleport to an offline player.
   essence.teleport.back:
     description: Go back to your last location before teleporting.
+  essence.teleport.back.other:
+    description: Teleport another player back to their last location.
   essence.teleport.random:
     description: Teleport to a random location.
   essence.teleport.other:
