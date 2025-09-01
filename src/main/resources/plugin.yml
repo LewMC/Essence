@@ -234,10 +234,13 @@ permissions:
     children:
       essence.economy.pay: true
       essence.economy.balance: true
+      essence.economy.admin: true
   essence.economy.pay:
     description: Use /pay command.
   essence.economy.balance:
     description: Use /balance command.
+  essence.economy.admin:
+    description: Use /eco command.
   essence.team.*:
     description: Allows players to access all teams commands.
     default: op
