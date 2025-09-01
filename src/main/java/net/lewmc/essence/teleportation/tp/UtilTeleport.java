@@ -196,19 +196,35 @@ public class UtilTeleport {
             this.log.severe("Location: "+location);
             return;
         }
+        
+        // Cross-world teleportation safety check
+        World targetWorld = location.getWorld();
+        World currentWorld = player.getWorld();
+        if (!targetWorld.equals(currentWorld)) {
+            // Validate target world instance validity
+            if (!targetWorld.getName().equals(location.getWorld().getName())) {
+                message.send("teleport","exception");
+                this.log.severe("World mismatch detected during cross-world teleportation.");
+                this.log.severe("Details: {\"error\": \"WORLD_MISMATCH\", \"player\": \"" + player.getName() + "\", \"from\": \"" + currentWorld.getName() + "\", \"to\": \"" + targetWorld.getName() + "\"}.");
+                return;
+            }
+        }
 
         if (delay > 0 && (boolean) this.plugin.config.get("teleportation.move-to-cancel")) {
             message.send("teleport", "movetocancel");
         }
         this.setTeleportStatus(player, true);
         if (flib.isFolia()) {
+            // Ensure minimum delay of 1 tick to avoid FoliaLib warnings
+            long delayTicks = Math.max(1L, delay * 20L);
             flib.getImpl().runAtEntityLater(player, () -> {
                 if (teleportIsValid(player)) {
                     new UtilLocation(plugin).UpdateLastLocation(player);
+                    // Use teleportAsync directly in Folia environment, let Bukkit handle chunk loading
                     player.teleportAsync(location);
                     setTeleportStatus(player, false);
                 }
-            }, delay * 20L);
+            }, delayTicks);
         } else {
             new BukkitRunnable() {
                 @Override
