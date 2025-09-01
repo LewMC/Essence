@@ -196,6 +196,19 @@ public class UtilTeleport {
             this.log.severe("Location: "+location);
             return;
         }
+        
+        // 跨世界传送安全检查
+        World targetWorld = location.getWorld();
+        World currentWorld = player.getWorld();
+        if (!targetWorld.equals(currentWorld)) {
+            // 验证目标世界实例的有效性
+            if (!targetWorld.getName().equals(location.getWorld().getName())) {
+                message.send("teleport","exception");
+                this.log.severe("World mismatch detected during cross-world teleportation.");
+                this.log.severe("Details: {\"error\": \"WORLD_MISMATCH\", \"player\": \"" + player.getName() + "\", \"from\": \"" + currentWorld.getName() + "\", \"to\": \"" + targetWorld.getName() + "\"}.");
+                return;
+            }
+        }
 
         if (delay > 0 && (boolean) this.plugin.config.get("teleportation.move-to-cancel")) {
             message.send("teleport", "movetocancel");

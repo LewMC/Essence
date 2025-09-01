@@ -120,6 +120,7 @@ public class EssenceConfiguration {
         putBoolean("team.enabled", (boolean) getValue("team.enabled", true, Boolean.class));
 
         putBoolean("teleportation.enabled", (boolean) getValue("teleportation.enabled", true, Boolean.class));
+        putInt("teleportation.back.wait", (Integer) getValue("teleportation.back.wait", 3, Integer.class));
         putInt("teleportation.home.wait", (Integer) getValue("teleportation.home.wait", 3, Integer.class));
         putInt("teleportation.home.cooldown", (Integer) getValue("teleportation.home.cooldown", 10, Integer.class));
         putInt("teleportation.warp.wait", (Integer) getValue("teleportation.warp.wait", 3, Integer.class));

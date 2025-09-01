@@ -98,8 +98,25 @@ public class CommandTprandom extends FoundryPlayerCommand {
             return true;
         }
 
-        this.flib.getScheduler().runAsync(wrappedTask -> {
-            Location teleportLocation = loc.GetRandomLocation(p, wb);
+        // 生成随机坐标（不涉及世界操作）
+        Location center = wb.getCenter();
+        double maxX = (center.getBlockX() + (wb.getSize() / 2));
+        double minX = (center.getBlockX() - (wb.getSize() / 2));
+        double maxZ = (center.getBlockZ() + (wb.getSize() / 2));
+        double minZ = (center.getBlockZ() - (wb.getSize() / 2));
+        int x = (int) (minX + (maxX - minX) * this.plugin.rand.nextDouble());
+        int z = (int) (minZ + (maxZ - minZ) * this.plugin.rand.nextDouble());
+        Location baseLoc = new Location(p.getWorld(), x, 0, z);
+        
+        // 在正确的线程中执行世界操作
+        this.flib.getScheduler().runAtLocation(baseLoc, wrappedTask -> {
+            int attempt = 1;
+            int y = loc.GetGroundY(p.getWorld(), x, z);
+            while (y == -64 && attempt != 3) {
+                y = loc.GetGroundY(p.getWorld(), x, z);
+                attempt++;
+            }
+            Location teleportLocation = new Location(p.getWorld(), x, y, z);
             this.checkChunkLoaded(p, teleportLocation);
         });
         return true;
@@ -120,9 +137,10 @@ public class CommandTprandom extends FoundryPlayerCommand {
             return;
         }
 
-        Chunk chunk = teleportLocation.getChunk();
         if (this.flib.isFolia()) {
+            // 在Folia环境下，必须在正确的线程中获取和操作chunk
             flib.getScheduler().runAtLocation(teleportLocation, wrappedTask -> {
+                Chunk chunk = teleportLocation.getChunk();
                 if (!chunk.isLoaded()) {
                     message.send("tprandom", "generating");
                     chunk.load(true);
@@ -130,6 +148,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
                 doTeleportation(player, teleportLocation);
             });
         } else {
+            Chunk chunk = teleportLocation.getChunk();
             if (!chunk.isLoaded()) {
                 message.send("tprandom", "generating");
                 chunk.load(true);

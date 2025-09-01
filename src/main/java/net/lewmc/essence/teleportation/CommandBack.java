@@ -70,10 +70,10 @@ public class CommandBack extends FoundryCommand {
     }
 
     /**
-     * 传送玩家自己回到上一个位置
-     * @param p 玩家
-     * @param msg 消息工具
-     * @return 是否成功
+     * Teleport the player back to their last location
+     * @param p Player
+     * @param msg Message utility
+     * @return Success status
      */
     private boolean backSelf(Player p, UtilMessage msg) {
         Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
@@ -117,11 +117,11 @@ public class CommandBack extends FoundryCommand {
     }
 
     /**
-     * 传送其他玩家回到上一个位置
-     * @param cs 命令发送者
-     * @param msg 消息工具
-     * @param targetName 目标玩家名称
-     * @return 是否成功
+     * Teleport another player back to their last location
+     * @param cs Command sender
+     * @param msg Message utility
+     * @param targetName Target player name
+     * @return Success status
      */
     private boolean backOther(CommandSender cs, UtilMessage msg, String targetName) {
         Player targetPlayer = Bukkit.getPlayer(targetName);

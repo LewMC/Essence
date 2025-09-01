@@ -9,7 +9,7 @@ import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -116,7 +116,12 @@ public class CommandHome extends FoundryPlayerCommand {
         World world = Bukkit.getServer().getWorld(playerData.getString(homeName + ".world"));
 
         if (world == null) {
-            world = new WorldCreator(playerData.getString(homeName + ".world")).createWorld();
+            playerData.close();
+            msg.send("generic", "exception");
+            Logger log = new Logger(this.plugin.foundryConfig);
+            log.warn("Player " + cs + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
+            log.warn("Error: world '" + playerData.getString(homeName + ".world") + "' does not exist.");
+            return true;
         }
 
         if (waitTime > 0) {
