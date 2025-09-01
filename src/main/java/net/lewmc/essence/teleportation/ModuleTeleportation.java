@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ModuleTeleportation extends FoundryModule {
 
+    private final UtilCommand cmd;
+
     /**
      * Constructor for the module.
      * @param plugin    JavaPlugin - Reference to the main Essence class.
@@ -24,6 +26,7 @@ public class ModuleTeleportation extends FoundryModule {
      */
     public ModuleTeleportation(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
+        this.cmd = new UtilCommand((Essence) this.plugin);
     }
 
     /**
@@ -31,30 +34,29 @@ public class ModuleTeleportation extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
-        if (!cmd.isDisabled("tp")) { reg.runtimeCommand("tp", new CommandTeleport((Essence) plugin), "teleport"); }
-        if (!cmd.isDisabled("tpa")) { reg.runtimeCommand("tpa", new CommandTpa((Essence) plugin), "tprequest"); }
-        if (!cmd.isDisabled("tpaccept")) { reg.runtimeCommand("tpaccept", new CommandTpaccept((Essence) plugin)); }
-        if (!cmd.isDisabled("tpdeny")) { reg.runtimeCommand("tpdeny", new CommandTpdeny((Essence) plugin), "tpdecline"); }
-        if (!cmd.isDisabled("tptoggle")) { reg.runtimeCommand("tptoggle", new CommandTptoggle((Essence) plugin), "toggletp"); }
-        if (!cmd.isDisabled("tpahere")) { reg.runtimeCommand("tpahere", new CommandTpahere((Essence) plugin)); }
-        if (!cmd.isDisabled("tpcancel")) { reg.runtimeCommand("tpcancel", new CommandTpcancel((Essence) plugin), "canceltp"); }
-        if (!cmd.isDisabled("tprandom")) { reg.runtimeCommand("tprandom", new CommandTprandom((Essence) plugin), "tpr", "rtp", "randomtp"); }
+        if (!this.cmd.isDisabled("tp")) { reg.runtimeCommand("tp", new CommandTeleport((Essence) plugin), "teleport"); }
+        if (!this.cmd.isDisabled("tpa")) { reg.runtimeCommand("tpa", new CommandTpa((Essence) plugin), "tprequest"); }
+        if (!this.cmd.isDisabled("tpaccept")) { reg.runtimeCommand("tpaccept", new CommandTpaccept((Essence) plugin)); }
+        if (!this.cmd.isDisabled("tpdeny")) { reg.runtimeCommand("tpdeny", new CommandTpdeny((Essence) plugin), "tpdecline"); }
+        if (!this.cmd.isDisabled("tptoggle")) { reg.runtimeCommand("tptoggle", new CommandTptoggle((Essence) plugin), "toggletp"); }
+        if (!this.cmd.isDisabled("tpahere")) { reg.runtimeCommand("tpahere", new CommandTpahere((Essence) plugin)); }
+        if (!this.cmd.isDisabled("tpcancel")) { reg.runtimeCommand("tpcancel", new CommandTpcancel((Essence) plugin), "canceltp"); }
+        if (!this.cmd.isDisabled("tprandom")) { reg.runtimeCommand("tprandom", new CommandTprandom((Essence) plugin), "tpr", "rtp", "randomtp"); }
 
-        if (!cmd.isDisabled("home")) { reg.runtimeCommand("home", new CommandHome((Essence) plugin)); }
-        if (!cmd.isDisabled("homes")) { reg.runtimeCommand("homes", new CommandHomes((Essence) plugin)); }
-        if (!cmd.isDisabled("sethome")) { reg.runtimeCommand("sethome", new CommandSethome((Essence) plugin)); }
-        if (!cmd.isDisabled("delhome")) { reg.runtimeCommand("delhome", new CommandDelhome((Essence) plugin)); }
+        if (!this.cmd.isDisabled("home")) { reg.runtimeCommand("home", new CommandHome((Essence) plugin)); }
+        if (!this.cmd.isDisabled("homes")) { reg.runtimeCommand("homes", new CommandHomes((Essence) plugin)); }
+        if (!this.cmd.isDisabled("sethome")) { reg.runtimeCommand("sethome", new CommandSethome((Essence) plugin)); }
+        if (!this.cmd.isDisabled("delhome")) { reg.runtimeCommand("delhome", new CommandDelhome((Essence) plugin)); }
 
-        if (!cmd.isDisabled("warp")) { reg.runtimeCommand("warp", new CommandWarp((Essence) plugin)); }
-        if (!cmd.isDisabled("warps")) { reg.runtimeCommand("warps", new CommandWarps((Essence) plugin)); }
-        if (!cmd.isDisabled("setwarp")) { reg.runtimeCommand("setwarp", new CommandSetwarp((Essence) plugin)); }
-        if (!cmd.isDisabled("delwarp")) { reg.runtimeCommand("delwarp", new CommandDelwarp((Essence) plugin)); }
+        if (!this.cmd.isDisabled("warp")) { reg.runtimeCommand("warp", new CommandWarp((Essence) plugin)); }
+        if (!this.cmd.isDisabled("warps")) { reg.runtimeCommand("warps", new CommandWarps((Essence) plugin)); }
+        if (!this.cmd.isDisabled("setwarp")) { reg.runtimeCommand("setwarp", new CommandSetwarp((Essence) plugin)); }
+        if (!this.cmd.isDisabled("delwarp")) { reg.runtimeCommand("delwarp", new CommandDelwarp((Essence) plugin)); }
 
-        if (!cmd.isDisabled("spawn")) { reg.runtimeCommand("spawn", new CommandSpawn((Essence) plugin),"spawnpoint", "world", "worldspawn"); }
-        if (!cmd.isDisabled("setspawn")) { reg.runtimeCommand("setspawn", new CommandSetspawn((Essence) plugin), "spawnset", "setworldspawn"); }
+        if (!this.cmd.isDisabled("spawn")) { reg.runtimeCommand("spawn", new CommandSpawn((Essence) plugin),"spawnpoint", "world", "worldspawn"); }
+        if (!this.cmd.isDisabled("setspawn")) { reg.runtimeCommand("setspawn", new CommandSetspawn((Essence) plugin), "spawnset", "setworldspawn"); }
 
-        if (!cmd.isDisabled("back")) { reg.runtimeCommand("back", new CommandBack((Essence) plugin)); }
+        if (!this.cmd.isDisabled("back")) { reg.runtimeCommand("back", new CommandBack((Essence) plugin)); }
     }
 
     /**
@@ -62,9 +64,9 @@ public class ModuleTeleportation extends FoundryModule {
      */
     @Override
     public void registerTabCompleters() {
-        reg.tabCompleter(new String[] { "warp", "delwarp" }, new TabCompleterWarp((Essence) plugin));
-        reg.tabCompleter(new String[] { "home", "delhome" }, new TabCompleterHome((Essence) plugin));
-        reg.tabCompleter(new String[] { "tp" }, new TabCompleterTp());
+        if (!this.cmd.isDisabled("warp") || !this.cmd.isDisabled("delwarp")) { reg.tabCompleter(new String[] { "warp", "delwarp" }, new TabCompleterWarp((Essence) plugin)); }
+        if (!this.cmd.isDisabled("home") || !this.cmd.isDisabled("delhome")) { reg.tabCompleter(new String[] { "home", "delhome" }, new TabCompleterHome((Essence) plugin)); }
+        if (!this.cmd.isDisabled("tp")) { reg.tabCompleter(new String[] { "tp" }, new TabCompleterTp()); }
     }
 
     /**
