@@ -75,6 +75,9 @@ teleportation:
   extended-toggle: false
   move-to-cancel: true
 
+world:
+  enabled: true
+
 # LANGUAGE - The file that will be used to display messages.
 # Please ensure the file exists in the 'language' sub-folder before changing this value.
 language: en-GB

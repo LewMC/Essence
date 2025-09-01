@@ -134,6 +134,8 @@ public class EssenceConfiguration {
         putBoolean("teleportation.extended-toggle", (boolean) getValue("teleportation.extended-toggle", false, Boolean.class));
         putBoolean("teleportation.move-to-cancel", (boolean) getValue("teleportation.move-to-cancel", true, Boolean.class));
 
+        putBoolean("world.enabled", (boolean) getValue("world.enabled", true, Boolean.class));
+
         putString("language", (String) getValue("language", "en-GB", String.class));
 
         putStringList("disabled-commands.list", (List<String>) getValue("disabled-commands.list", List.of("example"), List.class));
