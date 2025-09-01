@@ -98,7 +98,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
             return true;
         }
 
-        // 生成随机坐标（不涉及世界操作）
+        // Generate random coordinates (no world operations involved)
         Location center = wb.getCenter();
         double maxX = (center.getBlockX() + (wb.getSize() / 2));
         double minX = (center.getBlockX() - (wb.getSize() / 2));
@@ -108,7 +108,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
         int z = (int) (minZ + (maxZ - minZ) * this.plugin.rand.nextDouble());
         Location baseLoc = new Location(p.getWorld(), x, 0, z);
         
-        // 在正确的线程中执行世界操作
+        // Execute world operations on the correct thread
         this.flib.getScheduler().runAtLocation(baseLoc, wrappedTask -> {
             int attempt = 1;
             int y = loc.GetGroundY(p.getWorld(), x, z);
@@ -138,7 +138,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
         }
 
         if (this.flib.isFolia()) {
-            // 在Folia环境下，必须在正确的线程中获取和操作chunk
+            // In Folia environment, chunk operations must be performed on the correct thread
             flib.getScheduler().runAtLocation(teleportLocation, wrappedTask -> {
                 Chunk chunk = teleportLocation.getChunk();
                 if (!chunk.isLoaded()) {
@@ -161,6 +161,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
         this.teleUtil.setCooldown(player, "randomtp");
 
         UtilTeleport tp = new UtilTeleport(plugin);
-        tp.doTeleport(player, teleportLocation, 0);
+        // Use minimum delay of 1 tick to avoid FoliaLib warnings
+        tp.doTeleport(player, teleportLocation, 1);
     }
 }

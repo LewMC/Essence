@@ -197,11 +197,11 @@ public class UtilTeleport {
             return;
         }
         
-        // 跨世界传送安全检查
+        // Cross-world teleportation safety check
         World targetWorld = location.getWorld();
         World currentWorld = player.getWorld();
         if (!targetWorld.equals(currentWorld)) {
-            // 验证目标世界实例的有效性
+            // Validate target world instance validity
             if (!targetWorld.getName().equals(location.getWorld().getName())) {
                 message.send("teleport","exception");
                 this.log.severe("World mismatch detected during cross-world teleportation.");
@@ -215,14 +215,16 @@ public class UtilTeleport {
         }
         this.setTeleportStatus(player, true);
         if (flib.isFolia()) {
+            // Ensure minimum delay of 1 tick to avoid FoliaLib warnings
+            long delayTicks = Math.max(1L, delay * 20L);
             flib.getImpl().runAtEntityLater(player, () -> {
                 if (teleportIsValid(player)) {
                     new UtilLocation(plugin).UpdateLastLocation(player);
-                    // 在Folia环境下直接使用teleportAsync，让Bukkit处理区块加载
+                    // Use teleportAsync directly in Folia environment, let Bukkit handle chunk loading
                     player.teleportAsync(location);
                     setTeleportStatus(player, false);
                 }
-            }, delay * 20L);
+            }, delayTicks);
         } else {
             new BukkitRunnable() {
                 @Override
