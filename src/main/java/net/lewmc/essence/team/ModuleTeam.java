@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ModuleTeam extends FoundryModule {
 
+    private final UtilCommand cmd;
+
     /**
      * Constructor for the module.
      * @param plugin    JavaPlugin - Reference to the main Essence class.
@@ -19,6 +21,7 @@ public class ModuleTeam extends FoundryModule {
      */
     public ModuleTeam(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
+        this.cmd = new UtilCommand((Essence) this.plugin);
     }
 
     /**
@@ -26,12 +29,11 @@ public class ModuleTeam extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
-        if (!cmd.isDisabled("team")) { reg.runtimeCommand("team", new CommandTeam((Essence) plugin), "group"); }
-        if (!cmd.isDisabled("thome")) { reg.runtimeCommand("thome", new CommandThome((Essence) plugin), "teamhome","ghome","grouphome"); }
-        if (!cmd.isDisabled("thomes")) { reg.runtimeCommand("thomes", new CommandThomes((Essence) plugin), "teamhomes","ghomes","grouphomes"); }
-        if (!cmd.isDisabled("setthome")) { reg.runtimeCommand("setthome", new CommandSetthome((Essence) plugin), "setteamhome","setghome","setgrouphome"); }
-        if (!cmd.isDisabled("delthome")) { reg.runtimeCommand("delthome", new CommandDelthome((Essence) plugin), "delteamhome","delghome","delgrouphome"); }
+        if (!this.cmd.isDisabled("team")) { reg.runtimeCommand("team", new CommandTeam((Essence) plugin), "group"); }
+        if (!this.cmd.isDisabled("thome")) { reg.runtimeCommand("thome", new CommandThome((Essence) plugin), "teamhome","ghome","grouphome"); }
+        if (!this.cmd.isDisabled("thomes")) { reg.runtimeCommand("thomes", new CommandThomes((Essence) plugin), "teamhomes","ghomes","grouphomes"); }
+        if (!this.cmd.isDisabled("setthome")) { reg.runtimeCommand("setthome", new CommandSetthome((Essence) plugin), "setteamhome","setghome","setgrouphome"); }
+        if (!this.cmd.isDisabled("delthome")) { reg.runtimeCommand("delthome", new CommandDelthome((Essence) plugin), "delteamhome","delghome","delgrouphome"); }
 
     }
 
@@ -40,7 +42,7 @@ public class ModuleTeam extends FoundryModule {
      */
     @Override
     public void registerTabCompleters() {
-        reg.tabCompleter("team", new TabCompleterTeam());
+        if (!this.cmd.isDisabled("team")) { reg.tabCompleter("team", new TabCompleterTeam()); }
     }
 
     /**

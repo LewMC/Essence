@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ModuleCore extends FoundryModule {
 
+    private final UtilCommand cmd;
+
     /**
      * Constructor for the module.
      * @param plugin    JavaPlugin - Reference to the main Essence class.
@@ -18,6 +20,7 @@ public class ModuleCore extends FoundryModule {
      */
     public ModuleCore(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
+        this.cmd = new UtilCommand((Essence) this.plugin);
     }
 
     /**
@@ -25,9 +28,8 @@ public class ModuleCore extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
-        if (!cmd.isDisabled("essence")) { reg.runtimeCommand("essence", new CommandEssence((Essence) plugin), "es", "ess"); }
-        if (!cmd.isDisabled("rules")) { reg.runtimeCommand("rules", new CommandRules((Essence) plugin)); }
+        if (!this.cmd.isDisabled("essence")) { reg.runtimeCommand("essence", new CommandEssence((Essence) plugin), "es", "ess"); }
+        if (!this.cmd.isDisabled("rules")) { reg.runtimeCommand("rules", new CommandRules((Essence) plugin)); }
     }
 
     /**
@@ -35,7 +37,7 @@ public class ModuleCore extends FoundryModule {
      */
     @Override
     public void registerTabCompleters() {
-        reg.tabCompleter("essence", new TabCompleterEssence());
+        if (!this.cmd.isDisabled("essence")) { reg.tabCompleter("essence", new TabCompleterEssence()); }
     }
 
     /**
