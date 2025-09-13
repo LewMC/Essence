@@ -137,6 +137,9 @@ public class Essence extends JavaPlugin {
         this.checkForPaper();
         this.initFileSystem();
         this.loadModules();
+        
+        // Initialize flyingPlayers list to prevent NullPointerException
+        this.flyingPlayers = new ArrayList<>();
 
         this.integrations = new EssenceIntegrations(this);
         if (!this.integrations.loadPlaceholderAPI() && verbose) { this.log.warn("PlaceholderAPI not found! Using local placeholders."); }

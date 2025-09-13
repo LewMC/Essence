@@ -5,6 +5,7 @@ import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * /tpdeny command.
@@ -39,6 +40,18 @@ public class CommandTpdeny extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
+        // 获取请求信息以便通知请求发起者
+        String[] tpaRequest = this.plugin.teleportRequests.get(cs.getName());
+        if (tpaRequest != null) {
+            String requesterName = tpaRequest[0];
+            Player requesterPlayer = this.plugin.getServer().getPlayer(requesterName);
+            
+            // 通知请求发起者请求已被拒绝
+            if (requesterPlayer != null) {
+                new UtilMessage(this.plugin, requesterPlayer).send("teleport", "requestdenied", new String[]{cs.getName()});
+            }
+        }
+        
         new UtilTeleportRequest(this.plugin).deleteFromRequested(cs.getName());
         new UtilMessage(this.plugin,cs).send("teleport","canceldone");
         return true;
