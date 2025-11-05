@@ -84,7 +84,7 @@ public class CommandTop extends FoundryCommand {
         if (safeLocation != null) {
             if (p.getLocation().getBlockY() >= safeLocation.getBlockY()) {
                 msg.send("top", "alreadyattop");
-                return false;
+                return true;
             }
 
             new UtilTeleport(this.plugin).doTeleport(
@@ -99,7 +99,7 @@ public class CommandTop extends FoundryCommand {
             return true;
         }
         msg.send("top", "nosafelocation");
-        return false;
+        return true;
     }
 
     /**
@@ -125,7 +125,7 @@ public class CommandTop extends FoundryCommand {
         if (safeLocation != null) {
             if (targetPlayer.getLocation().getBlockY() >= safeLocation.getBlockY()) {
                 msg.send("top", "alreadyattop");
-                return false;
+                return true;
             }
 
             new UtilTeleport(this.plugin).doTeleport(
@@ -141,6 +141,6 @@ public class CommandTop extends FoundryCommand {
             return true;
         }
         msg.send("top", "nosafelocation");
-        return false;
+        return true;
     }
 }

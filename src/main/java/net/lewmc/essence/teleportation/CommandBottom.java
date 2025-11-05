@@ -84,7 +84,7 @@ public class CommandBottom extends FoundryCommand {
         if (safeLocation != null) {
             if (p.getLocation().getBlockY() <= safeLocation.getBlockY()) {
                 msg.send("bottom", "alreadyatbottom");
-                return false;
+                return true;
             }
 
             new UtilTeleport(this.plugin).doTeleport(
@@ -99,7 +99,7 @@ public class CommandBottom extends FoundryCommand {
             return true;
         }
         msg.send("bottom", "nosafelocation");
-        return false;
+        return true;
     }
 
     /**
@@ -125,7 +125,7 @@ public class CommandBottom extends FoundryCommand {
         if (safeLocation != null) {
             if (targetPlayer.getLocation().getBlockY() <= safeLocation.getBlockY()) {
                 msg.send("bottom", "alreadyatbottom");
-                return false;
+                return true;
             }
 
             new UtilTeleport(this.plugin).doTeleport(
@@ -141,6 +141,6 @@ public class CommandBottom extends FoundryCommand {
             return true;
         }
         msg.send("bottom", "nosafelocation");
-        return false;
+        return true;
     }
 }
