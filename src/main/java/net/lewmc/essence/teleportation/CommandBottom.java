@@ -103,7 +103,7 @@ public class CommandBottom extends FoundryCommand {
     }
 
     /**
-     * Teleport another player to the highest safe block
+     * Teleport another player to the lowest safe block
      * @param cs Command sender
      * @param msg Message utility
      * @param targetName Target player name

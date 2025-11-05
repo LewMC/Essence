@@ -156,14 +156,14 @@ top:
   usage: "§4[Essence] §cUsage: /top [player]"
   alreadyattop: "§4[Essence] §cYou're already at the top."
   nosafelocation: "§4[Essence] §cCouldn't find a safe location, please try again."
-  going: "§4[Essence] §aTeleporting to the top..."
+  going: "§2[Essence] §aTeleporting to the top..."
   goingother: "§2[Essence] §aSent {{1}} to the top."
   sentby: "§2[Essence] §a{{1}} sent you to the top."
 bottom:
   usage: "§4[Essence] §cUsage: /bottom [player]"
   alreadyatbottom: "§4[Essence] §cYou're already at the bottom."
   nosafelocation: "§4[Essence] §cCouldn't find a safe location, please try again."
-  going: "§4[Essence] §aTeleporting to the bottom..."
+  going: "§2[Essence] §aTeleporting to the bottom..."
   goingother: "§2[Essence] §aSent {{1}} to the bottom."
   sentby: "§2[Essence] §a{{1}} sent you to the bottom."
 home:
