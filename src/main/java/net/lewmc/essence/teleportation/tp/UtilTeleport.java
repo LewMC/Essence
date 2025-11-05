@@ -7,8 +7,10 @@ import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
+import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -29,6 +31,13 @@ public class UtilTeleport {
      */
     public enum Type {
         INVALID, TO_PLAYER, TO_COORD, PLAYER_TO_PLAYER, PLAYER_TO_COORD
+    }
+
+    /**
+     * Used to communicate the direction of a safe location search.
+     */
+    public enum Direction {
+        UP, DOWN
     }
 
     /**
@@ -317,5 +326,56 @@ public class UtilTeleport {
             config.close();
             return true;
         }
+    }
+
+    /**
+     * Finds a safe location relative to the origin point.
+     * @param origin The starting location.
+     * @param direction The direction to search.
+     * @return A safe location, or null if none found.
+     */
+    public static Location findSafeLocation(Location origin, Direction direction) {
+        if (origin == null) {
+            return null;
+        }
+
+        World world = origin.getWorld();
+        if (world == null) {
+            return null;
+        }
+
+        int x = origin.getBlockX();
+        int z = origin.getBlockZ();
+        float yaw = origin.getYaw();
+        float pitch = origin.getPitch();
+
+        int startY, endY = world.getMaxHeight(), step = 1;
+        if (direction == Direction.UP) {
+            startY = world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING);
+        } else {
+            startY = world.getMinHeight();
+        }
+
+        for (int y = startY; y < endY; y += step) {
+            Block feet = world.getBlockAt(x, y, z);
+            Block head = (y < world.getMaxHeight() - 1) ? world.getBlockAt(x, y + 1, z) : null;
+            Block below = (y > world.getMinHeight()) ? world.getBlockAt(x, y - 1, z) : null;
+
+            if (isSafeLocation(feet, head, below)) {
+                return new Location(world, x + 0.5, y, z + 0.5, yaw, pitch);
+            }
+        }
+
+        return null;
+    }
+
+    private static boolean isSafeLocation(Block feet, Block head, Block below) {
+        return feet != null &&
+                head != null &&
+                below != null &&
+                feet.getType().isAir() &&
+                head.getType().isAir() &&
+                !below.getType().isAir() &&
+                below.getType().isSolid();
     }
 }

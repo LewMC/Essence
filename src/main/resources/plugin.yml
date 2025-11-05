@@ -86,6 +86,10 @@ permissions:
       essence.teleport.offline: true
       essence.teleport.back: true
       essence.teleport.back.other: true
+      essence.teleport.top: true
+      essence.teleport.top.other: true
+      essence.teleport.bottom: true
+      essence.teleport.bottom.other: true
       essence.teleport.random: true
       essence.teleport.other: true
       essence.teleport.request.*: true

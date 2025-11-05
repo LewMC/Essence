@@ -58,6 +58,10 @@ teleportation:
   enabled: true
   back:
     wait: 3
+  top:
+    wait: 3
+  bottom:
+    wait: 3
   home:
     wait: 3
     cooldown: 10
