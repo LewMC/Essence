@@ -124,7 +124,7 @@ public class CommandBottom extends FoundryCommand {
 
         if (safeLocation != null) {
             if (targetPlayer.getLocation().getBlockY() <= safeLocation.getBlockY()) {
-                msg.send("bottom", "alreadyatbottom");
+                msg.send("bottom", "alreadyatbottomother", new String[]{targetPlayer.getName()});
                 return true;
             }
 

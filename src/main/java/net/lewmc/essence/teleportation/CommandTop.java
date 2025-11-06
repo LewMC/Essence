@@ -124,7 +124,7 @@ public class CommandTop extends FoundryCommand {
 
         if (safeLocation != null) {
             if (targetPlayer.getLocation().getBlockY() >= safeLocation.getBlockY()) {
-                msg.send("top", "alreadyattop");
+                msg.send("top", "alreadyattopother", new String[]{targetPlayer.getName()});
                 return true;
             }
 
