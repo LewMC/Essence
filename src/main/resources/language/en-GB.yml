@@ -155,7 +155,7 @@ back:
 top:
   usage: "§4[Essence] §cUsage: /top [player]"
   alreadyattop: "§4[Essence] §cYou're already at the top."
-  alreadyattopother: "§4[Essence] §c{{1}} already at the top."
+  alreadyattopother: "§4[Essence] §c{{1}} is already at the top."
   nosafelocation: "§4[Essence] §cCouldn't find a safe location, please try again."
   going: "§2[Essence] §aTeleporting to the top..."
   goingother: "§2[Essence] §aSent {{1}} to the top."
