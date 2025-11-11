@@ -379,8 +379,8 @@ public class UtilTeleport {
         return feet != null &&
                 head != null &&
                 below != null &&
-                feet.getType().isAir() &&
-                head.getType().isAir() &&
+                feet.isPassable() &&
+                head.isPassable() &&
                 !below.getType().isAir() &&
                 below.getType().isSolid();
     }
