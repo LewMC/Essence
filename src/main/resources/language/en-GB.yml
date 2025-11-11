@@ -377,3 +377,6 @@ environment:
   playertime: "§6[Essence] §eYour player time is {{1}}."
   playertimeset: "§2[Essence] §aYour player time is set to {{1}}."
   playertimereset: "§2[Essence] §aYour player time now matches server time."
+sudo:
+  usage: "§4[Essence] §cUsage: /sudo <player> <usage>"
+  ran: "§2[Essence] §aForced {{1}} to run '{{2}}'"
