@@ -4,7 +4,7 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.core.UtilPlayer;
-import net.lewmc.foundry.command.FoundryPlayerCommand;
+import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 /**
  * /give command.
  */
-public class CommandGive extends FoundryPlayerCommand {
+public class CommandGive extends FoundryCommand {
     private final Essence plugin;
     private UtilMessage msg;
 

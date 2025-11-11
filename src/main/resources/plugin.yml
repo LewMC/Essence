@@ -59,6 +59,9 @@ permissions:
       essence.inventory.smithing: true
       essence.inventory.stonecutter: true
       essence.inventory.trash: true
+      essence.inventory.give: true
+      essence.inventory.give.other: true
+      essence.inventory.skull: true
   essence.inventory.anvil:
     description: Allows players to open an anvil when no anvil is present.
   essence.inventory.cartography:
@@ -77,6 +80,12 @@ permissions:
     description: Allows players to open a stonecutter when no stonecutter is present.
   essence.inventory.trash:
     description: Allows players to open the disposal menu.
+  essence.inventory.give:
+    description: Gives you an item.
+  essence.inventory.give.other:
+    description: Gives other players items.
+  essence.inventory.skull:
+    description: Get a player's skull.
   essence.teleport.*:
     description: Allows players to teleport.
     default: op

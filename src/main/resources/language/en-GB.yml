@@ -387,3 +387,6 @@ give:
   invalidamount: "§4[Essence] §cCannot give amount of {{1}}."
   gaveself: "§2[Essence] §aGave {{1}}x {{2}} to yourself."
   gaveother: "§2[Essence] §aGave {{1}}x {{2}} to {{3}}."
+skull:
+  usage: "§4[Essence] §cUsage: /skull <player>"
+  gaveself: "§2[Essence] §aGiven {{1}}'s skull."
