@@ -30,7 +30,7 @@ public class ModuleAdmin extends FoundryModule {
         if (!cmd.isDisabled("info")) { reg.runtimeCommand("info", new CommandInfo((Essence) plugin), "pinfo","playerinfo"); }
         if (!cmd.isDisabled("invisible")) { reg.runtimeCommand("invisible", new CommandInvisible((Essence) plugin), "visible", "v"); }
         if (!cmd.isDisabled("seen")) { reg.runtimeCommand("seen", new CommandSeen((Essence) plugin), "pseen","playerseen"); }
-        if (!cmd.isDisabled("sudo")) { reg.runtimeCommand("sudo", new CommandSeen((Essence) plugin)); }
+        if (!cmd.isDisabled("sudo")) { reg.runtimeCommand("sudo", new CommandSudo((Essence) plugin)); }
     }
 
     /**

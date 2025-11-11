@@ -380,3 +380,9 @@ environment:
 sudo:
   usage: "§4[Essence] §cUsage: /sudo <player> <usage>"
   ran: "§2[Essence] §aForced {{1}} to run '{{2}}'"
+give:
+  usage: "§4[Essence] §cUsage: /give <player> <item> [amount] or /give <item> [amount]"
+  itemnotfound: "§4[Essence] §cItem {{1}} could not be found."
+  blacklisted: "§4[Essence] §cItem {{1}} cannot be given."
+  gaveself: "§2[Essence] §aGave {{1}}x {{2}} to yourself."
+  gaveother: "§2[Essence] §aGave {{1}}x {{2}} to {{3}}."
