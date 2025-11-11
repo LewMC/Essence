@@ -287,7 +287,7 @@ public class UtilPlayer {
     /**
      * Gives a player X amount of an item.
      * @param p Player - The player
-     * @param item ItemStack - The item
+     * @param item String - The item material name
      * @param amount int - The amount requested
      * @return boolean - true/false success.
      */
