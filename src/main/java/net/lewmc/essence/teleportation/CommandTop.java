@@ -58,7 +58,7 @@ public class CommandTop extends FoundryCommand {
             return this.topSelf((Player) cs, msg);
         } else if (args.length == 1) {
             UtilPermission perms = new UtilPermission(this.plugin, cs);
-            if (!perms.has("essence.teleport.top.other")) {
+            if (!perms.has("essence.teleport.other")) {
                 return perms.not();
             }
             return this.topOther(cs, msg, args[0]);

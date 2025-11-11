@@ -58,7 +58,7 @@ public class CommandBottom extends FoundryCommand {
             return this.bottomSelf((Player) cs, msg);
         } else if (args.length == 1) {
             UtilPermission perms = new UtilPermission(this.plugin, cs);
-            if (!perms.has("essence.teleport.bottom.other")) {
+            if (!perms.has("essence.teleport.other")) {
                 return perms.not();
             }
             return this.bottomOther(cs, msg, args[0]);

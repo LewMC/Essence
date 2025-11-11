@@ -87,9 +87,7 @@ permissions:
       essence.teleport.back: true
       essence.teleport.back.other: true
       essence.teleport.top: true
-      essence.teleport.top.other: true
       essence.teleport.bottom: true
-      essence.teleport.bottom.other: true
       essence.teleport.random: true
       essence.teleport.other: true
       essence.teleport.request.*: true
@@ -105,12 +103,8 @@ permissions:
     description: Teleport another player back to their last location.
   essence.teleport.top:
     description: Go to the highest safe location.
-  essence.teleport.top.other:
-    description: Teleport another player to the highest safe location.
   essence.teleport.bottom:
     description: Go to the lowest safe location.
-  essence.teleport.bottom.other:
-    description: Teleport another player to the lowest safe location.
   essence.teleport.random:
     description: Teleport to a random location.
   essence.teleport.other:
