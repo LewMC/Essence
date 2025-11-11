@@ -349,14 +349,20 @@ public class UtilTeleport {
         float yaw = origin.getYaw();
         float pitch = origin.getPitch();
 
-        int startY, endY = world.getMaxHeight(), step = 1;
+        int startY;
+        int endY;
+        int step;
         if (direction == Direction.UP) {
-            startY = world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING);
+            startY = Math.min(world.getMaxHeight() - 1, world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING) + 1);
+            endY = world.getMinHeight();
+            step = -1;
         } else {
             startY = world.getMinHeight();
+            endY = world.getMaxHeight();
+            step = 1;
         }
-
-        for (int y = startY; y < endY; y += step) {
+        
+        for (int y = startY; (direction == Direction.UP) == (y >= endY); y += step) {
             Block feet = world.getBlockAt(x, y, z);
             Block head = (y < world.getMaxHeight() - 1) ? world.getBlockAt(x, y + 1, z) : null;
             Block below = (y > world.getMinHeight()) ? world.getBlockAt(x, y - 1, z) : null;
