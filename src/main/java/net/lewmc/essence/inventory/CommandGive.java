@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class CommandGive extends FoundryPlayerCommand {
     private final Essence plugin;
+    private UtilMessage msg;
 
     /**
      * Constructor for the CommandGive class.
@@ -43,36 +44,37 @@ public class CommandGive extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilMessage msg = new UtilMessage(this.plugin, cs);
+        this.msg = new UtilMessage(this.plugin, cs);
         UtilPlayer pu = new UtilPlayer(this.plugin, cs);
         UtilPermission perm = new UtilPermission(this.plugin, cs);
 
         if (args.length == 1) {
             if (cs instanceof Player player) {
-                if (perm.itemIsBlacklisted(args[0])) { msg.send("give","blacklisted", new String[] {args[0]}); return true; }
+                if (perm.itemIsBlacklisted(args[0])) { this.msg.send("give","blacklisted", new String[] {args[0]}); return true; }
 
                 if (pu.givePlayerItem(player, args[0], 1)) {
-                    msg.send("give","gaveself", new String[] {"1", args[0]});
+                    this.msg.send("give","gaveself", new String[] {"1", args[0]});
                 } else {
-                    msg.send("give", "itemnotfound");
+                    this.msg.send("give", "itemnotfound");
                 }
             } else {
-                msg.send("give", "usage");
+                this.msg.send("give", "usage");
                 return true;
             }
         } else if (args.length == 2) {
             // Try to parse as /give <item> <amount> for self
             if (cs instanceof Player player) {
                 try {
-                    int amount = Integer.parseInt(args[1]);
+                    int amount = this.parseItemAmount(args[1]);
+                    
                     if (perm.itemIsBlacklisted(args[0])) {
-                        msg.send("give", "blacklisted", new String[]{args[0]});
+                        this.msg.send("give", "blacklisted", new String[]{args[0]});
                         return true;
                     }
                     if (pu.givePlayerItem(player, args[0], amount)) {
-                        msg.send("give", "gaveself", new String[]{String.valueOf(amount), args[0]});
+                        this.msg.send("give", "gaveself", new String[]{String.valueOf(amount), args[0]});
                     } else {
-                        msg.send("give", "itemnotfound");
+                        this.msg.send("give", "itemnotfound");
                     }
                     return true;
                 } catch (NumberFormatException e) {
@@ -86,17 +88,17 @@ public class CommandGive extends FoundryPlayerCommand {
             }
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
-                msg.send("generic", "playernotfound");
+                this.msg.send("generic", "playernotfound");
                 return true;
             }
             if (perm.itemIsBlacklisted(args[1])) {
-                msg.send("give", "blacklisted", new String[]{args[1]});
+                this.msg.send("give", "blacklisted", new String[]{args[1]});
                 return true;
             }
             if (pu.givePlayerItem(target, args[1], 1)) {
-                msg.send("give", "gaveother", new String[]{"1", args[1], target.getName()});
+                this.msg.send("give", "gaveother", new String[]{"1", args[1], target.getName()});
             } else {
-                msg.send("give", "itemnotfound");
+                this.msg.send("give", "itemnotfound");
             }
         } else if (args.length == 3) {
             // /give <player> <item> <amount>
@@ -105,27 +107,47 @@ public class CommandGive extends FoundryPlayerCommand {
             }
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
-                msg.send("generic", "playernotfound");
+                this.msg.send("generic", "playernotfound");
                 return true;
             }
             try {
-                int amount = Integer.parseInt(args[2]);
+                int amount = this.parseItemAmount(args[2]);
                 if (perm.itemIsBlacklisted(args[1])) {
-                    msg.send("give", "blacklisted", new String[]{args[1]});
+                    this.msg.send("give", "blacklisted", new String[]{args[1]});
                     return true;
                 }
                 if (pu.givePlayerItem(target, args[1], amount)) {
-                    msg.send("give", "gaveother", new String[]{String.valueOf(amount), args[1], target.getName()});
+                    this.msg.send("give", "gaveother", new String[]{String.valueOf(amount), args[1], target.getName()});
                 } else {
-                    msg.send("give", "itemnotfound");
+                    this.msg.send("give", "itemnotfound");
                 }
             } catch (NumberFormatException e) {
-                msg.send("give", "usage");
+                this.msg.send("give", "usage");
             }
         } else {
-            msg.send("give", "usage");
+            this.msg.send("give", "usage");
             return true;
         }
         return true;
+    }
+
+    /**
+     * Parses the amount being requested.
+     * @param amount String - The amount requested
+     * @return int - The amount validated as an integer, or zero if invalid.
+     */
+    private int parseItemAmount(String amount) {
+        try {
+            int iAmount = Integer.parseInt(amount);
+            if (iAmount <= 0 || iAmount > 2304) {
+                this.msg.send("give", "invalidamount");
+                return 0;
+            } else {
+                return iAmount;
+            }
+        } catch (Exception e) {
+            this.msg.send("give", "invalidamount");
+            return 0;
+        }
     }
 }
