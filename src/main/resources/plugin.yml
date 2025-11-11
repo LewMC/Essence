@@ -302,6 +302,7 @@ permissions:
       essence.admin.import: true
       essence.admin.invisible: true
       essence.admin.updates: true
+      essence.admin.sudo: true
   essence.admin.seen:
     description: Allows players to see when the player was last online.
   essence.admin.info:
@@ -317,7 +318,9 @@ permissions:
   essence.admin.invisible:
     description: Toggles invisibility.
   essence.admin.updates:
-    description: Toggles invisibility.
+    description: Shows update checks.
+  essence.admin.sudo:
+    description: Forces another user to run a command.
   essence.bypass.*:
     description: Allows bypassing of various limits.
     default: false
