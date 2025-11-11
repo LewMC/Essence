@@ -6,6 +6,7 @@ import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -63,8 +64,11 @@ public class CommandGive extends FoundryPlayerCommand {
         } else if (args.length == 2 || args.length == 3) {
             Player player = Bukkit.getPlayer(args[1]);
 
-            if (player == null || player == cs) {
-                if (player == cs) {
+            // Player not found
+            if (player == null) {
+                // Is it a player or a material?
+                if (Material.matchMaterial(args[0]) != null) {
+                    // Is a material, not a player
                     if (perm.itemIsBlacklisted(args[0])) { msg.send("give","blacklisted", new String[] {args[0]}); return true; }
                     if (pu.givePlayerItem(player, args[0], Integer.parseInt(args[1]))) {
                         msg.send("give","gaveself", new String[] {args[1], args[0]});
@@ -72,6 +76,7 @@ public class CommandGive extends FoundryPlayerCommand {
                         msg.send("give", "itemnotfound");
                     }
                 } else {
+                    // Player not found
                     msg.send("generic", "playernotfound");
                     return true;
                 }
