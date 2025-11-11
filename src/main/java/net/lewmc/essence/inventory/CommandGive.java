@@ -6,7 +6,6 @@ import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -61,42 +60,67 @@ public class CommandGive extends FoundryPlayerCommand {
                 msg.send("give", "usage");
                 return true;
             }
-        } else if (args.length == 2 || args.length == 3) {
-            Player player = Bukkit.getPlayer(args[1]);
-
-            // Player not found
-            if (player == null) {
-                // Is it a player or a material?
-                if (Material.matchMaterial(args[0]) != null) {
-                    // Is a material, not a player
-                    if (perm.itemIsBlacklisted(args[0])) { msg.send("give","blacklisted", new String[] {args[0]}); return true; }
-                    if (pu.givePlayerItem(player, args[0], Integer.parseInt(args[1]))) {
-                        msg.send("give","gaveself", new String[] {args[1], args[0]});
+        } else if (args.length == 2) {
+            // Try to parse as /give <item> <amount> for self
+            if (cs instanceof Player player) {
+                try {
+                    int amount = Integer.parseInt(args[1]);
+                    if (perm.itemIsBlacklisted(args[0])) {
+                        msg.send("give", "blacklisted", new String[]{args[0]});
+                        return true;
+                    }
+                    if (pu.givePlayerItem(player, args[0], amount)) {
+                        msg.send("give", "gaveself", new String[]{String.valueOf(amount), args[0]});
                     } else {
                         msg.send("give", "itemnotfound");
                     }
-                } else {
-                    // Player not found
-                    msg.send("generic", "playernotfound");
+                    return true;
+                } catch (NumberFormatException e) {
+                    // Not a number, try as /give <player> <item>
+                }
+            }
+
+            // Parse as /give <player> <item>
+            if (!perm.has("essence.inventory.give.other")) {
+                return perm.not();
+            }
+            Player target = Bukkit.getPlayer(args[0]);
+            if (target == null) {
+                msg.send("generic", "playernotfound");
+                return true;
+            }
+            if (perm.itemIsBlacklisted(args[1])) {
+                msg.send("give", "blacklisted", new String[]{args[1]});
+                return true;
+            }
+            if (pu.givePlayerItem(target, args[1], 1)) {
+                msg.send("give", "gaveother", new String[]{"1", args[1], target.getName()});
+            } else {
+                msg.send("give", "itemnotfound");
+            }
+        } else if (args.length == 3) {
+            // /give <player> <item> <amount>
+            if (!perm.has("essence.inventory.give.other")) {
+                return perm.not();
+            }
+            Player target = Bukkit.getPlayer(args[0]);
+            if (target == null) {
+                msg.send("generic", "playernotfound");
+                return true;
+            }
+            try {
+                int amount = Integer.parseInt(args[2]);
+                if (perm.itemIsBlacklisted(args[1])) {
+                    msg.send("give", "blacklisted", new String[]{args[1]});
                     return true;
                 }
-            } else {
-                if (!perm.has("essence.inventory.give.other")) { return perm.not(); }
-                if (args.length == 2) {
-                    if (perm.itemIsBlacklisted(args[1])) { msg.send("give","blacklisted", new String[] {args[1]}); return true; }
-                    if (pu.givePlayerItem(player, args[1], 1)) {
-                        msg.send("give","gaveother", new String[] {"1", args[1], args[0]});
-                    } else {
-                        msg.send("give", "itemnotfound");
-                    }
+                if (pu.givePlayerItem(target, args[1], amount)) {
+                    msg.send("give", "gaveother", new String[]{String.valueOf(amount), args[1], target.getName()});
                 } else {
-                    if (perm.itemIsBlacklisted(args[1])) { msg.send("give","blacklisted", new String[] {args[1]}); return true; }
-                    if (pu.givePlayerItem(player, args[1], Integer.parseInt(args[2]))) {
-                        msg.send("give","gaveother", new String[] {args[2], args[1], args[0]});
-                    } else {
-                        msg.send("give", "itemnotfound");
-                    }
+                    msg.send("give", "itemnotfound");
                 }
+            } catch (NumberFormatException e) {
+                msg.send("give", "usage");
             }
         } else {
             msg.send("give", "usage");
