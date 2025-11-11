@@ -68,6 +68,45 @@ public class CommandTop extends FoundryCommand {
         }
     }
 
+    /**
+     * Handles the teleportation to the highest safe block for a player
+     * @param player - The player to teleport
+     * @param msg - Message utility
+     * @param sender - The command sender
+     * @param isSelf - Whether this is a self-teleport (affects messages)
+     * @return true
+     */
+    private boolean top(Player player, UtilMessage msg, CommandSender sender, boolean isSelf) {
+        Location safeLocation = findSafeLocation(player.getLocation(), UtilTeleport.Direction.UP);
+        int waitTime = plugin.config.get("teleportation.top.wait") != null ?
+                (int) plugin.config.get("teleportation.top.wait") : 0;
+
+        if (safeLocation == null) {
+            msg.send("top", "nosafelocation");
+            return true;
+        }
+
+        if (player.getLocation().getBlockY() >= safeLocation.getBlockY()) {
+            if (isSelf) {
+                msg.send("top", "alreadyattop");
+            } else {
+                msg.send("top", "alreadyattopother", new String[]{player.getName()});
+            }
+            return true;
+        }
+
+        new UtilTeleport(this.plugin).doTeleport(player, safeLocation, waitTime);
+
+        if (waitTime == 0) {
+            if (isSelf) {
+                msg.send("top", "going");
+            } else {
+                msg.send("top", "goingother", new String[]{player.getName()});
+                new UtilMessage(this.plugin, player).send("top", "sentby", new String[]{sender.getName()});
+            }
+        }
+        return true;
+    }
 
     /**
      * Teleport the player to the highest safe block
@@ -76,30 +115,7 @@ public class CommandTop extends FoundryCommand {
      * @return Success status
      */
     private boolean topSelf(Player p, UtilMessage msg) {
-        Location safeLocation = findSafeLocation(p.getLocation(), UtilTeleport.Direction.UP);
-
-        int waitTime = plugin.config.get("teleportation.top.wait") != null ?
-                (int) plugin.config.get("teleportation.top.wait") : 0;
-
-        if (safeLocation != null) {
-            if (p.getLocation().getBlockY() >= safeLocation.getBlockY()) {
-                msg.send("top", "alreadyattop");
-                return true;
-            }
-
-            new UtilTeleport(this.plugin).doTeleport(
-                    p,
-                    safeLocation,
-                    waitTime
-            );
-
-            if (waitTime == 0) {
-                msg.send("top", "going");
-            }
-            return true;
-        }
-        msg.send("top", "nosafelocation");
-        return true;
+        return top(p, msg, p, true);
     }
 
     /**
@@ -116,31 +132,6 @@ public class CommandTop extends FoundryCommand {
             msg.send("generic", "playernotfound");
             return true;
         }
-
-        Location safeLocation = findSafeLocation(targetPlayer.getLocation(), UtilTeleport.Direction.UP);
-
-        int waitTime = plugin.config.get("teleportation.top.wait") != null ?
-                (int) plugin.config.get("teleportation.top.wait") : 0;
-
-        if (safeLocation != null) {
-            if (targetPlayer.getLocation().getBlockY() >= safeLocation.getBlockY()) {
-                msg.send("top", "alreadyattopother", new String[]{targetPlayer.getName()});
-                return true;
-            }
-
-            new UtilTeleport(this.plugin).doTeleport(
-                    targetPlayer,
-                    safeLocation,
-                    waitTime
-            );
-
-            if (waitTime == 0) {
-                msg.send("top", "goingother", new String[]{targetPlayer.getName()});
-                new UtilMessage(this.plugin, targetPlayer).send("top", "sentby", new String[]{cs.getName()});
-            }
-            return true;
-        }
-        msg.send("top", "nosafelocation");
-        return true;
+        return top(targetPlayer, msg, cs, false);
     }
 }

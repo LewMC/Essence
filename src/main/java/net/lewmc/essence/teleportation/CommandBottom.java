@@ -68,6 +68,45 @@ public class CommandBottom extends FoundryCommand {
         }
     }
 
+    /**
+     * Handles the teleportation to the lowest safe block for a player
+     * @param player - The player to teleport
+     * @param msg - Message utility
+     * @param sender - The command sender
+     * @param isSelf - Whether this is a self-teleport (affects messages)
+     * @return true
+     */
+    private boolean bottom(Player player, UtilMessage msg, CommandSender sender, boolean isSelf) {
+        Location safeLocation = findSafeLocation(player.getLocation(), UtilTeleport.Direction.DOWN);
+        int waitTime = plugin.config.get("teleportation.bottom.wait") != null ?
+                (int) plugin.config.get("teleportation.bottom.wait") : 0;
+
+        if (safeLocation == null) {
+            msg.send("bottom", "nosafelocation");
+            return true;
+        }
+
+        if (player.getLocation().getBlockY() <= safeLocation.getBlockY()) {
+            if (isSelf) {
+                msg.send("bottom", "alreadyatbottom");
+            } else {
+                msg.send("bottom", "alreadyatbottomother", new String[]{player.getName()});
+            }
+            return true;
+        }
+
+        new UtilTeleport(this.plugin).doTeleport(player, safeLocation, waitTime);
+
+        if (waitTime == 0) {
+            if (isSelf) {
+                msg.send("bottom", "going");
+            } else {
+                msg.send("bottom", "goingother", new String[]{player.getName()});
+                new UtilMessage(this.plugin, player).send("bottom", "sentby", new String[]{sender.getName()});
+            }
+        }
+        return true;
+    }
 
     /**
      * Teleport the player to the lowest safe block
@@ -76,30 +115,7 @@ public class CommandBottom extends FoundryCommand {
      * @return Success status
      */
     private boolean bottomSelf(Player p, UtilMessage msg) {
-        Location safeLocation = findSafeLocation(p.getLocation(), UtilTeleport.Direction.DOWN);
-
-        int waitTime = plugin.config.get("teleportation.bottom.wait") != null ?
-                (int) plugin.config.get("teleportation.bottom.wait") : 0;
-
-        if (safeLocation != null) {
-            if (p.getLocation().getBlockY() <= safeLocation.getBlockY()) {
-                msg.send("bottom", "alreadyatbottom");
-                return true;
-            }
-
-            new UtilTeleport(this.plugin).doTeleport(
-                    p,
-                    safeLocation,
-                    waitTime
-            );
-
-            if (waitTime == 0) {
-                msg.send("bottom", "going");
-            }
-            return true;
-        }
-        msg.send("bottom", "nosafelocation");
-        return true;
+        return bottom(p, msg, p, true);
     }
 
     /**
@@ -117,30 +133,6 @@ public class CommandBottom extends FoundryCommand {
             return true;
         }
 
-        Location safeLocation = findSafeLocation(targetPlayer.getLocation(), UtilTeleport.Direction.DOWN);
-
-        int waitTime = plugin.config.get("teleportation.bottom.wait") != null ?
-                (int) plugin.config.get("teleportation.bottom.wait") : 0;
-
-        if (safeLocation != null) {
-            if (targetPlayer.getLocation().getBlockY() <= safeLocation.getBlockY()) {
-                msg.send("bottom", "alreadyatbottomother", new String[]{targetPlayer.getName()});
-                return true;
-            }
-
-            new UtilTeleport(this.plugin).doTeleport(
-                    targetPlayer,
-                    safeLocation,
-                    waitTime
-            );
-
-            if (waitTime == 0) {
-                msg.send("bottom", "goingother", new String[]{targetPlayer.getName()});
-                new UtilMessage(this.plugin, targetPlayer).send("bottom", "sentby", new String[]{cs.getName()});
-            }
-            return true;
-        }
-        msg.send("bottom", "nosafelocation");
-        return true;
+        return bottom(targetPlayer, msg, cs, false);
     }
 }
