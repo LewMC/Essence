@@ -84,7 +84,7 @@ public class CommandTime extends FoundryCommand {
                             return true;
                         }
                     }
-                    msg.send("environment", "timeset", new String[]{String.valueOf(env.getTime(p.getWorld())), args[0]});
+                    msg.send("environment", "timeset", new String[]{String.valueOf(env.getTime(p.getWorld())), p.getWorld().getName()});
                 } else {
                     return new UtilPermission(plugin,cs).not();
                 }
