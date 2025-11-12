@@ -258,7 +258,7 @@ feed:
   serverfed: "§2[Essence] §aYou've been fed by a magical force."
   fedby: "§2[Essence] §aYou've been fed by {{1}}."
   beenfed: "§2[Essence] §aYou've been fed!"
-  usage: "§4[Essence] §cUsage: /feed <player>"
+  usage: "§4[Essence] §cUsage: /feed [player]"
 heal:
   healed: "§2[Essence] §aYou healed {{1}}."
   serverhealed: "§2[Essence] §aYou've been healed by a magical force."
