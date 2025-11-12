@@ -59,6 +59,9 @@ permissions:
       essence.inventory.smithing: true
       essence.inventory.stonecutter: true
       essence.inventory.trash: true
+      essence.inventory.give: true
+      essence.inventory.give.other: true
+      essence.inventory.skull: true
   essence.inventory.anvil:
     description: Allows players to open an anvil when no anvil is present.
   essence.inventory.cartography:
@@ -77,6 +80,12 @@ permissions:
     description: Allows players to open a stonecutter when no stonecutter is present.
   essence.inventory.trash:
     description: Allows players to open the disposal menu.
+  essence.inventory.give:
+    description: Gives you an item.
+  essence.inventory.give.other:
+    description: Gives other players items.
+  essence.inventory.skull:
+    description: Get a player's skull.
   essence.teleport.*:
     description: Allows players to teleport.
     default: op
@@ -87,9 +96,7 @@ permissions:
       essence.teleport.back: true
       essence.teleport.back.other: true
       essence.teleport.top: true
-      essence.teleport.top.other: true
       essence.teleport.bottom: true
-      essence.teleport.bottom.other: true
       essence.teleport.random: true
       essence.teleport.other: true
       essence.teleport.request.*: true
@@ -105,12 +112,8 @@ permissions:
     description: Teleport another player back to their last location.
   essence.teleport.top:
     description: Go to the highest safe location.
-  essence.teleport.top.other:
-    description: Teleport another player to the highest safe location.
   essence.teleport.bottom:
     description: Go to the lowest safe location.
-  essence.teleport.bottom.other:
-    description: Teleport another player to the lowest safe location.
   essence.teleport.random:
     description: Teleport to a random location.
   essence.teleport.other:
@@ -302,6 +305,7 @@ permissions:
       essence.admin.import: true
       essence.admin.invisible: true
       essence.admin.updates: true
+      essence.admin.sudo: true
   essence.admin.seen:
     description: Allows players to see when the player was last online.
   essence.admin.info:
@@ -317,7 +321,9 @@ permissions:
   essence.admin.invisible:
     description: Toggles invisibility.
   essence.admin.updates:
-    description: Toggles invisibility.
+    description: Shows update checks.
+  essence.admin.sudo:
+    description: Forces another user to run a command.
   essence.bypass.*:
     description: Allows bypassing of various limits.
     default: false

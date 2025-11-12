@@ -88,8 +88,12 @@ language: en-GB
 # DISABLED COMMANDS
 # Allows you to disable specific commands.
 disabled-commands:
-  list:
-    - example
+  - example
+
+# ITEM BLACKLIST
+# Items that cannot be /given
+item-blacklist:
+  - example
 
 # ADVANCED SETTINGS
 # These settings should usually be left alone. Only change them if you know what you're doing.
@@ -100,4 +104,4 @@ advanced:
   verbose: false
 
 # Do not change this!
-config-version: 3
+config-version: 4

@@ -121,6 +121,8 @@ public class EssenceConfiguration {
 
         putBoolean("teleportation.enabled", (boolean) getValue("teleportation.enabled", true, Boolean.class));
         putInt("teleportation.back.wait", (Integer) getValue("teleportation.back.wait", 3, Integer.class));
+        putInt("teleportation.top.wait", (Integer) getValue("teleportation.top.wait", 3, Integer.class));
+        putInt("teleportation.bottom.wait", (Integer) getValue("teleportation.bottom.wait", 3, Integer.class));
         putInt("teleportation.home.wait", (Integer) getValue("teleportation.home.wait", 3, Integer.class));
         putInt("teleportation.home.cooldown", (Integer) getValue("teleportation.home.cooldown", 10, Integer.class));
         putInt("teleportation.warp.wait", (Integer) getValue("teleportation.warp.wait", 3, Integer.class));
@@ -137,7 +139,9 @@ public class EssenceConfiguration {
 
         putString("language", (String) getValue("language", "en-GB", String.class));
 
-        putStringList("disabled-commands.list", (List<String>) getValue("disabled-commands.list", List.of("example"), List.class));
+        putStringList("disabled-commands", (List<String>) getValue("disabled-commands", List.of("example"), List.class));
+
+        putStringList("item-blacklist", (List<String>) getValue("item-blacklist", List.of("example"), List.class));
 
         putInt("config-version", (Integer) getValue("config-version", 3, Integer.class));
 
