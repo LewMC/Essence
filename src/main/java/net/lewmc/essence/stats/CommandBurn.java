@@ -44,6 +44,10 @@ public class CommandBurn extends FoundryCommand {
         if (args.length == 2) {
             try {
                 int seconds = Integer.parseInt(args[1]);
+                if (seconds <= 0) {
+                    message.send("burn", "usage");
+                    return true;
+                }
                 String pName = args[0];
                 Player p = Bukkit.getPlayer(pName);
                 if (p != null) {
