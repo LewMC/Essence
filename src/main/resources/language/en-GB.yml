@@ -264,7 +264,7 @@ heal:
   serverhealed: "§2[Essence] §aYou've been healed by a magical force."
   healedby: "§2[Essence] §aYou've been healed by {{1}}."
   beenhealed: "§2[Essence] §aYou've been healed!"
-  usage: "§4[Essence] §cUsage: /heal <player>"
+  usage: "§4[Essence] §cUsage: /heal [player]"
 visibility:
   invisible: "§2[Essence] §aYou are now invisible."
   visible: "§2[Essence] §aYou are now visible."
