@@ -165,6 +165,9 @@ permissions:
       essence.stats.repair: true
       essence.stats.fly: true
       essence.stats.speed: true
+      essence.stats.burn: true
+      essence.stats.extinguish: true
+      essence.stats.god: true
   essence.stats.heal:
     description: Allows you to heal yourself.
   essence.stats.feed:
@@ -175,6 +178,12 @@ permissions:
     description: Allows you to fly.
   essence.stats.speed:
     description: Allows you to set your speed.
+  essence.stats.burn:
+    description: Allows you to burn a player for the specified time
+  essence.stats.extinguish:
+    description: Allows you to extinguish a player
+  essence.stats.god:
+    description: Allows you to toggle god mode
   essence.stats.other.*:
     description: Allows players to manage other player's stats such as health and hunger.
     default: op
@@ -183,6 +192,8 @@ permissions:
       essence.stats.feed.other: true
       essence.stats.fly.other: true
       essence.stats.speed.other: true
+      essence.stats.extinguish.other: true
+      essence.stats.god.other: true
   essence.stats.heal.other:
     description: Allows you to heal other players.
   essence.stats.feed.other:
@@ -191,6 +202,10 @@ permissions:
     description: Allows you to let other players fly.
   essence.stats.speed.other:
     description: Allows you to set other player's speed.
+  essence.stats.extinguish.other:
+    description: Allows you to extinguish another player
+  essence.stats.god.other:
+    description: Allows you to toggle another player's god mode
   essence.home.*:
     description: Allows players to use the home system.
     default: op

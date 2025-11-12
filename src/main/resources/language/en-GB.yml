@@ -243,7 +243,7 @@ fly:
   stopother: "§2[Essence] §a{{1}} can no longer fly!"
   flybyother: "§2[Essence] §a{{1}} has enabled flying for you!"
   stopbyother: "§2[Essence] §a{{1}} has disabled flying for you!"
-  usage: "§4[Essence] §cUsage: /fly <player>"
+  usage: "§4[Essence] §cUsage: /fly [player]"
 speed:
   bounds: "§4[Essence] §cSpeed must be between -10 and 10."
   current: "§2[Essence] §aYour speed is {{1}}."
@@ -258,13 +258,36 @@ feed:
   serverfed: "§2[Essence] §aYou've been fed by a magical force."
   fedby: "§2[Essence] §aYou've been fed by {{1}}."
   beenfed: "§2[Essence] §aYou've been fed!"
-  usage: "§4[Essence] §cUsage: /feed <player>"
+  usage: "§4[Essence] §cUsage: /feed [player]"
 heal:
   healed: "§2[Essence] §aYou healed {{1}}."
   serverhealed: "§2[Essence] §aYou've been healed by a magical force."
   healedby: "§2[Essence] §aYou've been healed by {{1}}."
   beenhealed: "§2[Essence] §aYou've been healed!"
-  usage: "§4[Essence] §cUsage: /heal <player>"
+  usage: "§4[Essence] §cUsage: /heal [player]"
+burn:
+  burned: "§2[Essence] §aYou burned {{1}}."
+  serverburned: "§2[Essence] §aYou've been burned by a magical force."
+  burnedby: "§2[Essence] §aYou've been burned by {{1}}."
+  usage: "§4[Essence] §cUsage: /burn <player> <seconds>"
+  invalidnumber: "§4[Essence] §c{{1}} is not a valid number!"
+extinguish:
+  extinguished: "§2[Essence] §aYou extinguished {{1}}."
+  serverextinguished: "§2[Essence] §aYou've been extinguished by a magical force."
+  extinguishedby: "§2[Essence] §aYou've been extinguished by {{1}}."
+  beenextinguished: "§2[Essence] §aYou've been extinguished!"
+  usage: "§4[Essence] §cUsage: /extinguish [player]"
+god:
+  enabled: "§2[Essence] §aYou enabled God mode for {{1}}."
+  disabled: "§2[Essence] §aYou disabled God mode {{1}}."
+  serverenabled: "§2[Essence] §aYou've been given God mode by a magical force."
+  serverdisabled: "§2[Essence] §aYour God mode has been disabled by a magical force."
+  enabledby: "§2[Essence] §aGod mode enabled by {{1}}."
+  disabledby: "§2[Essence] §aGod mode disabled by {{1}}."
+  beenenabled: "§2[Essence] §aGod mode enabled."
+  beendisabled: "§2[Essence] §aGod mode disabled."
+  usage: "§4[Essence] §cUsage: /god [player]"
+
 visibility:
   invisible: "§2[Essence] §aYou are now invisible."
   visible: "§2[Essence] §aYou are now visible."

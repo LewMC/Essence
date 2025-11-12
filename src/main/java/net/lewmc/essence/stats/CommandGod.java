@@ -5,31 +5,28 @@ import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
-
-public class CommandHeal extends FoundryCommand {
+public class CommandGod extends FoundryCommand {
     private final Essence plugin;
 
     /**
-     * Constructor for the HealCommand class.
+     * Constructor for the GodCommand class.
      * @param plugin References to the main plugin class.
      */
-    public CommandHeal(Essence plugin) {
+    public CommandGod(Essence plugin) {
         this.plugin = plugin;
     }
 
     /**
      * The permission required to run the command.
-     * @return String - The permission string.
+     * @return String - The permission string
      */
     @Override
     protected String requiredPermission() {
-        return "essence.stats.heal";
+        return "essence.stats.god";
     }
 
     /**
@@ -44,64 +41,62 @@ public class CommandHeal extends FoundryCommand {
         UtilMessage message = new UtilMessage(this.plugin, cs);
 
         if (args.length > 0) {
-            return this.healOther(new UtilPermission(this.plugin, cs), cs, message, args);
+            return this.godOther(new UtilPermission(this.plugin, cs), cs, message, args);
         } else {
             if (!(cs instanceof Player)) {
-                message.send("heal","usage");
+                message.send("god", "usage");
                 return true;
             }
 
-            return this.healSelf(cs, message);
+            return this.godSelf(cs, message);
         }
     }
 
     /**
-     * Applies healing effects to a player
-     * @param player - The player to heal
+     * Sets or Removes Godmode from a player
+     * @param player - The player to godmode
+     * @return boolean - Operation success status
      */
-    private void healPlayer(Player player) {
-        player.setHealth((Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()));
-        player.setFoodLevel(20);
-        player.setSaturation(10);
-        player.setExhaustion(0F);
-        player.setFireTicks(0);
-        player.setRemainingAir(player.getMaximumAir());
-        player.clearActivePotionEffects();
+    private boolean godPlayer(Player player) {
+        boolean newState = !player.isInvulnerable();
+        player.setInvulnerable(newState);
+        return newState;
     }
 
     /**
-     * Heals the command sender.
-     * @param sender CommandSender - The user to heal.
+     * Godmodes the command sender.
+     * @param sender CommandSender - The user to god.
      * @param message MessageUtil - The messaging system.
      * @return boolean - If the operation was successful
      */
-    private boolean healSelf(CommandSender sender, UtilMessage message) {
+    private boolean godSelf(CommandSender sender, UtilMessage message) {
         Player player = (Player) sender;
-        healPlayer(player);
-        message.send("heal", "beenhealed");
+        boolean isNowGod = godPlayer(player);
+        message.send("god", isNowGod ? "beenenabled" : "beendisabled");
         return true;
     }
 
     /**
-     * Heals another user.
-     * @param permission PermissionHandler - The permission system.
-     * @param sender CommandSender - The user to heal.
+     * Godmodes another user.
+     * @param permission PermissionHandler - The permission system
+     * @param sender CommandSender - The user to god.
      * @param message MessageUtil - The messaging system.
-     * @param args String[] - List of command arguments.
+     * @param args Sting[] - List of command arguments.
      * @return boolean - If the operation was successful
      */
-    private boolean healOther(UtilPermission permission, CommandSender sender, UtilMessage message, String[] args) {
-        if (permission.has("essence.stats.heal.other")) {
+    private boolean godOther(UtilPermission permission, CommandSender sender, UtilMessage message, String[] args) {
+        if (permission.has("essence.stats.god.other")) {
             String pName = args[0];
             Player p = Bukkit.getPlayer(pName);
             if (p != null) {
-                message.send("heal", "healed", new String[] { p.getName() });
+                boolean isNowGod = !p.isInvulnerable();
+                message.send("god", isNowGod ? "enabled" : "disabled", new String[] { p.getName() });
                 if (!(sender instanceof Player)) {
-                    message.sendTo(p, "heal", "serverhealed");
+                    message.sendTo(p, "god", isNowGod ? "serverenabled" : "serverdisabled");
                 } else {
-                    message.sendTo(p, "heal", "healedby", new String[] { sender.getName() });
+                    message.sendTo(p, "god", isNowGod ? "enabledby" : "disabledby", new String[] { sender.getName() });
                 }
-                healPlayer(p);
+                godPlayer(p);
             } else {
                 message.send("generic", "playernotfound");
             }
