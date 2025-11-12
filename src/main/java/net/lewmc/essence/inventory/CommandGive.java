@@ -4,6 +4,7 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.core.UtilPlayer;
+import net.lewmc.foundry.Validation;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -63,10 +64,10 @@ public class CommandGive extends FoundryCommand {
             }
         } else if (args.length == 2) {
             // Try to parse as /give <item> <amount> for self
-            if (cs instanceof Player player) {
+            if (cs instanceof Player player && Validation.isNumeric(args[1]) ) {
                 try {
                     int amount = this.parseItemAmount(args[1]);
-                    
+
                     if (perm.itemIsBlacklisted(args[0])) {
                         this.msg.send("give", "blacklisted", new String[]{args[0]});
                         return true;
@@ -74,7 +75,7 @@ public class CommandGive extends FoundryCommand {
                     if (pu.givePlayerItem(player, args[0], amount)) {
                         this.msg.send("give", "gaveself", new String[]{String.valueOf(amount), args[0]});
                     } else {
-                        this.msg.send("give", "itemnotfound");
+                        this.msg.send("give", "itemnotfound", new String[]{args[1]});
                     }
                     return true;
                 } catch (NumberFormatException e) {
@@ -98,7 +99,7 @@ public class CommandGive extends FoundryCommand {
             if (pu.givePlayerItem(target, args[1], 1)) {
                 this.msg.send("give", "gaveother", new String[]{"1", args[1], target.getName()});
             } else {
-                this.msg.send("give", "itemnotfound");
+                this.msg.send("give", "itemnotfound", new String[]{args[1]});
             }
         } else if (args.length == 3) {
             // /give <player> <item> <amount>
@@ -119,7 +120,7 @@ public class CommandGive extends FoundryCommand {
                 if (pu.givePlayerItem(target, args[1], amount)) {
                     this.msg.send("give", "gaveother", new String[]{String.valueOf(amount), args[1], target.getName()});
                 } else {
-                    this.msg.send("give", "itemnotfound");
+                    this.msg.send("give", "itemnotfound", new String[]{args[1]});
                 }
             } catch (NumberFormatException e) {
                 this.msg.send("give", "usage");
@@ -140,13 +141,13 @@ public class CommandGive extends FoundryCommand {
         try {
             int iAmount = Integer.parseInt(amount);
             if (iAmount <= 0 || iAmount > 2304) {
-                this.msg.send("give", "invalidamount");
+                this.msg.send("give", "invalidamount", new String[]{amount});
                 return 0;
             } else {
                 return iAmount;
             }
         } catch (Exception e) {
-            this.msg.send("give", "invalidamount");
+            this.msg.send("give", "invalidamount", new String[]{amount});
             return 0;
         }
     }
