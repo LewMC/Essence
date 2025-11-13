@@ -168,6 +168,16 @@ bottom:
   going: "§2[Essence] §aTeleporting to the bottom..."
   goingother: "§2[Essence] §aSent {{1}} to the bottom."
   sentby: "§2[Essence] §a{{1}} sent you to the bottom."
+direction:
+  usage: "§4[Essence] §cUsage: /direction"
+  direction_north: "§2[Essence] §aYou're facing North, ({{1}}°)"
+  direction_north_east: "§2[Essence] §aYou're facing North-East, ({{1}}°)"
+  direction_east: "§2[Essence] §aYou're facing East, ({{1}}°)"
+  direction_south_east: "§2[Essence] §aYou're facing South-East, ({{1}}°)"
+  direction_south: "§2[Essence] §aYou're facing South, ({{1}}°)"
+  direction_south_west: "§2[Essence] §aYou're facing South-West, ({{1}}°)"
+  direction_west: "§2[Essence] §aYou're facing West, ({{1}}°)"
+  direction_north_west: "§2[Essence] §aYou're facing North-West, ({{1}}°)"
 home:
   notfound: "§4[Essence] §cHome {{1}} does not exist. Use /homes for a list of homes."
   deleted: "§2[Essence] §aHome {{1}} has been deleted."

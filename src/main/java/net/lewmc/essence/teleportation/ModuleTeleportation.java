@@ -57,6 +57,7 @@ public class ModuleTeleportation extends FoundryModule {
         if (!cmd.isDisabled("back")) { reg.runtimeCommand("back", new CommandBack((Essence) plugin)); }
         if (!cmd.isDisabled("top")) { reg.runtimeCommand("top", new CommandTop((Essence) plugin)); }
         if (!cmd.isDisabled("bottom")) { reg.runtimeCommand("bottom", new CommandBottom((Essence) plugin)); }
+        if (!cmd.isDisabled("direction")) { reg.runtimeCommand("direction", new CommandDirection((Essence) plugin)); }
     }
 
     /**
