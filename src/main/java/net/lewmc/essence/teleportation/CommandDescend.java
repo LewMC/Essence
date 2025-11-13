@@ -51,6 +51,10 @@ public class CommandDescend extends FoundryPlayerCommand {
         if (args.length > 0) {
             try {
                 levels = Integer.parseInt(args[0]);
+                if (levels <= 0) {
+                    msg.send("descend", "invalidnumber", new String[] { args[0] });
+                    return true;
+                }
                 return this.descend((Player) cs, levels, msg);
             } catch (NumberFormatException e) {
                 msg.send("descend", "invalidnumber", new String[] { args[0] });

@@ -51,6 +51,10 @@ public class CommandAscend extends FoundryPlayerCommand {
         if (args.length > 0) {
             try {
                 levels = Integer.parseInt(args[0]);
+                if (levels <= 0) {
+                    msg.send("ascend", "invalidnumber", new String[] { args[0] });
+                    return true;
+                }
                 return this.ascend((Player) cs, levels, msg);
             } catch (NumberFormatException e) {
                 msg.send("ascend", "invalidnumber", new String[] { args[0] });

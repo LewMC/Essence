@@ -387,7 +387,7 @@ public class UtilTeleport {
      * @return A LevelLocation containing the safe location and the number of levels searched, or null if no safe location is found.
      */
     public static LevelLocation findLevelLocation(Location origin, Direction direction, Integer levels, Player player) {
-        if (origin == null || levels <= 0) {
+        if (origin == null) {
             return null;
         }
 
