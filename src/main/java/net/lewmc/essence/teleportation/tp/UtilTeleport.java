@@ -375,6 +375,62 @@ public class UtilTeleport {
         return null;
     }
 
+    public record LevelLocation(Location location, int finalLevels) {}
+
+    /**
+     * Finds a safe location to teleport a player to, given a direction and number of levels.
+     *
+     * @param origin The location to start searching from.
+     * @param direction The direction to search in.
+     * @param levels The number of levels to search.
+     * @param player The player to check for safe locations.
+     * @return A LevelLocation containing the safe location and the number of levels searched, or null if no safe location is found.
+     */
+    public static LevelLocation findLevelLocation(Location origin, Direction direction, Integer levels, Player player) {
+        if (origin == null || levels <= 0) {
+            return null;
+        }
+
+        World world = origin.getWorld();
+        if (world == null) {
+            return null;
+        }
+
+        int x = origin.getBlockX();
+        int z = origin.getBlockZ();
+        int y = origin.getBlockY();
+        float yaw = origin.getYaw();
+        float pitch = origin.getPitch();
+
+        int step = (direction == Direction.UP) ? 1 : -1;
+        int currentLevel = 0;
+        int currentY = y + step;
+        Location lastSafeLocation = null;
+
+        while (currentY >= world.getMinHeight() && currentY <= world.getMaxHeight()) {
+            Location checkLoc = new Location(world, x, currentY, z, yaw, pitch);
+            Block feet = checkLoc.getBlock();
+            Block head = checkLoc.add(0, 1, 0).getBlock();
+            Block below = checkLoc.subtract(0, 2, 0).getBlock();
+
+            if (isSafeLocation(feet, head, below, player)) {
+                currentLevel++;
+                lastSafeLocation = new Location(world, x + 0.5, currentY, z + 0.5, yaw, pitch);
+
+                if (currentLevel == levels) {
+                    return new LevelLocation(lastSafeLocation, currentLevel);
+                }
+
+                currentY += step;
+            }
+
+            currentY += step;
+        }
+
+        return new LevelLocation(lastSafeLocation, currentLevel);
+
+    }
+
     private static boolean isSafeLocation(Block feet, Block head, Block below, Player player) {
         return head != null &&
                 (!head.isLiquid() || player.isInvulnerable()) && head.isPassable() &&

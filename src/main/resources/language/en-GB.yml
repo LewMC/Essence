@@ -168,6 +168,18 @@ bottom:
   going: "§2[Essence] §aTeleporting to the bottom..."
   goingother: "§2[Essence] §aSent {{1}} to the bottom."
   sentby: "§2[Essence] §a{{1}} sent you to the bottom."
+ascend:
+  usage: "§4[Essence] §cUsage: /ascend [levels]"
+  nosafelocation: "§4[Essence] §cCouldn't find a safe location. Are you at the top?"
+  invalidnumber: "§4[Essence] §c{{1}} is not a valid number!"
+  going: "§2[Essence] §aAscending {{1}} level(s)..."
+
+descend:
+  usage: "§4[Essence] §cUsage: /descend [levels]"
+  nosafelocation: "§4[Essence] §cCouldn't find a safe location. Are you at the bottom?"
+  invalidnumber: "§4[Essence] §c{{1}} is not a valid number!"
+  going: "§2[Essence] §aDescending {{1}} level(s)..."
+
 direction:
   usage: "§4[Essence] §cUsage: /direction"
   direction_north: "§2[Essence] §aYou're facing North, ({{1}}°)"

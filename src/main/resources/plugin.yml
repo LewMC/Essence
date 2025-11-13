@@ -97,6 +97,8 @@ permissions:
       essence.teleport.back.other: true
       essence.teleport.top: true
       essence.teleport.bottom: true
+      essence.teleport.ascend: true
+      essence.teleport.descend: true
       essence.teleport.random: true
       essence.teleport.direction: true
       essence.teleport.other: true
@@ -115,6 +117,10 @@ permissions:
     description: Go to the highest safe location.
   essence.teleport.bottom:
     description: Go to the lowest safe location.
+  essence.teleport.ascend:
+    description: Ascend to a specified level.
+  essence.teleport.descend:
+    description: Descend to a specified level.
   essence.teleport.random:
     description: Teleport to a random location.
   essence.teleport.direction:
