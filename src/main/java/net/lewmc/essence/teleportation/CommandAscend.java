@@ -69,6 +69,12 @@ public class CommandAscend extends FoundryPlayerCommand {
      */
     private boolean ascend(Player cs, Integer levels, UtilMessage msg) {
         UtilTeleport.LevelLocation result = findLevelLocation(cs.getLocation(), UtilTeleport.Direction.UP, levels, cs);
+
+        if (result == null) {
+            msg.send("ascend", "nosafelocation");
+            return true;
+        }
+
         Location ascendLocation = result.location();
         int finalLevels = result.finalLevels();
 

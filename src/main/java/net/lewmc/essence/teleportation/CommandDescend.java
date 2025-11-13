@@ -63,12 +63,18 @@ public class CommandDescend extends FoundryPlayerCommand {
     /**
      * Handles the teleportation to the next or specified level for a player
      * @param cs The player to teleport
-     * @param levels The number of levels to ascend
+     * @param levels The number of levels to descend
      * @param msg Message utility
      * @return true
      */
     private boolean descend(Player cs, Integer levels, UtilMessage msg) {
         UtilTeleport.LevelLocation result = findLevelLocation(cs.getLocation(), UtilTeleport.Direction.DOWN, levels, cs);
+
+        if (result == null) {
+            msg.send("descend", "nosafelocation");
+            return true;
+        }
+
         Location descendLocation = result.location();
         int finalLevels = result.finalLevels();
 
