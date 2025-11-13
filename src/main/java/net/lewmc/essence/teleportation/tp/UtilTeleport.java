@@ -334,7 +334,7 @@ public class UtilTeleport {
      * @param direction The direction to search.
      * @return A safe location, or null if none found.
      */
-    public static Location findSafeLocation(Location origin, Direction direction) {
+    public static Location findSafeLocation(Location origin, Direction direction, Player player) {
         if (origin == null) {
             return null;
         }
@@ -367,7 +367,7 @@ public class UtilTeleport {
             Block head = (y < world.getMaxHeight() - 1) ? world.getBlockAt(x, y + 1, z) : null;
             Block below = (y > world.getMinHeight()) ? world.getBlockAt(x, y - 1, z) : null;
 
-            if (isSafeLocation(feet, head, below)) {
+            if (isSafeLocation(feet, head, below, player)) {
                 return new Location(world, x + 0.5, y, z + 0.5, yaw, pitch);
             }
         }
@@ -375,13 +375,12 @@ public class UtilTeleport {
         return null;
     }
 
-    private static boolean isSafeLocation(Block feet, Block head, Block below) {
-        return feet != null &&
-                head != null &&
+    private static boolean isSafeLocation(Block feet, Block head, Block below, Player player) {
+        return head != null &&
+                (!head.isLiquid() || player.isInvulnerable()) && head.isPassable() &&
+                feet != null &&
+                (!feet.isLiquid() || player.isInvulnerable()) && feet.isPassable() &&
                 below != null &&
-                feet.isPassable() &&
-                head.isPassable() &&
-                !below.getType().isAir() &&
-                below.getType().isSolid();
+                !below.getType().isAir() && below.getType().isSolid();
     }
 }

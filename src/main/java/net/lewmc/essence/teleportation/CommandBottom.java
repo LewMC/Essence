@@ -77,7 +77,7 @@ public class CommandBottom extends FoundryCommand {
      * @return true
      */
     private boolean bottom(Player player, UtilMessage msg, CommandSender sender, boolean isSelf) {
-        Location safeLocation = findSafeLocation(player.getLocation(), UtilTeleport.Direction.DOWN);
+        Location safeLocation = findSafeLocation(player.getLocation(), UtilTeleport.Direction.DOWN, player);
         int waitTime = plugin.config.get("teleportation.bottom.wait") != null ?
                 (int) plugin.config.get("teleportation.bottom.wait") : 0;
 
