@@ -353,7 +353,7 @@ public class UtilTeleport {
         int endY;
         int step;
         if (direction == Direction.UP) {
-            startY = Math.min(world.getMaxHeight() - 1, world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING) + 1);
+            startY = world.getMaxHeight() + 1;
             endY = world.getMinHeight();
             step = -1;
         } else {
@@ -364,7 +364,7 @@ public class UtilTeleport {
         
         for (int y = startY; (direction == Direction.UP) == (y >= endY); y += step) {
             Block feet = world.getBlockAt(x, y, z);
-            Block head = (y < world.getMaxHeight() - 1) ? world.getBlockAt(x, y + 1, z) : null;
+            Block head = (y < world.getMaxHeight() + 1) ? world.getBlockAt(x, y + 1, z) : null;
             Block below = (y > world.getMinHeight()) ? world.getBlockAt(x, y - 1, z) : null;
 
             if (isSafeLocation(feet, head, below, player)) {
@@ -408,10 +408,9 @@ public class UtilTeleport {
         Location lastSafeLocation = null;
 
         while (currentY >= world.getMinHeight() && currentY <= world.getMaxHeight()) {
-            Location checkLoc = new Location(world, x, currentY, z, yaw, pitch);
-            Block feet = checkLoc.getBlock();
-            Block head = checkLoc.add(0, 1, 0).getBlock();
-            Block below = checkLoc.subtract(0, 2, 0).getBlock();
+            Block feet = world.getBlockAt(x, currentY, z);
+            Block head = (currentY < world.getMaxHeight() + 1) ? world.getBlockAt(x, currentY + 1, z) : null;
+            Block below = (currentY > world.getMinHeight()) ? world.getBlockAt(x, currentY - 1, z) : null;
 
             if (isSafeLocation(feet, head, below, player)) {
                 currentLevel++;
