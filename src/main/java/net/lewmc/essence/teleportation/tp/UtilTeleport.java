@@ -334,7 +334,7 @@ public class UtilTeleport {
      * @param direction The direction to search.
      * @return A safe location, or null if none found.
      */
-    public static Location findSafeLocation(Location origin, Direction direction, Player player) {
+    public static Location findFurthestLocation(Location origin, Direction direction, Player player) {
         if (origin == null) {
             return null;
         }
