@@ -123,6 +123,8 @@ public class EssenceConfiguration {
         putInt("teleportation.back.wait", (Integer) getValue("teleportation.back.wait", 3, Integer.class));
         putInt("teleportation.top.wait", (Integer) getValue("teleportation.top.wait", 3, Integer.class));
         putInt("teleportation.bottom.wait", (Integer) getValue("teleportation.bottom.wait", 3, Integer.class));
+        putInt("teleportation.ascend.wait", (Integer) getValue("teleportation.ascend.wait", 3, Integer.class));
+        putInt("teleportation.descend.wait", (Integer) getValue("teleportation.descend.wait", 3, Integer.class));
         putInt("teleportation.home.wait", (Integer) getValue("teleportation.home.wait", 3, Integer.class));
         putInt("teleportation.home.cooldown", (Integer) getValue("teleportation.home.cooldown", 10, Integer.class));
         putInt("teleportation.warp.wait", (Integer) getValue("teleportation.warp.wait", 3, Integer.class));
