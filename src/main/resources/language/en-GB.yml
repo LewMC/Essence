@@ -173,13 +173,11 @@ ascend:
   nosafelocation: "§4[Essence] §cCouldn't find a safe location. Are you at the top?"
   invalidnumber: "§4[Essence] §c{{1}} is not a valid number!"
   going: "§2[Essence] §aAscending {{1}} level(s)..."
-
 descend:
   usage: "§4[Essence] §cUsage: /descend [levels]"
   nosafelocation: "§4[Essence] §cCouldn't find a safe location. Are you at the bottom?"
   invalidnumber: "§4[Essence] §c{{1}} is not a valid number!"
   going: "§2[Essence] §aDescending {{1}} level(s)..."
-
 direction:
   usage: "§4[Essence] §cUsage: /direction"
   direction_north: "§2[Essence] §aYou're facing North, ({{1}}°)"
@@ -228,6 +226,7 @@ warp:
   noneset: "§4[Essence] §cThere are no warps set."
   list: "§6[Essence] §eWarps: {{1}}"
   hitlimit: "§4[Essence] §cYou can't create any more warps."
+  nopermission: "§4[Essence] §cYou don't have permission to delete '{{1}}'!"
 teleport:
   to: "§2[Essence] §aTeleporting to {{1}}..."
   tooffline: "§2[Essence] §aThis player is offline, so you won't see them when you arrive."
@@ -309,7 +308,6 @@ god:
   beenenabled: "§2[Essence] §aGod mode enabled."
   beendisabled: "§2[Essence] §aGod mode disabled."
   usage: "§4[Essence] §cUsage: /god [player]"
-
 visibility:
   invisible: "§2[Essence] §aYou are now invisible."
   visible: "§2[Essence] §aYou are now visible."

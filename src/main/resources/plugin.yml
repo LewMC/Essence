@@ -157,6 +157,7 @@ permissions:
       essence.warp.list: true
       essence.warp.create: true
       essence.warp.delete: true
+      essence.warp.delete.other: true
   essence.warp.use:
     description: Allows players to warp.
   essence.warp.list:
@@ -164,7 +165,9 @@ permissions:
   essence.warp.create:
     description: Allows players to create warps.
   essence.warp.delete:
-    description: Allows players to delete warps.
+    description: Allows players to delete their warps.
+  essence.warp.delete.other:
+    description: Allows players to delete other players warps.
   essence.stats.*:
     description: Allows players to manage their stats such as health and hunger.
     default: op
