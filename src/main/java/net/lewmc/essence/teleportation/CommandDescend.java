@@ -82,8 +82,8 @@ public class CommandDescend extends FoundryPlayerCommand {
         Location descendLocation = result.location();
         int finalLevels = result.finalLevels();
 
-        int waitTime = plugin.config.get("teleportation.descend.wait") != null ?
-                (int) plugin.config.get("teleportation.descend.wait") : 0;
+        Object configWaitTime = plugin.config.get("teleportation.descend.wait");
+        int waitTime = (configWaitTime != null) ? (int) configWaitTime : 0;
 
         if (descendLocation == null) {
             msg.send("descend", "nosafelocation");
