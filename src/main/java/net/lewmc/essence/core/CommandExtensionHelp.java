@@ -115,10 +115,11 @@ public class CommandExtensionHelp {
                 this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("economy".equalsIgnoreCase(args[1])) {
-                int blank = 6;
+                int blank = 5;
                 this.message.send("help", "economy");
                 if (!cu.isDisabled("pay")) { this.message.send("help", "pay"); } else { blank++; }
                 if (!cu.isDisabled("balance")) { this.message.send("help", "bal"); } else { blank++; }
+                if (!cu.isDisabled("eco")) { this.message.send("help", "eco"); } else { blank++; }
                 this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("admin".equalsIgnoreCase(args[1])) {
