@@ -33,12 +33,12 @@ public class UtilMessage {
     /**
      * Send a message to the user with additional data.
      * @param group String - The group the message belongs to in the language file.
-     * @param message String - The message taken from the language file.
+     * @param msg String - The message taken from the language file.
      * @param replace String[] - Text that should be put in place of {{X}} in the message.
      * @since 1.5.3
      */
-    public void send(String group, String message, String[] replace) {
-        message = this.getMessage(message, group);
+    public void send(String group, String msg, String[] replace) {
+        String message = this.getMessage(msg, group);
         if (message != null) {
             int i = 1;
             for (String item : replace) {
@@ -48,23 +48,23 @@ public class UtilMessage {
             this.cs.sendMessage(new UtilPlaceholder(this.plugin, this.cs).replaceAll(message));
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+"."+msg+"' to player, could not find key in en-GB.yml");
         }
     }
 
     /**
      * Send a message to the user.
      * @param group String - The group the message belongs to in the language file.
-     * @param message String - The message taken from the language file.
+     * @param msg String - The message taken from the language file.
      * @since 1.6.0
      */
-    public void send(String group, String message) {
-        message = this.getMessage(message, group);
+    public void send(String group, String msg) {
+        String message = this.getMessage(msg, group);
         if (message != null) {
             this.cs.sendMessage(message);
         } else {
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+"."+msg+"' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -72,17 +72,17 @@ public class UtilMessage {
      * Send a message to a user.
      * @param cs CommandSender - The player to send the message to.
      * @param group String - The group the message belongs to in the language file.
-     * @param message String - The message taken from the language file.
+     * @param msg String - The message taken from the language file.
      * @since 1.6.0
      */
-    public void sendTo(CommandSender cs, String group, String message) {
-        message = this.getMessage(message, group);
+    public void sendTo(CommandSender cs, String group, String msg) {
+        String message = this.getMessage(msg, group);
         if (message != null) {
             cs.sendMessage(message);
         } else {
             cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+"."+msg+"' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -90,12 +90,12 @@ public class UtilMessage {
      * Send a message to a user.
      * @param cs CommandSender - The player to send the message to.
      * @param group String - The group the message belongs to in the language file.
-     * @param message String - The message taken from the language file.
+     * @param msg String - The message taken from the language file.
      * @param replace String[] - Text that should be put in place of {{X}} in the message.
      * @since 1.6.0
      */
-    public void sendTo(CommandSender cs, String group, String message, String[] replace) {
-        message = this.getMessage(message, group);
+    public void sendTo(CommandSender cs, String group, String msg, String[] replace) {
+        String message = this.getMessage(msg, group);
         if (message != null) {
             int i = 1;
             for (String item : replace) {
@@ -106,7 +106,7 @@ public class UtilMessage {
         } else {
             cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
             this.cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+".null' to player, could not find key in en-GB.yml");
+            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+"."+msg+"' to player, could not find key in en-GB.yml");
         }
     }
 
@@ -122,21 +122,21 @@ public class UtilMessage {
      * Send a message with clickable buttons to a player.
      * @param cs CommandSender - The player to send the message to.
      * @param group String - The group the message belongs to in the language file.
-     * @param message String - The message taken from the language file.
+     * @param msg String - The message taken from the language file.
      * @param replace String[] - Text that should be put in place of {{X}} in the message.
      * @param acceptCommand String - The command to execute when accept button is clicked.
      * @param denyCommand String - The command to execute when deny button is clicked.
      * @since 1.11.0
      */
-    public void sendToWithButtons(CommandSender cs, String group, String message, String[] replace, String acceptCommand, String denyCommand) {
+    public void sendToWithButtons(CommandSender cs, String group, String msg, String[] replace, String acceptCommand, String denyCommand) {
         if (!(cs instanceof Player)) {
             // Fallback to regular message for non-players
-            this.sendTo(cs, group, message, replace);
+            this.sendTo(cs, group, msg, replace);
             return;
         }
         
         Player player = (Player) cs;
-        message = this.getMessage(message, group);
+        String message = this.getMessage(msg, group);
         if (message != null) {
             int i = 1;
             for (String item : replace) {
@@ -167,7 +167,7 @@ public class UtilMessage {
             player.spigot().sendMessage(mainMessage, acceptButton, denyButton);
         } else {
             cs.sendMessage(ChatColor.DARK_RED + "[Essence] " + ChatColor.RED + "Unable to send message to player, see console for more information.");
-            new Logger(this.plugin.foundryConfig).warn("Unable to send message '" + group + ".null' to player, could not find key in en-GB.yml");
+            new Logger(this.plugin.foundryConfig).warn("Unable to send message '"+group+"."+msg+"' to player, could not find key in en-GB.yml");
         }
     }
 
