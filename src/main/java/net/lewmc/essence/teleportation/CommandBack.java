@@ -85,8 +85,8 @@ public class CommandBack extends FoundryCommand {
             return true;
         }
 
-        Object configWaitTime = plugin.config.get("teleportation.back.wait");
-        int waitTime = (configWaitTime != null) ? (int) configWaitTime : 0;
+        int waitTime = plugin.config.get("teleportation.back.wait") != null ?
+                (int) plugin.config.get("teleportation.back.wait") : 0;
         
         // 检查目标世界是否存在
         String worldName = playerData.getString("last-location.world");
@@ -140,8 +140,8 @@ public class CommandBack extends FoundryCommand {
             return true;
         }
 
-        Object configWaitTime = plugin.config.get("teleportation.back.wait");
-        int waitTime = (configWaitTime != null) ? (int) configWaitTime : 0;
+        int waitTime = plugin.config.get("teleportation.back.wait") != null ?
+                (int) plugin.config.get("teleportation.back.wait") : 0;
         
         // 检查目标世界是否存在
         String worldName = playerData.getString("last-location.world");

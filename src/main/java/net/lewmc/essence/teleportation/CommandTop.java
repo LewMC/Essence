@@ -78,8 +78,8 @@ public class CommandTop extends FoundryCommand {
      */
     private boolean top(Player player, UtilMessage msg, CommandSender sender, boolean isSelf) {
         Location safeLocation = findFurthestLocation(player.getLocation(), UtilTeleport.Direction.UP, player);
-        Object configWaitTime = plugin.config.get("teleportation.top.wait");
-        int waitTime = (configWaitTime != null) ? (int) configWaitTime : 0;
+        int waitTime = plugin.config.get("teleportation.top.wait") != null ?
+                (int) plugin.config.get("teleportation.top.wait") : 0;
 
         if (safeLocation == null) {
             msg.send("top", "nosafelocation");

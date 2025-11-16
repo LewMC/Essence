@@ -82,8 +82,8 @@ public class CommandAscend extends FoundryPlayerCommand {
         Location ascendLocation = result.location();
         int finalLevels = result.finalLevels();
 
-        Object configWaitTime = plugin.config.get("teleportation.ascend.wait");
-        int waitTime = (configWaitTime != null) ? (int) configWaitTime : 0;
+        int waitTime = plugin.config.get("teleportation.ascend.wait") != null ?
+                (int) plugin.config.get("teleportation.ascend.wait") : 0;
 
         if (ascendLocation == null) {
             msg.send("ascend", "nosafelocation");

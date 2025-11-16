@@ -30,8 +30,8 @@ public class CommandNear extends FoundryPlayerCommand {
 
         int radius;
 
-        Object configDefaultRadius = (plugin.config.get("teleportation.near.default-radius"));
-        int defaultRadius = (configDefaultRadius != null) ? (int) configDefaultRadius : 200;
+        int defaultRadius = plugin.config.get("teleportation.near.default-radius") != null ?
+                (int) plugin.config.get("teleportation.near.default-radius") : 200;
 
         if (args.length == 0) {
             radius = defaultRadius;
@@ -43,8 +43,8 @@ public class CommandNear extends FoundryPlayerCommand {
                     return true;
                 }
 
-                Object configMaxRadius = (plugin.config.get("teleportation.near.max-radius"));
-                int maxRadius = (configMaxRadius != null) ? (int) configMaxRadius : 50000;
+                int maxRadius = plugin.config.get("teleportation.near.max-radius") != null ?
+                        (int) plugin.config.get("teleportation.near.max-radius") : 50000;
                 
                 if (radius > maxRadius) {
                     msg.send("near", "greaterthanmax", new String[] { args[0], String.valueOf(maxRadius) });
