@@ -43,22 +43,26 @@ public class CommandEnchant extends FoundryPlayerCommand {
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         UtilMessage msg = new UtilMessage(this.plugin, cs);
 
-        if (args.length == 2) {
-            ItemStack item = ((Player) cs).getInventory().getItemInMainHand();
-            Enchantment enc = Enchantment.getByKey(NamespacedKey.minecraft(args[0]));
+        try {
+            if (args.length == 2) {
+                ItemStack item = ((Player) cs).getInventory().getItemInMainHand();
+                Enchantment enc = Enchantment.getByKey(NamespacedKey.minecraft(args[0].toLowerCase()));
 
-            if (enc != null) {
-                if (enc.canEnchantItem(item)) {
-                    item.addEnchantment(enc, Integer.parseInt(args[1]));
-                    msg.send("enchant", "done");
+                if (enc != null) {
+                    if (enc.canEnchantItem(item)) {
+                        item.addEnchantment(enc, Integer.parseInt(args[1]));
+                        msg.send("enchant", "done");
+                    } else {
+                        msg.send("enchant", "invalidtype");
+                    }
                 } else {
-                    msg.send("enchant", "invalidtype");
+                    msg.send("enchant", "notfound");
                 }
             } else {
-                msg.send("enchant", "notfound");
+                msg.send("enchant", "usage");
             }
-        } else {
-            msg.send("enchant", "usage");
+        } catch (Exception e) {
+            msg.send("generic", "customerror", new String[]{e.getMessage()});
         }
         return true;
     }

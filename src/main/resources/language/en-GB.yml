@@ -37,6 +37,7 @@ generic:
   commanddisabled: "§4[Essence] §cThis command is disabled."
   cantyourself: "§4[Essence] §cYou can't do that to yourself!"
   exception: "§4[Essence] §cEssence encountered an issue whilst trying to process this command, please see console for details."
+  customerror: "§4[Essence] §c{{1}}"
   configexception: "§4[Essence] §cEssence encountered an issue whilst trying to process a configuration file, please see console for details."
   missingpermission: "§4[Essence] §cYou don't have the required permission to run this command."
   reload: "§2[Essence] §aReloaded."
