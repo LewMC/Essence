@@ -94,6 +94,10 @@ help:
   repair: "§6[Essence] §e/repair - Repair the item you're holding."
   fly: "§6[Essence] §e/fly [user] - Let yourself or another fly!"
   speed: "§6[Essence] §e/speed <speed> [user] - Set player speed."
+  burn: "§6[Essence] §e/burn [user] - Burn yourself or someone else."
+  extinguish: "§6[Essence] §e/extinguish [user] - Stop burning."
+  god: "§6[Essence] §e/god [user] - God yourself or someone else."
+  enchant: "§6[Essence] §e/enchant <type> <level> - Enchant item."
   economy: "§6[Essence] ---------- Essence Help - Economy ----------"
   pay: "§6[Essence] §e/pay <user> <amount> - Pay someone!"
   bal: "§6[Essence] §e/bal - View your balance."
@@ -446,3 +450,8 @@ skull:
   given: "§2[Essence] §aGiven {{1}}'s skull."
 invsee:
   usage: "§4[Essence] §cUsage: /invsee <player>"
+enchant:
+  usage: "§4[Essence] §cUsage: /enchant <enchantment> <level>"
+  notfound: "§4[Essence] §cEnchantment not found."
+  invalidtype: "§4[Essence] §cYou can't enchant that."
+  done: "§2[Essence] §aItem enchanted."

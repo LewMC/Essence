@@ -105,15 +105,25 @@ public class CommandExtensionHelp {
                     this.message.send("help", "page", new String[] { "3", "3" });
                 }
             } else if ("stats".equalsIgnoreCase(args[1])) {
-                int blank = 3;
                 this.message.send("help", "stats");
-                if (!cu.isDisabled("feed")) { this.message.send("help", "feed"); } else { blank++; }
-                if (!cu.isDisabled("heal")) { this.message.send("help", "heal"); } else { blank++; }
-                if (!cu.isDisabled("repair")) { this.message.send("help", "repair"); } else { blank++; }
-                if (!cu.isDisabled("fly")) { this.message.send("help", "fly"); } else { blank++; }
-                if (!cu.isDisabled("speed")) { this.message.send("help", "speed"); } else { blank++; }
-                this.blank(blank);
-                this.message.send("help", "page", new String[] { "1", "1" });
+                if (args.length < 3 || args[2].equals("1")) {
+                    int blank = 0;
+                    if (!cu.isDisabled("feed")) { this.message.send("help", "feed"); } else { blank++; }
+                    if (!cu.isDisabled("heal")) { this.message.send("help", "heal"); } else { blank++; }
+                    if (!cu.isDisabled("repair")) { this.message.send("help", "repair"); } else { blank++; }
+                    if (!cu.isDisabled("fly")) { this.message.send("help", "fly"); } else { blank++; }
+                    if (!cu.isDisabled("speed")) { this.message.send("help", "speed"); } else { blank++; }
+                    if (!cu.isDisabled("burn")) { this.message.send("help", "burn"); } else { blank++; }
+                    if (!cu.isDisabled("extinguish")) { this.message.send("help", "extinguish"); } else { blank++; }
+                    if (!cu.isDisabled("god")) { this.message.send("help", "god"); } else { blank++; }
+                    this.blank(blank);
+                    this.message.send("help", "page", new String[] { "1", "2" });
+                } else if (args[2].equals("2")) {
+                    int blank = 7;
+                    if (!cu.isDisabled("enchant")) { this.message.send("help", "enchant"); } else { blank++; }
+                    this.blank(blank);
+                    this.message.send("help", "page", new String[] { "2", "2" });
+                }
             } else if ("economy".equalsIgnoreCase(args[1])) {
                 int blank = 5;
                 this.message.send("help", "economy");
