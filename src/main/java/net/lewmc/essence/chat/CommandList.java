@@ -59,7 +59,7 @@ public class CommandList extends FoundryCommand {
                     .toList();
         }
 
-        msg.send("list", "online", new String[]{ String.valueOf(this.plugin.getServer().getOnlinePlayers().size()), String.valueOf(this.plugin.getServer().getMaxPlayers())});
+        msg.send("list", "number", new String[]{ String.valueOf(this.plugin.getServer().getOnlinePlayers().size()), String.valueOf(this.plugin.getServer().getMaxPlayers())});
         msg.send("list", "list", new String[]{ String.join(", ", visiblePlayerNames) });
 
         return true;

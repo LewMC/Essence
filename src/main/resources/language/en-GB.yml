@@ -208,7 +208,6 @@ near:
   invalidnumber: "§4[Essence] §c{{1}} is not a valid number!"
   noplayers: "§4[Essence] §cThere are no discoverable players within {{1}} blocks of you."
   playersfound: "§2[Essence] §aFound {{1}} player(s): {{2}}"
-
 home:
   notfound: "§4[Essence] §cHome {{1}} does not exist. Use /homes for a list of homes."
   deleted: "§2[Essence] §aHome {{1}} has been deleted."
