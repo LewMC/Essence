@@ -58,6 +58,9 @@ help:
   stonecutter: "§6[Essence] §e/stonecutter - 打开一个切石机."
   echest: "§6[Essence] §e/echest - 打开你的末影箱."
   trash: "§6[Essence] §e/trash - 打开一个处理菜单."
+  give: "§6[Essence] §e/give <player> <item> - Give someone something."
+  skull: "§6[Essence] §e/skull <player> - Get a player's skull."
+  invsee: "§6[Essence] §e/invsee <player> - See a player's inventory."
   gamemode: "§6[Essence] ---------- Essence 帮助 - 游戏模式 ---------"
   gm: "§6[Essence] §e/gamemode - 改变游戏模式."
   gmc: "§6[Essence] §e/gmc - 切换至创造模式."
@@ -412,3 +415,5 @@ give:
 skull:
   usage: "§4[Essence] §cUsage: /skull <player>"
   given: "§2[Essence] §aGiven {{1}}'s skull."
+invsee:
+  usage: "§4[Essence] §cUsage: /invsee <player>"
