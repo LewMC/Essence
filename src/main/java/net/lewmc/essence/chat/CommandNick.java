@@ -53,12 +53,6 @@ public class CommandNick extends FoundryCommand {
                 return true;
             }
 
-            // 移除特殊字符检查以支持中文昵称
-            // if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[0])) {
-            //     msg.send("nick","specialchars");
-            //     return true;
-            // }
-
             if (args[0].equalsIgnoreCase("off")) {
                 if (pu.removePlayerDisplayname(cs)) {
                     msg.send("nick","success", new String[]{cs.getName()});
@@ -78,12 +72,6 @@ public class CommandNick extends FoundryCommand {
                 msg.send("generic","playernotfound");
                 return true;
             }
-
-            // 移除特殊字符检查以支持中文昵称
-            // if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[1])) {
-            //     msg.send("nick","specialchars");
-            //     return true;
-            // }
 
             if (args[1].equalsIgnoreCase("off")) {
                 if (pu.removePlayerDisplayname(player)) {
