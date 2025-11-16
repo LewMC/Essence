@@ -408,7 +408,7 @@ public class UtilTeam {
         playerData.set("user.team", null);
         playerData.save();
 
-        return teamData.delete("teams/" + team + ".yml");
+        return teamData.delete("data/teams/" + team + ".yml");
     }
 
     /**

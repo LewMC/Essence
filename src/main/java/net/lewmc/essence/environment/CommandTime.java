@@ -44,7 +44,7 @@ public class CommandTime extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilEnvironment env = new UtilEnvironment();
+        UtilEnvironment env = new UtilEnvironment(plugin);
         UtilMessage msg = new UtilMessage(plugin, cs);
 
         if (args.length == 0 || (args.length == 1 && (Objects.equals(args[0], "time") || Objects.equals(args[0], "get") || Objects.equals(args[0], "query") || Objects.equals(args[0], "current") || Objects.equals(args[0], "now")))) {
@@ -84,7 +84,7 @@ public class CommandTime extends FoundryCommand {
                             return true;
                         }
                     }
-                    msg.send("environment", "timeset", new String[]{String.valueOf(env.getTime(p.getWorld())), args[0]});
+                    msg.send("environment", "timeset", new String[]{String.valueOf(env.getTime(p.getWorld())), p.getWorld().getName()});
                 } else {
                     return new UtilPermission(plugin,cs).not();
                 }

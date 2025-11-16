@@ -344,6 +344,21 @@ public class UtilUpdate {
             log.info("");
         }
 
+        if (f.getInt("config-version") == 3) {
+            log.info("Essence is updating your configuration file, please wait...");
+
+            log.info("[1/1] Migrating disabled commands list...");
+            List<String> dcl = f.getStringList("disabled-commands.list");
+            f.delete("disabled-commands.list");
+            f.set("disabled-commands", dcl);
+            log.info("[1/1] Done.");
+
+            f.set("config-version", 4);
+
+            log.info("Done.");
+            log.info("");
+        }
+
         f.save();
     }
 }

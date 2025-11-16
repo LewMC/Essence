@@ -4,8 +4,11 @@ import net.lewmc.essence.Essence;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -277,6 +280,28 @@ public class UtilPlayer {
 
             return success;
         } else {
+            return false;
+        }
+    }
+
+    /**
+     * Gives a player X amount of an item.
+     * @param p Player - The player
+     * @param item String - The item material name
+     * @param amount int - The amount requested
+     * @return boolean - true/false success.
+     */
+    public boolean givePlayerItem(Player p, String item, int amount) {
+        try {
+            PlayerInventory inventory = p.getInventory();
+            Material mat = Material.matchMaterial(item);
+            if (mat == null) {
+                return false;
+            } else {
+                inventory.addItem(new ItemStack(mat, amount));
+                return true;
+            }
+        } catch (Exception e) {
             return false;
         }
     }

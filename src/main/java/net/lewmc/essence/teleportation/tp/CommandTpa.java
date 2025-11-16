@@ -63,8 +63,7 @@ public class CommandTpa extends FoundryPlayerCommand {
             new UtilTeleportRequest(this.plugin).createRequest(cs.getName(), playerToRequest.getName(), false);
 
             msg.send("teleport", "requestsent");
-            msg.sendTo(playerToRequest, "teleport", "requested", new String[] { cs.getName() });
-            msg.sendTo(playerToRequest, "teleport", "acceptdeny");
+            msg.sendToWithButtons(playerToRequest, "teleport", "requested", new String[] { cs.getName() }, "/tpaccept", "/tpdeny");
 
         }
         return true;

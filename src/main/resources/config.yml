@@ -56,6 +56,16 @@ team:
 # TELEPORTATION MODULE
 teleportation:
   enabled: true
+  back:
+    wait: 3
+  top:
+    wait: 3
+  bottom:
+    wait: 3
+  ascend:
+    wait: 3
+  descend:
+    wait: 3
   home:
     wait: 3
     cooldown: 10
@@ -69,6 +79,9 @@ teleportation:
     cooldown: 10
     main-spawn-world: world
     always-spawn: false
+  near:
+    default-radius: 200
+    max-radius: 50000
   requests:
     cooldown: 10
     default-enabled: true
@@ -85,8 +98,12 @@ language: en-GB
 # DISABLED COMMANDS
 # Allows you to disable specific commands.
 disabled-commands:
-  list:
-    - example
+  - example
+
+# ITEM BLACKLIST
+# Items that cannot be /given
+item-blacklist:
+  - example
 
 # ADVANCED SETTINGS
 # These settings should usually be left alone. Only change them if you know what you're doing.
@@ -97,4 +114,4 @@ advanced:
   verbose: false
 
 # Do not change this!
-config-version: 3
+config-version: 4

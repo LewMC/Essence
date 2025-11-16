@@ -7,8 +7,10 @@ import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
+import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -29,6 +31,13 @@ public class UtilTeleport {
      */
     public enum Type {
         INVALID, TO_PLAYER, TO_COORD, PLAYER_TO_PLAYER, PLAYER_TO_COORD
+    }
+
+    /**
+     * Used to communicate the direction of a safe location search.
+     */
+    public enum Direction {
+        UP, DOWN
     }
 
     /**
@@ -196,19 +205,35 @@ public class UtilTeleport {
             this.log.severe("Location: "+location);
             return;
         }
+        
+        // Cross-world teleportation safety check
+        World targetWorld = location.getWorld();
+        World currentWorld = player.getWorld();
+        if (!targetWorld.equals(currentWorld)) {
+            // Validate target world instance validity
+            if (!targetWorld.getName().equals(location.getWorld().getName())) {
+                message.send("teleport","exception");
+                this.log.severe("World mismatch detected during cross-world teleportation.");
+                this.log.severe("Details: {\"error\": \"WORLD_MISMATCH\", \"player\": \"" + player.getName() + "\", \"from\": \"" + currentWorld.getName() + "\", \"to\": \"" + targetWorld.getName() + "\"}.");
+                return;
+            }
+        }
 
         if (delay > 0 && (boolean) this.plugin.config.get("teleportation.move-to-cancel")) {
             message.send("teleport", "movetocancel");
         }
         this.setTeleportStatus(player, true);
         if (flib.isFolia()) {
+            // Ensure minimum delay of 1 tick to avoid FoliaLib warnings
+            long delayTicks = Math.max(1L, delay * 20L);
             flib.getImpl().runAtEntityLater(player, () -> {
                 if (teleportIsValid(player)) {
                     new UtilLocation(plugin).UpdateLastLocation(player);
+                    // Use teleportAsync directly in Folia environment, let Bukkit handle chunk loading
                     player.teleportAsync(location);
                     setTeleportStatus(player, false);
                 }
-            }, delay * 20L);
+            }, delayTicks);
         } else {
             new BukkitRunnable() {
                 @Override
@@ -301,5 +326,116 @@ public class UtilTeleport {
             config.close();
             return true;
         }
+    }
+
+    /**
+     * Finds a safe location relative to the origin point.
+     * @param origin The starting location.
+     * @param direction The direction to search.
+     * @return A safe location, or null if none found.
+     */
+    public static Location findFurthestLocation(Location origin, Direction direction, Player player) {
+        if (origin == null) {
+            return null;
+        }
+
+        World world = origin.getWorld();
+        if (world == null) {
+            return null;
+        }
+
+        int x = origin.getBlockX();
+        int z = origin.getBlockZ();
+        float yaw = origin.getYaw();
+        float pitch = origin.getPitch();
+
+        int startY;
+        int endY;
+        int step;
+        if (direction == Direction.UP) {
+            startY = world.getMaxHeight() + 1;
+            endY = world.getMinHeight();
+            step = -1;
+        } else {
+            startY = world.getMinHeight();
+            endY = world.getMaxHeight();
+            step = 1;
+        }
+        
+        for (int y = startY; (direction == Direction.UP) == (y >= endY); y += step) {
+            Block feet = world.getBlockAt(x, y, z);
+            Block head = (y < world.getMaxHeight() + 1) ? world.getBlockAt(x, y + 1, z) : null;
+            Block below = (y > world.getMinHeight()) ? world.getBlockAt(x, y - 1, z) : null;
+
+            if (isSafeLocation(feet, head, below, player)) {
+                return new Location(world, x + 0.5, y, z + 0.5, yaw, pitch);
+            }
+        }
+
+        return null;
+    }
+
+    public record LevelLocation(Location location, int finalLevels) {}
+
+    /**
+     * Finds a safe location to teleport a player to, given a direction and number of levels.
+     *
+     * @param origin The location to start searching from.
+     * @param direction The direction to search in.
+     * @param levels The number of levels to search.
+     * @param player The player to check for safe locations.
+     * @return A LevelLocation containing the safe location and the number of levels searched, or null if no safe location is found.
+     */
+    public static LevelLocation findLevelLocation(Location origin, Direction direction, Integer levels, Player player) {
+        if (origin == null) {
+            return null;
+        }
+
+        World world = origin.getWorld();
+        if (world == null) {
+            return null;
+        }
+
+        int x = origin.getBlockX();
+        int z = origin.getBlockZ();
+        int y = origin.getBlockY();
+        float yaw = origin.getYaw();
+        float pitch = origin.getPitch();
+
+        int step = (direction == Direction.UP) ? 1 : -1;
+        int currentLevel = 0;
+        int currentY = y + step;
+        Location lastSafeLocation = null;
+
+        while (currentY >= world.getMinHeight() && currentY <= world.getMaxHeight()) {
+            Block feet = world.getBlockAt(x, currentY, z);
+            Block head = (currentY < world.getMaxHeight() + 1) ? world.getBlockAt(x, currentY + 1, z) : null;
+            Block below = (currentY > world.getMinHeight()) ? world.getBlockAt(x, currentY - 1, z) : null;
+
+            if (isSafeLocation(feet, head, below, player)) {
+                currentLevel++;
+                lastSafeLocation = new Location(world, x + 0.5, currentY, z + 0.5, yaw, pitch);
+
+                if (currentLevel == levels) {
+                    return new LevelLocation(lastSafeLocation, currentLevel);
+                }
+
+                currentY += step;
+            }
+
+            currentY += step;
+        }
+
+        return new LevelLocation(lastSafeLocation, currentLevel);
+
+    }
+
+    private static boolean isSafeLocation(Block feet, Block head, Block below, Player player) {
+        return head != null &&
+                (!head.isLiquid() || player.isInvulnerable()) && head.isPassable() &&
+                feet != null &&
+                (!feet.isLiquid() || player.isInvulnerable()) && feet.isPassable() &&
+                below != null &&
+                !below.getType().isAir() && below.getType().isSolid();
     }
 }

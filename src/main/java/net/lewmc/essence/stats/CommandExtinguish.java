@@ -5,31 +5,28 @@ import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
-
-public class CommandHeal extends FoundryCommand {
+public class CommandExtinguish extends FoundryCommand {
     private final Essence plugin;
 
     /**
-     * Constructor for the HealCommand class.
+     * Constructor for the ExtinguishCommand class.
      * @param plugin References to the main plugin class.
      */
-    public CommandHeal(Essence plugin) {
+    public CommandExtinguish(Essence plugin) {
         this.plugin = plugin;
     }
 
     /**
      * The permission required to run the command.
-     * @return String - The permission string.
+     * @return String - The permission string
      */
     @Override
     protected String requiredPermission() {
-        return "essence.stats.heal";
+        return "essence.stats.extinguish";
     }
 
     /**
@@ -44,64 +41,58 @@ public class CommandHeal extends FoundryCommand {
         UtilMessage message = new UtilMessage(this.plugin, cs);
 
         if (args.length > 0) {
-            return this.healOther(new UtilPermission(this.plugin, cs), cs, message, args);
+            return this.extinguishOther(new UtilPermission(this.plugin, cs), cs, message, args);
         } else {
             if (!(cs instanceof Player)) {
-                message.send("heal","usage");
+                message.send("extinguish", "usage");
                 return true;
             }
 
-            return this.healSelf(cs, message);
+            return this.extinguishSelf(cs, message);
         }
     }
 
     /**
-     * Applies healing effects to a player
-     * @param player - The player to heal
+     * Removes fire from a player
+     * @param player - The player to extinguish
      */
-    private void healPlayer(Player player) {
-        player.setHealth((Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()));
-        player.setFoodLevel(20);
-        player.setSaturation(10);
-        player.setExhaustion(0F);
+    private void extinguishPlayer(Player player) {
         player.setFireTicks(0);
-        player.setRemainingAir(player.getMaximumAir());
-        player.clearActivePotionEffects();
     }
 
     /**
-     * Heals the command sender.
-     * @param sender CommandSender - The user to heal.
+     * Extinguishes the command sender.
+     * @param sender CommandSender - The user to extinguish.
      * @param message MessageUtil - The messaging system.
      * @return boolean - If the operation was successful
      */
-    private boolean healSelf(CommandSender sender, UtilMessage message) {
+    private boolean extinguishSelf(CommandSender sender, UtilMessage message) {
         Player player = (Player) sender;
-        healPlayer(player);
-        message.send("heal", "beenhealed");
+        extinguishPlayer(player);
+        message.send("extinguish", "beenextinguished");
         return true;
     }
 
     /**
-     * Heals another user.
-     * @param permission PermissionHandler - The permission system.
-     * @param sender CommandSender - The user to heal.
+     * Extinguishes another user.
+     * @param permission PermissionHandler - The permission system
+     * @param sender CommandSender - The user to extinguish.
      * @param message MessageUtil - The messaging system.
-     * @param args String[] - List of command arguments.
+     * @param args Sting[] - List of command arguments.
      * @return boolean - If the operation was successful
      */
-    private boolean healOther(UtilPermission permission, CommandSender sender, UtilMessage message, String[] args) {
-        if (permission.has("essence.stats.heal.other")) {
+    private boolean extinguishOther(UtilPermission permission, CommandSender sender, UtilMessage message, String[] args) {
+        if (permission.has("essence.stats.extinguish.other")) {
             String pName = args[0];
             Player p = Bukkit.getPlayer(pName);
             if (p != null) {
-                message.send("heal", "healed", new String[] { p.getName() });
+                message.send("extinguish", "extinguished", new String[] { p.getName() });
                 if (!(sender instanceof Player)) {
-                    message.sendTo(p, "heal", "serverhealed");
+                    message.sendTo(p, "extinguish", "serverextinguished");
                 } else {
-                    message.sendTo(p, "heal", "healedby", new String[] { sender.getName() });
+                    message.sendTo(p, "extinguish", "extinguishedby", new String[] { sender.getName() });
                 }
-                healPlayer(p);
+                extinguishPlayer(p);
             } else {
                 message.send("generic", "playernotfound");
             }

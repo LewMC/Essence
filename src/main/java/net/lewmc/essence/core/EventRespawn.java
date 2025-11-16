@@ -5,6 +5,7 @@ import net.lewmc.essence.teleportation.tp.UtilTeleport;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -86,21 +87,23 @@ public class EventRespawn implements Listener {
         } else {
             UtilTeleport tp = new UtilTeleport(plugin);
 
-            if (Bukkit.getServer().getWorld(spawnName) == null) {
-                WorldCreator creator = new WorldCreator(spawnName);
-                creator.createWorld();
+            World world = Bukkit.getServer().getWorld(spawnName);
+            
+            if (world == null) {
+                message.send("spawn", "notexist");
+                this.plugin.log.severe("World "+spawnName+" not found.");
+            } else {
+                tp.doTeleport(
+                        event.getPlayer(),
+                        world,
+                        spawns.getDouble("spawn." + spawnName + ".X"),
+                        spawns.getDouble("spawn." + spawnName + ".Y"),
+                        spawns.getDouble("spawn." + spawnName + ".Z"),
+                        (float) spawns.getDouble("spawn." + spawnName + ".yaw"),
+                        (float) spawns.getDouble("spawn." + spawnName + ".pitch"),
+                        0
+                );
             }
-
-            tp.doTeleport(
-                    event.getPlayer(),
-                    Bukkit.getServer().getWorld(spawnName),
-                    spawns.getDouble("spawn."+spawnName+".X"),
-                    spawns.getDouble("spawn."+spawnName+".Y"),
-                    spawns.getDouble("spawn."+spawnName+".Z"),
-                    (float) spawns.getDouble("spawn."+spawnName+".yaw"),
-                    (float) spawns.getDouble("spawn."+spawnName+".pitch"),
-                    0
-            );
         }
 
         spawns.close();
