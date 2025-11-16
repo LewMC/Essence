@@ -85,7 +85,7 @@ public class CommandBack extends FoundryCommand {
             return true;
         }
 
-        int waitTime = plugin.config.get("teleportation.back.wait") != null ? 
+        int waitTime = plugin.config.get("teleportation.back.wait") != null ?
                 (int) plugin.config.get("teleportation.back.wait") : 0;
         
         // 检查目标世界是否存在
@@ -140,7 +140,7 @@ public class CommandBack extends FoundryCommand {
             return true;
         }
 
-        int waitTime = plugin.config.get("teleportation.back.wait") != null ? 
+        int waitTime = plugin.config.get("teleportation.back.wait") != null ?
                 (int) plugin.config.get("teleportation.back.wait") : 0;
         
         // 检查目标世界是否存在

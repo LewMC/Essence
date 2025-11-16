@@ -6,6 +6,7 @@ import net.lewmc.foundry.Files;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CommandDelwarp extends FoundryPlayerCommand {
     private final Essence plugin;
@@ -37,6 +38,7 @@ public class CommandDelwarp extends FoundryPlayerCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
+        Player p = (Player) cs;
         UtilMessage msg = new UtilMessage(this.plugin, cs);
 
         if (args.length == 0) {
@@ -51,6 +53,13 @@ public class CommandDelwarp extends FoundryPlayerCommand {
         if (config.get("warps."+warpName) == null) {
             config.close();
             msg.send("warp", "notfound", new String[] { warpName });
+            return true;
+        }
+
+        if (!config.get("warps."+warpName+".creator").equals(p.getUniqueId().toString())
+                && !p.hasPermission("essence.warp.delete.other")) {
+            msg.send("warp", "nopermission", new String[] { warpName } );
+            config.close();
             return true;
         }
 

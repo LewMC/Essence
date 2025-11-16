@@ -99,7 +99,10 @@ permissions:
       essence.teleport.back.other: true
       essence.teleport.top: true
       essence.teleport.bottom: true
+      essence.teleport.ascend: true
+      essence.teleport.descend: true
       essence.teleport.random: true
+      essence.teleport.direction: true
       essence.teleport.other: true
       essence.teleport.request.*: true
   essence.teleport.coord:
@@ -116,6 +119,10 @@ permissions:
     description: Go to the highest safe location.
   essence.teleport.bottom:
     description: Go to the lowest safe location.
+  essence.teleport.ascend:
+    description: Ascend to a specified level.
+  essence.teleport.descend:
+    description: Descend to a specified level.
   essence.teleport.random:
     description: Teleport to a random location.
   essence.teleport.other:
@@ -142,6 +149,16 @@ permissions:
     description: Toggle receiving teleport requests.
   essence.teleport.request.cancel:
     description: Cancel a teleport request.
+  essence.orientation.*:
+    description: Allows players to use orientation commands.
+    default: op
+    children:
+      essence.orientation.direction: true
+      essence.orientation.near: true
+  essence.orientation.direction:
+    description: Determine your current direction.
+  essence.orientation.near:
+    description: Lists nearby players within the default or specified radius.
   essence.warp.*:
     description: Allows players to use and manage warps.
     default: op
@@ -150,6 +167,7 @@ permissions:
       essence.warp.list: true
       essence.warp.create: true
       essence.warp.delete: true
+      essence.warp.delete.other: true
   essence.warp.use:
     description: Allows players to warp.
   essence.warp.list:
@@ -157,7 +175,9 @@ permissions:
   essence.warp.create:
     description: Allows players to create warps.
   essence.warp.delete:
-    description: Allows players to delete warps.
+    description: Allows players to delete their warps.
+  essence.warp.delete.other:
+    description: Allows players to delete other players warps.
   essence.stats.*:
     description: Allows players to manage their stats such as health and hunger.
     default: op

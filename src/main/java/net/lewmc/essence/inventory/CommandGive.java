@@ -56,7 +56,7 @@ public class CommandGive extends FoundryCommand {
                 if (pu.givePlayerItem(player, args[0], 1)) {
                     this.msg.send("give","gaveself", new String[] {"1", args[0]});
                 } else {
-                    this.msg.send("give", "itemnotfound");
+                    this.msg.send("give", "itemnotfound", new String[] {args[0]});
                 }
             } else {
                 this.msg.send("give", "usage");

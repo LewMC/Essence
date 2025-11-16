@@ -11,7 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static net.lewmc.essence.teleportation.tp.UtilTeleport.findSafeLocation;
+import static net.lewmc.essence.teleportation.tp.UtilTeleport.findFurthestLocation;
 
 /**
  * /top command.
@@ -77,7 +77,7 @@ public class CommandTop extends FoundryCommand {
      * @return true
      */
     private boolean top(Player player, UtilMessage msg, CommandSender sender, boolean isSelf) {
-        Location safeLocation = findSafeLocation(player.getLocation(), UtilTeleport.Direction.UP);
+        Location safeLocation = findFurthestLocation(player.getLocation(), UtilTeleport.Direction.UP, player);
         int waitTime = plugin.config.get("teleportation.top.wait") != null ?
                 (int) plugin.config.get("teleportation.top.wait") : 0;
 

@@ -334,7 +334,7 @@ public class UtilTeleport {
      * @param direction The direction to search.
      * @return A safe location, or null if none found.
      */
-    public static Location findSafeLocation(Location origin, Direction direction) {
+    public static Location findFurthestLocation(Location origin, Direction direction, Player player) {
         if (origin == null) {
             return null;
         }
@@ -353,7 +353,7 @@ public class UtilTeleport {
         int endY;
         int step;
         if (direction == Direction.UP) {
-            startY = Math.min(world.getMaxHeight() - 1, world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING) + 1);
+            startY = world.getMaxHeight() + 1;
             endY = world.getMinHeight();
             step = -1;
         } else {
@@ -364,10 +364,10 @@ public class UtilTeleport {
         
         for (int y = startY; (direction == Direction.UP) == (y >= endY); y += step) {
             Block feet = world.getBlockAt(x, y, z);
-            Block head = (y < world.getMaxHeight() - 1) ? world.getBlockAt(x, y + 1, z) : null;
+            Block head = (y < world.getMaxHeight() + 1) ? world.getBlockAt(x, y + 1, z) : null;
             Block below = (y > world.getMinHeight()) ? world.getBlockAt(x, y - 1, z) : null;
 
-            if (isSafeLocation(feet, head, below)) {
+            if (isSafeLocation(feet, head, below, player)) {
                 return new Location(world, x + 0.5, y, z + 0.5, yaw, pitch);
             }
         }
@@ -375,13 +375,67 @@ public class UtilTeleport {
         return null;
     }
 
-    private static boolean isSafeLocation(Block feet, Block head, Block below) {
-        return feet != null &&
-                head != null &&
+    public record LevelLocation(Location location, int finalLevels) {}
+
+    /**
+     * Finds a safe location to teleport a player to, given a direction and number of levels.
+     *
+     * @param origin The location to start searching from.
+     * @param direction The direction to search in.
+     * @param levels The number of levels to search.
+     * @param player The player to check for safe locations.
+     * @return A LevelLocation containing the safe location and the number of levels searched, or null if no safe location is found.
+     */
+    public static LevelLocation findLevelLocation(Location origin, Direction direction, Integer levels, Player player) {
+        if (origin == null) {
+            return null;
+        }
+
+        World world = origin.getWorld();
+        if (world == null) {
+            return null;
+        }
+
+        int x = origin.getBlockX();
+        int z = origin.getBlockZ();
+        int y = origin.getBlockY();
+        float yaw = origin.getYaw();
+        float pitch = origin.getPitch();
+
+        int step = (direction == Direction.UP) ? 1 : -1;
+        int currentLevel = 0;
+        int currentY = y + step;
+        Location lastSafeLocation = null;
+
+        while (currentY >= world.getMinHeight() && currentY <= world.getMaxHeight()) {
+            Block feet = world.getBlockAt(x, currentY, z);
+            Block head = (currentY < world.getMaxHeight() + 1) ? world.getBlockAt(x, currentY + 1, z) : null;
+            Block below = (currentY > world.getMinHeight()) ? world.getBlockAt(x, currentY - 1, z) : null;
+
+            if (isSafeLocation(feet, head, below, player)) {
+                currentLevel++;
+                lastSafeLocation = new Location(world, x + 0.5, currentY, z + 0.5, yaw, pitch);
+
+                if (currentLevel == levels) {
+                    return new LevelLocation(lastSafeLocation, currentLevel);
+                }
+
+                currentY += step;
+            }
+
+            currentY += step;
+        }
+
+        return new LevelLocation(lastSafeLocation, currentLevel);
+
+    }
+
+    private static boolean isSafeLocation(Block feet, Block head, Block below, Player player) {
+        return head != null &&
+                (!head.isLiquid() || player.isInvulnerable()) && head.isPassable() &&
+                feet != null &&
+                (!feet.isLiquid() || player.isInvulnerable()) && feet.isPassable() &&
                 below != null &&
-                feet.isPassable() &&
-                head.isPassable() &&
-                !below.getType().isAir() &&
-                below.getType().isSolid();
+                !below.getType().isAir() && below.getType().isSolid();
     }
 }

@@ -123,6 +123,8 @@ public class EssenceConfiguration {
         putInt("teleportation.back.wait", (Integer) getValue("teleportation.back.wait", 3, Integer.class));
         putInt("teleportation.top.wait", (Integer) getValue("teleportation.top.wait", 3, Integer.class));
         putInt("teleportation.bottom.wait", (Integer) getValue("teleportation.bottom.wait", 3, Integer.class));
+        putInt("teleportation.ascend.wait", (Integer) getValue("teleportation.ascend.wait", 3, Integer.class));
+        putInt("teleportation.descend.wait", (Integer) getValue("teleportation.descend.wait", 3, Integer.class));
         putInt("teleportation.home.wait", (Integer) getValue("teleportation.home.wait", 3, Integer.class));
         putInt("teleportation.home.cooldown", (Integer) getValue("teleportation.home.cooldown", 10, Integer.class));
         putInt("teleportation.warp.wait", (Integer) getValue("teleportation.warp.wait", 3, Integer.class));
@@ -132,6 +134,8 @@ public class EssenceConfiguration {
         putInt("teleportation.spawn.cooldown", (Integer) getValue("teleportation.spawn.cooldown", 10, Integer.class));
         putString("teleportation.spawn.main-spawn-world", (String) getValue("teleportation.spawn.main-spawn-world", "world", String.class));
         putBoolean("teleportation.spawn.always-spawn", (boolean) getValue("teleportation.spawn.always-spawn", false, Boolean.class));
+        putInt("teleportation.near.default-radius", (Integer) getValue("teleportation.near.default-radius", 200, Integer.class));
+        putInt("teleportation.near.max-radius", (Integer) getValue("teleportation.near.max-radius", 50000, Integer.class));
         putInt("teleportation.requests.cooldown", (Integer) getValue("teleportation.requests.cooldown", 10, Integer.class));
         putBoolean("teleportation.requests.default-enabled", (boolean) getValue("teleportation.requests.default-enabled", true, Boolean.class));
         putBoolean("teleportation.extended-toggle", (boolean) getValue("teleportation.extended-toggle", false, Boolean.class));

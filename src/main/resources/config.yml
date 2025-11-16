@@ -62,6 +62,10 @@ teleportation:
     wait: 3
   bottom:
     wait: 3
+  ascend:
+    wait: 3
+  descend:
+    wait: 3
   home:
     wait: 3
     cooldown: 10
@@ -75,6 +79,9 @@ teleportation:
     cooldown: 10
     main-spawn-world: world
     always-spawn: false
+  near:
+    default-radius: 200
+    max-radius: 50000
   requests:
     cooldown: 10
     default-enabled: true
