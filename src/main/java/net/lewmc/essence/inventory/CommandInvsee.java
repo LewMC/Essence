@@ -31,7 +31,7 @@ public class CommandInvsee extends FoundryPlayerCommand {
      */
     @Override
     protected String requiredPermission() {
-        return "essence.inventory.invsee";
+        return "essence.invsee";
     }
 
     /**
