@@ -3,7 +3,6 @@ package net.lewmc.essence.stats;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,7 +15,6 @@ public class CommandEnchant extends FoundryPlayerCommand {
 
     /**
      * Constructor for the CommandEnchant class.
-     *
      * @param plugin References to the main plugin class.
      */
     public CommandEnchant(Essence plugin) {
