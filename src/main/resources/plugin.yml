@@ -123,10 +123,6 @@ permissions:
     description: Descend to a specified level.
   essence.teleport.random:
     description: Teleport to a random location.
-  essence.teleport.direction:
-    description: Determine your current direction.
-  essence.teleport.near:
-    description: Lists nearby players within the default or specified radius.
   essence.teleport.other:
     description: Teleport another player.
   essence.teleport.request.*:
@@ -151,6 +147,16 @@ permissions:
     description: Toggle receiving teleport requests.
   essence.teleport.request.cancel:
     description: Cancel a teleport request.
+  essence.orientation.*:
+    description: Allows players to use orientation commands.
+    default: op
+    children:
+      essence.orientation.direction: true
+      essence.orientation.near: true
+  essence.orientation.direction:
+    description: Determine your current direction.
+  essence.orientation.near:
+    description: Lists nearby players within the default or specified radius.
   essence.warp.*:
     description: Allows players to use and manage warps.
     default: op

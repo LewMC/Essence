@@ -19,7 +19,7 @@ public class CommandNear extends FoundryPlayerCommand {
 
     @Override
     protected String requiredPermission() {
-        return "essence.teleport.near";
+        return "essence.orientation.near";
     }
 
     @Override

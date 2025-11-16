@@ -26,7 +26,7 @@ public class CommandDirection extends FoundryPlayerCommand {
      */
     @Override
     protected String requiredPermission() {
-        return "essence.teleport.direction";
+        return "essence.orientation.direction";
     }
 
     /**
