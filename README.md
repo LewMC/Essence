@@ -4,7 +4,7 @@
 - 🌐 **Help Translate Essence** - https://crowdin.com/project/lewmc-essence
 - ⭐ Enjoying Essence? We'd love to hear your feedback on Spigot. Leave us a review [here](https://www.spigotmc.org/resources/essence.114553/).
 
-[Maven Repository](https://repo.lewmc.net) - [Documentation](https://wiki.lewmc.net/foundry.html) - [JavaDocs](https://lewmc.github.io/Essence) - [Code Analysis](https://sonarcloud.io/project/overview?id=LewMC_Essence)
+[Maven Repository](https://repo.lewmc.net) - [Documentation](https://wiki.lewmc.net/foundry.html) - [Javadocs](https://lewmc.github.io/Essence) - [Code Analysis](https://sonarcloud.io/project/overview?id=LewMC_Essence)
 
 [![Crowdin](https://badges.crowdin.net/lewmc-essence/localized.svg)](https://crowdin.com/project/lewmc-essence)
 
@@ -21,7 +21,7 @@ This helps us to ensure that our snapshot builds are labelled as snapshot so tha
 Install JDK 21 before continuing. Click [here](https://docs.oracle.com/en/java/javase/21/install/index.html) for documentation.
 
 - You will also need Maven for the `mvn` command, which can be installed [here](https://maven.apache.org/download.cgi).
-- Make sure that your version of JDK 21 includes JavaDoc.
+- Make sure that your version of JDK 21 includes Javadoc.
   - For example, Eclipse Temurin JDK with Hotspot 21 includes this executable.
 
 ```sh
