@@ -60,7 +60,7 @@ public class CommandNear extends FoundryPlayerCommand {
         // Get nearby players
         List<Player> nearbyPlayers = p.getLocation().getNearbyPlayers(radius).stream()
                 .filter(player -> !player.getUniqueId().equals(p.getUniqueId())) // Exclude self
-                .filter(player -> !player.hasMetadata("vanish")) // Exclude vanished players
+                .filter(player -> !player.hasMetadata("vanish") && !player.hasMetadata("vanished")) // Exclude vanished players
                 .filter(player -> tp.teleportToggleCheck(p, player)) // Check if player can be teleported to
                 .toList();
 
