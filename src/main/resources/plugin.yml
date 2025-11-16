@@ -190,6 +190,7 @@ permissions:
       essence.stats.burn: true
       essence.stats.extinguish: true
       essence.stats.god: true
+      essence.stats.enchant: true
   essence.stats.heal:
     description: Allows you to heal yourself.
   essence.stats.feed:
@@ -206,6 +207,8 @@ permissions:
     description: Allows you to extinguish a player
   essence.stats.god:
     description: Allows you to toggle god mode
+  essence.stats.enchant:
+    description: Allows you to enchant an item
   essence.stats.other.*:
     description: Allows players to manage other player's stats such as health and hunger.
     default: op
@@ -265,6 +268,7 @@ permissions:
       essence.chat.reply: true
       essence.chat.nick: true
       essence.chat.nick.*: true
+      essence.chat.list: true
   essence.chat.broadcast:
     description: Allows players to broadcast a message to chat.
   essence.chat.msg:
@@ -280,6 +284,10 @@ permissions:
     description: Allows players to change their display names.
   essence.chat.nick.other:
     description: Allows players to change other player's display names.
+  essence.chat.list:
+    description: See who else is online.
+  essence.chat.list.invisible:
+    description: See online invisible players.
   essence.economy.*:
     description: Allows players to access all economy commands.
     default: op
