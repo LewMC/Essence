@@ -29,7 +29,7 @@ public class Essence extends JavaPlugin {
     /**
      * The logging system.
      */
-    private Logger log;
+    public Logger log;
 
     /**
      * Stores pending teleport requests.

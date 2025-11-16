@@ -58,6 +58,9 @@ help:
   stonecutter: "§6[Essence] §e/stonecutter - Open a stonecutter."
   echest: "§6[Essence] §e/echest - Open your ender chest."
   trash: "§6[Essence] §e/trash - Open a disposal menu."
+  give: "§6[Essence] §e/give <player> <item> - Give someone something."
+  skull: "§6[Essence] §e/skull <player> - Get a player's skull."
+  invsee: "§6[Essence] §e/invsee <player> - See a player's inventory."
   gamemode: "§6[Essence] ---------- Essence Help - Gamemode ---------"
   gm: "§6[Essence] §e/gamemode - Change gamemode."
   gmc: "§6[Essence] §e/gmc - Switch to creative mode."
@@ -413,3 +416,5 @@ give:
 skull:
   usage: "§4[Essence] §cUsage: /skull <player>"
   given: "§2[Essence] §aGiven {{1}}'s skull."
+invsee:
+  usage: "§4[Essence] §cUsage: /invsee <player>"

@@ -1,7 +1,6 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
-import org.bukkit.command.CommandSender;
 
 /**
  * Help command class.
@@ -10,7 +9,6 @@ public class CommandExtensionHelp {
     private final UtilMessage message;
     private final String[] args;
     private final Essence plugin;
-    private final CommandSender cs;
 
     /**
      * Constructor for the HelpCommand class.
@@ -18,11 +16,10 @@ public class CommandExtensionHelp {
      * @param message MessageUtil - Instance of the MessageUtil class.
      * @param args String[] - Array of command arguments.
      */
-    public CommandExtensionHelp(Essence plugin, UtilMessage message, String[] args, CommandSender cs) {
+    public CommandExtensionHelp(Essence plugin, UtilMessage message, String[] args) {
         this.plugin = plugin;
         this.message = message;
         this.args = args;
-        this.cs = cs;
     }
 
     /**
@@ -47,9 +44,12 @@ public class CommandExtensionHelp {
                     this.blank(blank);
                     this.message.send("help", "page", new String[] { "1", "2" });
                 } else if (args[2].equals("2")) {
-                    int blank = 7;
+                    int blank = 4;
                     this.message.send("help", "inventory");
                     if (!cu.isDisabled("trash")) { this.message.send("help", "trash"); } else { blank++; }
+                    if (!cu.isDisabled("give")) { this.message.send("help", "give"); } else { blank++; }
+                    if (!cu.isDisabled("skull")) { this.message.send("help", "skull"); } else { blank++; }
+                    if (!cu.isDisabled("invsee")) { this.message.send("help", "invsee"); } else { blank++; }
                     this.blank(blank);
                     this.message.send("help", "page", new String[] { "2", "2" });
                 }

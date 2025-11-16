@@ -43,7 +43,7 @@ public class CommandEssence extends FoundryCommand {
 
         if (args.length > 0) {
             if ("help".equals(args[0])) {
-                CommandExtensionHelp helpCommand = new CommandExtensionHelp(this.plugin, msg, args, cs);
+                CommandExtensionHelp helpCommand = new CommandExtensionHelp(this.plugin, msg, args);
                 return helpCommand.runHelpCommand();
             } else if ("reload".equals(args[0])) {
                 return this.reloadCommand(cs, msg);
