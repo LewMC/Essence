@@ -133,6 +133,7 @@ help:
   reply: "§6[Essence] §e/reply <message> - Reply to your last /msg."
   nickself: "§6[Essence] §e/nick <name> - Change your displayname."
   nickother: "§6[Essence] §e/nick <user> <name> - Change other nick."
+  list: "§6[Essence] §e/list - See who is online."
   environment: "§6[Essence] -------- Essence Help - Environment --------"
   time: "§6[Essence] §e/time - View and set your world time."
   weather: "§6[Essence] §e/weather - View and set your world weather."
@@ -460,3 +461,6 @@ enchant:
   notfound: "§4[Essence] §cEnchantment not found."
   invalidtype: "§4[Essence] §cYou can't enchant that."
   done: "§2[Essence] §aItem enchanted."
+list:
+  number: "§6[Essence] §eOnline: {{1}}/{{2}}"
+  list: "§6[Essence] §e{{1}}"

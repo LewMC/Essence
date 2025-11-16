@@ -31,6 +31,7 @@ public class ModuleChat extends FoundryModule {
         if (!cmd.isDisabled("msg")) { reg.runtimeCommand("msg", new CommandMsg((Essence) plugin), "message","pm","tell","w"); }
         if (!cmd.isDisabled("nick")) { reg.runtimeCommand("nick", new CommandNick((Essence) plugin), "nickname", "displayname"); }
         if (!cmd.isDisabled("reply")) { reg.runtimeCommand("reply", new CommandReply((Essence) plugin), "r"); }
+        if (!cmd.isDisabled("list")) { reg.runtimeCommand("list", new CommandList((Essence) plugin), "online"); }
     }
 
     /**

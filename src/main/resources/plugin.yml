@@ -268,6 +268,7 @@ permissions:
       essence.chat.reply: true
       essence.chat.nick: true
       essence.chat.nick.*: true
+      essence.chat.list: true
   essence.chat.broadcast:
     description: Allows players to broadcast a message to chat.
   essence.chat.msg:
@@ -283,6 +284,10 @@ permissions:
     description: Allows players to change their display names.
   essence.chat.nick.other:
     description: Allows players to change other player's display names.
+  essence.chat.list:
+    description: See who else is online.
+  essence.chat.list.invisible:
+    description: See online invisible players.
   essence.economy.*:
     description: Allows players to access all economy commands.
     default: op
