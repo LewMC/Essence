@@ -79,6 +79,9 @@ teleportation:
     cooldown: 10
     main-spawn-world: world
     always-spawn: false
+  near:
+    default-radius: 200
+    max-radius: 50000
   requests:
     cooldown: 10
     default-enabled: true

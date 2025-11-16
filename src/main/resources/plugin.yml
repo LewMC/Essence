@@ -125,6 +125,8 @@ permissions:
     description: Teleport to a random location.
   essence.teleport.direction:
     description: Determine your current direction.
+  essence.teleport.near:
+    description: Lists nearby players within the default or specified radius.
   essence.teleport.other:
     description: Teleport another player.
   essence.teleport.request.*:

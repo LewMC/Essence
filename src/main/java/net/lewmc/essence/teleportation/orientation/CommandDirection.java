@@ -1,4 +1,4 @@
-package net.lewmc.essence.teleportation;
+package net.lewmc.essence.teleportation.orientation;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
