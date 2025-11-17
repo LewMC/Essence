@@ -51,7 +51,8 @@ public class EventRespawn implements Listener {
                     player.lastLocation.z,
                     player.lastLocation.yaw,
                     player.lastLocation.pitch,
-                    0
+                    0,
+                    false
             );
 
             return;
@@ -74,7 +75,8 @@ public class EventRespawn implements Listener {
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getZ(),
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getYaw(),
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch(),
-                        0
+                        0,
+                        false
                 );
             } else {
                 message.send("spawn", "notexist");
@@ -97,7 +99,8 @@ public class EventRespawn implements Listener {
                         spawns.getDouble("spawn." + spawnName + ".Z"),
                         (float) spawns.getDouble("spawn." + spawnName + ".yaw"),
                         (float) spawns.getDouble("spawn." + spawnName + ".pitch"),
-                        0
+                        0,
+                        false
                 );
             }
         }

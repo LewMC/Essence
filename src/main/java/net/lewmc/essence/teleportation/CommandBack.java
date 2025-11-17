@@ -90,7 +90,8 @@ public class CommandBack extends FoundryCommand {
                 player.lastLocation.z,
                 player.lastLocation.yaw,
                 player.lastLocation.pitch,
-                waitTime
+                waitTime,
+                true
         );
 
         if (waitTime == 0) {
@@ -132,7 +133,8 @@ public class CommandBack extends FoundryCommand {
                 player.lastLocation.z,
                 player.lastLocation.yaw,
                 player.lastLocation.pitch,
-                waitTime
+                waitTime,
+                true
         );
 
         if (waitTime == 0) {

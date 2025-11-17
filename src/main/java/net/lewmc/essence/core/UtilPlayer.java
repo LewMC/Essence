@@ -40,47 +40,51 @@ public class UtilPlayer {
         Files f = new Files(this.plugin.foundryConfig, this.plugin);
 
         if (f.exists(f.playerDataFile(p.getUniqueId()))) {
+            f.load(f.playerDataFile(p));
             TypePlayer player = new TypePlayer();
 
-            Object atr = f.get(PLAYER_KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString());
-            player.user.acceptingTeleportRequests = (atr == null) ? true : (boolean) atr;
+            Boolean atr = f.getBoolean(PLAYER_KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString());
+            player.user.acceptingTeleportRequests = (atr == null) ? true : atr;
 
             player.user.lastSeen = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            player.user.lastKnownName = p.getName();
-            Object n = f.get(PLAYER_KEYS.USER_NICKNAME.toString());
-            player.user.nickname = (n == null) ? null : (String) n;
 
-            Object t = f.get(PLAYER_KEYS.USER_TEAM.toString());
-            player.user.team = (t == null) ? null : t.toString();
+            player.user.lastKnownName = p.getName();
+
+            String n = f.getString(PLAYER_KEYS.USER_NICKNAME.toString());
+            player.user.nickname = (n == null) ? null : n;
+
+            String t = f.getString(PLAYER_KEYS.USER_TEAM.toString());
+            player.user.team = (t == null) ? null : t;
 
             if ((boolean) this.plugin.config.get("advanced.playerdata.store-ip-address")) {
                 f.set(PLAYER_KEYS.USER_IP_ADDRESS.toString(), Objects.requireNonNull(p.getPlayer().getAddress()).getAddress().getHostAddress());
             }
 
-            Object b = f.get(PLAYER_KEYS.ECONOMY_BALANCE.toString());
-            player.economy.balance = (b == null) ? (double) this.plugin.config.get("economy.start-money") : (double) b;
+            Double b = f.getDouble(PLAYER_KEYS.ECONOMY_BALANCE.toString());
+            player.economy.balance = (b == null) ? (double) this.plugin.config.get("economy.start-money") : b;
 
-            Object ap = f.get(PLAYER_KEYS.ECONOMY_ACCEPTING_PAYMENTS.toString());
-            player.economy.acceptingPayments = (ap == null) ? true : (boolean) ap;
+            Boolean ap = f.getBoolean(PLAYER_KEYS.ECONOMY_ACCEPTING_PAYMENTS.toString());
+            player.economy.acceptingPayments = (ap == null) ? true : ap;
 
-            player.lastLocation.world = f.get(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString()).toString();
+            String llw = f.getString(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
+            player.lastLocation.world = (llw == null) ? null : llw;
 
-            Object llx = f.get(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
-            player.lastLocation.x = (llx == null) ? p.getPlayer().getLocation().getX() : (double) llx;
+            Double llx = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
+            player.lastLocation.x = (llx == null) ? p.getPlayer().getLocation().getX() : llx;
 
-            Object lly = f.get(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
-            player.lastLocation.y = (lly == null) ? p.getPlayer().getLocation().getX() : (double) lly;
+            Double lly = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
+            player.lastLocation.y = (lly == null) ? p.getPlayer().getLocation().getX() : lly;
 
-            Object llz = f.get(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
-            player.lastLocation.z = (llz == null) ? p.getPlayer().getLocation().getZ() : (double) llz;
+            Double llz = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
+            player.lastLocation.z = (llz == null) ? p.getPlayer().getLocation().getZ() : llz;
 
-            Object llyaw = f.get(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
-            player.lastLocation.yaw = (llyaw == null) ? p.getPlayer().getLocation().getYaw() : (float) llyaw;
+            Double llyaw = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
+            player.lastLocation.yaw = (llyaw == null) ? p.getPlayer().getLocation().getYaw() : Float.parseFloat(String.valueOf(llyaw));
 
-            Object llpitch = f.get(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
-            player.lastLocation.pitch = (llpitch == null) ? p.getPlayer().getLocation().getPitch() : (float) llpitch;
+            Double llpitch = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
+            player.lastLocation.pitch = (llpitch == null) ? p.getPlayer().getLocation().getPitch() : Float.parseFloat(String.valueOf(llyaw));
 
-            Object llib = f.get(PLAYER_KEYS.LAST_KNOWN_LOCATION_IS_BED.toString());
+            Boolean llib = f.getBoolean(PLAYER_KEYS.LAST_KNOWN_LOCATION_IS_BED.toString());
             player.lastLocation.isBed = (llib == null) ? false : (boolean) llib;
 
             this.plugin.players.put(
@@ -102,8 +106,9 @@ public class UtilPlayer {
     public boolean savePlayer(OfflinePlayer p) {
         Files f = new Files(this.plugin.foundryConfig, this.plugin);
 
-        if (f.exists(f.playerDataFile(p.getUniqueId()))) {
+        if (f.exists(f.playerDataFile(p))) {
             TypePlayer player = this.plugin.players.get(p.getUniqueId());
+            f.load(f.playerDataFile(p));
 
             f.set(PLAYER_KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString(), player.user.acceptingTeleportRequests);
             f.set(PLAYER_KEYS.USER_LAST_SEEN.toString(), player.user.lastSeen);

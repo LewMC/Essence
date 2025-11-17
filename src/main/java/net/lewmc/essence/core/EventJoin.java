@@ -101,7 +101,8 @@ public class EventJoin implements Listener {
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getZ(),
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getYaw(),
                         Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch(),
-                        0
+                        0,
+                        true
                 );
             } else {
                 message.send("spawn", "notexist");
@@ -121,7 +122,8 @@ public class EventJoin implements Listener {
                     spawnConfiguration.getDouble("spawn."+spawnName+".Z"),
                     (float) spawnConfiguration.getDouble("spawn."+spawnName+".yaw"),
                     (float) spawnConfiguration.getDouble("spawn."+spawnName+".pitch"),
-                    0
+                    0,
+                    true
             );
         }
 
