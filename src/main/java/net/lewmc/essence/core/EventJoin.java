@@ -77,7 +77,14 @@ public class EventJoin implements Listener {
     private void spawn(PlayerJoinEvent event, Logger log) {
         UtilMessage message = new UtilMessage(this.plugin, event.getPlayer());
 
-        String spawnName = this.plugin.config.get("teleportation.spawn.main-spawn-world").toString();
+        Object spawnConfig = this.plugin.config.get("teleportation.spawn.main-spawn-world");
+        if (spawnConfig == null) {
+            if (plugin.verbose) {
+                log.severe("Config key 'teleportation.spawn.main-spawn-world' is not set; skipping join spawn teleport.");
+            }
+            return;
+        }
+        String spawnName = spawnConfig.toString();
 
         Files spawnConfiguration = new Files(this.plugin.foundryConfig, this.plugin);
         if (!spawnConfiguration.load("data/spawns.yml")) {

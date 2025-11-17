@@ -57,7 +57,10 @@ public class UtilPlayer {
             player.user.team = (t == null) ? null : t;
 
             if ((boolean) this.plugin.config.get("advanced.playerdata.store-ip-address")) {
-                f.set(PLAYER_KEYS.USER_IP_ADDRESS.toString(), Objects.requireNonNull(p.getPlayer().getAddress()).getAddress().getHostAddress());
+                Player onlinePlayer = p.getPlayer();
+                if (onlinePlayer != null && onlinePlayer.getAddress() != null) {
+                    f.set(PLAYER_KEYS.USER_IP_ADDRESS.toString(), onlinePlayer.getAddress().getAddress().getHostAddress());
+                }
             }
 
             Double b = f.getDouble(PLAYER_KEYS.ECONOMY_BALANCE.toString());
@@ -69,19 +72,19 @@ public class UtilPlayer {
             String llw = f.getString(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
             player.lastLocation.world = (llw == null) ? null : llw;
 
-            Double llx = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
+            Double llx = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_X.toString());
             player.lastLocation.x = (llx == null) ? p.getPlayer().getLocation().getX() : llx;
 
-            Double lly = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
+            Double lly = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_Y.toString());
             player.lastLocation.y = (lly == null) ? p.getPlayer().getLocation().getX() : lly;
 
-            Double llz = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
+            Double llz = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_Z.toString());
             player.lastLocation.z = (llz == null) ? p.getPlayer().getLocation().getZ() : llz;
 
-            Double llyaw = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
+            Double llyaw = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_YAW.toString());
             player.lastLocation.yaw = (llyaw == null) ? p.getPlayer().getLocation().getYaw() : Float.parseFloat(String.valueOf(llyaw));
 
-            Double llpitch = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
+            Double llpitch = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_PITCH.toString());
             player.lastLocation.pitch = (llpitch == null) ? p.getPlayer().getLocation().getPitch() : Float.parseFloat(String.valueOf(llyaw));
 
             Boolean llib = f.getBoolean(PLAYER_KEYS.LAST_KNOWN_LOCATION_IS_BED.toString());
@@ -98,7 +101,7 @@ public class UtilPlayer {
     }
 
     /**
-     * Saves a player's data - WARNING: DOES NOT SAVE IT
+     * Saves a player's data
      * @param p OfflinePlayer - The player
      * @return boolean - Success?
      * @since 1.11.0
@@ -108,6 +111,10 @@ public class UtilPlayer {
 
         if (f.exists(f.playerDataFile(p))) {
             TypePlayer player = this.plugin.players.get(p.getUniqueId());
+            if (player == null) {
+                return false;
+            }
+
             f.load(f.playerDataFile(p));
 
             f.set(PLAYER_KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString(), player.user.acceptingTeleportRequests);
@@ -136,7 +143,7 @@ public class UtilPlayer {
     }
 
     /**
-     * Unloads a player's data - WARNING: DOES NOT SAVE IT
+     * Unloads a player's data from memory - WARNING: Does not save! Call savePlayer() first to persist changes.
      * @param p OfflinePlayer - The player
      * @return boolean - Success?
      * @since 1.11.0
@@ -330,7 +337,7 @@ public class UtilPlayer {
         if (cs instanceof Player p) {
             TypePlayer player = this.plugin.players.get(p.getUniqueId());
             player.user.nickname = nickname;
-            this.plugin.players.replace(p.getUniqueId(), player);
+            this.plugin.players.put(p.getUniqueId(), player);
             return true;
         } else {
             return false;
@@ -347,7 +354,7 @@ public class UtilPlayer {
         if (cs instanceof Player p) {
             TypePlayer player = this.plugin.players.get(p.getUniqueId());
             player.user.nickname = null;
-            this.plugin.players.replace(p.getUniqueId(), player);
+            this.plugin.players.put(p.getUniqueId(), player);
             return true;
         } else {
             return false;

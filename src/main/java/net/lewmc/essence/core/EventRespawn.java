@@ -40,22 +40,28 @@ public class EventRespawn implements Listener {
         config.close();
 
         TypePlayer player = this.plugin.players.get(event.getPlayer().getUniqueId());
-
-        if (!player.lastLocation.isBed && !alwaysSpawn) {
+        if (player == null || player.lastLocation.world == null) {
+            // Fall through to spawn logic below
+        } else if (!player.lastLocation.isBed && !alwaysSpawn) {
             UtilTeleport tp = new UtilTeleport(plugin);
-            tp.doTeleport(
-                    event.getPlayer(),
-                    Bukkit.getServer().getWorld(player.lastLocation.world),
-                    player.lastLocation.x,
-                    player.lastLocation.y,
-                    player.lastLocation.z,
-                    player.lastLocation.yaw,
-                    player.lastLocation.pitch,
-                    0,
-                    false
-            );
+            World world = Bukkit.getServer().getWorld(player.lastLocation.world);
+            if (world == null) {
+                // Fall through to spawn logic
+            } else {
+                tp.doTeleport(
+                        event.getPlayer(),
+                        world,
+                        player.lastLocation.x,
+                        player.lastLocation.y,
+                        player.lastLocation.z,
+                        player.lastLocation.yaw,
+                        player.lastLocation.pitch,
+                        0,
+                        false
+                );
 
-            return;
+                return;
+            }
         }
 
         Files spawns = new Files(this.plugin.foundryConfig, this.plugin);

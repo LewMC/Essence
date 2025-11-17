@@ -73,6 +73,10 @@ public class CommandBack extends FoundryCommand {
      */
     private boolean backSelf(Player p, UtilMessage msg) {
         TypePlayer player = this.plugin.players.get(p.getUniqueId());
+        if (player == null || player.lastLocation.world == null) {
+            msg.send("back", "cant");
+            return true;
+        }
 
         int waitTime = plugin.config.get("teleportation.back.wait") != null ?
                 (int) plugin.config.get("teleportation.back.wait") : 0;
@@ -119,8 +123,7 @@ public class CommandBack extends FoundryCommand {
                 (int) plugin.config.get("teleportation.back.wait") : 0;
 
         TypePlayer player = this.plugin.players.get(targetPlayer.getUniqueId());
-
-        if (Bukkit.getServer().getWorld(player.lastLocation.world) == null) {
+        if (player == null || player.lastLocation.world == null || Bukkit.getServer().getWorld(player.lastLocation.world) == null) {
             msg.send("back", "cantother", new String[]{targetPlayer.getName()});
             return true;
         }

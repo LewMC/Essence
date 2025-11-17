@@ -61,13 +61,18 @@ public class UtilTeam {
                 teamsFile.save();
 
                 TypePlayer leaderPlayer = this.plugin.players.get(leader);
+                if (leaderPlayer == null) {
+                    message.send("generic", "exception");
+                    this.plugin.log.warn("Player data not loaded for leader: " + leader);
+                    return;
+                }
                 leaderPlayer.user.team = name;
-                this.plugin.players.replace(leader, leaderPlayer);
+                this.plugin.players.put(leader, leaderPlayer);
 
                 message.send("team", "created", new String[] { name });
             } else {
                 message.send("generic", "exception");
-                new Logger(this.plugin.foundryConfig).warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
+                this.plugin.log.warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
             }
         } else {
             message.send("team", "exists");
@@ -152,7 +157,11 @@ public class UtilTeam {
      * @return String - Name of the player's team.
      */
     public @Nullable String getPlayerTeam(UUID player) {
-        return this.plugin.players.get(player).user.team;
+        TypePlayer playerData = this.plugin.players.get(player);
+        if (playerData != null) {
+            return playerData.user.team;
+        }
+        return null;
     }
 
     /**
@@ -165,8 +174,12 @@ public class UtilTeam {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
         TypePlayer opt = this.plugin.players.get(op.getUniqueId());
+        if (opt == null) {
+            return false;
+        }
+
         opt.user.team = team;
-        this.plugin.players.replace(op.getUniqueId(), opt);
+        this.plugin.players.put(op.getUniqueId(), opt);
 
         Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");

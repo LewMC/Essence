@@ -22,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The main Essence class.
@@ -50,12 +51,12 @@ public class Essence extends JavaPlugin {
      * CommandSender = The receiver.
      * CommandSender = The sender.
      */
-    public Map<CommandSender, CommandSender> msgHistory = new HashMap<>();
+    public ConcurrentHashMap<CommandSender, CommandSender> msgHistory = new ConcurrentHashMap<>();
 
     /**
      * Stores a cache of player data.
      */
-    public HashMap<UUID, TypePlayer> players = new HashMap<>();
+    public ConcurrentHashMap<UUID, TypePlayer> players = new ConcurrentHashMap<>();
 
     /**
      * Store's Essence's configuration.

@@ -25,6 +25,12 @@ public class UtilLocation {
      */
     public void UpdateLastLocation(Player p) {
         TypePlayer player = this.plugin.players.get(p.getUniqueId());
+
+        if (player == null) {
+            this.plugin.log.warn("Unable to update last location: player "+p.getName()+" is null.");
+            return;
+        }
+
         player.lastLocation.world = p.getLocation().getWorld().getName();
         player.lastLocation.x = p.getLocation().getX();
         player.lastLocation.y = p.getLocation().getY();
@@ -32,7 +38,7 @@ public class UtilLocation {
         player.lastLocation.yaw = p.getLocation().getYaw();
         player.lastLocation.pitch = p.getLocation().getPitch();
         player.lastLocation.isBed = false;
-        this.plugin.players.replace(p.getUniqueId(), player);
+        this.plugin.players.put(p.getUniqueId(), player);
     }
 
     /**

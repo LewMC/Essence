@@ -1,5 +1,6 @@
 package net.lewmc.essence.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class TypePlayer {
         public String lastKnownName;
         public String nickname;
         public String ipAddress;
-        public List<String> ignoringPlayers;
+        public List<String> ignoringPlayers = new ArrayList<>();;
         public String team;
     }
 

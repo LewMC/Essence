@@ -27,6 +27,11 @@ public class EventPlayerBedEnter implements Listener {
         Location bedLocation = event.getBed().getLocation();
 
         TypePlayer player = this.plugin.players.get(event.getPlayer().getUniqueId());
+        if (player == null) {
+            this.plugin.log.warn("Player data not loaded for " + event.getPlayer().getName());
+            return;
+        }
+
         player.lastLocation.world = bedLocation.getWorld().getName();
         player.lastLocation.x = bedLocation.getX();
         player.lastLocation.y = bedLocation.getY();
@@ -35,7 +40,7 @@ public class EventPlayerBedEnter implements Listener {
         player.lastLocation.pitch = bedLocation.getPitch();
         player.lastLocation.isBed = true;
 
-        this.plugin.players.replace(event.getPlayer().getUniqueId(), player);
+        this.plugin.players.put(event.getPlayer().getUniqueId(), player);
 
         UtilMessage messageUtil = new UtilMessage(this.plugin, event.getPlayer());
         messageUtil.send("other", "respawnset");
