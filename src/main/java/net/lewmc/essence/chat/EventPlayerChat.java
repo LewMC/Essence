@@ -2,10 +2,14 @@ package net.lewmc.essence.chat;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilPlaceholder;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+
+import java.util.List;
 
 /**
  * PlayerChatEvent fires when a player sends a message in chat.
@@ -28,9 +32,7 @@ public class EventPlayerChat implements Listener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         if ((boolean) this.plugin.config.get("chat.manage-chat")) {
-            String msg = event.getMessage();
-
-            msg = new UtilPlaceholder(this.plugin, event.getPlayer()).replaceAll(this.plugin.config.get("chat.name-format") + " " + msg);
+            String msg = new UtilPlaceholder(this.plugin, event.getPlayer()).replaceAll(this.plugin.config.get("chat.name-format") + " " + event.getMessage());
 
             if ((boolean) this.plugin.config.get("chat.allow-message-formatting")) {
                 msg = ChatColor.translateAlternateColorCodes('&', msg);
@@ -41,6 +43,14 @@ public class EventPlayerChat implements Listener {
 
             event.setMessage(msg);
             event.setFormat(msg);
+
+            for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                if (!this.plugin.players.get(p.getUniqueId()).user.ignoringPlayers.contains(p.getUniqueId())) {
+                    p.sendMessage(msg);
+                }
+            }
+
+            event.setCancelled(true);
         }
     }
 }
