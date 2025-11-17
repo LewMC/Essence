@@ -44,12 +44,14 @@ public class CommandExtensionHelp {
                     this.blank(blank);
                     this.message.send("help", "page", new String[] { "1", "2" });
                 } else if (args[2].equals("2")) {
-                    int blank = 4;
+                    int blank = 2;
                     this.message.send("help", "inventory");
                     if (!cu.isDisabled("trash")) { this.message.send("help", "trash"); } else { blank++; }
                     if (!cu.isDisabled("give")) { this.message.send("help", "give"); } else { blank++; }
                     if (!cu.isDisabled("skull")) { this.message.send("help", "skull"); } else { blank++; }
                     if (!cu.isDisabled("invsee")) { this.message.send("help", "invsee"); } else { blank++; }
+                    if (!cu.isDisabled("clear")) { this.message.send("help", "clearself"); } else { blank++; }
+                    if (!cu.isDisabled("clear")) { this.message.send("help", "clearother"); } else { blank++; }
                     this.blank(blank);
                     this.message.send("help", "page", new String[] { "2", "2" });
                 }
