@@ -62,6 +62,8 @@ help:
   give: "§6[Essence] §e/give <player> <item> - Give someone something."
   skull: "§6[Essence] §e/skull <player> - Get a player's skull."
   invsee: "§6[Essence] §e/invsee <player> - See a player's inventory."
+  clearself: "§6[Essence] §e/clear - Clear your inventory."
+  clearother: "§6[Essence] §e/clear <player> - Clear a player's inventory."
   gamemode: "§6[Essence] ----- Ayuda de Essence - Modo de Juego -----"
   gm: "§6[Essence] §e/gamemode - Cambia el modo de juego."
   gmc: "§6[Essence] §e/gmc - Cambia al modo creativo."
@@ -464,3 +466,9 @@ enchant:
 list:
   number: "§6[Essence] §eOnline: {{1}}/{{2}}"
   list: "§6[Essence] §e{{1}}"
+clear:
+  usage: "§4[Essence] §cUsage: /clear or /clear <player>"
+  consoleusage: "§4[Essence] §cUsage: /clear <player>"
+  cleared: "§2[Essence] §aYour inventory was cleared."
+  clearedby: "§6[Essence] §eYour inventory was cleared by {{1}}."
+  clearedother: "§2[Essence] §aCleared {{1}}'s inventory."
