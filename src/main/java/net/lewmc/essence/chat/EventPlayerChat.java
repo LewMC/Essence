@@ -9,8 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import java.util.List;
-
 /**
  * PlayerChatEvent fires when a player sends a message in chat.
  */
