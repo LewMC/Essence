@@ -5,7 +5,6 @@ import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.core.UtilPlayer;
-import net.lewmc.foundry.Security;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -45,7 +44,7 @@ public class CommandNick extends FoundryCommand {
         UtilCommand cmd = new UtilCommand(this.plugin);
 
         UtilMessage msg = new UtilMessage(this.plugin, cs);
-        UtilPlayer pu = new UtilPlayer(this.plugin, cs);
+        UtilPlayer pu = new UtilPlayer(this.plugin);
 
         if (args.length == 1) {
             if (cmd.console(cs)) {
@@ -54,13 +53,13 @@ public class CommandNick extends FoundryCommand {
             }
 
             if (args[0].equalsIgnoreCase("off")) {
-                if (pu.removePlayerDisplayname(cs)) {
+                if (pu.removeDisplayname(cs)) {
                     msg.send("nick","success", new String[]{cs.getName()});
                 }
                 return true;
             }
 
-            if (pu.setPlayerDisplayname(cs, args[0])) {
+            if (pu.setDisplayname(cs, args[0])) {
                 msg.send("nick","success", new String[]{args[0]});
             }
         } else if (args.length == 2) {
@@ -74,14 +73,14 @@ public class CommandNick extends FoundryCommand {
             }
 
             if (args[1].equalsIgnoreCase("off")) {
-                if (pu.removePlayerDisplayname(player)) {
+                if (pu.removeDisplayname(player)) {
                     msg.send("nick","successother", new String[]{args[0], player.getName()});
                     msg.sendTo(player, "nick","changedby", new String[]{cs.getName(), player.getName()});
                 }
                 return true;
             }
 
-            if (pu.setPlayerDisplayname(player, args[1])) {
+            if (pu.setDisplayname(player, args[1])) {
                 msg.send("nick","successother", new String[]{args[0], args[1]});
                 msg.sendTo(player, "nick","changedby", new String[]{cs.getName(), args[1]});
             }

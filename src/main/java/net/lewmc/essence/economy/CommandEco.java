@@ -1,8 +1,8 @@
 package net.lewmc.essence.economy;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.TypePlayer;
 import net.lewmc.essence.core.UtilMessage;
-import net.lewmc.foundry.Files;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -91,11 +91,10 @@ public class CommandEco extends FoundryCommand {
         if (targetPlayer == null) {
             return true;
         }
-        
-        Files playerDataFile = getPlayerDataFile(targetPlayer);
-        playerDataFile.set("economy.balance", amount);
-        playerDataFile.save();
-        
+
+        TypePlayer targetData = plugin.players.get(targetPlayer.getUniqueId());
+        targetData.economy.balance = amount;
+
         String symbol = this.plugin.config.get("economy.symbol").toString();
         message.send("economy", "ecoset", new String[]{targetPlayer.getName(), symbol + amount});
         
@@ -124,11 +123,9 @@ public class CommandEco extends FoundryCommand {
         if (targetPlayer == null) {
             return true;
         }
-        
-        Files playerDataFile = getPlayerDataFile(targetPlayer);
-        double currentBalance = playerDataFile.getDouble("economy.balance");
-        playerDataFile.set("economy.balance", currentBalance + amount);
-        playerDataFile.save();
+
+        TypePlayer targetData = plugin.players.get(targetPlayer.getUniqueId());
+        targetData.economy.balance = targetData.economy.balance + amount;
         
         String symbol = this.plugin.config.get("economy.symbol").toString();
         message.send("economy", "ecogive", new String[]{symbol + amount, targetPlayer.getName()});
@@ -159,19 +156,16 @@ public class CommandEco extends FoundryCommand {
             return true;
         }
         
-        Files playerDataFile = getPlayerDataFile(targetPlayer);
-        double currentBalance = playerDataFile.getDouble("economy.balance");
+        TypePlayer targetData = plugin.players.get(targetPlayer.getUniqueId());
         
         // Check if the player has sufficient balance
-        if (currentBalance < amount) {
+        if (targetData.economy.balance < amount) {
             message.send("economy", "insufficientfunds");
             return true;
         }
-        
-        double newBalance = currentBalance - amount;
-        playerDataFile.set("economy.balance", newBalance);
-        playerDataFile.save();
-        
+
+        targetData.economy.balance = targetData.economy.balance - amount;
+
         String symbol = this.plugin.config.get("economy.symbol").toString();
         message.send("economy", "ecotake", new String[]{symbol + amount, targetPlayer.getName()});
         
@@ -219,17 +213,6 @@ public class CommandEco extends FoundryCommand {
             return null;
         }
         return targetPlayer;
-    }
-    
-    /**
-     * Get player data file for economy operations
-     * @param player Target player
-     * @return Files instance loaded with player data
-     */
-    private Files getPlayerDataFile(Player player) {
-        Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-        playerDataFile.load(playerDataFile.playerDataFile(player));
-        return playerDataFile;
     }
     
     /**

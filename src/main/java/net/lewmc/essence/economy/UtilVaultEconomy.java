@@ -503,13 +503,14 @@ public class UtilVaultEconomy implements Economy {
 
     /**
      * Creates a new player account.
-     * @param offlinePlayer OfflinePlayer - The player to create an account for.
+     * @param p OfflinePlayer - The player to create an account for.
      * @return boolean - If the operation was successful.
+     * @since 1.11.0
      */
     @Override
-    public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
-        UtilPlayer playerUtil = new UtilPlayer(this.plugin, offlinePlayer.getPlayer());
-        return playerUtil.createPlayerData();
+    public boolean createPlayerAccount(OfflinePlayer p) {
+        UtilPlayer up = new UtilPlayer(this.plugin);
+        return up.createPlayer(p);
     }
 
     /**

@@ -1,6 +1,7 @@
 package net.lewmc.essence.team;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.TypePlayer;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
@@ -59,11 +60,9 @@ public class UtilTeam {
 
                 teamsFile.save();
 
-                Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-                playerDataFile.load(playerDataFile.playerDataFile(leader));
-
-                playerDataFile.set("user.team", name);
-                playerDataFile.save();
+                TypePlayer leaderPlayer = this.plugin.players.get(leader);
+                leaderPlayer.user.team = name;
+                this.plugin.players.replace(leader, leaderPlayer);
 
                 message.send("team", "created", new String[] { name });
             } else {
@@ -153,16 +152,7 @@ public class UtilTeam {
      * @return String - Name of the player's team.
      */
     public @Nullable String getPlayerTeam(UUID player) {
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(player));
-        if (playerData.getString("user.team") == null) {
-            playerData.close();
-            return null;
-        } else {
-            String team = playerData.getString("user.team");
-            playerData.close();
-            return team;
-        }
+        return this.plugin.players.get(player).user.team;
     }
 
     /**
@@ -174,11 +164,9 @@ public class UtilTeam {
     public boolean acceptRequest(String team, String player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(op.getUniqueId()));
-
-        playerData.set("user.team", team);
-        playerData.save();
+        TypePlayer opt = this.plugin.players.get(op.getUniqueId());
+        opt.user.team = team;
+        this.plugin.players.replace(op.getUniqueId(), opt);
 
         Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");

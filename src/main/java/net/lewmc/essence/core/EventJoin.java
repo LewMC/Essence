@@ -6,7 +6,6 @@ import net.lewmc.essence.teleportation.tp.UtilTeleport;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,43 +36,23 @@ public class EventJoin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Logger log = new Logger(this.plugin.foundryConfig);
 
-        Files playerFile = new Files(plugin.foundryConfig, this.plugin);
-        String playerDataFile = playerFile.playerDataFile(event.getPlayer());
+        UtilPlayer up = new UtilPlayer(this.plugin);
 
-        UtilPlayer pu = new UtilPlayer(this.plugin, event.getPlayer());
-
-        if (!playerFile.exists(playerDataFile)) {
-            if (pu.createPlayerData()) {
-                if (plugin.verbose) {
-                    log.info("Player data file created.");
-                }
-            } else {
-                log.severe("Unable to create player data.");
-            }
+        boolean firstJoin = false;
+        if (up.createPlayer(event.getPlayer())) {
+            log.info("Player data file created.");
+            firstJoin = true;
         } else {
-            if (pu.updatePlayerData()) {
-                if (plugin.verbose) {
-                    log.info("Player data file saved.");
-                }
-            } else {
-                log.severe("Unable to create player data.");
+            if (plugin.verbose) {
+                log.info("Player data file already exists.");
             }
         }
-
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getPlayer().getName());
-        boolean firstJoin = !offlinePlayer.hasPlayedBefore();
 
         if (firstJoin) { this.firstJoin(event, log); }
 
-        if ((boolean) this.plugin.config.get("advanced.playerdata.store-ip-address")) {
-            playerFile.load(playerDataFile);
-            playerFile.set("user.ip-address", Objects.requireNonNull(event.getPlayer().getAddress()).getAddress().getHostAddress()+"");
-            playerFile.save();
-        }
+        up.loadPlayer(event.getPlayer());
 
         this.playerJoinMessage(event);
-
-        plugin.reloadConfig();
 
         if (!Objects.equals(plugin.config.get("motd"), "false") && !Objects.equals(plugin.config.get("motd"), false)) { this.motd(event); }
 
@@ -98,14 +77,7 @@ public class EventJoin implements Listener {
     private void spawn(PlayerJoinEvent event, Logger log) {
         UtilMessage message = new UtilMessage(this.plugin, event.getPlayer());
 
-        Files essenceConfiguration = new Files(this.plugin.foundryConfig, this.plugin);
-        if (!essenceConfiguration.load("config.yml")) {
-            log.severe("Unable to load configuration file 'config.yml'. Essence may be unable to set some player data");
-            return;
-        }
-
-        String spawnName = essenceConfiguration.get("teleportation.spawn.main-spawn-world").toString();
-        essenceConfiguration.close();
+        String spawnName = this.plugin.config.get("teleportation.spawn.main-spawn-world").toString();
 
         Files spawnConfiguration = new Files(this.plugin.foundryConfig, this.plugin);
         if (!spawnConfiguration.load("data/spawns.yml")) {

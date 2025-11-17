@@ -4,6 +4,7 @@ import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.admin.ModuleAdmin;
 import net.lewmc.essence.chat.ModuleChat;
 import net.lewmc.essence.core.ModuleCore;
+import net.lewmc.essence.core.TypePlayer;
 import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilUpdate;
 import net.lewmc.essence.economy.ModuleEconomy;
@@ -50,6 +51,11 @@ public class Essence extends JavaPlugin {
      * CommandSender = The sender.
      */
     public Map<CommandSender, CommandSender> msgHistory = new HashMap<>();
+
+    /**
+     * Stores a cache of player data.
+     */
+    public HashMap<UUID, TypePlayer> players = new HashMap<>();
 
     /**
      * Store's Essence's configuration.

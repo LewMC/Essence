@@ -46,14 +46,14 @@ public class CommandGive extends FoundryCommand {
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         this.msg = new UtilMessage(this.plugin, cs);
-        UtilPlayer pu = new UtilPlayer(this.plugin, cs);
+        UtilPlayer up = new UtilPlayer(this.plugin);
         UtilPermission perm = new UtilPermission(this.plugin, cs);
 
         if (args.length == 1) {
             if (cs instanceof Player player) {
                 if (perm.itemIsBlacklisted(args[0])) { this.msg.send("give","blacklisted", new String[] {args[0]}); return true; }
 
-                if (pu.givePlayerItem(player, args[0], 1)) {
+                if (up.givePlayerItem(player, args[0], 1)) {
                     this.msg.send("give","gaveself", new String[] {"1", args[0]});
                 } else {
                     this.msg.send("give", "itemnotfound", new String[] {args[0]});
@@ -72,7 +72,7 @@ public class CommandGive extends FoundryCommand {
                         this.msg.send("give", "blacklisted", new String[]{args[0]});
                         return true;
                     }
-                    if (pu.givePlayerItem(player, args[0], amount)) {
+                    if (up.givePlayerItem(player, args[0], amount)) {
                         this.msg.send("give", "gaveself", new String[]{String.valueOf(amount), args[0]});
                     } else {
                         this.msg.send("give", "itemnotfound", new String[]{args[1]});
@@ -96,7 +96,7 @@ public class CommandGive extends FoundryCommand {
                 this.msg.send("give", "blacklisted", new String[]{args[1]});
                 return true;
             }
-            if (pu.givePlayerItem(target, args[1], 1)) {
+            if (up.givePlayerItem(target, args[1], 1)) {
                 this.msg.send("give", "gaveother", new String[]{"1", args[1], target.getName()});
             } else {
                 this.msg.send("give", "itemnotfound", new String[]{args[1]});
@@ -117,7 +117,7 @@ public class CommandGive extends FoundryCommand {
                     this.msg.send("give", "blacklisted", new String[]{args[1]});
                     return true;
                 }
-                if (pu.givePlayerItem(target, args[1], amount)) {
+                if (up.givePlayerItem(target, args[1], amount)) {
                     this.msg.send("give", "gaveother", new String[]{String.valueOf(amount), args[1], target.getName()});
                 } else {
                     this.msg.send("give", "itemnotfound", new String[]{args[1]});
