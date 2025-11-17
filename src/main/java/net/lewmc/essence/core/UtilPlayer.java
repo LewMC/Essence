@@ -266,12 +266,12 @@ public class UtilPlayer {
     /**
      * Fetches a player's prefix.
      *
-     * @param p Player - The player
+     * @param cs CommandSender - The command sender.
      * @return String - The player's prefix (might be blank).
      */
-    public String getPlayerPrefix(OfflinePlayer p) {
-        if (this.plugin.integrations.chat != null) {
-            String prefix = this.plugin.integrations.chat.getPlayerPrefix((Player) p);
+    public String getPlayerPrefix(CommandSender cs) {
+        if (this.plugin.integrations.chat != null && cs instanceof Player p) {
+            String prefix = this.plugin.integrations.chat.getPlayerPrefix( p);
             if (prefix != null && !prefix.isEmpty()) {
                 return "[" + prefix + "]";
             } else {
@@ -285,12 +285,12 @@ public class UtilPlayer {
     /**
      * Fetches a player's suffix.
      *
-     * @param p OfflinePlayer - The player
+     * @param cs CommandSender - The command sender.
      * @return String - The player's suffix (might be blank).
      */
-    public String getPlayerSuffix(OfflinePlayer p) {
-        if (this.plugin.integrations.chat != null) {
-            String suffix = this.plugin.integrations.chat.getPlayerSuffix((Player) p);
+    public String getPlayerSuffix(CommandSender cs) {
+        if (this.plugin.integrations.chat != null && cs instanceof Player p) {
+            String suffix = this.plugin.integrations.chat.getPlayerSuffix( p);
             if (suffix != null && !suffix.isEmpty()) {
                 return " " + suffix;
             } else {

@@ -102,11 +102,11 @@ public class UtilPlaceholder {
         } else if (placeholder.equalsIgnoreCase("team_prefix")) {
             return tu.getTeamPrefix(this.cs);
         } else if (placeholder.equalsIgnoreCase("combined_prefix")) {
-            return new UtilPlayer(this.plugin).getPlayerPrefix((OfflinePlayer) cs) + tu.getTeamPrefix(this.cs);
+            return new UtilPlayer(this.plugin).getPlayerPrefix(cs) + tu.getTeamPrefix(this.cs);
         } else if (placeholder.equalsIgnoreCase("player_prefix")) {
-            return new UtilPlayer(this.plugin).getPlayerPrefix((OfflinePlayer) cs);
+            return new UtilPlayer(this.plugin).getPlayerPrefix(cs);
         } else if (placeholder.equalsIgnoreCase("player_suffix")) {
-            return new UtilPlayer(this.plugin).getPlayerSuffix((OfflinePlayer) cs);
+            return new UtilPlayer(this.plugin).getPlayerSuffix(cs);
         } else if (placeholder.equalsIgnoreCase("balance")) {
             if (cs instanceof Player p) {
                 return this.plugin.config.get("economy.symbol").toString() + this.plugin.players.get(p.getUniqueId()).economy.balance;
