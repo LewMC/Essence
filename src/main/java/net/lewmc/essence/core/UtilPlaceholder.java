@@ -2,7 +2,6 @@ package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.team.UtilTeam;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
