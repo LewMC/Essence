@@ -52,30 +52,29 @@ public class CommandBack extends FoundryCommand {
                 msg.send("back", "usage");
                 return true;
             }
-            return this.backSelf((Player) cs, msg);
+            this.backSelf((Player) cs, msg);
         } else if (args.length == 1) {
             UtilPermission perms = new UtilPermission(this.plugin, cs);
             if (!perms.has("essence.teleport.back.other")) {
                 return perms.not();
             }
-            return this.backOther(cs, msg, args[0]);
+            this.backOther(cs, msg, args[0]);
         } else {
             msg.send("back", "usage");
-            return true;
         }
+        return true;
     }
 
     /**
      * Teleport the player back to their last location
      * @param p Player
      * @param msg Message utility
-     * @return Success status
      */
-    private boolean backSelf(Player p, UtilMessage msg) {
+    private void backSelf(Player p, UtilMessage msg) {
         TypePlayer player = this.plugin.players.get(p.getUniqueId());
         if (player == null || player.lastLocation.world == null) {
             msg.send("back", "cant");
-            return true;
+            return;
         }
 
         int waitTime = plugin.config.get("teleportation.back.wait") != null ?
@@ -83,7 +82,7 @@ public class CommandBack extends FoundryCommand {
         
         if (Bukkit.getServer().getWorld(player.lastLocation.world) == null) {
             msg.send("back", "cant");
-            return true;
+            return;
         }
         
         new UtilTeleport(this.plugin).doTeleport(
@@ -101,7 +100,6 @@ public class CommandBack extends FoundryCommand {
         if (waitTime == 0) {
             msg.send("back", "going");
         }
-        return true;
     }
 
     /**
@@ -109,14 +107,13 @@ public class CommandBack extends FoundryCommand {
      * @param cs Command sender
      * @param msg Message utility
      * @param targetName Target player name
-     * @return Success status
      */
-    private boolean backOther(CommandSender cs, UtilMessage msg, String targetName) {
+    private void backOther(CommandSender cs, UtilMessage msg, String targetName) {
         Player targetPlayer = Bukkit.getPlayer(targetName);
         
         if (targetPlayer == null) {
             msg.send("generic", "playernotfound");
-            return true;
+            return;
         }
 
         int waitTime = plugin.config.get("teleportation.back.wait") != null ?
@@ -125,7 +122,7 @@ public class CommandBack extends FoundryCommand {
         TypePlayer player = this.plugin.players.get(targetPlayer.getUniqueId());
         if (player == null || player.lastLocation.world == null || Bukkit.getServer().getWorld(player.lastLocation.world) == null) {
             msg.send("back", "cantother", new String[]{targetPlayer.getName()});
-            return true;
+            return;
         }
         
         new UtilTeleport(this.plugin).doTeleport(
@@ -144,7 +141,5 @@ public class CommandBack extends FoundryCommand {
             msg.send("back", "goingother", new String[]{targetPlayer.getName()});
             new UtilMessage(this.plugin, targetPlayer).send("back", "sentby", new String[]{cs.getName()});
         }
-        
-        return true;
     }
 }
