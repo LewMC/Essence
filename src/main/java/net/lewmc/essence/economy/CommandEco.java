@@ -1,8 +1,8 @@
 package net.lewmc.essence.economy;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.TypePlayer;
 import net.lewmc.essence.core.UtilMessage;
+import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -92,8 +92,7 @@ public class CommandEco extends FoundryCommand {
             return true;
         }
 
-        TypePlayer targetData = plugin.players.get(targetPlayer.getUniqueId());
-        targetData.economy.balance = amount;
+        new UtilPlayer(this.plugin).setPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE, amount);
 
         String symbol = this.plugin.config.get("economy.symbol").toString();
         message.send("economy", "ecoset", new String[]{targetPlayer.getName(), symbol + amount});
@@ -124,8 +123,8 @@ public class CommandEco extends FoundryCommand {
             return true;
         }
 
-        TypePlayer targetData = plugin.players.get(targetPlayer.getUniqueId());
-        targetData.economy.balance = targetData.economy.balance + amount;
+        UtilPlayer up = new UtilPlayer(this.plugin);
+        up.setPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE, (Double) up.getPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE) + amount);
         
         String symbol = this.plugin.config.get("economy.symbol").toString();
         message.send("economy", "ecogive", new String[]{symbol + amount, targetPlayer.getName()});
@@ -155,16 +154,16 @@ public class CommandEco extends FoundryCommand {
         if (targetPlayer == null) {
             return true;
         }
-        
-        TypePlayer targetData = plugin.players.get(targetPlayer.getUniqueId());
+
+        UtilPlayer up = new UtilPlayer(this.plugin);
         
         // Check if the player has sufficient balance
-        if (targetData.economy.balance < amount) {
+        if ((Double) up.getPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE) < amount) {
             message.send("economy", "insufficientfunds");
             return true;
         }
 
-        targetData.economy.balance = targetData.economy.balance - amount;
+        up.setPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE, (Double) up.getPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE) - amount);
 
         String symbol = this.plugin.config.get("economy.symbol").toString();
         message.send("economy", "ecotake", new String[]{symbol + amount, targetPlayer.getName()});

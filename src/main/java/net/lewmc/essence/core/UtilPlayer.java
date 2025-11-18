@@ -12,6 +12,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -28,6 +29,102 @@ public class UtilPlayer {
      */
     public UtilPlayer(Essence plugin) {
         this.plugin = plugin;
+    }
+
+    /**
+     * Sets a player's data value
+     * @param p OfflinePlayer - The player
+     * @param key PLAYER_KEYS - The item to change
+     * @param value Object - The value
+     * @return Success?
+     */
+    public boolean setPlayer(OfflinePlayer p, PLAYER_KEYS key, Object value) {
+        if (this.plugin.players.containsKey(p.getUniqueId())) {
+            TypePlayer player = this.plugin.players.get(p.getUniqueId());
+
+            if (key == PLAYER_KEYS.USER_ACCEPTING_TELEPORT_REQUESTS && value instanceof Boolean) {
+                player.user.acceptingTeleportRequests = (Boolean) value;
+            } else if (key == PLAYER_KEYS.USER_LAST_SEEN && value instanceof String) {
+                player.user.lastSeen = (String) value;
+            } else if (key == PLAYER_KEYS.USER_LAST_KNOWN_NAME && value instanceof String) {
+                player.user.lastKnownName = (String) value;
+            } else if (key == PLAYER_KEYS.USER_NICKNAME && value instanceof String) {
+                player.user.nickname = (String) value;
+            } else if (key == PLAYER_KEYS.USER_IP_ADDRESS && value instanceof String) {
+                player.user.ipAddress = (String) value;
+            } else if (key == PLAYER_KEYS.USER_IGNORING_PLAYERS && value instanceof List<?>) {
+                player.user.ignoringPlayers = (List<String>) value;
+            } else if (key == PLAYER_KEYS.ECONOMY_BALANCE && value instanceof Double) {
+                player.economy.balance = (Double) value;
+            } else if (key == PLAYER_KEYS.ECONOMY_ACCEPTING_PAYMENTS && value instanceof Boolean) {
+                player.economy.acceptingPayments = (Boolean) value;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD && value instanceof String) {
+                player.lastLocation.world = (String) value;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_X && value instanceof Double) {
+                player.lastLocation.x = (Double) value;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_Y && value instanceof Double) {
+                player.lastLocation.y = (Double) value;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_Z && value instanceof Double) {
+                player.lastLocation.z = (Double) value;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_YAW && value instanceof Float) {
+                player.lastLocation.yaw = (Float) value;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_PITCH && value instanceof Float) {
+                player.lastLocation.pitch = (Float) value;
+            } else {
+                return false;
+            }
+
+            this.plugin.players.put(p.getUniqueId(), player);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Gets a player's data value
+     * @param p OfflinePlayer - The player
+     * @param key PLAYER_KEYS - The item to change
+     * @return Object - Value or Null
+     */
+    public Object getPlayer(OfflinePlayer p, PLAYER_KEYS key) {
+        if (this.plugin.players.containsKey(p.getUniqueId())) {
+            TypePlayer player = this.plugin.players.get(p.getUniqueId());
+
+            if (key == PLAYER_KEYS.USER_ACCEPTING_TELEPORT_REQUESTS) {
+                return player.user.acceptingTeleportRequests;
+            } else if (key == PLAYER_KEYS.USER_LAST_SEEN) {
+                return player.user.lastSeen;
+            } else if (key == PLAYER_KEYS.USER_LAST_KNOWN_NAME) {
+                return player.user.lastKnownName;
+            } else if (key == PLAYER_KEYS.USER_NICKNAME) {
+                return player.user.nickname;
+            } else if (key == PLAYER_KEYS.USER_IP_ADDRESS) {
+                return player.user.ipAddress;
+            } else if (key == PLAYER_KEYS.USER_IGNORING_PLAYERS) {
+                return player.user.ignoringPlayers;
+            } else if (key == PLAYER_KEYS.ECONOMY_BALANCE) {
+                return player.economy.balance;
+            } else if (key == PLAYER_KEYS.ECONOMY_ACCEPTING_PAYMENTS) {
+                return player.economy.acceptingPayments;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD) {
+                return player.lastLocation.world;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_X) {
+                return player.lastLocation.x;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_Y) {
+                return player.lastLocation.y;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_Z) {
+                return player.lastLocation.z;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_YAW) {
+                return player.lastLocation.yaw;
+            } else if (key == PLAYER_KEYS.LAST_KNOWN_LOCATION_PITCH) {
+                return player.lastLocation.pitch;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -101,7 +198,7 @@ public class UtilPlayer {
     }
 
     /**
-     * Saves a player's data
+     * Saves a player's data, avoid using this unless required - it fires automatically when a player leaves the server.
      * @param p OfflinePlayer - The player
      * @return boolean - Success?
      * @since 1.11.0
