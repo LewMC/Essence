@@ -190,19 +190,19 @@ public class UtilPlayer {
             player.lastSleep.world = (lsw == null) ? null : lsw;
 
             Double lsx = f.getDouble(KEYS.LAST_SLEEP_X.toString());
-            player.lastSleep.x = (lsx == null) ? null : lsx;
+            player.lastSleep.x = (lsx == null) ? 0D : lsx;
 
             Double lsy = f.getDouble(KEYS.LAST_SLEEP_Y.toString());
-            player.lastSleep.y = (lsy == null) ? null : lsy;
+            player.lastSleep.y = (lsy == null) ? 0D : lsy;
 
             Double lsz = f.getDouble(KEYS.LAST_SLEEP_Z.toString());
-            player.lastSleep.z = (lsz == null) ? null : lsz;
+            player.lastSleep.z = (lsz == null) ? 0D : lsz;
 
             Double lsyaw = f.getDouble(KEYS.LAST_SLEEP_YAW.toString());
-            player.lastSleep.yaw = (lsyaw == null) ? null : Float.parseFloat(String.valueOf(lsyaw));
+            player.lastSleep.yaw = (lsyaw == null) ? 0F : Float.parseFloat(String.valueOf(lsyaw));
 
             Double lspitch = f.getDouble(KEYS.LAST_SLEEP_PITCH.toString());
-            player.lastSleep.pitch = (lspitch == null) ? null : Float.parseFloat(String.valueOf(lspitch));
+            player.lastSleep.pitch = (lspitch == null) ? 0F : Float.parseFloat(String.valueOf(lspitch));
 
             this.plugin.players.put(uuid,player);
             return true;
