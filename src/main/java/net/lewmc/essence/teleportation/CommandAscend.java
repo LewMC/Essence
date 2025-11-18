@@ -90,7 +90,7 @@ public class CommandAscend extends FoundryPlayerCommand {
             return true;
         }
 
-        new UtilTeleport(this.plugin).doTeleport(cs, ascendLocation, waitTime);
+        new UtilTeleport(this.plugin).doTeleport(cs, ascendLocation, waitTime, true);
 
         if (waitTime == 0) {
             msg.send("ascend", "going", new String[] { String.valueOf(finalLevels) });

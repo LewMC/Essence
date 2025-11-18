@@ -1,18 +1,15 @@
 package net.lewmc.essence.economy;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
-import net.lewmc.foundry.Files;
-import net.lewmc.foundry.command.FoundryPlayerCommand;
+import net.lewmc.essence.core.UtilPlayer;
+import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
-
-public class CommandPay extends FoundryPlayerCommand {
+public class CommandPay extends FoundryCommand {
     private final Essence plugin;
 
     /**
@@ -44,33 +41,53 @@ public class CommandPay extends FoundryPlayerCommand {
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         UtilMessage message = new UtilMessage(this.plugin, cs);
         if (args.length == 2) {
-            Files senderDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-            senderDataFile.load(senderDataFile.playerDataFile((Player) cs));
-
-            double balance = senderDataFile.getDouble("economy.balance");
-
-            double amount = Double.parseDouble(args[1]);
-
-            if ((balance - amount) >= 0) {
-                senderDataFile.set("economy.balance", (balance - amount));
-                senderDataFile.save();
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                        Files recieverDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-
-                        recieverDataFile.load(senderDataFile.playerDataFile(p));
-                        double newBalance = recieverDataFile.getDouble("economy.balance") + amount;
-                        recieverDataFile.set("economy.balance", newBalance);
-                        recieverDataFile.save();
-
-                        message.send("economy", "sent", new String[] { plugin.config.get("economy.symbol").toString() + amount, p.getName() });
-                        message.sendTo(p, "economy", "received", new String[] { (plugin.config.get("economy.symbol").toString() + amount), cs.getName() });
-                        return true;
-                    }
+            try {
+                double amount = Double.parseDouble(args[1]);
+                if (amount <= 0) {
+                    message.send("economy", "positiveamount");
+                    return true;
                 }
-                message.send("generic", "playernotfound");
-            } else {
-                message.send("economy", "insufficientfunds");
+                UtilPlayer up = new UtilPlayer(plugin);
+
+                if (cs instanceof Player sender) {
+                    if (((Double) up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) - amount) >= 0) {
+                        up.setPlayer(sender.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, ((Double) up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) - amount));
+
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
+                                up.setPlayer(p.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, ((Double) up.getPlayer(p.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) + amount));
+
+                                message.send("economy", "sent", new String[]{plugin.config.get("economy.symbol").toString() + amount, p.getName()});
+                                message.sendTo(p, "economy", "received", new String[]{(plugin.config.get("economy.symbol").toString() + amount), cs.getName()});
+                                up.savePlayer(sender.getUniqueId());
+                                up.savePlayer(p.getUniqueId());
+                                return true;
+                            } else {
+                                message.send("generic", "playernotfound");
+                            }
+                        }
+                        message.send("generic", "playernotfound");
+                    } else {
+                        message.send("economy", "insufficientfunds");
+                    }
+                } else {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
+                            up.setPlayer(p.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, ((Double) up.getPlayer(p.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) + amount));
+
+                            message.send("economy", "sent", new String[]{plugin.config.get("economy.symbol").toString() + amount, p.getName()});
+                            message.sendTo(p, "economy", "received", new String[]{(plugin.config.get("economy.symbol").toString() + amount), cs.getName()});
+                            up.savePlayer(p.getUniqueId());
+                            return true;
+                        } else {
+                            message.send("generic", "playernotfound");
+                        }
+                    }
+                    message.send("generic", "playernotfound");
+                }
+            } catch (NumberFormatException e) {
+                message.send("economy", "invalidamount");
+                return true;
             }
         } else {
             message.send("economy", "payusage");

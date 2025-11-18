@@ -20,13 +20,7 @@ public class UtilEnvironment {
     public UtilEnvironment(Plugin plugin) {
         this.plugin = plugin;
     }
-    
-    /**
-     * Default constructor for backward compatibility
-     */
-    public UtilEnvironment() {
-        this.plugin = null;
-    }
+
     /**
      * Stores preset weather.
      */
@@ -189,12 +183,11 @@ public class UtilEnvironment {
                     // Direct call for non-Folia servers
                     wo.setTime(t);
                 }
-                return true;
             } else {
                 // Fallback to direct call if plugin instance is null
                 wo.setTime(t);
-                return true;
             }
+            return true;
         } else {
             return false;
         }

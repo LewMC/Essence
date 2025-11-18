@@ -63,6 +63,8 @@ permissions:
       essence.inventory.give: true
       essence.inventory.give.other: true
       essence.inventory.skull: true
+      essence.inventory.clear: true
+      essence.inventory.clear.other: true
   essence.inventory.anvil:
     description: Allows players to open an anvil when no anvil is present.
   essence.inventory.cartography:
@@ -87,6 +89,10 @@ permissions:
     description: Gives other players items.
   essence.inventory.skull:
     description: Get a player's skull.
+  essence.inventory.clear:
+    description: Clear your own inventory.
+  essence.inventory.clear.other:
+    description: Clear a player's inventory.
   essence.invsee:
     description: See a player's inventory.
   essence.teleport.*:
@@ -289,6 +295,8 @@ permissions:
     description: See who else is online.
   essence.chat.list.invisible:
     description: See online invisible players.
+  essence.chat.ignore:
+    description: Ignore other players in chat.
   essence.economy.*:
     description: Allows players to access all economy commands.
     default: op

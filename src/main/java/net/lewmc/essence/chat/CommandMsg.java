@@ -3,14 +3,19 @@ package net.lewmc.essence.chat;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPlaceholder;
+import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
+/**
+ * /msg command
+ */
 public class CommandMsg extends FoundryCommand {
     private final Essence plugin;
 
@@ -46,21 +51,20 @@ public class CommandMsg extends FoundryCommand {
         if (args.length > 1) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                    String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+                    if (cs instanceof ConsoleCommandSender || !new UtilPlayer(this.plugin).playerIsIgnoring(Bukkit.getPlayer(cs.getName()).getUniqueId(),p.getUniqueId())) {
+                        String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-                    msg = new UtilPlaceholder(this.plugin, cs).replaceAll(msg);
+                        msg = new UtilPlaceholder(this.plugin, cs).replaceAll(msg);
 
-                    String[] repl = new String[] {cs.getName(), p.getName(), msg};
+                        String[] repl = new String[] {cs.getName(), p.getName(), msg};
 
-                    message.send("msg", "send", repl);
-                    message.sendTo(p, "msg", "send", repl);
+                        message.send("msg", "send", repl);
+                        message.sendTo(p, "msg", "send", repl);
 
-                    if (this.plugin.msgHistory.containsKey(p)) {
-                        this.plugin.msgHistory.replace(p, cs);
-                    } else {
                         this.plugin.msgHistory.put(p, cs);
+                    } else {
+                        message.send("ignore", "cantmessage", new String[]{p.getName()});
                     }
-
                     return true;
                 }
             }

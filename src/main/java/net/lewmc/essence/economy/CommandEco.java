@@ -2,7 +2,7 @@ package net.lewmc.essence.economy;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
-import net.lewmc.foundry.Files;
+import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -54,11 +54,11 @@ public class CommandEco extends FoundryCommand {
         
         switch (subCommand) {
             case "set":
-                return handleSetCommand(cs, args, message);
+                return handleSetCommand(args, message);
             case "give":
-                return handleGiveCommand(cs, args, message);
+                return handleGiveCommand(args, message);
             case "take":
-                return handleTakeCommand(cs, args, message);
+                return handleTakeCommand(args, message);
             case "help":
                 showUsage(message);
                 return true;
@@ -71,12 +71,11 @@ public class CommandEco extends FoundryCommand {
     
     /**
      * Handle the 'set' subcommand
-     * @param cs CommandSender
      * @param args Command arguments
      * @param message UtilMessage instance
      * @return boolean success
      */
-    private boolean handleSetCommand(CommandSender cs, String[] args, UtilMessage message) {
+    private boolean handleSetCommand(String[] args, UtilMessage message) {
         if (args.length != 3) {
             message.send("economy", "ecosetusage");
             return true;
@@ -91,25 +90,26 @@ public class CommandEco extends FoundryCommand {
         if (targetPlayer == null) {
             return true;
         }
-        
-        Files playerDataFile = getPlayerDataFile(targetPlayer);
-        playerDataFile.set("economy.balance", amount);
-        playerDataFile.save();
-        
-        String symbol = this.plugin.config.get("economy.symbol").toString();
-        message.send("economy", "ecoset", new String[]{targetPlayer.getName(), symbol + amount});
-        
-        return true;
+
+        if (new UtilPlayer(this.plugin).setPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, amount)) {
+            String symbol = this.plugin.config.get("economy.symbol").toString();
+            message.send("economy", "ecoset", new String[]{targetPlayer.getName(), symbol + amount});
+
+            return true;
+        } else {
+            message.send("generic", "exception");
+            this.plugin.log.warn("Unable to update player balance: player "+targetPlayer.getName()+" may be null");
+            return false;
+        }
     }
     
     /**
      * Handle the 'give' subcommand
-     * @param cs CommandSender
      * @param args Command arguments
      * @param message UtilMessage instance
      * @return boolean success
      */
-    private boolean handleGiveCommand(CommandSender cs, String[] args, UtilMessage message) {
+    private boolean handleGiveCommand(String[] args, UtilMessage message) {
         if (args.length != 3) {
             message.send("economy", "ecogiveusage");
             return true;
@@ -124,26 +124,27 @@ public class CommandEco extends FoundryCommand {
         if (targetPlayer == null) {
             return true;
         }
-        
-        Files playerDataFile = getPlayerDataFile(targetPlayer);
-        double currentBalance = playerDataFile.getDouble("economy.balance");
-        playerDataFile.set("economy.balance", currentBalance + amount);
-        playerDataFile.save();
-        
-        String symbol = this.plugin.config.get("economy.symbol").toString();
-        message.send("economy", "ecogive", new String[]{symbol + amount, targetPlayer.getName()});
-        
-        return true;
+
+        UtilPlayer up = new UtilPlayer(this.plugin);
+        if (up.setPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, (Double) up.getPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) + amount)) {
+            String symbol = this.plugin.config.get("economy.symbol").toString();
+            message.send("economy", "ecogive", new String[]{symbol + amount, targetPlayer.getName()});
+
+            return true;
+        } else {
+            message.send("generic", "exception");
+            this.plugin.log.warn("Unable to update player balance: player "+targetPlayer.getName()+" may be null");
+            return false;
+        }
     }
     
     /**
      * Handle the 'take' subcommand
-     * @param cs CommandSender
      * @param args Command arguments
      * @param message UtilMessage instance
      * @return boolean success
      */
-    private boolean handleTakeCommand(CommandSender cs, String[] args, UtilMessage message) {
+    private boolean handleTakeCommand(String[] args, UtilMessage message) {
         if (args.length != 3) {
             message.send("economy", "ecotakeusage");
             return true;
@@ -158,24 +159,24 @@ public class CommandEco extends FoundryCommand {
         if (targetPlayer == null) {
             return true;
         }
+
+        UtilPlayer up = new UtilPlayer(this.plugin);
         
-        Files playerDataFile = getPlayerDataFile(targetPlayer);
-        double currentBalance = playerDataFile.getDouble("economy.balance");
-        
-        // Check if the player has sufficient balance
-        if (currentBalance < amount) {
+        if ((Double) up.getPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) < amount) {
             message.send("economy", "insufficientfunds");
             return true;
         }
-        
-        double newBalance = currentBalance - amount;
-        playerDataFile.set("economy.balance", newBalance);
-        playerDataFile.save();
-        
-        String symbol = this.plugin.config.get("economy.symbol").toString();
-        message.send("economy", "ecotake", new String[]{symbol + amount, targetPlayer.getName()});
-        
-        return true;
+
+        if (up.setPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, (Double) up.getPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) - amount)) {
+            String symbol = this.plugin.config.get("economy.symbol").toString();
+            message.send("economy", "ecotake", new String[]{symbol + amount, targetPlayer.getName()});
+
+            return true;
+        } else {
+            message.send("generic", "exception");
+            this.plugin.log.warn("Unable to update player balance: player "+targetPlayer.getName()+" may be null");
+            return false;
+        }
     }
     
     /**
@@ -219,17 +220,6 @@ public class CommandEco extends FoundryCommand {
             return null;
         }
         return targetPlayer;
-    }
-    
-    /**
-     * Get player data file for economy operations
-     * @param player Target player
-     * @return Files instance loaded with player data
-     */
-    private Files getPlayerDataFile(Player player) {
-        Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-        playerDataFile.load(playerDataFile.playerDataFile(player));
-        return playerDataFile;
     }
     
     /**

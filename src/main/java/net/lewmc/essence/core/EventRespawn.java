@@ -1,15 +1,14 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.teleportation.tp.UtilTeleport;
-import net.lewmc.foundry.Files;
-import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
+
+import java.util.UUID;
 
 /**
  * RespawnEvent class.
@@ -31,81 +30,40 @@ public class EventRespawn implements Listener {
      */
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        Logger log = new Logger(this.plugin.foundryConfig);
-        UtilMessage message = new UtilMessage(this.plugin, event.getPlayer());
 
-        Files config = new Files(this.plugin.foundryConfig, this.plugin);
-        config.load("config.yml");
-        String spawnName = config.getString("teleportation.spawn.main-spawn-world");
-        boolean alwaysSpawn = config.getBoolean("teleportation.spawn.always-spawn");
-        config.close();
+        UUID uuid = event.getPlayer().getUniqueId();
 
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(config.playerDataFile(event.getPlayer()));
+        UtilPlayer up = new UtilPlayer(plugin);
+        boolean alwaysSpawn = (boolean) plugin.config.get("teleportation.spawn.always-spawn");
 
-        if ((playerData.getString("user.last-sleep-location") != null) && !alwaysSpawn) {
-            UtilTeleport tp = new UtilTeleport(plugin);
-            tp.doTeleport(
-                    event.getPlayer(),
-                    Bukkit.getServer().getWorld(playerData.getString("user.last-sleep-location.world")),
-                    playerData.getDouble("user.last-sleep-location.X"),
-                    playerData.getDouble("user.last-sleep-location.Y"),
-                    playerData.getDouble("user.last-sleep-location.Z"),
-                    (float) playerData.getDouble("user.last-sleep-location.yaw"),
-                    (float) playerData.getDouble("user.last-sleep-location.pitch"),
-                    0
-            );
+        if (!alwaysSpawn && up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_WORLD) != null) {
+            String worldName = up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_WORLD).toString();
+            World world = Bukkit.getWorld(worldName);
 
+            if (world != null) {
+                event.setRespawnLocation(new Location(
+                        world,
+                        (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_X),
+                        (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_Y),
+                        (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_Z),
+                        ((Float) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_YAW)),
+                        ((Float) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_PITCH))
+                ));
+                return;
+            }
+        }
+
+        String spawnName = plugin.config.get("teleportation.spawn.main-spawn-world").toString();
+        if (spawnName == null) {
+            plugin.getLogger().warning("Spawn world " + spawnName + " not found!");
             return;
         }
+        World world = Bukkit.getWorld(spawnName);
 
-        playerData.close();
-
-        Files spawns = new Files(this.plugin.foundryConfig, this.plugin);
-        spawns.load("data/spawns.yml");
-
-        if (spawns.get("spawn."+spawnName) == null) {
-            if (
-                Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null &&
-                Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY() >= 10
-            ) {
-                UtilTeleport tp = new UtilTeleport(plugin);
-                tp.doTeleport(
-                        event.getPlayer(),
-                        Bukkit.getServer().getWorld(spawnName),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getX(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getZ(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getYaw(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch(),
-                        0
-                );
-            } else {
-                message.send("spawn", "notexist");
-                log.info("Failed to respawn player - world '"+Bukkit.getServer().getWorld(spawnName)+"' does not exist.");
-            }
+        if (world != null) {
+            event.setRespawnLocation(world.getSpawnLocation());
         } else {
-            UtilTeleport tp = new UtilTeleport(plugin);
-
-            World world = Bukkit.getServer().getWorld(spawnName);
-            
-            if (world == null) {
-                message.send("spawn", "notexist");
-                this.plugin.log.severe("World "+spawnName+" not found.");
-            } else {
-                tp.doTeleport(
-                        event.getPlayer(),
-                        world,
-                        spawns.getDouble("spawn." + spawnName + ".X"),
-                        spawns.getDouble("spawn." + spawnName + ".Y"),
-                        spawns.getDouble("spawn." + spawnName + ".Z"),
-                        (float) spawns.getDouble("spawn." + spawnName + ".yaw"),
-                        (float) spawns.getDouble("spawn." + spawnName + ".pitch"),
-                        0
-                );
-            }
+            plugin.getLogger().warning("Spawn world " + spawnName + " not found!");
         }
-
-        spawns.close();
     }
 }

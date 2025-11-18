@@ -2,7 +2,7 @@ package net.lewmc.essence.teleportation.tp;
 
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilLocation;
+import net.lewmc.essence.teleportation.UtilLocation;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
@@ -162,6 +162,6 @@ public class CommandTprandom extends FoundryPlayerCommand {
 
         UtilTeleport tp = new UtilTeleport(plugin);
         // Use minimum delay of 1 tick to avoid FoliaLib warnings
-        tp.doTeleport(player, teleportLocation, 1);
+        tp.doTeleport(player, teleportLocation, 1, true);
     }
 }

@@ -4,7 +4,7 @@
 - 🌐 **Help Translate Essence** - https://crowdin.com/project/lewmc-essence
 - ⭐ Enjoying Essence? We'd love to hear your feedback on Spigot. Leave us a review [here](https://www.spigotmc.org/resources/essence.114553/).
 
-[Maven Repository](https://repo.lewmc.net) - [Documentation](https://wiki.lewmc.net/foundry.html) - [JavaDocs](https://lewmc.github.io/Essence) - [Code Analysis](https://sonarcloud.io/project/overview?id=LewMC_Essence)
+[Maven Repository](https://repo.lewmc.net) - [Documentation](https://wiki.lewmc.net/foundry.html) - [Javadocs](https://lewmc.github.io/Essence) - [Code Analysis](https://sonarcloud.io/project/overview?id=LewMC_Essence)
 
 [![Crowdin](https://badges.crowdin.net/lewmc-essence/localized.svg)](https://crowdin.com/project/lewmc-essence)
 
@@ -21,7 +21,7 @@ This helps us to ensure that our snapshot builds are labelled as snapshot so tha
 Install JDK 21 before continuing. Click [here](https://docs.oracle.com/en/java/javase/21/install/index.html) for documentation.
 
 - You will also need Maven for the `mvn` command, which can be installed [here](https://maven.apache.org/download.cgi).
-- Make sure that your version of JDK 21 includes JavaDoc.
+- Make sure that your version of JDK 21 includes Javadoc.
   - For example, Eclipse Temurin JDK with Hotspot 21 includes this executable.
 
 ```sh
@@ -30,6 +30,30 @@ git clone https://github.com/lewmc/essence && cd essence
 
 # Perform a build
 mvn clean package
+```
+
+## Handling Player Data
+As of version 1.11.0, player data is no longer to be handled via files. Player data is now stored in-memory as a cache
+which is automatically read from and written to file when the user joins and leaves the game. This reduces the I/O load
+on larger servers and allows for faster operations plugin-wide.
+
+For more information please see [the Javadoc](https://lewmc.github.io/Essence/net/lewmc/essence/core/UtilPlayer.html).
+Please feel free to message Lew or email dev@lewmc.net for assistance.
+
+Use function getPlayer(UUID, Key) to get a value from the player's data, and setPlayer(UUID, Key, Value) to set a value
+in the player's data.
+
+All new features accessing player data must use this system. Some limited older systems may still use files.
+
+For example, to set and get a player's balance:
+```java
+class ExampleEconomyClass {
+    public void getSetEconomy(UUID playerUUID, Essence plugin) {
+        UtilPlayer up = new UtilPlayer(plugin);
+        up.getPlayer(playerUUID, UtilPlayer.KEYS.ECONOMY_BALANCE);
+        up.setPlayer(playerUUID, UtilPlayer.KEYS.ECONOMY_BALANCE, 10.0);
+    }
+}
 ```
 
 # Licensing

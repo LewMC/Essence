@@ -83,9 +83,15 @@ public class CommandTeleport extends FoundryCommand {
             double x, y, z;
             try {
                 Player ref = (cs instanceof Player) ? (Player) cs : targets.getFirst();
-                x = args[1].equals("~") ? ref.getLocation().getX() : Double.parseDouble(args[1]);
-                y = args[2].equals("~") ? ref.getLocation().getY() : Double.parseDouble(args[2]);
-                z = args[3].equals("~") ? ref.getLocation().getZ() : Double.parseDouble(args[3]);
+                x = args[1].startsWith("~") ?
+                        (args[1].length() == 1 ? ref.getLocation().getX() : ref.getLocation().getX() + Double.parseDouble(args[1].substring(1))) :
+                        Double.parseDouble(args[1]);
+                y = args[2].startsWith("~") ?
+                        (args[2].length() == 1 ? ref.getLocation().getY() : ref.getLocation().getY() + Double.parseDouble(args[2].substring(1))) :
+                        Double.parseDouble(args[2]);
+                z = args[3].startsWith("~") ?
+                        (args[3].length() == 1 ? ref.getLocation().getZ() : ref.getLocation().getZ() + Double.parseDouble(args[3].substring(1))) :
+                        Double.parseDouble(args[3]);
             } catch (Exception e) {
                 message.send("generic", "numberformaterror");
                 return true;
@@ -96,10 +102,10 @@ public class CommandTeleport extends FoundryCommand {
                     message.send("teleport", "requestsdisabled", new String[] { t.getName() });
                 } else {
                     Location loc = new Location(t.getWorld(), x, y, z);
-                    tp.doTeleport(t, loc, 0);
+                    tp.doTeleport(t, loc, 0, true);
                 }
             }
-            message.send("teleport", "tocoord", new String[] { x+", "+y+", "+z });
+            message.send("teleport", "tocoord", new String[] { String.format("%.1f, %.1f, %.1f", x, y, z) });
             return true;
         }
 
@@ -120,7 +126,7 @@ public class CommandTeleport extends FoundryCommand {
                 if (!tp.teleportToggleCheck(player, to)) {
                     message.send("teleport", "requestsdisabled", new String[] { to.getName() });
                 } else {
-                    tp.doTeleport(from, to.getLocation(), 0); // Folia
+                    tp.doTeleport(from, to.getLocation(), 0, true); // Folia
                 }
             }
             message.send("teleport", "toplayer", new String[] { fromList.stream().map(Player::getName).collect(Collectors.joining(", ")), to.getName() });
@@ -134,16 +140,22 @@ public class CommandTeleport extends FoundryCommand {
             }
             double x, y, z;
             try {
-                x = args[0].equals("~") ? player.getLocation().getX() : Double.parseDouble(args[0]);
-                y = args[1].equals("~") ? player.getLocation().getY() : Double.parseDouble(args[1]);
-                z = args[2].equals("~") ? player.getLocation().getZ() : Double.parseDouble(args[2]);
+                x = args[0].startsWith("~") ? 
+                    (args[0].length() == 1 ? player.getLocation().getX() : player.getLocation().getX() + Double.parseDouble(args[0].substring(1))) : 
+                    Double.parseDouble(args[0]);
+                y = args[1].startsWith("~") ? 
+                    (args[1].length() == 1 ? player.getLocation().getY() : player.getLocation().getY() + Double.parseDouble(args[1].substring(1))) : 
+                    Double.parseDouble(args[1]);
+                z = args[2].startsWith("~") ? 
+                    (args[2].length() == 1 ? player.getLocation().getZ() : player.getLocation().getZ() + Double.parseDouble(args[2].substring(1))) : 
+                    Double.parseDouble(args[2]);
             } catch (Exception e) {
                 message.send("generic", "numberformaterror");
                 return true;
             }
             Location loc = new Location(player.getWorld(), x, y, z);
-            tp.doTeleport(player, loc, 0); // Folia兼容
-            message.send("teleport", "tocoord", new String[] { x+", "+y+", "+z });
+            tp.doTeleport(player, loc, 0, true);
+            message.send("teleport", "tocoord", new String[] { String.format("%.1f, %.1f, %.1f", x, y, z) });
             return true;
         }
 
@@ -162,7 +174,7 @@ public class CommandTeleport extends FoundryCommand {
                     return true;
                 }
 
-                tp.doTeleport(player, to.getLocation(), 0);
+                tp.doTeleport(player, to.getLocation(), 0, true);
                 message.send("teleport", "to", new String[] { to.getName() });
                 return true;
             }
@@ -185,7 +197,7 @@ public class CommandTeleport extends FoundryCommand {
                         }
 
                         Location offlineLoc = new Location(world, x, y, z);
-                        tp.doTeleport(player, offlineLoc, 0);
+                        tp.doTeleport(player, offlineLoc, 0, true);
                         message.send("teleport", "to", new String[]{offline.getName()});
                         message.send("teleport", "tooffline");
                         return true;

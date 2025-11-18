@@ -13,15 +13,32 @@ import java.util.List;
 public class CommandNear extends FoundryPlayerCommand {
     private final Essence plugin;
 
+    /**
+     * Constructor for the NearCommand class.
+     *
+     * @param plugin References to the main plugin class
+     */
     public CommandNear(Essence plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * The required permission.
+     *
+     * @return String - The permission string.
+     */
     @Override
     protected String requiredPermission() {
         return "essence.orientation.near";
     }
 
+    /**
+     * @param cs        Information about who sent the command - player or console.
+     * @param command   Information about what command was sent.
+     * @param s         Command label - not used here.
+     * @param args      The command's arguments.
+     * @return boolean  true/false - was the command accepted and processed or not?
+     */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         UtilMessage msg = new UtilMessage(plugin, cs);

@@ -2,8 +2,8 @@ package net.lewmc.essence.team;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
+import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.Files;
-import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.Security;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -59,16 +59,12 @@ public class UtilTeam {
 
                 teamsFile.save();
 
-                Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-                playerDataFile.load(playerDataFile.playerDataFile(leader));
-
-                playerDataFile.set("user.team", name);
-                playerDataFile.save();
+                new UtilPlayer(this.plugin).setPlayer(leader, UtilPlayer.KEYS.USER_TEAM, name);
 
                 message.send("team", "created", new String[] { name });
             } else {
                 message.send("generic", "exception");
-                new Logger(this.plugin.foundryConfig).warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
+                this.plugin.log.warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
             }
         } else {
             message.send("team", "exists");
@@ -153,15 +149,11 @@ public class UtilTeam {
      * @return String - Name of the player's team.
      */
     public @Nullable String getPlayerTeam(UUID player) {
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(player));
-        if (playerData.getString("user.team") == null) {
-            playerData.close();
+        Object team = new UtilPlayer(this.plugin).getPlayer(player, UtilPlayer.KEYS.USER_TEAM);
+        if (team == null) {
             return null;
         } else {
-            String team = playerData.getString("user.team");
-            playerData.close();
-            return team;
+            return team.toString();
         }
     }
 
@@ -174,11 +166,7 @@ public class UtilTeam {
     public boolean acceptRequest(String team, String player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(op.getUniqueId()));
-
-        playerData.set("user.team", team);
-        playerData.save();
+        new UtilPlayer(this.plugin).setPlayer(op.getUniqueId(), UtilPlayer.KEYS.USER_TEAM, team);
 
         Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");

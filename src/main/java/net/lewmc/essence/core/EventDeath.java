@@ -1,6 +1,7 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.teleportation.UtilLocation;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
