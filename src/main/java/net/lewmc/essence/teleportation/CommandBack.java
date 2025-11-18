@@ -1,10 +1,9 @@
 package net.lewmc.essence.teleportation;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.TypePlayer;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
-import net.lewmc.essence.teleportation.tp.UtilTeleport;
+import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -16,6 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class CommandBack extends FoundryCommand {
     private final Essence plugin;
+    private final UtilPlayer up;
 
     /**
      * Constructor for the BackCommand class.
@@ -24,6 +24,7 @@ public class CommandBack extends FoundryCommand {
      */
     public CommandBack(Essence plugin) {
         this.plugin = plugin;
+        this.up = new UtilPlayer(plugin);
     }
 
     /**
@@ -71,31 +72,19 @@ public class CommandBack extends FoundryCommand {
      * @param msg Message utility
      */
     private void backSelf(Player p, UtilMessage msg) {
-        TypePlayer player = this.plugin.players.get(p.getUniqueId());
-        if (player == null || player.lastLocation.world == null) {
+        if (up.getPlayer(p.getUniqueId(), UtilPlayer.KEYS.LAST_LOCATION_WORLD) == null) {
             msg.send("back", "cant");
             return;
         }
 
-        int waitTime = plugin.config.get("teleportation.back.wait") != null ?
-                (int) plugin.config.get("teleportation.back.wait") : 0;
+        int waitTime = plugin.config.get("teleportation.back.wait") != null ? (int) plugin.config.get("teleportation.back.wait") : 0;
         
-        if (Bukkit.getServer().getWorld(player.lastLocation.world) == null) {
+        if (Bukkit.getServer().getWorld(up.getPlayer(p.getUniqueId(), UtilPlayer.KEYS.LAST_LOCATION_WORLD).toString()) == null) {
             msg.send("back", "cant");
             return;
         }
-        
-        new UtilTeleport(this.plugin).doTeleport(
-                p,
-                Bukkit.getServer().getWorld(player.lastLocation.world),
-                player.lastLocation.x,
-                player.lastLocation.y,
-                player.lastLocation.z,
-                player.lastLocation.yaw,
-                player.lastLocation.pitch,
-                waitTime,
-                true
-        );
+
+        new UtilLocation(this.plugin).sendBack(p, waitTime);
 
         if (waitTime == 0) {
             msg.send("back", "going");
@@ -116,26 +105,14 @@ public class CommandBack extends FoundryCommand {
             return;
         }
 
-        int waitTime = plugin.config.get("teleportation.back.wait") != null ?
-                (int) plugin.config.get("teleportation.back.wait") : 0;
+        int waitTime = plugin.config.get("teleportation.back.wait") != null ? (int) plugin.config.get("teleportation.back.wait") : 0;
 
-        TypePlayer player = this.plugin.players.get(targetPlayer.getUniqueId());
-        if (player == null || player.lastLocation.world == null || Bukkit.getServer().getWorld(player.lastLocation.world) == null) {
+        if (Bukkit.getServer().getWorld(up.getPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.LAST_LOCATION_WORLD).toString()) == null) {
             msg.send("back", "cantother", new String[]{targetPlayer.getName()});
             return;
         }
         
-        new UtilTeleport(this.plugin).doTeleport(
-                targetPlayer,
-                Bukkit.getServer().getWorld(player.lastLocation.world),
-                player.lastLocation.x,
-                player.lastLocation.y,
-                player.lastLocation.z,
-                player.lastLocation.yaw,
-                player.lastLocation.pitch,
-                waitTime,
-                true
-        );
+        new UtilLocation(this.plugin).sendBack(targetPlayer, waitTime);
 
         if (waitTime == 0) {
             msg.send("back", "goingother", new String[]{targetPlayer.getName()});

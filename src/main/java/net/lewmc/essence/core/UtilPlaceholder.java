@@ -108,12 +108,7 @@ public class UtilPlaceholder {
             return new UtilPlayer(this.plugin).getPlayerSuffix(cs);
         } else if (placeholder.equalsIgnoreCase("balance")) {
             if (cs instanceof Player p) {
-                TypePlayer playerData = this.plugin.players.get(p.getUniqueId());
-                if (playerData != null) {
-                    return this.plugin.config.get("economy.symbol").toString() + playerData.economy.balance;
-                } else {
-                    return this.plugin.config.get("economy.symbol").toString() + "0.0";
-                }
+                return this.plugin.config.get("economy.symbol").toString() + new UtilPlayer(this.plugin).getPlayer(p.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE);
             } else {
                 return this.plugin.config.get("economy.symbol").toString() + "Infinity";
             }

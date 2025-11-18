@@ -510,7 +510,7 @@ public class UtilVaultEconomy implements Economy {
     @Override
     public boolean createPlayerAccount(OfflinePlayer p) {
         UtilPlayer up = new UtilPlayer(this.plugin);
-        return up.createPlayer(p);
+        return up.createPlayer(p.getUniqueId());
     }
 
     /**

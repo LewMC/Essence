@@ -39,7 +39,7 @@ public class EventJoin implements Listener {
         UtilPlayer up = new UtilPlayer(this.plugin);
 
         boolean firstJoin = false;
-        if (up.createPlayer(event.getPlayer())) {
+        if (up.createPlayer(event.getPlayer().getUniqueId())) {
             log.info("Player data file created.");
             firstJoin = true;
         } else {
@@ -50,7 +50,11 @@ public class EventJoin implements Listener {
 
         if (firstJoin) { this.firstJoin(event, log); }
 
-        up.loadPlayer(event.getPlayer());
+        if(!up.loadPlayer(event.getPlayer().getUniqueId())) {
+            this.plugin.log.severe("Unable to load player data.");
+            this.plugin.log.warn("It wasn't possible to load "+event.getPlayer().getName()+"'s player data.");
+            this.plugin.log.warn("The player data may be stale/outdated, Essence may have issues.");
+        }
 
         this.playerJoinMessage(event);
 

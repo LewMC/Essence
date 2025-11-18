@@ -2,9 +2,9 @@ package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.foundry.Files;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +12,9 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Essence's player utility.
@@ -31,69 +33,38 @@ public class UtilPlayer {
     }
 
     /**
-     * Loads a player into memory.
-     * @param p OfflinePlayer - The player.
-     * @return boolean - Success?
-     * @since 1.11.0
+     * Sets a player's data value
+     * @param uuid UUID - The player's UUID
+     * @param key KEYS - The item to change
+     * @param value Object - The value
+     * @return Success?
      */
-    public boolean loadPlayer(OfflinePlayer p) {
-        Files f = new Files(this.plugin.foundryConfig, this.plugin);
+    public boolean setPlayer(UUID uuid, KEYS key, Object value) {
+        if (this.plugin.players.containsKey(uuid)) {
+            TypePlayer player = this.plugin.players.get(uuid);
 
-        if (f.exists(f.playerDataFile(p.getUniqueId()))) {
-            f.load(f.playerDataFile(p));
-            TypePlayer player = new TypePlayer();
-
-            Boolean atr = f.getBoolean(PLAYER_KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString());
-            player.user.acceptingTeleportRequests = (atr == null) ? true : atr;
-
-            player.user.lastSeen = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
-            player.user.lastKnownName = p.getName();
-
-            String n = f.getString(PLAYER_KEYS.USER_NICKNAME.toString());
-            player.user.nickname = (n == null) ? null : n;
-
-            String t = f.getString(PLAYER_KEYS.USER_TEAM.toString());
-            player.user.team = (t == null) ? null : t;
-
-            if ((boolean) this.plugin.config.get("advanced.playerdata.store-ip-address")) {
-                Player onlinePlayer = p.getPlayer();
-                if (onlinePlayer != null && onlinePlayer.getAddress() != null) {
-                    f.set(PLAYER_KEYS.USER_IP_ADDRESS.toString(), onlinePlayer.getAddress().getAddress().getHostAddress());
+            switch (value) {
+                case Boolean b when key == KEYS.USER_ACCEPTING_TELEPORT_REQUESTS -> player.user.acceptingTeleportRequests = b;
+                case String s when key == KEYS.USER_LAST_SEEN -> player.user.lastSeen = s;
+                case String s when key == KEYS.USER_LAST_KNOWN_NAME -> player.user.lastKnownName = s;
+                case String s when key == KEYS.USER_NICKNAME -> player.user.nickname = s;
+                case String s when key == KEYS.USER_IP_ADDRESS -> player.user.ipAddress = s;
+                case List<?> objects when key == KEYS.USER_IGNORING_PLAYERS -> player.user.ignoringPlayers = (List<String>) objects;
+                case Double v when key == KEYS.ECONOMY_BALANCE -> player.economy.balance = v;
+                case Boolean b when key == KEYS.ECONOMY_ACCEPTING_PAYMENTS -> player.economy.acceptingPayments = b;
+                case String s when key == KEYS.LAST_LOCATION_WORLD -> player.lastLocation.world = s;
+                case Double v when key == KEYS.LAST_LOCATION_X -> player.lastLocation.x = v;
+                case Double v when key == KEYS.LAST_LOCATION_Y -> player.lastLocation.y = v;
+                case Double v when key == KEYS.LAST_LOCATION_Z -> player.lastLocation.z = v;
+                case Float v when key == KEYS.LAST_LOCATION_YAW -> player.lastLocation.yaw = v;
+                case Float v when key == KEYS.LAST_LOCATION_PITCH -> player.lastLocation.pitch = v;
+                case Boolean b when key == KEYS.LAST_LOCATION_IS_BED -> player.lastLocation.isBed = b;
+                case null, default -> {
+                    return false;
                 }
             }
 
-            Double b = f.getDouble(PLAYER_KEYS.ECONOMY_BALANCE.toString());
-            player.economy.balance = (b == null) ? (double) this.plugin.config.get("economy.start-money") : b;
-
-            Boolean ap = f.getBoolean(PLAYER_KEYS.ECONOMY_ACCEPTING_PAYMENTS.toString());
-            player.economy.acceptingPayments = (ap == null) ? true : ap;
-
-            String llw = f.getString(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString());
-            player.lastLocation.world = (llw == null) ? null : llw;
-
-            Double llx = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_X.toString());
-            player.lastLocation.x = (llx == null) ? p.getPlayer().getLocation().getX() : llx;
-
-            Double lly = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_Y.toString());
-            player.lastLocation.y = (lly == null) ? p.getPlayer().getLocation().getX() : lly;
-
-            Double llz = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_Z.toString());
-            player.lastLocation.z = (llz == null) ? p.getPlayer().getLocation().getZ() : llz;
-
-            Double llyaw = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_YAW.toString());
-            player.lastLocation.yaw = (llyaw == null) ? p.getPlayer().getLocation().getYaw() : Float.parseFloat(String.valueOf(llyaw));
-
-            Double llpitch = f.getDouble(PLAYER_KEYS.LAST_KNOWN_LOCATION_PITCH.toString());
-            player.lastLocation.pitch = (llpitch == null) ? p.getPlayer().getLocation().getPitch() : Float.parseFloat(String.valueOf(llyaw));
-
-            Boolean llib = f.getBoolean(PLAYER_KEYS.LAST_KNOWN_LOCATION_IS_BED.toString());
-            player.lastLocation.isBed = (llib == null) ? false : (boolean) llib;
-
-            this.plugin.players.put(
-                p.getUniqueId(),
-                player
-            );
+            this.plugin.players.put(uuid, player);
             return true;
         } else {
             return false;
@@ -101,42 +72,141 @@ public class UtilPlayer {
     }
 
     /**
-     * Saves a player's data
-     * @param p OfflinePlayer - The player
+     * Gets a player's data value
+     * @param uuid UUID - The player's UUID
+     * @param key KEYS - The item to change
+     * @return Object - Value or Null
+     */
+    public Object getPlayer(UUID uuid, KEYS key) {
+        if (this.plugin.players.containsKey(uuid)) {
+            TypePlayer player = this.plugin.players.get(uuid);
+
+            return switch (key) {
+                case USER_ACCEPTING_TELEPORT_REQUESTS -> player.user.acceptingTeleportRequests;
+                case USER_LAST_SEEN -> player.user.lastSeen;
+                case USER_LAST_KNOWN_NAME -> player.user.lastKnownName;
+                case USER_NICKNAME -> player.user.nickname;
+                case USER_IP_ADDRESS -> player.user.ipAddress;
+                case USER_IGNORING_PLAYERS -> player.user.ignoringPlayers;
+                case ECONOMY_BALANCE -> player.economy.balance;
+                case ECONOMY_ACCEPTING_PAYMENTS -> player.economy.acceptingPayments;
+                case LAST_LOCATION_WORLD -> player.lastLocation.world;
+                case LAST_LOCATION_X -> player.lastLocation.x;
+                case LAST_LOCATION_Y -> player.lastLocation.y;
+                case LAST_LOCATION_Z -> player.lastLocation.z;
+                case LAST_LOCATION_YAW -> player.lastLocation.yaw;
+                case LAST_LOCATION_PITCH -> player.lastLocation.pitch;
+                case LAST_LOCATION_IS_BED -> player.lastLocation.isBed;
+                case null, default -> null;
+            };
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Loads a player into memory.
+     * @param uuid UUID - The player's UUID.
      * @return boolean - Success?
      * @since 1.11.0
      */
-    public boolean savePlayer(OfflinePlayer p) {
+    public boolean loadPlayer(UUID uuid) {
         Files f = new Files(this.plugin.foundryConfig, this.plugin);
 
-        if (f.exists(f.playerDataFile(p))) {
-            TypePlayer player = this.plugin.players.get(p.getUniqueId());
+        if (f.exists(f.playerDataFile(uuid))) {
+            Player p = Bukkit.getPlayer(uuid);
+            f.load(f.playerDataFile(uuid));
+            TypePlayer player = new TypePlayer();
+
+            Boolean atr = f.getBoolean(KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString());
+            player.user.acceptingTeleportRequests = (atr == null) ? true : atr;
+
+            player.user.lastSeen = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+            player.user.lastKnownName = p.getName();
+
+            String n = f.getString(KEYS.USER_NICKNAME.toString());
+            player.user.nickname = (n == null) ? null : n;
+
+            String t = f.getString(KEYS.USER_TEAM.toString());
+            player.user.team = (t == null) ? null : t;
+
+            if ((boolean) this.plugin.config.get("advanced.playerdata.store-ip-address")) {
+                Player onlinePlayer = p.getPlayer();
+                if (onlinePlayer != null && onlinePlayer.getAddress() != null) {
+                    f.set(KEYS.USER_IP_ADDRESS.toString(), onlinePlayer.getAddress().getAddress().getHostAddress());
+                }
+            }
+
+            Double b = f.getDouble(KEYS.ECONOMY_BALANCE.toString());
+            player.economy.balance = (b == null) ? (double) this.plugin.config.get("economy.start-money") : b;
+
+            Boolean ap = f.getBoolean(KEYS.ECONOMY_ACCEPTING_PAYMENTS.toString());
+            player.economy.acceptingPayments = (ap == null) ? true : ap;
+
+            String llw = f.getString(KEYS.LAST_LOCATION_WORLD.toString());
+            player.lastLocation.world = (llw == null) ? null : llw;
+
+            Double llx = f.getDouble(KEYS.LAST_LOCATION_X.toString());
+            player.lastLocation.x = (llx == null) ? p.getPlayer().getLocation().getX() : llx;
+
+            Double lly = f.getDouble(KEYS.LAST_LOCATION_Y.toString());
+            player.lastLocation.y = (lly == null) ? p.getPlayer().getLocation().getX() : lly;
+
+            Double llz = f.getDouble(KEYS.LAST_LOCATION_Z.toString());
+            player.lastLocation.z = (llz == null) ? p.getPlayer().getLocation().getZ() : llz;
+
+            Double llyaw = f.getDouble(KEYS.LAST_LOCATION_YAW.toString());
+            player.lastLocation.yaw = (llyaw == null) ? p.getPlayer().getLocation().getYaw() : Float.parseFloat(String.valueOf(llyaw));
+
+            Double llpitch = f.getDouble(KEYS.LAST_LOCATION_PITCH.toString());
+            player.lastLocation.pitch = (llpitch == null) ? p.getPlayer().getLocation().getPitch() : Float.parseFloat(String.valueOf(llyaw));
+
+            Boolean llib = f.getBoolean(KEYS.LAST_LOCATION_IS_BED.toString());
+            player.lastLocation.isBed = (llib == null) ? false : llib;
+
+            this.plugin.players.put(uuid,player);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Saves a player's data, avoid using this unless required - it fires automatically when a player leaves the server.
+     * @param uuid UUID - The player's UUID
+     * @return boolean - Success?
+     * @since 1.11.0
+     */
+    public boolean savePlayer(UUID uuid) {
+        Files f = new Files(this.plugin.foundryConfig, this.plugin);
+
+        if (f.exists(f.playerDataFile(uuid))) {
+            TypePlayer player = this.plugin.players.get(uuid);
             if (player == null) {
                 return false;
             }
 
-            f.load(f.playerDataFile(p));
+            f.load(f.playerDataFile(uuid));
 
-            f.set(PLAYER_KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString(), player.user.acceptingTeleportRequests);
-            f.set(PLAYER_KEYS.USER_LAST_SEEN.toString(), player.user.lastSeen);
-            f.set(PLAYER_KEYS.USER_LAST_KNOWN_NAME.toString(), player.user.lastKnownName);
-            f.set(PLAYER_KEYS.USER_NICKNAME.toString(), player.user.nickname);
-            f.set(PLAYER_KEYS.USER_IP_ADDRESS.toString(), player.user.ipAddress);
-            f.set(PLAYER_KEYS.USER_IGNORING_PLAYERS.toString(), player.user.ignoringPlayers);
-            f.set(PLAYER_KEYS.ECONOMY_BALANCE.toString(), player.economy.balance);
-            f.set(PLAYER_KEYS.ECONOMY_ACCEPTING_PAYMENTS.toString(), player.economy.acceptingPayments);
-            f.set(PLAYER_KEYS.LAST_KNOWN_LOCATION_WORLD.toString(), player.lastLocation.world);
-            f.set(PLAYER_KEYS.LAST_KNOWN_LOCATION_X.toString(), player.lastLocation.x);
-            f.set(PLAYER_KEYS.LAST_KNOWN_LOCATION_Y.toString(), player.lastLocation.y);
-            f.set(PLAYER_KEYS.LAST_KNOWN_LOCATION_Z.toString(), player.lastLocation.z);
-            f.set(PLAYER_KEYS.LAST_KNOWN_LOCATION_YAW.toString(), player.lastLocation.yaw);
-            f.set(PLAYER_KEYS.LAST_KNOWN_LOCATION_PITCH.toString(), player.lastLocation.pitch);
-            f.set(PLAYER_KEYS.LAST_KNOWN_LOCATION_IS_BED.toString(), player.lastLocation.isBed);
-            f.set(PLAYER_KEYS.USER_TEAM.toString(), player.user.team);
+            f.set(KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString(), player.user.acceptingTeleportRequests);
+            f.set(KEYS.USER_LAST_SEEN.toString(), player.user.lastSeen);
+            f.set(KEYS.USER_LAST_KNOWN_NAME.toString(), player.user.lastKnownName);
+            f.set(KEYS.USER_NICKNAME.toString(), player.user.nickname);
+            f.set(KEYS.USER_IP_ADDRESS.toString(), player.user.ipAddress);
+            f.set(KEYS.USER_IGNORING_PLAYERS.toString(), player.user.ignoringPlayers);
+            f.set(KEYS.ECONOMY_BALANCE.toString(), player.economy.balance);
+            f.set(KEYS.ECONOMY_ACCEPTING_PAYMENTS.toString(), player.economy.acceptingPayments);
+            f.set(KEYS.LAST_LOCATION_WORLD.toString(), player.lastLocation.world);
+            f.set(KEYS.LAST_LOCATION_X.toString(), player.lastLocation.x);
+            f.set(KEYS.LAST_LOCATION_Y.toString(), player.lastLocation.y);
+            f.set(KEYS.LAST_LOCATION_Z.toString(), player.lastLocation.z);
+            f.set(KEYS.LAST_LOCATION_YAW.toString(), player.lastLocation.yaw);
+            f.set(KEYS.LAST_LOCATION_PITCH.toString(), player.lastLocation.pitch);
+            f.set(KEYS.LAST_LOCATION_IS_BED.toString(), player.lastLocation.isBed);
+            f.set(KEYS.USER_TEAM.toString(), player.user.team);
 
-            f.save();
-
-            return true;
+            return f.save();
         } else {
             return false;
         }
@@ -144,26 +214,24 @@ public class UtilPlayer {
 
     /**
      * Unloads a player's data from memory - WARNING: Does not save! Call savePlayer() first to persist changes.
-     * @param p OfflinePlayer - The player
-     * @return boolean - Success?
+     * @param uuid UUID - The player's UUID
      * @since 1.11.0
      */
-    public boolean unloadPlayer(OfflinePlayer p) {
-        this.plugin.players.remove(p.getUniqueId());
-        return true;
+    public void unloadPlayer(UUID uuid) {
+        this.plugin.players.remove(uuid);
     }
 
     /**
      * Creates a player's data file. Does not load any data into it - default data is loaded in by loadPlayer()
-     * @param p OfflinePlayer - The player
+     * @param uuid UUID - The player's UUID
      * @return boolean - Success?
      * @since 1.11.0
      */
-    public boolean createPlayer(OfflinePlayer p) {
+    public boolean createPlayer(UUID uuid) {
         Files f = new Files(this.plugin.foundryConfig, this.plugin);
 
-        if (!f.exists(f.playerDataFile(p.getUniqueId()))) {
-            return f.create(f.playerDataFile(p.getUniqueId()));
+        if (!f.exists(f.playerDataFile(uuid))) {
+            return f.create(f.playerDataFile(uuid));
         } else {
             return false;
         }
@@ -172,7 +240,7 @@ public class UtilPlayer {
     /**
      * Player data keys
      */
-    public enum PLAYER_KEYS {
+    public enum KEYS {
         USER_ACCEPTING_TELEPORT_REQUESTS {
             @Override
             public String toString() { return "user.accepting-teleport-requests"; }
@@ -209,31 +277,31 @@ public class UtilPlayer {
             @Override
             public String toString() { return "economy.accepting-payments"; }
         },
-        LAST_KNOWN_LOCATION_WORLD {
+        LAST_LOCATION_WORLD {
             @Override
             public String toString() { return "location.last-known.world"; }
         },
-        LAST_KNOWN_LOCATION_X {
+        LAST_LOCATION_X {
             @Override
             public String toString() { return "location.last-known.x"; }
         },
-        LAST_KNOWN_LOCATION_Y {
+        LAST_LOCATION_Y {
             @Override
             public String toString() { return "location.last-known.y"; }
         },
-        LAST_KNOWN_LOCATION_Z {
+        LAST_LOCATION_Z {
             @Override
             public String toString() { return "location.last-known.z"; }
         },
-        LAST_KNOWN_LOCATION_YAW {
+        LAST_LOCATION_YAW {
             @Override
             public String toString() { return "location.last-known.yaw"; }
         },
-        LAST_KNOWN_LOCATION_PITCH {
+        LAST_LOCATION_PITCH {
             @Override
             public String toString() { return "location.last-known.pitch"; }
         },
-        LAST_KNOWN_LOCATION_IS_BED {
+        LAST_LOCATION_IS_BED {
             @Override
             public String toString() { return "location.is-bed"; }
         }
@@ -316,11 +384,7 @@ public class UtilPlayer {
      */
     public String getDisplayname(CommandSender cs) {
         if (cs instanceof Player p) {
-            if (this.plugin.players.get(p.getUniqueId()).user.nickname != null) {
-                return this.plugin.players.get(p.getUniqueId()).user.nickname;
-            } else {
-                return cs.getName();
-            }
+            return Objects.requireNonNullElseGet(this.plugin.players.get(p.getUniqueId()).user.nickname, cs::getName);
         } else {
             return cs.getName();
         }
