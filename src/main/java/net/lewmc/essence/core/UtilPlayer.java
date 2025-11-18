@@ -546,6 +546,7 @@ public class UtilPlayer {
             f.set("location.last-known.yaw", f.get("last-location.yaw"));
             f.set("location.last-known.pitch", f.get("last-location.pitch"));
         }
+
         if (f.get("user.last-sleep-location") != null) {
             f.set("location.last-sleep.world", f.get("user.last-sleep-location.world"));
             f.set("location.last-sleep.x", f.get("user.last-sleep-location.x"));
@@ -554,5 +555,8 @@ public class UtilPlayer {
             f.set("location.last-sleep.yaw", f.get("user.last-sleep-location.yaw"));
             f.set("location.last-sleep.pitch", f.get("user.last-sleep-location.pitch"));
         }
+
+        f.remove("last-location");
+        f.remove("user.last-sleep-location");
     }
 }
