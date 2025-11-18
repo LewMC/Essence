@@ -98,7 +98,7 @@ public class CommandEco extends FoundryCommand {
             return true;
         } else {
             message.send("generic", "exception");
-            this.plugin.log.warn("Unable to update last location: player "+targetPlayer.getName()+" may be null");
+            this.plugin.log.warn("Unable to update player balance: player "+targetPlayer.getName()+" may be null");
             return false;
         }
     }
@@ -133,7 +133,7 @@ public class CommandEco extends FoundryCommand {
             return true;
         } else {
             message.send("generic", "exception");
-            this.plugin.log.warn("Unable to update last location: player "+targetPlayer.getName()+" may be null");
+            this.plugin.log.warn("Unable to update player balance: player "+targetPlayer.getName()+" may be null");
             return false;
         }
     }
@@ -162,7 +162,6 @@ public class CommandEco extends FoundryCommand {
 
         UtilPlayer up = new UtilPlayer(this.plugin);
         
-        // Check if the player has sufficient balance
         if ((Double) up.getPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) < amount) {
             message.send("economy", "insufficientfunds");
             return true;
@@ -175,7 +174,7 @@ public class CommandEco extends FoundryCommand {
             return true;
         } else {
             message.send("generic", "exception");
-            this.plugin.log.warn("Unable to update last location: player "+targetPlayer.getName()+" may be null");
+            this.plugin.log.warn("Unable to update player balance: player "+targetPlayer.getName()+" may be null");
             return false;
         }
     }
