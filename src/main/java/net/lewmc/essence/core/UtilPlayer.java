@@ -58,6 +58,7 @@ public class UtilPlayer {
                 case Double v when key == KEYS.LAST_LOCATION_Z -> player.lastLocation.z = v;
                 case Float v when key == KEYS.LAST_LOCATION_YAW -> player.lastLocation.yaw = v;
                 case Float v when key == KEYS.LAST_LOCATION_PITCH -> player.lastLocation.pitch = v;
+                case Boolean b when key == KEYS.LAST_LOCATION_IS_BED -> player.lastLocation.isBed = b;
                 case null, default -> {
                     return false;
                 }
@@ -95,6 +96,7 @@ public class UtilPlayer {
                 case LAST_LOCATION_Z -> player.lastLocation.z;
                 case LAST_LOCATION_YAW -> player.lastLocation.yaw;
                 case LAST_LOCATION_PITCH -> player.lastLocation.pitch;
+                case LAST_LOCATION_IS_BED -> player.lastLocation.isBed;
                 case null, default -> null;
             };
         } else {
