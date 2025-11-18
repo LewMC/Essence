@@ -34,7 +34,7 @@ public class EventRespawn implements Listener {
         UUID uuid = event.getPlayer().getUniqueId();
 
         UtilPlayer up = new UtilPlayer(plugin);
-        boolean alwaysSpawn = plugin.getConfig().getBoolean("teleportation.spawn.always-spawn");
+        boolean alwaysSpawn = (boolean) plugin.config.get("teleportation.spawn.always-spawn");
 
         if (!alwaysSpawn && up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_WORLD) != null) {
             String worldName = up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_WORLD).toString();
@@ -53,7 +53,7 @@ public class EventRespawn implements Listener {
             }
         }
 
-        String spawnName = plugin.getConfig().getString("teleportation.spawn.main-spawn-world");
+        String spawnName = plugin.config.get("teleportation.spawn.main-spawn-world").toString();
         if (spawnName == null) {
             plugin.getLogger().warning("Spawn world " + spawnName + " not found!");
             return;
