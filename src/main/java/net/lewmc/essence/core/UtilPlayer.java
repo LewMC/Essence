@@ -13,7 +13,6 @@ import org.bukkit.inventory.PlayerInventory;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -49,7 +48,13 @@ public class UtilPlayer {
                 case String s when key == KEYS.USER_LAST_KNOWN_NAME -> player.user.lastKnownName = s;
                 case String s when key == KEYS.USER_NICKNAME -> player.user.nickname = s;
                 case String s when key == KEYS.USER_IP_ADDRESS -> player.user.ipAddress = s;
-                case List<?> objects when key == KEYS.USER_IGNORING_PLAYERS -> player.user.ignoringPlayers = (List<String>) objects;
+                case List<?> objects when key == KEYS.USER_IGNORING_PLAYERS -> {
+                    if (objects.stream().allMatch(o -> o instanceof String)) {
+                        player.user.ignoringPlayers = (List<String>) objects;
+                    } else {
+                        return false;
+                    }
+                }
                 case Double v when key == KEYS.ECONOMY_BALANCE -> player.economy.balance = v;
                 case Boolean b when key == KEYS.ECONOMY_ACCEPTING_PAYMENTS -> player.economy.acceptingPayments = b;
                 case String s when key == KEYS.LAST_LOCATION_WORLD -> player.lastLocation.world = s;
@@ -115,6 +120,10 @@ public class UtilPlayer {
 
         if (f.exists(f.playerDataFile(uuid))) {
             Player p = Bukkit.getPlayer(uuid);
+            if (p == null || p.getPlayer() == null) {
+                return false;
+            }
+
             f.load(f.playerDataFile(uuid));
             TypePlayer player = new TypePlayer();
 
@@ -151,7 +160,7 @@ public class UtilPlayer {
             player.lastLocation.x = (llx == null) ? p.getPlayer().getLocation().getX() : llx;
 
             Double lly = f.getDouble(KEYS.LAST_LOCATION_Y.toString());
-            player.lastLocation.y = (lly == null) ? p.getPlayer().getLocation().getX() : lly;
+            player.lastLocation.y = (lly == null) ? p.getPlayer().getLocation().getY() : lly;
 
             Double llz = f.getDouble(KEYS.LAST_LOCATION_Z.toString());
             player.lastLocation.z = (llz == null) ? p.getPlayer().getLocation().getZ() : llz;
@@ -160,7 +169,7 @@ public class UtilPlayer {
             player.lastLocation.yaw = (llyaw == null) ? p.getPlayer().getLocation().getYaw() : Float.parseFloat(String.valueOf(llyaw));
 
             Double llpitch = f.getDouble(KEYS.LAST_LOCATION_PITCH.toString());
-            player.lastLocation.pitch = (llpitch == null) ? p.getPlayer().getLocation().getPitch() : Float.parseFloat(String.valueOf(llyaw));
+            player.lastLocation.pitch = (llpitch == null) ? p.getPlayer().getLocation().getPitch() : Float.parseFloat(String.valueOf(llpitch));
 
             Boolean llib = f.getBoolean(KEYS.LAST_LOCATION_IS_BED.toString());
             player.lastLocation.isBed = (llib == null) ? false : llib;
@@ -384,7 +393,11 @@ public class UtilPlayer {
      */
     public String getDisplayname(CommandSender cs) {
         if (cs instanceof Player p) {
-            return Objects.requireNonNullElseGet(this.plugin.players.get(p.getUniqueId()).user.nickname, cs::getName);
+            TypePlayer player = this.plugin.players.get(p.getUniqueId());
+            if (player != null && player.user.nickname != null) {
+                return player.user.nickname;
+            }
+            return cs.getName();
         } else {
             return cs.getName();
         }
