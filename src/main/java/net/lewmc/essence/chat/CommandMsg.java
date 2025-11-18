@@ -11,6 +11,9 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
+/**
+ * /msg command
+ */
 public class CommandMsg extends FoundryCommand {
     private final Essence plugin;
 
@@ -55,11 +58,7 @@ public class CommandMsg extends FoundryCommand {
                     message.send("msg", "send", repl);
                     message.sendTo(p, "msg", "send", repl);
 
-                    if (this.plugin.msgHistory.containsKey(p)) {
-                        this.plugin.msgHistory.replace(p, cs);
-                    } else {
-                        this.plugin.msgHistory.put(p, cs);
-                    }
+                    this.plugin.msgHistory.put(p, cs);
 
                     return true;
                 }
