@@ -10,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
+import java.util.UUID;
+
 /**
  * RespawnEvent class.
  */
@@ -39,23 +41,25 @@ public class EventRespawn implements Listener {
         boolean alwaysSpawn = config.getBoolean("teleportation.spawn.always-spawn");
         config.close();
 
-        TypePlayer player = this.plugin.players.get(event.getPlayer().getUniqueId());
-        if (player == null || player.lastLocation.world == null) {
+        UUID epID = event.getPlayer().getUniqueId();
+
+        UtilPlayer up = new UtilPlayer(this.plugin);
+        if (up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_WORLD) == null) {
             // Fall through to spawn logic below
-        } else if (!player.lastLocation.isBed && !alwaysSpawn) {
+        } else if (!(Boolean)up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_IS_BED) && !alwaysSpawn) {
             UtilTeleport tp = new UtilTeleport(plugin);
-            World world = Bukkit.getServer().getWorld(player.lastLocation.world);
+            World world = Bukkit.getServer().getWorld((String)up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_WORLD));
             if (world == null) {
                 // Fall through to spawn logic
             } else {
                 tp.doTeleport(
                         event.getPlayer(),
                         world,
-                        player.lastLocation.x,
-                        player.lastLocation.y,
-                        player.lastLocation.z,
-                        player.lastLocation.yaw,
-                        player.lastLocation.pitch,
+                        (Double) up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_X),
+                        (Double) up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_Y),
+                        (Double) up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_Z),
+                        (Float) up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_YAW),
+                        (Float) up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_PITCH),
                         0,
                         false
                 );

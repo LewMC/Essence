@@ -54,11 +54,11 @@ public class CommandEco extends FoundryCommand {
         
         switch (subCommand) {
             case "set":
-                return handleSetCommand(cs, args, message);
+                return handleSetCommand(args, message);
             case "give":
-                return handleGiveCommand(cs, args, message);
+                return handleGiveCommand(args, message);
             case "take":
-                return handleTakeCommand(cs, args, message);
+                return handleTakeCommand(args, message);
             case "help":
                 showUsage(message);
                 return true;
@@ -71,12 +71,11 @@ public class CommandEco extends FoundryCommand {
     
     /**
      * Handle the 'set' subcommand
-     * @param cs CommandSender
      * @param args Command arguments
      * @param message UtilMessage instance
      * @return boolean success
      */
-    private boolean handleSetCommand(CommandSender cs, String[] args, UtilMessage message) {
+    private boolean handleSetCommand(String[] args, UtilMessage message) {
         if (args.length != 3) {
             message.send("economy", "ecosetusage");
             return true;
@@ -92,22 +91,25 @@ public class CommandEco extends FoundryCommand {
             return true;
         }
 
-        new UtilPlayer(this.plugin).setPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE, amount);
+        if (new UtilPlayer(this.plugin).setPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, amount)) {
+            String symbol = this.plugin.config.get("economy.symbol").toString();
+            message.send("economy", "ecoset", new String[]{targetPlayer.getName(), symbol + amount});
 
-        String symbol = this.plugin.config.get("economy.symbol").toString();
-        message.send("economy", "ecoset", new String[]{targetPlayer.getName(), symbol + amount});
-        
-        return true;
+            return true;
+        } else {
+            message.send("generic", "exception");
+            this.plugin.log.warn("Unable to update last location: player "+targetPlayer.getName()+" may be null");
+            return false;
+        }
     }
     
     /**
      * Handle the 'give' subcommand
-     * @param cs CommandSender
      * @param args Command arguments
      * @param message UtilMessage instance
      * @return boolean success
      */
-    private boolean handleGiveCommand(CommandSender cs, String[] args, UtilMessage message) {
+    private boolean handleGiveCommand(String[] args, UtilMessage message) {
         if (args.length != 3) {
             message.send("economy", "ecogiveusage");
             return true;
@@ -124,22 +126,25 @@ public class CommandEco extends FoundryCommand {
         }
 
         UtilPlayer up = new UtilPlayer(this.plugin);
-        up.setPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE, (Double) up.getPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE) + amount);
-        
-        String symbol = this.plugin.config.get("economy.symbol").toString();
-        message.send("economy", "ecogive", new String[]{symbol + amount, targetPlayer.getName()});
-        
-        return true;
+        if (up.setPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, (Double) up.getPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) + amount)) {
+            String symbol = this.plugin.config.get("economy.symbol").toString();
+            message.send("economy", "ecogive", new String[]{symbol + amount, targetPlayer.getName()});
+
+            return true;
+        } else {
+            message.send("generic", "exception");
+            this.plugin.log.warn("Unable to update last location: player "+targetPlayer.getName()+" may be null");
+            return false;
+        }
     }
     
     /**
      * Handle the 'take' subcommand
-     * @param cs CommandSender
      * @param args Command arguments
      * @param message UtilMessage instance
      * @return boolean success
      */
-    private boolean handleTakeCommand(CommandSender cs, String[] args, UtilMessage message) {
+    private boolean handleTakeCommand(String[] args, UtilMessage message) {
         if (args.length != 3) {
             message.send("economy", "ecotakeusage");
             return true;
@@ -158,17 +163,21 @@ public class CommandEco extends FoundryCommand {
         UtilPlayer up = new UtilPlayer(this.plugin);
         
         // Check if the player has sufficient balance
-        if ((Double) up.getPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE) < amount) {
+        if ((Double) up.getPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) < amount) {
             message.send("economy", "insufficientfunds");
             return true;
         }
 
-        up.setPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE, (Double) up.getPlayer(targetPlayer, UtilPlayer.PLAYER_KEYS.ECONOMY_BALANCE) - amount);
+        if (up.setPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, (Double) up.getPlayer(targetPlayer.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) - amount)) {
+            String symbol = this.plugin.config.get("economy.symbol").toString();
+            message.send("economy", "ecotake", new String[]{symbol + amount, targetPlayer.getName()});
 
-        String symbol = this.plugin.config.get("economy.symbol").toString();
-        message.send("economy", "ecotake", new String[]{symbol + amount, targetPlayer.getName()});
-        
-        return true;
+            return true;
+        } else {
+            message.send("generic", "exception");
+            this.plugin.log.warn("Unable to update last location: player "+targetPlayer.getName()+" may be null");
+            return false;
+        }
     }
     
     /**

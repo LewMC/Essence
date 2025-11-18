@@ -1,6 +1,7 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.teleportation.UtilLocation;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -32,7 +33,7 @@ public class EventLeave implements Listener {
         event.setQuitMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.leave")));
 
         UtilPlayer up = new UtilPlayer(this.plugin);
-        up.savePlayer(event.getPlayer());
-        up.unloadPlayer(event.getPlayer());
+        up.savePlayer(event.getPlayer().getUniqueId());
+        up.unloadPlayer(event.getPlayer().getUniqueId());
     }
 }

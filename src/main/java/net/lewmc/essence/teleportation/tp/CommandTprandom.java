@@ -2,7 +2,7 @@ package net.lewmc.essence.teleportation.tp;
 
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilLocation;
+import net.lewmc.essence.teleportation.UtilLocation;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;

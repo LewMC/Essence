@@ -1,10 +1,9 @@
 package net.lewmc.essence.team;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.TypePlayer;
 import net.lewmc.essence.core.UtilMessage;
+import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.Files;
-import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.Security;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -60,14 +59,7 @@ public class UtilTeam {
 
                 teamsFile.save();
 
-                TypePlayer leaderPlayer = this.plugin.players.get(leader);
-                if (leaderPlayer == null) {
-                    message.send("generic", "exception");
-                    this.plugin.log.warn("Player data not loaded for leader: " + leader);
-                    return;
-                }
-                leaderPlayer.user.team = name;
-                this.plugin.players.put(leader, leaderPlayer);
+                new UtilPlayer(this.plugin).setPlayer(leader, UtilPlayer.KEYS.USER_TEAM, name);
 
                 message.send("team", "created", new String[] { name });
             } else {
@@ -157,11 +149,7 @@ public class UtilTeam {
      * @return String - Name of the player's team.
      */
     public @Nullable String getPlayerTeam(UUID player) {
-        TypePlayer playerData = this.plugin.players.get(player);
-        if (playerData != null) {
-            return playerData.user.team;
-        }
-        return null;
+        return new UtilPlayer(this.plugin).getPlayer(player, UtilPlayer.KEYS.USER_TEAM).toString();
     }
 
     /**
@@ -173,13 +161,7 @@ public class UtilTeam {
     public boolean acceptRequest(String team, String player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
-        TypePlayer opt = this.plugin.players.get(op.getUniqueId());
-        if (opt == null) {
-            return false;
-        }
-
-        opt.user.team = team;
-        this.plugin.players.put(op.getUniqueId(), opt);
+        new UtilPlayer(this.plugin).setPlayer(op.getUniqueId(), UtilPlayer.KEYS.USER_TEAM, team);
 
         Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");

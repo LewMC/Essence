@@ -6,6 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 
+import java.util.UUID;
+
 public class EventPlayerBedEnter implements Listener {
     private final Essence plugin;
 
@@ -26,21 +28,16 @@ public class EventPlayerBedEnter implements Listener {
     public void onPlayerBedEnterEvent(PlayerBedEnterEvent event) {
         Location bedLocation = event.getBed().getLocation();
 
-        TypePlayer player = this.plugin.players.get(event.getPlayer().getUniqueId());
-        if (player == null) {
-            this.plugin.log.warn("Player data not loaded for " + event.getPlayer().getName());
-            return;
-        }
+        UUID pid = event.getPlayer().getUniqueId();
 
-        player.lastLocation.world = bedLocation.getWorld().getName();
-        player.lastLocation.x = bedLocation.getX();
-        player.lastLocation.y = bedLocation.getY();
-        player.lastLocation.z = bedLocation.getZ();
-        player.lastLocation.yaw = bedLocation.getYaw();
-        player.lastLocation.pitch = bedLocation.getPitch();
-        player.lastLocation.isBed = true;
-
-        this.plugin.players.put(event.getPlayer().getUniqueId(), player);
+        UtilPlayer up = new UtilPlayer(this.plugin);
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_WORLD, bedLocation.getWorld().getName());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_X, bedLocation.getX());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_Y, bedLocation.getY());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_Z, bedLocation.getZ());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_YAW, bedLocation.getYaw());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_PITCH, bedLocation.getPitch());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_IS_BED, true);
 
         UtilMessage messageUtil = new UtilMessage(this.plugin, event.getPlayer());
         messageUtil.send("other", "respawnset");

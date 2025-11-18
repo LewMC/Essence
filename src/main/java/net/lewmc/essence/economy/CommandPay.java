@@ -1,7 +1,6 @@
 package net.lewmc.essence.economy;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.TypePlayer;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryCommand;
@@ -51,31 +50,17 @@ public class CommandPay extends FoundryCommand {
                 UtilPlayer up = new UtilPlayer(plugin);
 
                 if (cs instanceof Player sender) {
-                    TypePlayer senderData = plugin.players.get(sender.getUniqueId());
-                    if (senderData == null) {
-                        message.send("generic", "error");
-                        return true;
-                    }
-
-                    if ((senderData.economy.balance - amount) >= 0) {
-                        senderData.economy.balance = senderData.economy.balance - amount;
-                        plugin.players.put(sender.getUniqueId(), senderData);
+                    if (((Double) up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) - amount) >= 0) {
+                        up.setPlayer(sender.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, ((Double) up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) - amount));
 
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                                TypePlayer receiverData = plugin.players.get(p.getUniqueId());
-                                if (receiverData == null) {
-                                    message.send("generic", "playernotfound");
-                                    continue;
-                                }
-                                receiverData.economy.balance = receiverData.economy.balance + amount;
-
-                                this.plugin.players.put(p.getUniqueId(), receiverData);
+                                up.setPlayer(p.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, ((Double) up.getPlayer(p.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) + amount));
 
                                 message.send("economy", "sent", new String[]{plugin.config.get("economy.symbol").toString() + amount, p.getName()});
                                 message.sendTo(p, "economy", "received", new String[]{(plugin.config.get("economy.symbol").toString() + amount), cs.getName()});
-                                up.savePlayer(sender);
-                                up.savePlayer(p);
+                                up.savePlayer(sender.getUniqueId());
+                                up.savePlayer(p.getUniqueId());
                                 return true;
                             } else {
                                 message.send("generic", "playernotfound");
@@ -88,18 +73,11 @@ public class CommandPay extends FoundryCommand {
                 } else {
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                            TypePlayer receiverData = plugin.players.get(p.getUniqueId());
-                            if (receiverData == null) {
-                                message.send("generic", "playernotfound");
-                                continue;
-                            }
-                            receiverData.economy.balance = receiverData.economy.balance + amount;
-
-                            this.plugin.players.put(p.getUniqueId(), receiverData);
+                            up.setPlayer(p.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE, ((Double) up.getPlayer(p.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE) + amount));
 
                             message.send("economy", "sent", new String[]{plugin.config.get("economy.symbol").toString() + amount, p.getName()});
                             message.sendTo(p, "economy", "received", new String[]{(plugin.config.get("economy.symbol").toString() + amount), cs.getName()});
-                            up.savePlayer(p);
+                            up.savePlayer(p.getUniqueId());
                             return true;
                         } else {
                             message.send("generic", "playernotfound");
