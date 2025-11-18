@@ -81,14 +81,39 @@ public class UtilLocation {
      */
     public void sendBack(Player player, int waitTime) {
         UtilPlayer up = new UtilPlayer(this.plugin);
+
+        UUID pid = player.getUniqueId();
+        Object worldNameObj = up.getPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_WORLD);
+        Object xObj = up.getPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_X);
+        Object yObj = up.getPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_Y);
+        Object zObj = up.getPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_Z);
+        Object yawObj = up.getPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_YAW);
+        Object pitchObj = up.getPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_PITCH);
+
+        if (!(worldNameObj instanceof String worldName)
+                || !(xObj instanceof Double x)
+                || !(yObj instanceof Double y)
+                || !(zObj instanceof Double z)
+                || !(yawObj instanceof Float yaw)
+                || !(pitchObj instanceof Float pitch)) {
+            this.plugin.log.warn("Unable to send back " + player.getName() + " – cached last location is incomplete.");
+            return;
+        }
+
+        World world = Bukkit.getServer().getWorld(worldName);
+        if (world == null) {
+            this.plugin.log.warn("Unable to send back " + player.getName() + " – world '" + worldName + "' not found.");
+            return;
+        }
+
         new UtilTeleport(this.plugin).doTeleport(
                 player,
-                Bukkit.getServer().getWorld(up.getPlayer(player.getUniqueId(), UtilPlayer.KEYS.LAST_LOCATION_WORLD).toString()),
-                (Double) up.getPlayer(player.getUniqueId(), UtilPlayer.KEYS.LAST_LOCATION_X),
-                (Double) up.getPlayer(player.getUniqueId(), UtilPlayer.KEYS.LAST_LOCATION_Y),
-                (Double) up.getPlayer(player.getUniqueId(), UtilPlayer.KEYS.LAST_LOCATION_Z),
-                (Float) up.getPlayer(player.getUniqueId(), UtilPlayer.KEYS.LAST_LOCATION_YAW),
-                (Float) up.getPlayer(player.getUniqueId(), UtilPlayer.KEYS.LAST_LOCATION_PITCH),
+                world,
+                x,
+                y,
+                z,
+                yaw,
+                pitch,
                 waitTime,
                 true
         );
