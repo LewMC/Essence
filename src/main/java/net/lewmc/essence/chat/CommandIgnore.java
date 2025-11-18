@@ -52,7 +52,11 @@ public class CommandIgnore extends FoundryPlayerCommand {
             for (Player playerToIgnore : Bukkit.getOnlinePlayers()) {
                 if ((playerToIgnore.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
                     List<String> ignoring = (List<String>) up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
-                    if ((Boolean) up.playerIsIgnoring(sender.getUniqueId(), playerToIgnore.getUniqueId())) {
+                    if (ignoring == null) {
+                        ignoring = new java.util.ArrayList<>();
+                    }
+
+                    if (up.playerIsIgnoring(sender.getUniqueId(), playerToIgnore.getUniqueId())) {
                         message.send("ignore","unignored", new String[]{playerToIgnore.getName()});
                         ignoring.remove(playerToIgnore.getUniqueId().toString());
                     } else {
@@ -67,7 +71,7 @@ public class CommandIgnore extends FoundryPlayerCommand {
             message.send("generic", "playernotfound");
         } if (args.length == 0) {
             List<String> ignoring = (List<String>) up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
-            if (ignoring.isEmpty()) {
+            if (ignoring == null || ignoring.isEmpty()) {
                 message.send("ignore", "ignoringnone");
             } else {
                 message.send("ignore", "ignoring", new String[]{ String.join(",", ignoring) });

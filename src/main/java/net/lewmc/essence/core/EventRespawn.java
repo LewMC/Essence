@@ -44,14 +44,10 @@ public class EventRespawn implements Listener {
         UUID epID = event.getPlayer().getUniqueId();
 
         UtilPlayer up = new UtilPlayer(this.plugin);
-        if (up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_WORLD) == null) {
-            // Fall through to spawn logic below
-        } else if ((up.getPlayer(epID, UtilPlayer.KEYS.LAST_SLEEP_WORLD) != null) && !alwaysSpawn) {
+        if ((up.getPlayer(epID, UtilPlayer.KEYS.LAST_SLEEP_WORLD) != null) && !alwaysSpawn) {
             UtilTeleport tp = new UtilTeleport(plugin);
-            World world = Bukkit.getServer().getWorld((String)up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_WORLD));
-            if (world == null) {
-                // Fall through to spawn logic
-            } else {
+            World world = Bukkit.getServer().getWorld((String)up.getPlayer(epID, UtilPlayer.KEYS.LAST_SLEEP_WORLD));
+            if (world != null) {
                 tp.doTeleport(
                         event.getPlayer(),
                         Bukkit.getServer().getWorld(up.getPlayer(epID, UtilPlayer.KEYS.LAST_SLEEP_WORLD).toString()),

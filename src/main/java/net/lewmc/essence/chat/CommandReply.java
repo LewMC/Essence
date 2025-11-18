@@ -5,13 +5,15 @@ import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPlaceholder;
 import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryCommand;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
 import java.util.Arrays;
 
+/**
+ * /reply command.
+ */
 public class CommandReply extends FoundryCommand {
     private final Essence plugin;
 
@@ -48,7 +50,13 @@ public class CommandReply extends FoundryCommand {
             if (this.plugin.msgHistory.containsKey(cs)) {
                 CommandSender p = this.plugin.msgHistory.get(cs);
 
-                if (cs instanceof ConsoleCommandSender || !(Boolean)new UtilPlayer(this.plugin).playerIsIgnoring(Bukkit.getPlayer(cs.getName()).getUniqueId(),Bukkit.getPlayer(p.getName()).getUniqueId())) {
+                boolean canSend = true;
+                if (!(cs instanceof ConsoleCommandSender) && cs instanceof org.bukkit.entity.Player sender && p instanceof org.bukkit.entity.Player target) {
+                    UtilPlayer up = new UtilPlayer(this.plugin);
+                    canSend = !up.playerIsIgnoring(target.getUniqueId(), sender.getUniqueId());
+                }
+
+                if (canSend) {
                     String msg = String.join(" ", Arrays.copyOfRange(args, 0, args.length));
 
                     String[] repl = new String[]{cs.getName(), p.getName(), new UtilPlaceholder(this.plugin, cs).replaceAll(msg)};

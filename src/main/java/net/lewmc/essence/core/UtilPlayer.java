@@ -287,14 +287,15 @@ public class UtilPlayer {
      * @param target UUID - The player who might be being ignored.
      * @return boolean - is ignored?
      */
-    public Object playerIsIgnoring(UUID check, UUID target) {
-        List<String> ignoring = (List<String>) new UtilPlayer(this.plugin).getPlayer(check, UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
+    public boolean playerIsIgnoring(UUID check, UUID target) {
+        @SuppressWarnings("unchecked")
+        List<String> ignoring = (List<String>) this.getPlayer(check, KEYS.USER_IGNORING_PLAYERS);
 
-        if (ignoring.isEmpty()) {
+        if (ignoring == null || ignoring.isEmpty()) {
             return false;
-        } else {
-            return ignoring.contains(target.toString());
         }
+
+        return ignoring.contains(target.toString());
     }
 
     /**
