@@ -37,7 +37,7 @@ As of version 1.11.0, player data is no longer to be handled via files. Player d
 which is automatically read from and written to file when the user joins and leaves the game. This reduces the I/O load
 on larger servers and allows for faster operations plugin-wide.
 
-For more information pleases see [the Javadoc](https://lewmc.github.io/Essence/net/lewmc/essence/core/UtilPlayer.html).
+For more information please see [the Javadoc](https://lewmc.github.io/Essence/net/lewmc/essence/core/UtilPlayer.html).
 Please feel free to message Lew or email dev@lewmc.net for assistance.
 
 Use function getPlayer(UUID, Key) to get a value from the player's data, and setPlayer(UUID, Key, Value) to set a value
