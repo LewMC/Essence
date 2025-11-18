@@ -36,7 +36,10 @@ public class ModuleEconomy extends FoundryModule {
      * Registers Tab Completers
      */
     @Override
-    public void registerTabCompleters() {}
+    public void registerTabCompleters() {
+        reg.tabCompleter("eco", new TabCompleterEco());
+        reg.tabCompleter("pay", new TabCompleterPay());
+    }
 
     /**
      * Registers Events
