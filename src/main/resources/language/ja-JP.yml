@@ -472,3 +472,5 @@ clear:
   cleared: "§2[Essence] §aYour inventory was cleared."
   clearedby: "§6[Essence] §eYour inventory was cleared by {{1}}."
   clearedother: "§2[Essence] §aCleared {{1}}'s inventory."
+ignore:
+  usage: "§4[Essence] §cUsage: /ignore or /ignore <player>"
