@@ -45,6 +45,17 @@ in the player's data.
 
 All new features accessing player data must use this system. Some limited older systems may still use files.
 
+For example, to set and get a player's balance:
+```java
+class ExampleEconomyClass {
+    public void getSetEconomy(UUID playerUUID, Essence plugin) {
+        UtilPlayer up = new UtilPlayer(plugin);
+        up.getPlayer(playerUUID, UtilPlayer.KEYS.ECONOMY_BALANCE);
+        up.setPlayer(playerUUID, UtilPlayer.KEYS.ECONOMY_BALANCE, 10.0);
+    }
+}
+```
+
 # Licensing
 
 Essence is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for more information.
