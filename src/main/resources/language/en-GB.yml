@@ -479,3 +479,6 @@ ignore:
   ignored: "§2[Essence] §aYou ignored {{1}}, you won't see messages in chat from them."
   unignored: "§2[Essence] §aYou unignored {{1}}, you will now see messages in chat from them."
   cantmessage: "§4[Essence] §cYou can't message {{1}}."
+  cantteleport: "§4[Essence] §cYou can't request to teleport to {{1}}."
+  ignoring: "§6[Essence] §eYou are ignoring {{1}}."
+  ignoringnone: "§6[Essence] §eYou are not ignoring anybody."

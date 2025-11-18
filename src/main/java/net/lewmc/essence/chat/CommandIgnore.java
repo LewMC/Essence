@@ -45,24 +45,33 @@ public class CommandIgnore extends FoundryPlayerCommand {
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         UtilMessage message = new UtilMessage(plugin, cs);
+        Player sender = (Player) cs;
+        UtilPlayer up = new UtilPlayer(this.plugin);
 
-        if (args.length > 1 && cs instanceof Player sender) {
+        if (args.length == 1) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                    UtilPlayer up = new UtilPlayer(this.plugin);
                     List<String> ignoring = (List<String>) up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
-                    if (ignoring.contains(sender.getUniqueId().toString())) {
+                    if ((Boolean) up.playerIsIgnoring(sender.getUniqueId(), p.getUniqueId())) {
                         message.send("ignore","unignored", new String[]{p.getName()});
-                        ignoring.remove(sender.getUniqueId().toString());
+                        ignoring.remove(p.getUniqueId().toString());
                     } else {
                         message.send("ignore","ignored", new String[]{p.getName()});
-                        ignoring.add(sender.getUniqueId().toString());
+                        ignoring.add(p.getUniqueId().toString());
                     }
+                    up.setPlayer(sender.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS, ignoring);
 
                     return true;
                 }
             }
             message.send("generic", "playernotfound");
+        } if (args.length == 0) {
+            List<String> ignoring = (List<String>) up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
+            if (ignoring.isEmpty()) {
+                message.send("ignore", "ignoringnone");
+            } else {
+                message.send("ignore", "ignoring", new String[]{ String.join(",", ignoring) });
+            }
         } else {
             message.send("ignore","usage");
         }

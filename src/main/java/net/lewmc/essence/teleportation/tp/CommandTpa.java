@@ -2,7 +2,7 @@ package net.lewmc.essence.teleportation.tp;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
-import net.lewmc.foundry.Files;
+import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -52,13 +52,17 @@ public class CommandTpa extends FoundryPlayerCommand {
                 return true;
             }
 
-            Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-            playerData.load(playerData.playerDataFile(playerToRequest));
-            if (!playerData.getBoolean("user.accepting-teleport-requests")) {
+            UtilPlayer up = new UtilPlayer(this.plugin);
+            if (!(Boolean)up.getPlayer(playerToRequest.getUniqueId(), UtilPlayer.KEYS.USER_ACCEPTING_TELEPORT_REQUESTS)) {
                 msg.send("teleport", "requestsdisabled", new String[] { playerToRequest.getName() });
                 return true;
             }
-            playerData.close();
+
+            Player csP = (Player) cs;
+            if ((Boolean)up.playerIsIgnoring(playerToRequest.getUniqueId(), csP.getUniqueId())) {
+                msg.send("ignore", "cantteleport", new String[] { playerToRequest.getName() });
+                return true;
+            }
 
             new UtilTeleportRequest(this.plugin).createRequest(cs.getName(), playerToRequest.getName(), false);
 

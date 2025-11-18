@@ -11,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class CommandReply extends FoundryCommand {
     private final Essence plugin;
@@ -49,8 +48,7 @@ public class CommandReply extends FoundryCommand {
             if (this.plugin.msgHistory.containsKey(cs)) {
                 CommandSender p = this.plugin.msgHistory.get(cs);
 
-                List<String> recipientIgnoring = (List<String>) new UtilPlayer(this.plugin).getPlayer(Bukkit.getPlayerUniqueId(p.getName()), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
-                if (cs instanceof ConsoleCommandSender || recipientIgnoring == null || !recipientIgnoring.contains(Bukkit.getPlayerUniqueId(cs.getName()))) {
+                if (cs instanceof ConsoleCommandSender || !(Boolean)new UtilPlayer(this.plugin).playerIsIgnoring(Bukkit.getPlayer(cs.getName()).getUniqueId(),Bukkit.getPlayer(p.getName()).getUniqueId())) {
                     String msg = String.join(" ", Arrays.copyOfRange(args, 0, args.length));
 
                     String[] repl = new String[]{cs.getName(), p.getName(), new UtilPlaceholder(this.plugin, cs).replaceAll(msg)};

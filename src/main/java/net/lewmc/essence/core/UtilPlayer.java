@@ -249,6 +249,22 @@ public class UtilPlayer {
     }
 
     /**
+     * Checks if a player is ignoring another player
+     * @param check UUID - The account to check
+     * @param target UUID - The player who might be being ignored.
+     * @return boolean - is ignored?
+     */
+    public Object playerIsIgnoring(UUID check, UUID target) {
+        List<String> ignoring = (List<String>) new UtilPlayer(this.plugin).getPlayer(check, UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
+
+        if (ignoring.isEmpty()) {
+            return false;
+        } else {
+            return ignoring.contains(target.toString());
+        }
+    }
+
+    /**
      * Player data keys
      * @since 1.11.0
      */

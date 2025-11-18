@@ -12,7 +12,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * /msg command
@@ -52,8 +51,7 @@ public class CommandMsg extends FoundryCommand {
         if (args.length > 1) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                    List<String> recipientIgnoring = (List<String>) new UtilPlayer(this.plugin).getPlayer(p.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
-                    if (cs instanceof ConsoleCommandSender || recipientIgnoring == null || !recipientIgnoring.contains(Bukkit.getPlayerUniqueId(cs.getName()))) {
+                    if (cs instanceof ConsoleCommandSender || !(Boolean)new UtilPlayer(this.plugin).playerIsIgnoring(Bukkit.getPlayer(cs.getName()).getUniqueId(),p.getUniqueId())) {
                         String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
                         msg = new UtilPlaceholder(this.plugin, cs).replaceAll(msg);
