@@ -49,15 +49,15 @@ public class CommandIgnore extends FoundryPlayerCommand {
         UtilPlayer up = new UtilPlayer(this.plugin);
 
         if (args.length == 1) {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
+            for (Player playerToIgnore : Bukkit.getOnlinePlayers()) {
+                if ((playerToIgnore.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
                     List<String> ignoring = (List<String>) up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
-                    if ((Boolean) up.playerIsIgnoring(sender.getUniqueId(), p.getUniqueId())) {
-                        message.send("ignore","unignored", new String[]{p.getName()});
-                        ignoring.remove(p.getUniqueId().toString());
+                    if ((Boolean) up.playerIsIgnoring(sender.getUniqueId(), playerToIgnore.getUniqueId())) {
+                        message.send("ignore","unignored", new String[]{playerToIgnore.getName()});
+                        ignoring.remove(playerToIgnore.getUniqueId().toString());
                     } else {
-                        message.send("ignore","ignored", new String[]{p.getName()});
-                        ignoring.add(p.getUniqueId().toString());
+                        message.send("ignore","ignored", new String[]{playerToIgnore.getName()});
+                        ignoring.add(playerToIgnore.getUniqueId().toString());
                     }
                     up.setPlayer(sender.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS, ignoring);
 
