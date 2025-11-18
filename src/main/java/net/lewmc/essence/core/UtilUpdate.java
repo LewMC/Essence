@@ -296,7 +296,7 @@ public class UtilUpdate {
 
             log.info("[1/4] Migrating kit module...");
             f.set("kit.spawn-kits", f.getStringList("spawn-kits"));
-            f.delete("spawn-kits");
+            f.remove("spawn-kits");
             log.info("[1/4] Done.");
 
             log.info("[2/4] Migrating chat module...");
@@ -306,36 +306,36 @@ public class UtilUpdate {
             f.set("chat.broadcasts.first-join", f.getString("broadcasts.first-join"));
             f.set("chat.broadcasts.join", f.getString("broadcasts.join"));
             f.set("chat.broadcasts.leave", f.getString("broadcasts.leave"));
-            f.delete("broadcasts.first-join");
-            f.delete("broadcasts.join");
-            f.delete("broadcasts.leave");
+            f.remove("broadcasts.first-join");
+            f.remove("broadcasts.join");
+            f.remove("broadcasts.leave");
 
             if (f.getBoolean("motd.enabled")) {
                 f.set("chat.motd", f.getString("motd.message"));
             } else {
                 f.set("chat.motd", "false");
             }
-            f.delete("motd.enabled");
-            f.delete("motd.message");
-            f.delete("motd");
+            f.remove("motd.enabled");
+            f.remove("motd.message");
+            f.remove("motd");
             log.info("[2/4] Done.");
 
             log.info("[3/4] Migrating advanced settings...");
             f.set("advanced.update-check", f.getBoolean("update-check"));
             f.set("advanced.verbose", f.getBoolean("verbose"));
             f.set("advanced.playerdata.store-ip-address", f.getBoolean("playerdata.store-ip-address"));
-            f.delete("update-check");
-            f.delete("verbose");
-            f.delete("playerdata.store-ip-address");
+            f.remove("update-check");
+            f.remove("verbose");
+            f.remove("playerdata.store-ip-address");
             log.info("[3/4] Done.");
 
             log.info("[4/4] Migrating disabled commands...");
             List<String> dc = f.getStringList("disabled-commands");
-            f.delete("disabled-commands");
+            f.remove("disabled-commands");
 
             f.set("disabled-commands.list", dc);
             f.set("disabled-commands.feedback", f.getBoolean("disabled-commands-feedback"));
-            f.delete("disabled-commands-feedback");
+            f.remove("disabled-commands-feedback");
             log.info("[4/4] Done.");
 
             f.set("config-version", 3);
@@ -349,7 +349,7 @@ public class UtilUpdate {
 
             log.info("[1/1] Migrating disabled commands list...");
             List<String> dcl = f.getStringList("disabled-commands.list");
-            f.delete("disabled-commands.list");
+            f.remove("disabled-commands.list");
             f.set("disabled-commands", dcl);
             log.info("[1/1] Done.");
 
