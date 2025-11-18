@@ -400,10 +400,8 @@ public class UtilPlayer {
             if (player != null && player.user.nickname != null) {
                 return player.user.nickname;
             }
-            return cs.getName();
-        } else {
-            return cs.getName();
         }
+        return cs.getName();
     }
 
     /**
