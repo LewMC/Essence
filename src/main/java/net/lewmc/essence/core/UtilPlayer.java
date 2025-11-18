@@ -37,6 +37,7 @@ public class UtilPlayer {
      * @param key KEYS - The item to change
      * @param value Object - The value
      * @return Success?
+     * @since 1.11.0
      */
     public boolean setPlayer(UUID uuid, KEYS key, Object value) {
         if (this.plugin.players.containsKey(uuid)) {
@@ -81,6 +82,7 @@ public class UtilPlayer {
      * @param uuid UUID - The player's UUID
      * @param key KEYS - The item to change
      * @return Object - Value or Null
+     * @since 1.11.0
      */
     public Object getPlayer(UUID uuid, KEYS key) {
         if (this.plugin.players.containsKey(uuid)) {
@@ -248,6 +250,7 @@ public class UtilPlayer {
 
     /**
      * Player data keys
+     * @since 1.11.0
      */
     public enum KEYS {
         USER_ACCEPTING_TELEPORT_REQUESTS {
@@ -444,6 +447,7 @@ public class UtilPlayer {
      * @param item String - The item material name
      * @param amount int - The amount requested
      * @return boolean - true/false success.
+     * @since 1.11.0
      */
     public boolean givePlayerItem(Player p, String item, int amount) {
         try {
