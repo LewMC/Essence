@@ -13,8 +13,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
-
 public class CommandWarp extends FoundryPlayerCommand {
     private final Essence plugin;
     private final Logger log;
@@ -99,7 +97,8 @@ public class CommandWarp extends FoundryPlayerCommand {
                     config.getDouble("warps." + args[0].toLowerCase() + ".Z"),
                     (float) config.getDouble("warps." + args[0].toLowerCase() + ".yaw"),
                     (float) config.getDouble("warps." + args[0].toLowerCase() + ".pitch"),
-                    waitTime
+                    waitTime,
+                    true
             );
 
             config.close();

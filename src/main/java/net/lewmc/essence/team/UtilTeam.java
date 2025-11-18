@@ -1,6 +1,7 @@
 package net.lewmc.essence.team;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.TypePlayer;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
@@ -59,16 +60,19 @@ public class UtilTeam {
 
                 teamsFile.save();
 
-                Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-                playerDataFile.load(playerDataFile.playerDataFile(leader));
-
-                playerDataFile.set("user.team", name);
-                playerDataFile.save();
+                TypePlayer leaderPlayer = this.plugin.players.get(leader);
+                if (leaderPlayer == null) {
+                    message.send("generic", "exception");
+                    this.plugin.log.warn("Player data not loaded for leader: " + leader);
+                    return;
+                }
+                leaderPlayer.user.team = name;
+                this.plugin.players.put(leader, leaderPlayer);
 
                 message.send("team", "created", new String[] { name });
             } else {
                 message.send("generic", "exception");
-                new Logger(this.plugin.foundryConfig).warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
+                this.plugin.log.warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
             }
         } else {
             message.send("team", "exists");
@@ -153,16 +157,11 @@ public class UtilTeam {
      * @return String - Name of the player's team.
      */
     public @Nullable String getPlayerTeam(UUID player) {
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(player));
-        if (playerData.getString("user.team") == null) {
-            playerData.close();
-            return null;
-        } else {
-            String team = playerData.getString("user.team");
-            playerData.close();
-            return team;
+        TypePlayer playerData = this.plugin.players.get(player);
+        if (playerData != null) {
+            return playerData.user.team;
         }
+        return null;
     }
 
     /**
@@ -174,11 +173,13 @@ public class UtilTeam {
     public boolean acceptRequest(String team, String player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(op.getUniqueId()));
+        TypePlayer opt = this.plugin.players.get(op.getUniqueId());
+        if (opt == null) {
+            return false;
+        }
 
-        playerData.set("user.team", team);
-        playerData.save();
+        opt.user.team = team;
+        this.plugin.players.put(op.getUniqueId(), opt);
 
         Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");

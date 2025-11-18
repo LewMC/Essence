@@ -1,18 +1,16 @@
 package net.lewmc.essence.economy;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
+import net.lewmc.essence.core.TypePlayer;
 import net.lewmc.essence.core.UtilMessage;
-import net.lewmc.foundry.Files;
-import net.lewmc.foundry.command.FoundryPlayerCommand;
+import net.lewmc.essence.core.UtilPlayer;
+import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
-
-public class CommandPay extends FoundryPlayerCommand {
+public class CommandPay extends FoundryCommand {
     private final Essence plugin;
 
     /**
@@ -44,33 +42,74 @@ public class CommandPay extends FoundryPlayerCommand {
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         UtilMessage message = new UtilMessage(this.plugin, cs);
         if (args.length == 2) {
-            Files senderDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-            senderDataFile.load(senderDataFile.playerDataFile((Player) cs));
+            try {
+                double amount = Double.parseDouble(args[1]);
+                if (amount <= 0) {
+                    message.send("economy", "positiveamount");
+                    return true;
+                }
+                UtilPlayer up = new UtilPlayer(plugin);
 
-            double balance = senderDataFile.getDouble("economy.balance");
-
-            double amount = Double.parseDouble(args[1]);
-
-            if ((balance - amount) >= 0) {
-                senderDataFile.set("economy.balance", (balance - amount));
-                senderDataFile.save();
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                        Files recieverDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-
-                        recieverDataFile.load(senderDataFile.playerDataFile(p));
-                        double newBalance = recieverDataFile.getDouble("economy.balance") + amount;
-                        recieverDataFile.set("economy.balance", newBalance);
-                        recieverDataFile.save();
-
-                        message.send("economy", "sent", new String[] { plugin.config.get("economy.symbol").toString() + amount, p.getName() });
-                        message.sendTo(p, "economy", "received", new String[] { (plugin.config.get("economy.symbol").toString() + amount), cs.getName() });
+                if (cs instanceof Player sender) {
+                    TypePlayer senderData = plugin.players.get(sender.getUniqueId());
+                    if (senderData == null) {
+                        message.send("generic", "error");
                         return true;
                     }
+
+                    if ((senderData.economy.balance - amount) >= 0) {
+                        senderData.economy.balance = senderData.economy.balance - amount;
+                        plugin.players.put(sender.getUniqueId(), senderData);
+
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
+                                TypePlayer receiverData = plugin.players.get(p.getUniqueId());
+                                if (receiverData == null) {
+                                    message.send("generic", "playernotfound");
+                                    continue;
+                                }
+                                receiverData.economy.balance = receiverData.economy.balance + amount;
+
+                                this.plugin.players.put(p.getUniqueId(), receiverData);
+
+                                message.send("economy", "sent", new String[]{plugin.config.get("economy.symbol").toString() + amount, p.getName()});
+                                message.sendTo(p, "economy", "received", new String[]{(plugin.config.get("economy.symbol").toString() + amount), cs.getName()});
+                                up.savePlayer(sender);
+                                up.savePlayer(p);
+                                return true;
+                            } else {
+                                message.send("generic", "playernotfound");
+                            }
+                        }
+                        message.send("generic", "playernotfound");
+                    } else {
+                        message.send("economy", "insufficientfunds");
+                    }
+                } else {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
+                            TypePlayer receiverData = plugin.players.get(p.getUniqueId());
+                            if (receiverData == null) {
+                                message.send("generic", "playernotfound");
+                                continue;
+                            }
+                            receiverData.economy.balance = receiverData.economy.balance + amount;
+
+                            this.plugin.players.put(p.getUniqueId(), receiverData);
+
+                            message.send("economy", "sent", new String[]{plugin.config.get("economy.symbol").toString() + amount, p.getName()});
+                            message.sendTo(p, "economy", "received", new String[]{(plugin.config.get("economy.symbol").toString() + amount), cs.getName()});
+                            up.savePlayer(p);
+                            return true;
+                        } else {
+                            message.send("generic", "playernotfound");
+                        }
+                    }
+                    message.send("generic", "playernotfound");
                 }
-                message.send("generic", "playernotfound");
-            } else {
-                message.send("economy", "insufficientfunds");
+            } catch (NumberFormatException e) {
+                message.send("economy", "invalidamount");
+                return true;
             }
         } else {
             message.send("economy", "payusage");

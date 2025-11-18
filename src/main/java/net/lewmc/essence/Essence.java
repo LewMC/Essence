@@ -4,6 +4,7 @@ import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.admin.ModuleAdmin;
 import net.lewmc.essence.chat.ModuleChat;
 import net.lewmc.essence.core.ModuleCore;
+import net.lewmc.essence.core.TypePlayer;
 import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilUpdate;
 import net.lewmc.essence.economy.ModuleEconomy;
@@ -21,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The main Essence class.
@@ -49,7 +51,12 @@ public class Essence extends JavaPlugin {
      * CommandSender = The receiver.
      * CommandSender = The sender.
      */
-    public Map<CommandSender, CommandSender> msgHistory = new HashMap<>();
+    public ConcurrentHashMap<CommandSender, CommandSender> msgHistory = new ConcurrentHashMap<>();
+
+    /**
+     * Stores a cache of player data.
+     */
+    public ConcurrentHashMap<UUID, TypePlayer> players = new ConcurrentHashMap<>();
 
     /**
      * Store's Essence's configuration.

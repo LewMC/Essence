@@ -162,6 +162,6 @@ public class CommandTprandom extends FoundryPlayerCommand {
 
         UtilTeleport tp = new UtilTeleport(plugin);
         // Use minimum delay of 1 tick to avoid FoliaLib warnings
-        tp.doTeleport(player, teleportLocation, 1);
+        tp.doTeleport(player, teleportLocation, 1, true);
     }
 }

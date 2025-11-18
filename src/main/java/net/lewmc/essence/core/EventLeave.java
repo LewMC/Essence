@@ -30,5 +30,9 @@ public class EventLeave implements Listener {
 
         UtilPlaceholder tag = new UtilPlaceholder(this.plugin, event.getPlayer());
         event.setQuitMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.leave")));
+
+        UtilPlayer up = new UtilPlayer(this.plugin);
+        up.savePlayer(event.getPlayer());
+        up.unloadPlayer(event.getPlayer());
     }
 }

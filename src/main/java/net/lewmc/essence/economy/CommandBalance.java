@@ -1,15 +1,12 @@
 package net.lewmc.essence.economy;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilCommand;
+import net.lewmc.essence.core.TypePlayer;
 import net.lewmc.essence.core.UtilMessage;
-import net.lewmc.foundry.Files;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Objects;
 
 /**
  * /bal command.
@@ -45,9 +42,12 @@ public class CommandBalance extends FoundryCommand {
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         if (cs instanceof Player p) {
-            Files pf = new Files(this.plugin.foundryConfig, this.plugin);
-            pf.load(pf.playerDataFile(p));
-            new UtilMessage(this.plugin, cs).send("economy", "balance", new String[]{this.plugin.config.get("economy.symbol").toString() + pf.getDouble("economy.balance")});
+            TypePlayer playerData = this.plugin.players.get(p.getUniqueId());
+            if (playerData != null) {
+                new UtilMessage(this.plugin, cs).send("economy", "balance", new String[]{this.plugin.config.get("economy.symbol").toString() + playerData.economy.balance});
+            } else {
+                new UtilMessage(this.plugin, cs).send("economy", "balance", new String[]{this.plugin.config.get("economy.symbol").toString() + "0.0"});
+            }
         } else {
             new UtilMessage(this.plugin, cs).send("economy", "balance", new String[]{this.plugin.config.get("economy.symbol").toString() + "Infinity"});
         }

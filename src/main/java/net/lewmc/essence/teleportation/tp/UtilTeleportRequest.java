@@ -92,13 +92,15 @@ public class UtilTeleportRequest {
             tpu.doTeleport(
                     this.plugin.getServer().getPlayer(requested),
                     this.plugin.getServer().getPlayer(requesterName).getLocation(),
-                    0
+                    0,
+                    true
             );
         } else {
             tpu.doTeleport(
                     this.plugin.getServer().getPlayer(requesterName),
                     this.plugin.getServer().getPlayer(requested).getLocation(),
-                    0
+                    0,
+                    true
             );
         }
 

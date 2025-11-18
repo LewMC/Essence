@@ -1,11 +1,8 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.foundry.Files;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 
 /**
@@ -22,47 +19,35 @@ public class UtilLocation {
         this.plugin = plugin;
     }
 
-    public void UpdateLastLocation(Player player) {
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(player));
+    /**
+     * Updates the player's last location.
+     * @param p Player - The player
+     */
+    public void UpdateLastLocation(Player p) {
+        TypePlayer player = this.plugin.players.get(p.getUniqueId());
 
-        playerData.set("last-location.world", player.getLocation().getWorld().getName());
-        playerData.set("last-location.X", player.getLocation().getX());
-        playerData.set("last-location.Y", player.getLocation().getY());
-        playerData.set("last-location.Z", player.getLocation().getZ());
-        playerData.set("last-location.yaw", player.getLocation().getYaw());
-        playerData.set("last-location.pitch", player.getLocation().getPitch());
+        if (player == null) {
+            this.plugin.log.warn("Unable to update last location: player "+p.getName()+" is null.");
+            return;
+        }
 
-        playerData.save();
+        player.lastLocation.world = p.getLocation().getWorld().getName();
+        player.lastLocation.x = p.getLocation().getX();
+        player.lastLocation.y = p.getLocation().getY();
+        player.lastLocation.z = p.getLocation().getZ();
+        player.lastLocation.yaw = p.getLocation().getYaw();
+        player.lastLocation.pitch = p.getLocation().getPitch();
+        player.lastLocation.isBed = false;
+        this.plugin.players.put(p.getUniqueId(), player);
     }
 
     /**
-     * Retrieves a random location around the player.
-     * @param player Player - The player to search around.
-     * @param wb WorldBorder - The end of the world
-     * @return Location - The location to return.
+     * Gets the ground Y coordinate.
+     * @param world World - The world
+     * @param x int - Location X
+     * @param z int - Location Z
+     * @return int - The ground Y
      */
-    public Location GetRandomLocation(Player player, WorldBorder wb) {
-        World world = player.getWorld();
-
-        Location center = wb.getCenter();
-        double maxX = (center.getBlockX() + (wb.getSize()/2));
-        double minX = (center.getBlockX() - (wb.getSize()/2));
-        double maxZ = (center.getBlockZ() + (wb.getSize()/2));
-        double minZ = (center.getBlockZ() - (wb.getSize()/2));
-
-        int x = (int) (minX + (maxX - minX) * this.plugin.rand.nextDouble());
-        int z = (int) (minZ + (maxZ - minZ) * this.plugin.rand.nextDouble());
-
-        int attempt = 1;
-        int y = GetGroundY(world, x, z);
-        while (y == -64 && attempt != 3) {
-            y = GetGroundY(world, x, z);
-            attempt++;
-        }
-        return new Location(world, (float) x, (float) y, (float) z);
-    }
-
     public int GetGroundY(World world, int x, int z) {
         int y = 319;
         Material block = world.getBlockAt(x, y, z).getType();
@@ -75,6 +60,11 @@ public class UtilLocation {
         return y + 1;
     }
 
+    /**
+     * Is the location safe?
+     * @param block Mateiral - The block.
+     * @return boolean - Is safe?
+     */
     private boolean LocationIsSafe(Material block) {
         return block != Material.LAVA && block != Material.WATER && block != Material.MAGMA_BLOCK && block != Material.POWDER_SNOW && block != Material.CACTUS && block != Material.VOID_AIR;
     }
