@@ -32,6 +32,30 @@ git clone https://github.com/lewmc/essence && cd essence
 mvn clean package
 ```
 
+## Handling Player Data
+As of version 1.11.0, player data is no longer to be handled via files. Player data is now stored in-memory as a cache
+which is automatically read from and written to file when the user joins and leaves the game. This reduces the I/O load
+on larger servers and allows for faster operations plugin-wide.
+
+For more information please see [the Javadoc](https://lewmc.github.io/Essence/net/lewmc/essence/core/UtilPlayer.html).
+Please feel free to message Lew or email dev@lewmc.net for assistance.
+
+Use function getPlayer(UUID, Key) to get a value from the player's data, and setPlayer(UUID, Key, Value) to set a value
+in the player's data.
+
+All new features accessing player data must use this system. Some limited older systems may still use files.
+
+For example, to set and get a player's balance:
+```java
+class ExampleEconomyClass {
+    public void getSetEconomy(UUID playerUUID, Essence plugin) {
+        UtilPlayer up = new UtilPlayer(plugin);
+        up.getPlayer(playerUUID, UtilPlayer.KEYS.ECONOMY_BALANCE);
+        up.setPlayer(playerUUID, UtilPlayer.KEYS.ECONOMY_BALANCE, 10.0);
+    }
+}
+```
+
 # Licensing
 
 Essence is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for more information.

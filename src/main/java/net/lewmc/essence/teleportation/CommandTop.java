@@ -95,7 +95,7 @@ public class CommandTop extends FoundryCommand {
             return true;
         }
 
-        new UtilTeleport(this.plugin).doTeleport(player, safeLocation, waitTime);
+        new UtilTeleport(this.plugin).doTeleport(player, safeLocation, waitTime, true);
 
         if (waitTime == 0) {
             if (isSelf) {

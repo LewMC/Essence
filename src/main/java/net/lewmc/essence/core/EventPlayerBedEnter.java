@@ -1,11 +1,12 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.foundry.Files;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+
+import java.util.UUID;
 
 public class EventPlayerBedEnter implements Listener {
     private final Essence plugin;
@@ -21,22 +22,21 @@ public class EventPlayerBedEnter implements Listener {
     /**
      * Event handler for when a player respawns.
      * @param event PlayerRespawnEvent - Server thrown event.
+     * @since 1.11.0
      */
     @EventHandler
     public void onPlayerBedEnterEvent(PlayerBedEnterEvent event) {
         Location bedLocation = event.getBed().getLocation();
 
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(event.getPlayer()));
+        UUID pid = event.getPlayer().getUniqueId();
 
-        playerData.set("user.last-sleep-location.world", bedLocation.getWorld().getName());
-        playerData.set("user.last-sleep-location.X", bedLocation.getX());
-        playerData.set("user.last-sleep-location.Y", bedLocation.getY());
-        playerData.set("user.last-sleep-location.Z", bedLocation.getZ());
-        playerData.set("user.last-sleep-location.yaw", bedLocation.getYaw());
-        playerData.set("user.last-sleep-location.pitch", bedLocation.getPitch());
-
-        playerData.save();
+        UtilPlayer up = new UtilPlayer(this.plugin);
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_WORLD, bedLocation.getWorld().getName());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_X, bedLocation.getX());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_Y, bedLocation.getY());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_Z, bedLocation.getZ());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_YAW, bedLocation.getYaw());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_PITCH, bedLocation.getPitch());
 
         UtilMessage messageUtil = new UtilMessage(this.plugin, event.getPlayer());
         messageUtil.send("other", "respawnset");

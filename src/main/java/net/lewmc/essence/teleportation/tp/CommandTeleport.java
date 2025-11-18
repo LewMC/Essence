@@ -102,7 +102,7 @@ public class CommandTeleport extends FoundryCommand {
                     message.send("teleport", "requestsdisabled", new String[] { t.getName() });
                 } else {
                     Location loc = new Location(t.getWorld(), x, y, z);
-                    tp.doTeleport(t, loc, 0);
+                    tp.doTeleport(t, loc, 0, true);
                 }
             }
             message.send("teleport", "tocoord", new String[] { String.format("%.1f, %.1f, %.1f", x, y, z) });
@@ -126,7 +126,7 @@ public class CommandTeleport extends FoundryCommand {
                 if (!tp.teleportToggleCheck(player, to)) {
                     message.send("teleport", "requestsdisabled", new String[] { to.getName() });
                 } else {
-                    tp.doTeleport(from, to.getLocation(), 0); // Folia
+                    tp.doTeleport(from, to.getLocation(), 0, true); // Folia
                 }
             }
             message.send("teleport", "toplayer", new String[] { fromList.stream().map(Player::getName).collect(Collectors.joining(", ")), to.getName() });
@@ -154,7 +154,7 @@ public class CommandTeleport extends FoundryCommand {
                 return true;
             }
             Location loc = new Location(player.getWorld(), x, y, z);
-            tp.doTeleport(player, loc, 0); // Folia兼容
+            tp.doTeleport(player, loc, 0, true);
             message.send("teleport", "tocoord", new String[] { String.format("%.1f, %.1f, %.1f", x, y, z) });
             return true;
         }
@@ -174,7 +174,7 @@ public class CommandTeleport extends FoundryCommand {
                     return true;
                 }
 
-                tp.doTeleport(player, to.getLocation(), 0);
+                tp.doTeleport(player, to.getLocation(), 0, true);
                 message.send("teleport", "to", new String[] { to.getName() });
                 return true;
             }
@@ -197,7 +197,7 @@ public class CommandTeleport extends FoundryCommand {
                         }
 
                         Location offlineLoc = new Location(world, x, y, z);
-                        tp.doTeleport(player, offlineLoc, 0);
+                        tp.doTeleport(player, offlineLoc, 0, true);
                         message.send("teleport", "to", new String[]{offline.getName()});
                         message.send("teleport", "tooffline");
                         return true;

@@ -55,6 +55,6 @@ public class UtilGamemode {
             }
         }
 
-        return new UtilPlayer(plugin, cs).setGamemode(cs, player, gm);
+        return new UtilPlayer(plugin).setGamemode(cs, player, gm);
     }
 }

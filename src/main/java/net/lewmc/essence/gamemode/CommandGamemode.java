@@ -84,6 +84,6 @@ public class CommandGamemode extends FoundryCommand {
             }
         }
 
-        return new UtilPlayer(this.plugin, cs).setGamemode(cs, player, gamemode);
+        return new UtilPlayer(this.plugin).setGamemode(cs, player, gamemode);
     }
 }

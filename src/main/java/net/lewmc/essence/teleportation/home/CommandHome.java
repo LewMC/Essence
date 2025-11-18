@@ -14,8 +14,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
-
 public class CommandHome extends FoundryPlayerCommand {
     private final Essence plugin;
 
@@ -138,7 +136,8 @@ public class CommandHome extends FoundryPlayerCommand {
                 playerData.getDouble(homeName + ".Z"),
                 (float) playerData.getDouble(homeName + ".yaw"),
                 (float) playerData.getDouble(homeName + ".pitch"),
-                waitTime
+                waitTime,
+                true
         );
         playerData.close();
 

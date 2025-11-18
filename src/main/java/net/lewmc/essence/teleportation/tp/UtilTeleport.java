@@ -2,12 +2,11 @@ package net.lewmc.essence.teleportation.tp;
 
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilLocation;
+import net.lewmc.essence.teleportation.UtilLocation;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
-import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -25,13 +24,6 @@ import java.util.Objects;
 public class UtilTeleport {
     private final Essence plugin;
     private final Logger log;
-
-    /**
-     * Used to communicate the type of teleportation to commands where this may be ambiguous.
-     */
-    public enum Type {
-        INVALID, TO_PLAYER, TO_COORD, PLAYER_TO_PLAYER, PLAYER_TO_COORD
-    }
 
     /**
      * Used to communicate the direction of a safe location search.
@@ -169,7 +161,8 @@ public class UtilTeleport {
             double Z,
             float yaw,
             float pitch,
-            int delay
+            int delay,
+            boolean doLastLocUpdate
     ) {
         Location loc = new Location(
                 world,
@@ -186,7 +179,7 @@ public class UtilTeleport {
             delay = 0;
         }
 
-        this.doTeleport(player, loc, delay);
+        this.doTeleport(player, loc, delay, doLastLocUpdate);
     }
 
     /**
@@ -195,7 +188,7 @@ public class UtilTeleport {
      * @param location Location - The location to teleport them to,
      * @param delay int - The amount of time to wait before teleporting.
      */
-    public void doTeleport(Player player, Location location, int delay) {
+    public void doTeleport(Player player, Location location, int delay, boolean doLastLocUpdate) {
         FoliaLib flib = new FoliaLib(this.plugin);
         UtilMessage message = new UtilMessage(this.plugin, player);
         if (location.getWorld() == null) {
@@ -228,7 +221,7 @@ public class UtilTeleport {
             long delayTicks = Math.max(1L, delay * 20L);
             flib.getImpl().runAtEntityLater(player, () -> {
                 if (teleportIsValid(player)) {
-                    new UtilLocation(plugin).UpdateLastLocation(player);
+                    if (doLastLocUpdate) { new UtilLocation(plugin).UpdateLastLocation(player); }
                     // Use teleportAsync directly in Folia environment, let Bukkit handle chunk loading
                     player.teleportAsync(location);
                     setTeleportStatus(player, false);
@@ -239,38 +232,13 @@ public class UtilTeleport {
                 @Override
                 public void run() {
                     if (teleportIsValid(player)) {
-                        new UtilLocation(plugin).UpdateLastLocation(player);
+                        if (doLastLocUpdate) { new UtilLocation(plugin).UpdateLastLocation(player); }
                         player.teleport(location);
                         setTeleportStatus(player, false);
                     }
                 }
             }.runTaskLater(plugin, delay * 20L);
         }
-    }
-
-    /**
-     * Determines which type of teleportation is taking place.
-     * @param args String[] - arguments from a command.
-     * @return Type - The teleportation type (instanceof TeleportUtil.Type)
-     */
-    public Type getTeleportType(String[] args) {
-        if (args.length == 1) {
-            return Type.TO_PLAYER;
-        }
-
-        if (args.length == 2) {
-            return Type.PLAYER_TO_PLAYER;
-        }
-
-        if (args.length == 3) {
-            return Type.TO_COORD;
-        }
-
-        if (args.length == 4) {
-            return Type.PLAYER_TO_COORD;
-        }
-
-        return Type.INVALID;
     }
 
     /**
@@ -430,6 +398,14 @@ public class UtilTeleport {
 
     }
 
+    /**
+     * Checks for a safe location.
+     * @param feet Block - The block the feet are in.
+     * @param head Block - The block the head is in.
+     * @param below Block - The block below the feet.
+     * @param player Player - The player.
+     * @return boolean - Is safe?
+     */
     private static boolean isSafeLocation(Block feet, Block head, Block below, Player player) {
         return head != null &&
                 (!head.isLiquid() || player.isInvulnerable()) && head.isPassable() &&
