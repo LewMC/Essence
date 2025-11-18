@@ -149,7 +149,12 @@ public class UtilTeam {
      * @return String - Name of the player's team.
      */
     public @Nullable String getPlayerTeam(UUID player) {
-        return new UtilPlayer(this.plugin).getPlayer(player, UtilPlayer.KEYS.USER_TEAM).toString();
+        Object team = new UtilPlayer(this.plugin).getPlayer(player, UtilPlayer.KEYS.USER_TEAM);
+        if (team == null) {
+            return null;
+        } else {
+            return team.toString();
+        }
     }
 
     /**
