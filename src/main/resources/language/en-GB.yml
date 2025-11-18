@@ -136,6 +136,8 @@ help:
   reply: "§6[Essence] §e/reply <message> - Reply to your last /msg."
   nickself: "§6[Essence] §e/nick <name> - Change your displayname."
   nickother: "§6[Essence] §e/nick <user> <name> - Change other nick."
+  ignorelist: "§6[Essence] §e/ignore - View list of ignored users."
+  ignoreuser: "§6[Essence] §e/ignore <user> - Toggle ignore user."
   list: "§6[Essence] §e/list - See who is online."
   environment: "§6[Essence] -------- Essence Help - Environment --------"
   time: "§6[Essence] §e/time - View and set your world time."
