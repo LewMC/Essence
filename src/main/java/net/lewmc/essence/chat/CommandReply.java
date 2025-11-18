@@ -3,11 +3,15 @@ package net.lewmc.essence.chat;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPlaceholder;
+import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class CommandReply extends FoundryCommand {
     private final Essence plugin;
@@ -45,16 +49,21 @@ public class CommandReply extends FoundryCommand {
             if (this.plugin.msgHistory.containsKey(cs)) {
                 CommandSender p = this.plugin.msgHistory.get(cs);
 
-                String msg = String.join(" ", Arrays.copyOfRange(args, 0, args.length));
+                List<String> recipientIgnoring = (List<String>) new UtilPlayer(this.plugin).getPlayer(Bukkit.getPlayerUniqueId(p.getName()), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
+                if (cs instanceof ConsoleCommandSender || recipientIgnoring == null || !recipientIgnoring.contains(Bukkit.getPlayerUniqueId(cs.getName()))) {
+                    String msg = String.join(" ", Arrays.copyOfRange(args, 0, args.length));
 
-                String[] repl = new String[]{cs.getName(), p.getName(), new UtilPlaceholder(this.plugin, cs).replaceAll(msg)};
-                message.send("msg", "send", repl);
-                message.sendTo(p, "msg", "send", repl);
+                    String[] repl = new String[]{cs.getName(), p.getName(), new UtilPlaceholder(this.plugin, cs).replaceAll(msg)};
+                    message.send("msg", "send", repl);
+                    message.sendTo(p, "msg", "send", repl);
 
-                if (this.plugin.msgHistory.containsKey(p)) {
-                    this.plugin.msgHistory.replace(p, cs);
+                    if (this.plugin.msgHistory.containsKey(p)) {
+                        this.plugin.msgHistory.replace(p, cs);
+                    } else {
+                        this.plugin.msgHistory.put(p, cs);
+                    }
                 } else {
-                    this.plugin.msgHistory.put(p, cs);
+                    message.send("ignore", "cantmessage", new String[]{p.getName()});
                 }
             } else {
                 message.send("reply", "none");

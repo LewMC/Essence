@@ -46,12 +46,11 @@ public class EventPlayerChat implements Listener {
             event.setFormat(msg);
 
             for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                List<String> ignoring = (List<String>)new UtilPlayer(this.plugin).getPlayer(p.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
+                List<String> ignoring = (List<String>) new UtilPlayer(this.plugin).getPlayer(p.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
                 if (!ignoring.contains(p.getUniqueId().toString())) {
                     p.sendMessage(msg);
                 }
             }
-
             event.setCancelled(true);
         }
     }

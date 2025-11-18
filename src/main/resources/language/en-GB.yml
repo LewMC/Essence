@@ -474,3 +474,6 @@ clear:
   clearedother: "§2[Essence] §aCleared {{1}}'s inventory."
 ignore:
   usage: "§4[Essence] §cUsage: /ignore or /ignore <player>"
+  ignored: "§2[Essence] §aYou ignored {{1}}, you won't see messages in chat from them."
+  unignored: "§2[Essence] §aYou unignored {{1}}, you will now see messages in chat from them."
+  cantmessage: "§4[Essence] §cYou can't message {{1}}."

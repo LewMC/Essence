@@ -2,29 +2,26 @@ package net.lewmc.essence.chat;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
-import net.lewmc.essence.core.UtilPlaceholder;
 import net.lewmc.essence.core.UtilPlayer;
-import net.lewmc.foundry.command.FoundryCommand;
+import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
- * /msg command
+ * /ignore command
  */
-public class CommandMsg extends FoundryCommand {
+public class CommandIgnore extends FoundryPlayerCommand {
     private final Essence plugin;
 
     /**
-     * Constructor for the MsgCommand class.
+     * Constructor for the CommandIgnore class.
      * @param plugin References to the main plugin class.
      */
-    public CommandMsg(Essence plugin) {
+    public CommandIgnore(Essence plugin) {
         this.plugin = plugin;
     }
 
@@ -34,11 +31,11 @@ public class CommandMsg extends FoundryCommand {
      */
     @Override
     protected String requiredPermission() {
-        return "essence.chat.msg";
+        return "essence.chat.ignore";
     }
 
     /**
-     * /msg command handler.
+     * /ignore command handler.
      * @param cs Information about who sent the command - player or console.
      * @param command Information about what command was sent.
      * @param s Command label - not used here.
@@ -49,30 +46,25 @@ public class CommandMsg extends FoundryCommand {
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         UtilMessage message = new UtilMessage(plugin, cs);
 
-        if (args.length > 1) {
+        if (args.length > 1 && cs instanceof Player sender) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if ((p.getName().toLowerCase()).equalsIgnoreCase(args[0])) {
-                    List<String> recipientIgnoring = (List<String>) new UtilPlayer(this.plugin).getPlayer(p.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
-                    if (cs instanceof ConsoleCommandSender || recipientIgnoring == null || !recipientIgnoring.contains(Bukkit.getPlayerUniqueId(cs.getName()))) {
-                        String msg = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-
-                        msg = new UtilPlaceholder(this.plugin, cs).replaceAll(msg);
-
-                        String[] repl = new String[] {cs.getName(), p.getName(), msg};
-
-                        message.send("msg", "send", repl);
-                        message.sendTo(p, "msg", "send", repl);
-
-                        this.plugin.msgHistory.put(p, cs);
+                    UtilPlayer up = new UtilPlayer(this.plugin);
+                    List<String> ignoring = (List<String>) up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.USER_IGNORING_PLAYERS);
+                    if (ignoring.contains(sender.getUniqueId().toString())) {
+                        message.send("ignore","unignored", new String[]{p.getName()});
+                        ignoring.remove(sender.getUniqueId().toString());
                     } else {
-                        message.send("ignore", "cantmessage", new String[]{p.getName()});
+                        message.send("ignore","ignored", new String[]{p.getName()});
+                        ignoring.add(sender.getUniqueId().toString());
                     }
+
                     return true;
                 }
             }
             message.send("generic", "playernotfound");
         } else {
-            message.send("msg","usage");
+            message.send("ignore","usage");
         }
 
         return true;
