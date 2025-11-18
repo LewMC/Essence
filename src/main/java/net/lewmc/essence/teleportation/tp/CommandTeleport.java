@@ -83,9 +83,15 @@ public class CommandTeleport extends FoundryCommand {
             double x, y, z;
             try {
                 Player ref = (cs instanceof Player) ? (Player) cs : targets.getFirst();
-                x = args[1].equals("~") ? ref.getLocation().getX() : Double.parseDouble(args[1]);
-                y = args[2].equals("~") ? ref.getLocation().getY() : Double.parseDouble(args[2]);
-                z = args[3].equals("~") ? ref.getLocation().getZ() : Double.parseDouble(args[3]);
+                x = args[1].startsWith("~") ?
+                        (args[1].length() == 1 ? ref.getLocation().getX() : ref.getLocation().getX() + Double.parseDouble(args[1].substring(1))) :
+                        Double.parseDouble(args[1]);
+                y = args[2].startsWith("~") ?
+                        (args[2].length() == 1 ? ref.getLocation().getY() : ref.getLocation().getY() + Double.parseDouble(args[2].substring(1))) :
+                        Double.parseDouble(args[2]);
+                z = args[3].startsWith("~") ?
+                        (args[3].length() == 1 ? ref.getLocation().getZ() : ref.getLocation().getZ() + Double.parseDouble(args[3].substring(1))) :
+                        Double.parseDouble(args[3]);
             } catch (Exception e) {
                 message.send("generic", "numberformaterror");
                 return true;
@@ -99,7 +105,7 @@ public class CommandTeleport extends FoundryCommand {
                     tp.doTeleport(t, loc, 0);
                 }
             }
-            message.send("teleport", "tocoord", new String[] { x+", "+y+", "+z });
+            message.send("teleport", "tocoord", new String[] { String.format("%.1f, %.1f, %.1f", x, y, z) });
             return true;
         }
 
@@ -134,16 +140,22 @@ public class CommandTeleport extends FoundryCommand {
             }
             double x, y, z;
             try {
-                x = args[0].equals("~") ? player.getLocation().getX() : Double.parseDouble(args[0]);
-                y = args[1].equals("~") ? player.getLocation().getY() : Double.parseDouble(args[1]);
-                z = args[2].equals("~") ? player.getLocation().getZ() : Double.parseDouble(args[2]);
+                x = args[0].startsWith("~") ? 
+                    (args[0].length() == 1 ? player.getLocation().getX() : player.getLocation().getX() + Double.parseDouble(args[0].substring(1))) : 
+                    Double.parseDouble(args[0]);
+                y = args[1].startsWith("~") ? 
+                    (args[1].length() == 1 ? player.getLocation().getY() : player.getLocation().getY() + Double.parseDouble(args[1].substring(1))) : 
+                    Double.parseDouble(args[1]);
+                z = args[2].startsWith("~") ? 
+                    (args[2].length() == 1 ? player.getLocation().getZ() : player.getLocation().getZ() + Double.parseDouble(args[2].substring(1))) : 
+                    Double.parseDouble(args[2]);
             } catch (Exception e) {
                 message.send("generic", "numberformaterror");
                 return true;
             }
             Location loc = new Location(player.getWorld(), x, y, z);
             tp.doTeleport(player, loc, 0); // Folia兼容
-            message.send("teleport", "tocoord", new String[] { x+", "+y+", "+z });
+            message.send("teleport", "tocoord", new String[] { String.format("%.1f, %.1f, %.1f", x, y, z) });
             return true;
         }
 
