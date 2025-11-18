@@ -10,12 +10,15 @@ import org.bukkit.OfflinePlayer;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * An implementation of the Vault economy interface.
  */
 public class UtilVaultEconomy implements Economy {
     private final Essence plugin;
+    private final UtilPlayer up;
 
     /**
      * Constructor for the VaultEconomy class.
@@ -23,6 +26,7 @@ public class UtilVaultEconomy implements Economy {
      */
     public UtilVaultEconomy(Essence plugin) {
         this.plugin = plugin;
+        this.up = new UtilPlayer(plugin);
     }
 
     /**
@@ -153,11 +157,21 @@ public class UtilVaultEconomy implements Economy {
      */
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
+        UUID pid = Bukkit.getServer().getPlayerUniqueId(Objects.requireNonNull(offlinePlayer.getName()));
+        if (this.plugin.players.containsKey(pid)) {
+            this.up.savePlayer(pid);
+        }
+        
         Files fileUtil = new Files(this.plugin.foundryConfig, this.plugin);
 
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
         fileUtil.close();
+        
+        if (this.plugin.players.containsKey(pid)) {
+            this.up.loadPlayer(pid);
+        }
+        
         return bal;
     }
 
@@ -207,10 +221,20 @@ public class UtilVaultEconomy implements Economy {
      */
     @Override
     public boolean has(OfflinePlayer offlinePlayer, double v) {
+        UUID pid = Bukkit.getServer().getPlayerUniqueId(Objects.requireNonNull(offlinePlayer.getName()));
+        if (this.plugin.players.containsKey(pid)) {
+            this.up.savePlayer(pid);
+        }
+        
         Files fileUtil = new Files(this.plugin.foundryConfig, this.plugin);
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
         fileUtil.close();
+        
+        if (this.plugin.players.containsKey(pid)) {
+            this.up.loadPlayer(pid);
+        }
+        
         return (v >= bal);
     }
 
@@ -262,12 +286,20 @@ public class UtilVaultEconomy implements Economy {
      */
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
+        UUID pid = Bukkit.getServer().getPlayerUniqueId(Objects.requireNonNull(offlinePlayer.getName()));
+        if (this.plugin.players.containsKey(pid)) {
+            this.up.savePlayer(pid);
+        }
+        
         Files fileUtil = new Files(this.plugin.foundryConfig, this.plugin);
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
         if (fileUtil.set("economy.balance", bal - v)) {
             bal = fileUtil.getDouble("economy.balance");
             fileUtil.close();
+            if (this.plugin.players.containsKey(pid)) {
+                this.up.loadPlayer(pid);
+            }
             return new EconomyResponse(v, bal, EconomyResponse.ResponseType.SUCCESS, null);
         } else {
             return new EconomyResponse(v, bal, EconomyResponse.ResponseType.FAILURE, "Unable to modify player data.");
@@ -322,12 +354,19 @@ public class UtilVaultEconomy implements Economy {
      */
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
+        UUID pid = Bukkit.getServer().getPlayerUniqueId(Objects.requireNonNull(offlinePlayer.getName()));
+        if (this.plugin.players.containsKey(pid)) {
+            this.up.savePlayer(pid);
+        }
         Files fileUtil = new Files(this.plugin.foundryConfig, this.plugin);
         fileUtil.load(fileUtil.playerDataFile(offlinePlayer.getUniqueId()));
         double bal = fileUtil.getDouble("economy.balance");
         if (fileUtil.set("economy.balance", bal + v)) {
             bal = fileUtil.getDouble("economy.balance");
             fileUtil.close();
+            if (this.plugin.players.containsKey(pid)) {
+                this.up.loadPlayer(pid);
+            }
             return new EconomyResponse(v, bal, EconomyResponse.ResponseType.SUCCESS, null);
         } else {
             return new EconomyResponse(v, bal, EconomyResponse.ResponseType.FAILURE, "Unable to modify player data.");
