@@ -136,6 +136,8 @@ help:
   reply: "§6[Essence] §e/reply <message> - 回复你最近的一次消息（/msg）."
   nickself: "§6[Essence] §e/nick <name> - Change your displayname."
   nickother: "§6[Essence] §e/nick <user> <name> - Change other nick."
+  ignorelist: "§6[Essence] §e/ignore - View list of ignored users."
+  ignoreuser: "§6[Essence] §e/ignore <user> - Toggle ignore user."
   list: "§6[Essence] §e/list - See who is online."
   environment: "§6[Essence] -------- Essence Help - Environment --------"
   time: "§6[Essence] §e/time - View and set your world time."
@@ -474,3 +476,9 @@ clear:
   clearedother: "§2[Essence] §aCleared {{1}}'s inventory."
 ignore:
   usage: "§4[Essence] §cUsage: /ignore or /ignore <player>"
+  ignored: "§2[Essence] §aYou ignored {{1}}, you won't see messages in chat from them."
+  unignored: "§2[Essence] §aYou unignored {{1}}, you will now see messages in chat from them."
+  cantmessage: "§4[Essence] §cYou can't message {{1}}."
+  cantteleport: "§4[Essence] §cYou can't request to teleport to {{1}}."
+  ignoring: "§6[Essence] §eYou are ignoring {{1}}."
+  ignoringnone: "§6[Essence] §eYou are not ignoring anybody."
