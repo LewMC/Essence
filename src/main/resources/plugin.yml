@@ -294,6 +294,8 @@ permissions:
     description: See who else is online.
   essence.chat.list.invisible:
     description: See online invisible players.
+  essence.chat.ignore:
+    description: Ignore other players in chat.
   essence.economy.*:
     description: Allows players to access all economy commands.
     default: op

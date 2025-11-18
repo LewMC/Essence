@@ -38,8 +38,7 @@ public class UtilLocation {
             up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_Y, p.getLocation().getY()) &&
             up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_Z, p.getLocation().getZ()) &&
             up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_YAW, p.getLocation().getYaw()) &&
-            up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_PITCH, p.getLocation().getPitch()) &&
-            up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_IS_BED, false)
+            up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_PITCH, p.getLocation().getPitch())
         ) {
             return;
         }

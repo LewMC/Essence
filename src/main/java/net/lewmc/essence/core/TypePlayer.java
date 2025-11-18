@@ -11,6 +11,7 @@ public class TypePlayer {
     public SubtypeUser user = new SubtypeUser();
     public SubtypeEconomy economy = new SubtypeEconomy();
     public SubtypeLocation lastLocation = new SubtypeLocation();
+    public SubtypeLocation lastSleep = new SubtypeLocation();
 
     public static class SubtypeUser {
         public boolean acceptingTeleportRequests;
@@ -18,7 +19,7 @@ public class TypePlayer {
         public String lastKnownName;
         public String nickname;
         public String ipAddress;
-        public List<String> ignoringPlayers = new ArrayList<>();;
+        public List<String> ignoringPlayers = new ArrayList<>();
         public String team;
     }
 
@@ -34,6 +35,5 @@ public class TypePlayer {
         public double z;
         public float yaw;
         public float pitch;
-        public boolean isBed;
     }
 }

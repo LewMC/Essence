@@ -31,13 +31,12 @@ public class EventPlayerBedEnter implements Listener {
         UUID pid = event.getPlayer().getUniqueId();
 
         UtilPlayer up = new UtilPlayer(this.plugin);
-        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_WORLD, bedLocation.getWorld().getName());
-        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_X, bedLocation.getX());
-        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_Y, bedLocation.getY());
-        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_Z, bedLocation.getZ());
-        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_YAW, bedLocation.getYaw());
-        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_PITCH, bedLocation.getPitch());
-        up.setPlayer(pid, UtilPlayer.KEYS.LAST_LOCATION_IS_BED, true);
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_WORLD, bedLocation.getWorld().getName());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_X, bedLocation.getX());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_Y, bedLocation.getY());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_Z, bedLocation.getZ());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_YAW, bedLocation.getYaw());
+        up.setPlayer(pid, UtilPlayer.KEYS.LAST_SLEEP_PITCH, bedLocation.getPitch());
 
         UtilMessage messageUtil = new UtilMessage(this.plugin, event.getPlayer());
         messageUtil.send("other", "respawnset");
