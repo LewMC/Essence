@@ -64,7 +64,12 @@ public class UtilPlayer {
                 case Double v when key == KEYS.LAST_LOCATION_Z -> player.lastLocation.z = v;
                 case Float v when key == KEYS.LAST_LOCATION_YAW -> player.lastLocation.yaw = v;
                 case Float v when key == KEYS.LAST_LOCATION_PITCH -> player.lastLocation.pitch = v;
-                case Boolean b when key == KEYS.LAST_LOCATION_IS_BED -> player.lastLocation.isBed = b;
+                case String s when key == KEYS.LAST_SLEEP_WORLD -> player.lastSleep.world = s;
+                case Double v when key == KEYS.LAST_SLEEP_X -> player.lastSleep.x = v;
+                case Double v when key == KEYS.LAST_SLEEP_Y -> player.lastSleep.y = v;
+                case Double v when key == KEYS.LAST_SLEEP_Z -> player.lastSleep.z = v;
+                case Float v when key == KEYS.LAST_SLEEP_YAW -> player.lastSleep.yaw = v;
+                case Float v when key == KEYS.LAST_SLEEP_PITCH -> player.lastSleep.pitch = v;
                 case null, default -> {
                     return false;
                 }
@@ -103,7 +108,12 @@ public class UtilPlayer {
                 case LAST_LOCATION_Z -> player.lastLocation.z;
                 case LAST_LOCATION_YAW -> player.lastLocation.yaw;
                 case LAST_LOCATION_PITCH -> player.lastLocation.pitch;
-                case LAST_LOCATION_IS_BED -> player.lastLocation.isBed;
+                case LAST_SLEEP_WORLD -> player.lastSleep.world;
+                case LAST_SLEEP_X -> player.lastSleep.x;
+                case LAST_SLEEP_Y -> player.lastSleep.y;
+                case LAST_SLEEP_Z -> player.lastSleep.z;
+                case LAST_SLEEP_YAW -> player.lastSleep.yaw;
+                case LAST_SLEEP_PITCH -> player.lastSleep.pitch;
                 case null, default -> null;
             };
         } else {
@@ -127,6 +137,9 @@ public class UtilPlayer {
             }
 
             f.load(f.playerDataFile(uuid));
+
+            this.migratePlayerFile(f);
+
             TypePlayer player = new TypePlayer();
 
             Boolean atr = f.getBoolean(KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString());
@@ -173,8 +186,23 @@ public class UtilPlayer {
             Double llpitch = f.getDouble(KEYS.LAST_LOCATION_PITCH.toString());
             player.lastLocation.pitch = (llpitch == null) ? p.getPlayer().getLocation().getPitch() : Float.parseFloat(String.valueOf(llpitch));
 
-            Boolean llib = f.getBoolean(KEYS.LAST_LOCATION_IS_BED.toString());
-            player.lastLocation.isBed = (llib == null) ? false : llib;
+            String lsw = f.getString(KEYS.LAST_SLEEP_WORLD.toString());
+            player.lastSleep.world = (lsw == null) ? null : lsw;
+
+            Double lsx = f.getDouble(KEYS.LAST_SLEEP_X.toString());
+            player.lastSleep.x = (lsx == null) ? null : lsx;
+
+            Double lsy = f.getDouble(KEYS.LAST_SLEEP_Y.toString());
+            player.lastSleep.y = (lsy == null) ? null : lsy;
+
+            Double lsz = f.getDouble(KEYS.LAST_SLEEP_Z.toString());
+            player.lastSleep.z = (lsz == null) ? null : lsz;
+
+            Double lsyaw = f.getDouble(KEYS.LAST_SLEEP_YAW.toString());
+            player.lastSleep.yaw = (lsyaw == null) ? null : Float.parseFloat(String.valueOf(lsyaw));
+
+            Double lspitch = f.getDouble(KEYS.LAST_SLEEP_PITCH.toString());
+            player.lastSleep.pitch = (lspitch == null) ? null : Float.parseFloat(String.valueOf(lspitch));
 
             this.plugin.players.put(uuid,player);
             return true;
@@ -214,7 +242,12 @@ public class UtilPlayer {
             f.set(KEYS.LAST_LOCATION_Z.toString(), player.lastLocation.z);
             f.set(KEYS.LAST_LOCATION_YAW.toString(), player.lastLocation.yaw);
             f.set(KEYS.LAST_LOCATION_PITCH.toString(), player.lastLocation.pitch);
-            f.set(KEYS.LAST_LOCATION_IS_BED.toString(), player.lastLocation.isBed);
+            f.set(KEYS.LAST_SLEEP_WORLD.toString(), player.lastSleep.world);
+            f.set(KEYS.LAST_SLEEP_X.toString(), player.lastSleep.x);
+            f.set(KEYS.LAST_SLEEP_Y.toString(), player.lastSleep.y);
+            f.set(KEYS.LAST_SLEEP_Z.toString(), player.lastSleep.z);
+            f.set(KEYS.LAST_SLEEP_YAW.toString(), player.lastSleep.yaw);
+            f.set(KEYS.LAST_SLEEP_PITCH.toString(), player.lastSleep.pitch);
             f.set(KEYS.USER_TEAM.toString(), player.user.team);
 
             return f.save();
@@ -329,9 +362,29 @@ public class UtilPlayer {
             @Override
             public String toString() { return "location.last-known.pitch"; }
         },
-        LAST_LOCATION_IS_BED {
+        LAST_SLEEP_WORLD {
             @Override
-            public String toString() { return "location.is-bed"; }
+            public String toString() { return "location.last-sleep.world"; }
+        },
+        LAST_SLEEP_X {
+            @Override
+            public String toString() { return "location.last-sleep.x"; }
+        },
+        LAST_SLEEP_Y {
+            @Override
+            public String toString() { return "location.last-sleep.y"; }
+        },
+        LAST_SLEEP_Z {
+            @Override
+            public String toString() { return "location.last-sleep.z"; }
+        },
+        LAST_SLEEP_YAW {
+            @Override
+            public String toString() { return "location.last-sleep.yaw"; }
+        },
+        LAST_SLEEP_PITCH {
+            @Override
+            public String toString() { return "location.last-sleep.pitch"; }
         }
     }
 
@@ -475,6 +528,21 @@ public class UtilPlayer {
             }
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    /**
+     * Migrates a pre-1.11.0 player file to 1.11.0 format.
+     * @since 1.11.0
+     */
+    private void migratePlayerFile(Files f) {
+        if (f.get("last-location.world") != null) {
+            f.set("location.last-known.world", f.get("last-location.world"));
+            f.set("location.last-known.x", f.get("last-location.x"));
+            f.set("location.last-known.y", f.get("last-location.y"));
+            f.set("location.last-known.z", f.get("last-location.z"));
+            f.set("location.last-known.yaw", f.get("last-location.yaw"));
+            f.set("location.last-known.pitch", f.get("last-location.pitch"));
         }
     }
 }

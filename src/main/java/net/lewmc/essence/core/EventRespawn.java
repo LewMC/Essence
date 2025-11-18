@@ -46,7 +46,7 @@ public class EventRespawn implements Listener {
         UtilPlayer up = new UtilPlayer(this.plugin);
         if (up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_WORLD) == null) {
             // Fall through to spawn logic below
-        } else if (!(Boolean)up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_IS_BED) && !alwaysSpawn) {
+        } else if ((up.getPlayer(epID, UtilPlayer.KEYS.LAST_SLEEP_WORLD) != null) && !alwaysSpawn) {
             UtilTeleport tp = new UtilTeleport(plugin);
             World world = Bukkit.getServer().getWorld((String)up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_WORLD));
             if (world == null) {
@@ -54,12 +54,12 @@ public class EventRespawn implements Listener {
             } else {
                 tp.doTeleport(
                         event.getPlayer(),
-                        world,
-                        (Double) up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_X),
-                        (Double) up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_Y),
-                        (Double) up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_Z),
-                        (Float) up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_YAW),
-                        (Float) up.getPlayer(epID, UtilPlayer.KEYS.LAST_LOCATION_PITCH),
+                        Bukkit.getServer().getWorld(up.getPlayer(epID, UtilPlayer.KEYS.LAST_SLEEP_WORLD).toString()),
+                        (Double) up.getPlayer(epID, UtilPlayer.KEYS.LAST_SLEEP_X),
+                        (Double) up.getPlayer(epID, UtilPlayer.KEYS.LAST_SLEEP_Y),
+                        (Double) up.getPlayer(epID, UtilPlayer.KEYS.LAST_SLEEP_Z),
+                        (Float) up.getPlayer(epID, UtilPlayer.KEYS.LAST_SLEEP_YAW),
+                        (Float) up.getPlayer(epID, UtilPlayer.KEYS.LAST_SLEEP_PITCH),
                         0,
                         false
                 );
