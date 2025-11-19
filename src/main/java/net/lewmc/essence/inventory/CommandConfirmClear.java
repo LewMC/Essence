@@ -28,7 +28,7 @@ public class CommandConfirmClear extends FoundryPlayerCommand {
      */
     @Override
     protected String requiredPermission() {
-        return "essence.chat.ignore";
+        return "essence.inventory.clear";
     }
 
     /**
