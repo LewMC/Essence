@@ -45,7 +45,7 @@ public class CommandConfirmClear extends FoundryPlayerCommand {
         Player sender = (Player) cs;
         UtilPlayer up = new UtilPlayer(this.plugin);
 
-        if (!(Boolean)up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.USER_CONFIRM_CLEAR)) {
+        if (!(boolean)up.getPlayer(sender.getUniqueId(), UtilPlayer.KEYS.USER_CONFIRM_CLEAR)) {
             if (up.setPlayer(sender.getUniqueId(), UtilPlayer.KEYS.USER_CONFIRM_CLEAR, true)) {
                 msg.send("clear","confirmon");
             } else {
