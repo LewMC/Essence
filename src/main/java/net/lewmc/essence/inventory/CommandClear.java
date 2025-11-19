@@ -63,15 +63,19 @@ public class CommandClear extends FoundryCommand {
 
             if (perm.has("essence.inventory.clear.other")) {
                 target.getInventory().clear();
-                this.plugin.pendingClears.remove(executor.getUniqueId());
-                msg.send("clear", "clearedother", new String[]{target.getName()});
-                msg.sendTo(target, "clear", "clearedby", new String[]{cs.getName()});
+                if (executor != null) {
+                    this.plugin.pendingClears.remove(executor.getUniqueId());
+                    msg.send("clear", "clearedother", new String[]{target.getName()});
+                    msg.sendTo(target, "clear", "clearedby", new String[]{cs.getName()});
+                }
             } else {
                 return perm.not();
             }
         } else if (args.length == 0) {
-            executor.getInventory().clear();
-            msg.send("clear", "cleared");
+            if (executor != null) {
+                executor.getInventory().clear();
+                msg.send("clear", "cleared");
+            }
         } else {
             msg.send("clear", "usage");
         }
