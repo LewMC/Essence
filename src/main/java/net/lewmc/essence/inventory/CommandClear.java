@@ -46,11 +46,46 @@ public class CommandClear extends FoundryCommand {
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         UtilMessage msg = new UtilMessage(this.plugin, cs);
         UtilPermission perm = new UtilPermission(this.plugin, cs);
-        UtilPlayer up = new UtilPlayer(this.plugin);
 
         Player executor = (cs instanceof Player p) ? p : null;
         Player target = (args.length == 1) ? Bukkit.getPlayer(args[0]) : (executor != null && args.length == 0 ? executor : null);
+        if (confirmRequired(executor, target, msg)) {
+            return true;
+        }
 
+        if (args.length == 1) {
+            if (target == null) {
+                msg.send("generic", "playernotfound");
+                return true;
+            }
+
+            if (perm.has("essence.inventory.clear.other")) {
+                target.getInventory().clear();
+                msg.send("clear", "clearedother", new String[]{target.getName()});
+                msg.sendTo(target, "clear", "clearedby", new String[]{cs.getName()});
+            } else {
+                return perm.not();
+            }
+
+        } else if (args.length == 0 && executor != null) {
+            executor.getInventory().clear();
+            msg.send("clear", "cleared");
+        } else {
+            msg.send("clear", "usage");
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if confirmation is required.
+     * @param executor Player
+     * @param target Player
+     * @param msg UtilMessage
+     * @return true = yes, false = no
+     */
+    private boolean confirmRequired(Player executor, Player target, UtilMessage msg) {
+        UtilPlayer up = new UtilPlayer(this.plugin);
         if (executor != null) {
             if ((boolean) up.getPlayer(executor.getUniqueId(), UtilPlayer.KEYS.USER_CONFIRM_CLEAR)) {
                 TypePendingRequests.TypePendingClears pending = this.plugin.pendingClears.get(executor.getUniqueId());
@@ -72,33 +107,6 @@ public class CommandClear extends FoundryCommand {
                 }
             }
         }
-
-        if (args.length == 1) {
-            if (target == null) {
-                msg.send("generic", "playernotfound");
-                return true;
-            }
-
-            if (perm.has("essence.inventory.clear.other")) {
-                target.getInventory().clear();
-                msg.send("clear", "clearedother", new String[]{target.getName()});
-                msg.sendTo(target, "clear", "clearedby", new String[]{cs.getName()});
-            } else {
-                return perm.not();
-            }
-
-        } else if (args.length == 0) {
-            if (executor != null) {
-                executor.getInventory().clear();
-                msg.send("clear", "cleared");
-            } else {
-                msg.send("clear", "consoleusage");
-            }
-
-        } else {
-            msg.send("clear", "usage");
-        }
-
-        return true;
+        return false;
     }
 }
