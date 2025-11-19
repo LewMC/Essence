@@ -66,7 +66,6 @@ public class CommandClear extends FoundryCommand {
             } else {
                 return perm.not();
             }
-
         } else if (args.length == 0 && executor != null) {
             executor.getInventory().clear();
             msg.send("clear", "cleared");
