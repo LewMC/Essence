@@ -9,6 +9,7 @@ import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -72,7 +73,9 @@ public class CommandClear extends FoundryCommand {
                 return perm.not();
             }
         } else if (args.length == 0) {
-            if (executor != null) {
+            if (cs instanceof ConsoleCommandSender) {
+                msg.send("clear", "usage");
+            } else if (executor != null) {
                 executor.getInventory().clear();
                 msg.send("clear", "cleared");
             }
