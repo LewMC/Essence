@@ -3,10 +3,7 @@ package net.lewmc.essence;
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.admin.ModuleAdmin;
 import net.lewmc.essence.chat.ModuleChat;
-import net.lewmc.essence.core.ModuleCore;
-import net.lewmc.essence.core.TypePlayer;
-import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.core.UtilUpdate;
+import net.lewmc.essence.core.*;
 import net.lewmc.essence.economy.ModuleEconomy;
 import net.lewmc.essence.environment.ModuleEnvironment;
 import net.lewmc.essence.gamemode.ModuleGamemode;
@@ -38,7 +35,14 @@ public class Essence extends JavaPlugin {
      * String = The requested player's name.
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
      */
-    public Map<String, String[]> teleportRequests = new HashMap<>();
+    public ConcurrentHashMap<String, String[]> teleportRequests = new ConcurrentHashMap<>();
+
+    /**
+     * Stores pending player clears.
+     * UUID = The requested player's UUID.
+     * TypePendingRequests.TypePendingClears = Data
+     */
+    public ConcurrentHashMap<UUID, TypePendingRequests.TypePendingClears> pendingClears = new ConcurrentHashMap<>();
 
     /**
      * Stores pending teleports.
@@ -61,7 +65,7 @@ public class Essence extends JavaPlugin {
     /**
      * Store's Essence's configuration.
      */
-    public Map<String, Object> config;
+    public ConcurrentHashMap<String, Object> config;
 
     /**
      * Stores which players are flying.

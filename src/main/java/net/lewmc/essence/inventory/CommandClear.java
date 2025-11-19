@@ -1,8 +1,10 @@
 package net.lewmc.essence.inventory;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.TypePendingRequests;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
+import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -34,42 +36,69 @@ public class CommandClear extends FoundryCommand {
     }
 
     /**
-     * @param cs        Information about who sent the command - player or console.
-     * @param command   Information about what command was sent.
-     * @param s         Command label - not used here.
-     * @param args      The command's arguments.
-     * @return boolean  true/false - was the command accepted and processed or not?
-     */
+     * /clear command handler.
+     * @param cs Information about who sent the command - player or console.
+     * @param command Information about what command was sent.
+     * @param s Command label - not used here.
+     * @param args The command's arguments.
+     * @return boolean true/false - was the command accepted and processed or not? */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         UtilMessage msg = new UtilMessage(this.plugin, cs);
         UtilPermission perm = new UtilPermission(this.plugin, cs);
+        UtilPlayer up = new UtilPlayer(this.plugin);
+
+        Player executor = (cs instanceof Player p) ? p : null;
+        Player target = (args.length == 1) ? Bukkit.getPlayer(args[0]) : (executor != null && args.length == 0 ? executor : null);
+
+        if (executor != null) {
+            if ((boolean) up.getPlayer(executor.getUniqueId(), UtilPlayer.KEYS.USER_CONFIRM_CLEAR)) {
+                TypePendingRequests.TypePendingClears pending = this.plugin.pendingClears.get(executor.getUniqueId());
+
+                if (pending != null) {
+                    Player storedTarget = Bukkit.getPlayer(pending.target);
+
+                    boolean sameTarget = (storedTarget == null && target == null) || (storedTarget != null && target != null && storedTarget.getUniqueId().equals(target.getUniqueId()));
+
+                    if (!sameTarget || (System.currentTimeMillis() - pending.time) > 30_000) {
+                        TypePendingRequests.TypePendingClears storeConfirm = new TypePendingRequests.TypePendingClears();
+                        storeConfirm.time = System.currentTimeMillis();
+                        storeConfirm.target = target != null ? target.getUniqueId() : executor.getUniqueId();
+                        this.plugin.pendingClears.put(executor.getUniqueId(), storeConfirm);
+
+                        msg.send("clear", "confirm");
+                        return true;
+                    }
+                }
+            }
+        }
 
         if (args.length == 1) {
-            Player target = Bukkit.getPlayer(args[0]);
-
             if (target == null) {
-                msg.send("generic","playernotfound");
+                msg.send("generic", "playernotfound");
                 return true;
             }
 
             if (perm.has("essence.inventory.clear.other")) {
                 target.getInventory().clear();
-                msg.send("clear", "clearedother", new String[]{ target.getName() });
-                msg.sendTo(target, "clear", "clearedby", new String[]{ cs.getName() });
+                msg.send("clear", "clearedother", new String[]{target.getName()});
+                msg.sendTo(target, "clear", "clearedby", new String[]{cs.getName()});
             } else {
                 return perm.not();
             }
+
         } else if (args.length == 0) {
-            if (cs instanceof Player) {
-                ((Player) cs).getInventory().clear();
+            if (executor != null) {
+                executor.getInventory().clear();
                 msg.send("clear", "cleared");
             } else {
                 msg.send("clear", "consoleusage");
             }
+
         } else {
             msg.send("clear", "usage");
         }
+
         return true;
     }
 }

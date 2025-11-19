@@ -6,9 +6,8 @@ import net.lewmc.foundry.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The Essence Configuration handler.
@@ -22,7 +21,7 @@ public class EssenceConfiguration {
     /**
      * The configuration in HashMap format.
      */
-    public Map<String, Object> config = new HashMap<>();
+    public ConcurrentHashMap<String, Object> config = new ConcurrentHashMap<>();
 
     /**
      * The config file handler.
@@ -52,10 +51,10 @@ public class EssenceConfiguration {
 
     /**
      * Handles Essence's configuration during startup.
-     * @return Map (String, Object) - The new configuration.
+     * @return ConcurrentHashMap (String, Object) - The new configuration.
      * @since 1.10.1
      */
-    public Map<String, Object> startup() {
+    public ConcurrentHashMap<String, Object> startup() {
         File configFile = new File(this.plugin.getDataFolder(), "config.yml");
 
         try {
@@ -69,10 +68,10 @@ public class EssenceConfiguration {
 
     /**
      * Reload's Essence's configuration.
-     * @return Map (String, Object) - The new configuration.
+     * @return ConcurrentHashMap (String, Object) - The new configuration.
      * @since 1.10.1
      */
-    public Map<String, Object> reload() {
+    public ConcurrentHashMap<String, Object> reload() {
         if (!this.configFile.exists("config.yml")) {
             this.plugin.saveDefaultConfig();
             if (!this.configFile.exists("config.yml")) {

@@ -474,6 +474,9 @@ clear:
   cleared: "§2[Essence] §aYour inventory was cleared."
   clearedby: "§6[Essence] §eYour inventory was cleared by {{1}}."
   clearedother: "§2[Essence] §aCleared {{1}}'s inventory."
+  confirmon: "§2[Essence] §aYou now need to confirm to clear your inventory."
+  confirmoff: "§2[Essence] §aYou no longer need to confirm to clear your inventory."
+  confirmcant: "§4[Essence] §cUnable to change your preferences, something went wrong."
 ignore:
   usage: "§4[Essence] §cUsage: /ignore or /ignore <player>"
   ignored: "§2[Essence] §aYou ignored {{1}}, you won't see messages in chat from them."

@@ -56,6 +56,7 @@ public class UtilPlayer {
                         return false;
                     }
                 }
+                case Boolean v when key == KEYS.USER_CONFIRM_CLEAR -> player.user.confirmClear = v;
                 case Double v when key == KEYS.ECONOMY_BALANCE -> player.economy.balance = v;
                 case Boolean b when key == KEYS.ECONOMY_ACCEPTING_PAYMENTS -> player.economy.acceptingPayments = b;
                 case String s when key == KEYS.LAST_LOCATION_WORLD -> player.lastLocation.world = s;
@@ -100,6 +101,7 @@ public class UtilPlayer {
                 case USER_NICKNAME -> player.user.nickname;
                 case USER_IP_ADDRESS -> player.user.ipAddress;
                 case USER_IGNORING_PLAYERS -> player.user.ignoringPlayers;
+                case USER_CONFIRM_CLEAR -> player.user.confirmClear;
                 case ECONOMY_BALANCE -> player.economy.balance;
                 case ECONOMY_ACCEPTING_PAYMENTS -> player.economy.acceptingPayments;
                 case LAST_LOCATION_WORLD -> player.lastLocation.world;
@@ -161,6 +163,9 @@ public class UtilPlayer {
                     f.set(KEYS.USER_IP_ADDRESS.toString(), onlinePlayer.getAddress().getAddress().getHostAddress());
                 }
             }
+
+            Boolean s = f.getBoolean(KEYS.USER_CONFIRM_CLEAR.toString());
+            player.user.confirmClear = (s == null) ? true : s;
 
             Double b = f.getDouble(KEYS.ECONOMY_BALANCE.toString());
             player.economy.balance = (b == null) ? (double) this.plugin.config.get("economy.start-money") : b;
@@ -234,6 +239,7 @@ public class UtilPlayer {
             f.set(KEYS.USER_NICKNAME.toString(), player.user.nickname);
             f.set(KEYS.USER_IP_ADDRESS.toString(), player.user.ipAddress);
             f.set(KEYS.USER_IGNORING_PLAYERS.toString(), player.user.ignoringPlayers);
+            f.set(KEYS.USER_CONFIRM_CLEAR.toString(), player.user.confirmClear);
             f.set(KEYS.ECONOMY_BALANCE.toString(), player.economy.balance);
             f.set(KEYS.ECONOMY_ACCEPTING_PAYMENTS.toString(), player.economy.acceptingPayments);
             f.set(KEYS.LAST_LOCATION_WORLD.toString(), player.lastLocation.world);
@@ -330,6 +336,10 @@ public class UtilPlayer {
         USER_TEAM {
             @Override
             public String toString() { return "user.team"; }
+        },
+        USER_CONFIRM_CLEAR {
+            @Override
+            public String toString() { return "user.confirm-clear"; }
         },
         ECONOMY_BALANCE {
             @Override
