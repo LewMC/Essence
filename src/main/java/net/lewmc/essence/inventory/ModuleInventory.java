@@ -40,6 +40,7 @@ public class ModuleInventory extends FoundryModule {
         if (!cmd.isDisabled("skull")) { reg.runtimeCommand("skull", new CommandSkull((Essence) this.plugin), "head"); }
         if (!cmd.isDisabled("invsee")) { reg.runtimeCommand("invsee", new CommandInvsee((Essence) this.plugin)); }
         if (!cmd.isDisabled("clear")) { reg.runtimeCommand("clear", new CommandClear((Essence) this.plugin), "clearinventory", "ci"); }
+        if (!cmd.isDisabled("confirmclear")) { reg.runtimeCommand("confirmclear", new CommandConfirmClear((Essence) this.plugin), "cclear"); }
     }
 
     /**

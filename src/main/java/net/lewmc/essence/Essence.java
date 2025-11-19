@@ -3,10 +3,7 @@ package net.lewmc.essence;
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.admin.ModuleAdmin;
 import net.lewmc.essence.chat.ModuleChat;
-import net.lewmc.essence.core.ModuleCore;
-import net.lewmc.essence.core.TypePlayer;
-import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.core.UtilUpdate;
+import net.lewmc.essence.core.*;
 import net.lewmc.essence.economy.ModuleEconomy;
 import net.lewmc.essence.environment.ModuleEnvironment;
 import net.lewmc.essence.gamemode.ModuleGamemode;
@@ -23,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * The main Essence class.
@@ -38,7 +36,14 @@ public class Essence extends JavaPlugin {
      * String = The requested player's name.
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
      */
-    public Map<String, String[]> teleportRequests = new HashMap<>();
+    public ConcurrentMap<String, String[]> teleportRequests = new ConcurrentHashMap<>();
+
+    /**
+     * Stores pending player clears.
+     * UUID = The requested player's UUID.
+     * TypePendingRequests.TypePendingClears = Data
+     */
+    public ConcurrentMap<UUID, TypePendingRequests.TypePendingClears> pendingClears = new ConcurrentHashMap<>();
 
     /**
      * Stores pending teleports.
@@ -51,17 +56,17 @@ public class Essence extends JavaPlugin {
      * CommandSender = The receiver.
      * CommandSender = The sender.
      */
-    public ConcurrentHashMap<CommandSender, CommandSender> msgHistory = new ConcurrentHashMap<>();
+    public ConcurrentMap<CommandSender, CommandSender> msgHistory = new ConcurrentHashMap<>();
 
     /**
      * Stores a cache of player data.
      */
-    public ConcurrentHashMap<UUID, TypePlayer> players = new ConcurrentHashMap<>();
+    public ConcurrentMap<UUID, TypePlayer> players = new ConcurrentHashMap<>();
 
     /**
      * Store's Essence's configuration.
      */
-    public Map<String, Object> config;
+    public ConcurrentMap<String, Object> config;
 
     /**
      * Stores which players are flying.

@@ -56,6 +56,7 @@ public class UtilPlayer {
                         return false;
                     }
                 }
+                case Boolean v when key == KEYS.USER_CONFIRM_CLEAR -> player.user.confirmClear = v;
                 case Double v when key == KEYS.ECONOMY_BALANCE -> player.economy.balance = v;
                 case Boolean b when key == KEYS.ECONOMY_ACCEPTING_PAYMENTS -> player.economy.acceptingPayments = b;
                 case String s when key == KEYS.LAST_LOCATION_WORLD -> player.lastLocation.world = s;
@@ -100,6 +101,7 @@ public class UtilPlayer {
                 case USER_NICKNAME -> player.user.nickname;
                 case USER_IP_ADDRESS -> player.user.ipAddress;
                 case USER_IGNORING_PLAYERS -> player.user.ignoringPlayers;
+                case USER_CONFIRM_CLEAR -> player.user.confirmClear;
                 case ECONOMY_BALANCE -> player.economy.balance;
                 case ECONOMY_ACCEPTING_PAYMENTS -> player.economy.acceptingPayments;
                 case LAST_LOCATION_WORLD -> player.lastLocation.world;
@@ -142,67 +144,110 @@ public class UtilPlayer {
 
             TypePlayer player = new TypePlayer();
 
-            Boolean atr = f.getBoolean(KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString());
-            player.user.acceptingTeleportRequests = (atr == null) ? true : atr;
+            if (f.get(KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString()) != null) {
+                player.user.acceptingTeleportRequests = f.getBoolean(KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString());
+            } else {
+                player.user.acceptingTeleportRequests = true;
+            }
 
             player.user.lastSeen = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
             player.user.lastKnownName = p.getName();
 
-            String n = f.getString(KEYS.USER_NICKNAME.toString());
-            player.user.nickname = (n == null) ? null : n;
+            player.user.nickname = f.getString(KEYS.USER_NICKNAME.toString());
 
-            String t = f.getString(KEYS.USER_TEAM.toString());
-            player.user.team = (t == null) ? null : t;
+            player.user.team = f.getString(KEYS.USER_TEAM.toString());
 
             if ((boolean) this.plugin.config.get("advanced.playerdata.store-ip-address")) {
                 Player onlinePlayer = p.getPlayer();
                 if (onlinePlayer != null && onlinePlayer.getAddress() != null) {
                     f.set(KEYS.USER_IP_ADDRESS.toString(), onlinePlayer.getAddress().getAddress().getHostAddress());
                 }
+            } else {
+                f.set(KEYS.USER_IP_ADDRESS.toString(), null);
             }
 
-            Double b = f.getDouble(KEYS.ECONOMY_BALANCE.toString());
-            player.economy.balance = (b == null) ? (double) this.plugin.config.get("economy.start-money") : b;
+            if (f.get(KEYS.USER_CONFIRM_CLEAR.toString()) != null) {
+                player.user.confirmClear = f.getBoolean(KEYS.USER_CONFIRM_CLEAR.toString());
+            } else {
+                player.user.confirmClear = true;
+            }
 
-            Boolean ap = f.getBoolean(KEYS.ECONOMY_ACCEPTING_PAYMENTS.toString());
-            player.economy.acceptingPayments = (ap == null) ? true : ap;
+            if (f.get(KEYS.ECONOMY_BALANCE.toString()) != null) {
+                player.economy.balance = f.getDouble(KEYS.ECONOMY_BALANCE.toString());
+            } else {
+                player.economy.balance = 0D;
+            }
 
-            String llw = f.getString(KEYS.LAST_LOCATION_WORLD.toString());
-            player.lastLocation.world = (llw == null) ? null : llw;
+            if (f.get(KEYS.ECONOMY_ACCEPTING_PAYMENTS.toString()) != null) {
+                player.economy.acceptingPayments = f.getBoolean(KEYS.ECONOMY_ACCEPTING_PAYMENTS.toString());
+            } else {
+                player.economy.acceptingPayments = true;
+            }
 
-            Double llx = f.getDouble(KEYS.LAST_LOCATION_X.toString());
-            player.lastLocation.x = (llx == null) ? p.getPlayer().getLocation().getX() : llx;
+            player.lastLocation.world = f.getString(KEYS.LAST_LOCATION_WORLD.toString());
 
-            Double lly = f.getDouble(KEYS.LAST_LOCATION_Y.toString());
-            player.lastLocation.y = (lly == null) ? p.getPlayer().getLocation().getY() : lly;
+            if (f.get(KEYS.LAST_LOCATION_X.toString()) != null) {
+                player.lastLocation.x = f.getDouble(KEYS.LAST_LOCATION_X.toString());
+            } else {
+                player.lastLocation.x = 0D;
+            }
 
-            Double llz = f.getDouble(KEYS.LAST_LOCATION_Z.toString());
-            player.lastLocation.z = (llz == null) ? p.getPlayer().getLocation().getZ() : llz;
+            if (f.get(KEYS.LAST_LOCATION_Y.toString()) != null) {
+                player.lastLocation.y = f.getDouble(KEYS.LAST_LOCATION_Y.toString());
+            } else {
+                player.lastLocation.y = 0D;
+            }
 
-            Double llyaw = f.getDouble(KEYS.LAST_LOCATION_YAW.toString());
-            player.lastLocation.yaw = (llyaw == null) ? p.getPlayer().getLocation().getYaw() : Float.parseFloat(String.valueOf(llyaw));
+            if (f.get(KEYS.LAST_LOCATION_Z.toString()) != null) {
+                player.lastLocation.z = f.getDouble(KEYS.LAST_LOCATION_Z.toString());
+            } else {
+                player.lastLocation.z = 0D;
+            }
 
-            Double llpitch = f.getDouble(KEYS.LAST_LOCATION_PITCH.toString());
-            player.lastLocation.pitch = (llpitch == null) ? p.getPlayer().getLocation().getPitch() : Float.parseFloat(String.valueOf(llpitch));
+            if (f.get(KEYS.LAST_LOCATION_YAW.toString()) != null) {
+                player.lastLocation.yaw = (float) f.getDouble(KEYS.LAST_LOCATION_PITCH.toString());
+            } else {
+                player.lastLocation.yaw = 0F;
+            }
 
-            String lsw = f.getString(KEYS.LAST_SLEEP_WORLD.toString());
-            player.lastSleep.world = (lsw == null) ? null : lsw;
+            if (f.get(KEYS.LAST_LOCATION_PITCH.toString()) != null) {
+                player.lastLocation.pitch = (float) f.getDouble(KEYS.LAST_LOCATION_PITCH.toString());
+            } else {
+                player.lastLocation.pitch = 0F;
+            }
 
-            Double lsx = f.getDouble(KEYS.LAST_SLEEP_X.toString());
-            player.lastSleep.x = (lsx == null) ? 0D : lsx;
+            player.lastSleep.world = f.getString(KEYS.LAST_SLEEP_WORLD.toString());
 
-            Double lsy = f.getDouble(KEYS.LAST_SLEEP_Y.toString());
-            player.lastSleep.y = (lsy == null) ? 0D : lsy;
+            if (f.get(KEYS.LAST_SLEEP_X.toString()) != null) {
+                player.lastSleep.x = f.getDouble(KEYS.LAST_SLEEP_X.toString());
+            } else {
+                player.lastSleep.x = 0D;
+            }
 
-            Double lsz = f.getDouble(KEYS.LAST_SLEEP_Z.toString());
-            player.lastSleep.z = (lsz == null) ? 0D : lsz;
+            if (f.get(KEYS.LAST_SLEEP_Y.toString()) != null) {
+                player.lastSleep.y = f.getDouble(KEYS.LAST_SLEEP_Y.toString());
+            } else {
+                player.lastSleep.y = 0D;
+            }
 
-            Double lsyaw = f.getDouble(KEYS.LAST_SLEEP_YAW.toString());
-            player.lastSleep.yaw = (lsyaw == null) ? 0F : Float.parseFloat(String.valueOf(lsyaw));
+            if (f.get(KEYS.LAST_SLEEP_Z.toString()) != null) {
+                player.lastSleep.z = f.getDouble(KEYS.LAST_SLEEP_Z.toString());
+            } else {
+                player.lastSleep.z = 0D;
+            }
 
-            Double lspitch = f.getDouble(KEYS.LAST_SLEEP_PITCH.toString());
-            player.lastSleep.pitch = (lspitch == null) ? 0F : Float.parseFloat(String.valueOf(lspitch));
+            if (f.get(KEYS.LAST_SLEEP_YAW.toString()) != null) {
+                player.lastSleep.yaw = (float) f.getDouble(KEYS.LAST_SLEEP_PITCH.toString());
+            } else {
+                player.lastSleep.yaw = 0F;
+            }
+
+            if (f.get(KEYS.LAST_SLEEP_PITCH.toString()) != null) {
+                player.lastSleep.pitch = (float) f.getDouble(KEYS.LAST_SLEEP_PITCH.toString());
+            } else {
+                player.lastSleep.pitch = 0F;
+            }
 
             this.plugin.players.put(uuid,player);
             return true;
@@ -234,6 +279,7 @@ public class UtilPlayer {
             f.set(KEYS.USER_NICKNAME.toString(), player.user.nickname);
             f.set(KEYS.USER_IP_ADDRESS.toString(), player.user.ipAddress);
             f.set(KEYS.USER_IGNORING_PLAYERS.toString(), player.user.ignoringPlayers);
+            f.set(KEYS.USER_CONFIRM_CLEAR.toString(), player.user.confirmClear);
             f.set(KEYS.ECONOMY_BALANCE.toString(), player.economy.balance);
             f.set(KEYS.ECONOMY_ACCEPTING_PAYMENTS.toString(), player.economy.acceptingPayments);
             f.set(KEYS.LAST_LOCATION_WORLD.toString(), player.lastLocation.world);
@@ -330,6 +376,10 @@ public class UtilPlayer {
         USER_TEAM {
             @Override
             public String toString() { return "user.team"; }
+        },
+        USER_CONFIRM_CLEAR {
+            @Override
+            public String toString() { return "user.confirm-clear"; }
         },
         ECONOMY_BALANCE {
             @Override
