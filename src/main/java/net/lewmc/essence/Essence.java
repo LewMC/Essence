@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * The main Essence class.
@@ -35,14 +36,14 @@ public class Essence extends JavaPlugin {
      * String = The requested player's name.
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
      */
-    public ConcurrentHashMap<String, String[]> teleportRequests = new ConcurrentHashMap<>();
+    public ConcurrentMap<String, String[]> teleportRequests = new ConcurrentHashMap<>();
 
     /**
      * Stores pending player clears.
      * UUID = The requested player's UUID.
      * TypePendingRequests.TypePendingClears = Data
      */
-    public ConcurrentHashMap<UUID, TypePendingRequests.TypePendingClears> pendingClears = new ConcurrentHashMap<>();
+    public ConcurrentMap<UUID, TypePendingRequests.TypePendingClears> pendingClears = new ConcurrentHashMap<>();
 
     /**
      * Stores pending teleports.
@@ -55,17 +56,17 @@ public class Essence extends JavaPlugin {
      * CommandSender = The receiver.
      * CommandSender = The sender.
      */
-    public ConcurrentHashMap<CommandSender, CommandSender> msgHistory = new ConcurrentHashMap<>();
+    public ConcurrentMap<CommandSender, CommandSender> msgHistory = new ConcurrentHashMap<>();
 
     /**
      * Stores a cache of player data.
      */
-    public ConcurrentHashMap<UUID, TypePlayer> players = new ConcurrentHashMap<>();
+    public ConcurrentMap<UUID, TypePlayer> players = new ConcurrentHashMap<>();
 
     /**
      * Store's Essence's configuration.
      */
-    public ConcurrentHashMap<String, Object> config;
+    public ConcurrentMap<String, Object> config;
 
     /**
      * Stores which players are flying.

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * The Essence Configuration handler.
@@ -21,7 +22,7 @@ public class EssenceConfiguration {
     /**
      * The configuration in HashMap format.
      */
-    public ConcurrentHashMap<String, Object> config = new ConcurrentHashMap<>();
+    public ConcurrentMap<String, Object> config = new ConcurrentHashMap<>();
 
     /**
      * The config file handler.
@@ -54,7 +55,7 @@ public class EssenceConfiguration {
      * @return ConcurrentHashMap (String, Object) - The new configuration.
      * @since 1.10.1
      */
-    public ConcurrentHashMap<String, Object> startup() {
+    public ConcurrentMap<String, Object> startup() {
         File configFile = new File(this.plugin.getDataFolder(), "config.yml");
 
         try {
@@ -71,7 +72,7 @@ public class EssenceConfiguration {
      * @return ConcurrentHashMap (String, Object) - The new configuration.
      * @since 1.10.1
      */
-    public ConcurrentHashMap<String, Object> reload() {
+    public ConcurrentMap<String, Object> reload() {
         if (!this.configFile.exists("config.yml")) {
             this.plugin.saveDefaultConfig();
             if (!this.configFile.exists("config.yml")) {
