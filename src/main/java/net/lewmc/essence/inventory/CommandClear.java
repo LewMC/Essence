@@ -86,24 +86,22 @@ public class CommandClear extends FoundryCommand {
      */
     private boolean confirmRequired(Player executor, Player target, UtilMessage msg) {
         UtilPlayer up = new UtilPlayer(this.plugin);
-        if (executor != null) {
-            if ((boolean) up.getPlayer(executor.getUniqueId(), UtilPlayer.KEYS.USER_CONFIRM_CLEAR)) {
-                TypePendingRequests.TypePendingClears pending = this.plugin.pendingClears.get(executor.getUniqueId());
+        if (executor != null && (boolean) up.getPlayer(executor.getUniqueId(), UtilPlayer.KEYS.USER_CONFIRM_CLEAR)) {
+            TypePendingRequests.TypePendingClears pending = this.plugin.pendingClears.get(executor.getUniqueId());
 
-                if (pending != null) {
-                    Player storedTarget = Bukkit.getPlayer(pending.target);
+            if (pending != null) {
+                Player storedTarget = Bukkit.getPlayer(pending.target);
 
-                    boolean sameTarget = (storedTarget == null && target == null) || (storedTarget != null && target != null && storedTarget.getUniqueId().equals(target.getUniqueId()));
+                boolean sameTarget = (storedTarget == null && target == null) || (storedTarget != null && target != null && storedTarget.getUniqueId().equals(target.getUniqueId()));
 
-                    if (!sameTarget || (System.currentTimeMillis() - pending.time) > 30_000) {
-                        TypePendingRequests.TypePendingClears storeConfirm = new TypePendingRequests.TypePendingClears();
-                        storeConfirm.time = System.currentTimeMillis();
-                        storeConfirm.target = target != null ? target.getUniqueId() : executor.getUniqueId();
-                        this.plugin.pendingClears.put(executor.getUniqueId(), storeConfirm);
+                if (!sameTarget || (System.currentTimeMillis() - pending.time) > 30_000) {
+                    TypePendingRequests.TypePendingClears storeConfirm = new TypePendingRequests.TypePendingClears();
+                    storeConfirm.time = System.currentTimeMillis();
+                    storeConfirm.target = target != null ? target.getUniqueId() : executor.getUniqueId();
+                    this.plugin.pendingClears.put(executor.getUniqueId(), storeConfirm);
 
-                        msg.send("clear", "confirm");
-                        return true;
-                    }
+                    msg.send("clear", "confirm");
+                    return true;
                 }
             }
         }
