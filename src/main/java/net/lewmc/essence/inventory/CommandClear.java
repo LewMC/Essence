@@ -11,6 +11,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 /**
  * /clear command.
  */
@@ -61,12 +63,13 @@ public class CommandClear extends FoundryCommand {
 
             if (perm.has("essence.inventory.clear.other")) {
                 target.getInventory().clear();
+                this.plugin.pendingClears.remove(executor.getUniqueId());
                 msg.send("clear", "clearedother", new String[]{target.getName()});
                 msg.sendTo(target, "clear", "clearedby", new String[]{cs.getName()});
             } else {
                 return perm.not();
             }
-        } else if (args.length == 0 && executor != null) {
+        } else if (args.length == 0) {
             executor.getInventory().clear();
             msg.send("clear", "cleared");
         } else {
@@ -84,26 +87,32 @@ public class CommandClear extends FoundryCommand {
      * @return true = yes, false = no
      */
     private boolean confirmRequired(Player executor, Player target, UtilMessage msg) {
+        if (executor == null) return false;
+
         UtilPlayer up = new UtilPlayer(this.plugin);
-        if (executor != null && (boolean) up.getPlayer(executor.getUniqueId(), UtilPlayer.KEYS.USER_CONFIRM_CLEAR)) {
-            TypePendingRequests.TypePendingClears pending = this.plugin.pendingClears.get(executor.getUniqueId());
 
-            if (pending != null) {
-                Player storedTarget = Bukkit.getPlayer(pending.target);
+        boolean requireConfirm = up.getPlayer(executor.getUniqueId(), UtilPlayer.KEYS.USER_CONFIRM_CLEAR) instanceof Boolean b && b;
+        if (!requireConfirm) return false;
 
-                boolean sameTarget = (storedTarget == null && target == null) || (storedTarget != null && target != null && storedTarget.getUniqueId().equals(target.getUniqueId()));
+        UUID executorId = executor.getUniqueId();
+        UUID targetId = (target != null ? target.getUniqueId() : executorId);
 
-                if (!sameTarget || (System.currentTimeMillis() - pending.time) > 30_000) {
-                    TypePendingRequests.TypePendingClears storeConfirm = new TypePendingRequests.TypePendingClears();
-                    storeConfirm.time = System.currentTimeMillis();
-                    storeConfirm.target = target != null ? target.getUniqueId() : executor.getUniqueId();
-                    this.plugin.pendingClears.put(executor.getUniqueId(), storeConfirm);
+        TypePendingRequests.TypePendingClears pending = this.plugin.pendingClears.get(executorId);
 
-                    msg.send("clear", "confirm");
-                    return true;
-                }
-            }
+        boolean sameTarget = pending != null && pending.target.equals(targetId);
+
+        if (pending == null || ((System.currentTimeMillis() - pending.time) > 30_000) || !sameTarget) {
+            TypePendingRequests.TypePendingClears newPending = new TypePendingRequests.TypePendingClears();
+            newPending.time = System.currentTimeMillis();
+            newPending.target = targetId;
+
+            this.plugin.pendingClears.put(executorId, newPending);
+            msg.send("clear", "confirm");
+            return true;
         }
+
+        this.plugin.pendingClears.remove(executorId);
         return false;
     }
+
 }
