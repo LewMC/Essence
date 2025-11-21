@@ -43,11 +43,16 @@ public class UtilPlayer {
         if (this.plugin.players.containsKey(uuid)) {
             TypePlayer player = this.plugin.players.get(uuid);
 
+            if (this.plugin.verbose) {
+                this.plugin.log.info("DataCache > " + uuid + " > " + key + " > " + value);
+            }
+
             switch (value) {
                 case Boolean b when key == KEYS.USER_ACCEPTING_TELEPORT_REQUESTS -> player.user.acceptingTeleportRequests = b;
                 case String s when key == KEYS.USER_LAST_SEEN -> player.user.lastSeen = s;
                 case String s when key == KEYS.USER_LAST_KNOWN_NAME -> player.user.lastKnownName = s;
                 case String s when key == KEYS.USER_NICKNAME -> player.user.nickname = s;
+                case String s when key == KEYS.USER_TEAM -> player.user.team = s;
                 case String s when key == KEYS.USER_IP_ADDRESS -> player.user.ipAddress = s;
                 case List<?> objects when key == KEYS.USER_IGNORING_PLAYERS -> {
                     if (objects.stream().allMatch(o -> o instanceof String)) {
@@ -102,6 +107,7 @@ public class UtilPlayer {
                 case USER_IP_ADDRESS -> player.user.ipAddress;
                 case USER_IGNORING_PLAYERS -> player.user.ignoringPlayers;
                 case USER_CONFIRM_CLEAR -> player.user.confirmClear;
+                case USER_TEAM -> player.user.team;
                 case ECONOMY_BALANCE -> player.economy.balance;
                 case ECONOMY_ACCEPTING_PAYMENTS -> player.economy.acceptingPayments;
                 case LAST_LOCATION_WORLD -> player.lastLocation.world;
@@ -116,7 +122,6 @@ public class UtilPlayer {
                 case LAST_SLEEP_Z -> player.lastSleep.z;
                 case LAST_SLEEP_YAW -> player.lastSleep.yaw;
                 case LAST_SLEEP_PITCH -> player.lastSleep.pitch;
-                case null, default -> null;
             };
         } else {
             return null;
@@ -167,6 +172,10 @@ public class UtilPlayer {
                 f.set(KEYS.USER_IP_ADDRESS.toString(), null);
             }
 
+            if (f.get(KEYS.USER_IGNORING_PLAYERS.toString()) != null) {
+                player.user.ignoringPlayers = f.getStringList(KEYS.USER_IGNORING_PLAYERS.toString());
+            }
+
             if (f.get(KEYS.USER_CONFIRM_CLEAR.toString()) != null) {
                 player.user.confirmClear = f.getBoolean(KEYS.USER_CONFIRM_CLEAR.toString());
             } else {
@@ -206,7 +215,7 @@ public class UtilPlayer {
             }
 
             if (f.get(KEYS.LAST_LOCATION_YAW.toString()) != null) {
-                player.lastLocation.yaw = (float) f.getDouble(KEYS.LAST_LOCATION_PITCH.toString());
+                player.lastLocation.yaw = (float) f.getDouble(KEYS.LAST_LOCATION_YAW.toString());
             } else {
                 player.lastLocation.yaw = 0F;
             }
@@ -238,7 +247,7 @@ public class UtilPlayer {
             }
 
             if (f.get(KEYS.LAST_SLEEP_YAW.toString()) != null) {
-                player.lastSleep.yaw = (float) f.getDouble(KEYS.LAST_SLEEP_PITCH.toString());
+                player.lastSleep.yaw = (float) f.getDouble(KEYS.LAST_SLEEP_YAW.toString());
             } else {
                 player.lastSleep.yaw = 0F;
             }
@@ -250,6 +259,11 @@ public class UtilPlayer {
             }
 
             this.plugin.players.put(uuid,player);
+
+            if (this.plugin.verbose) {
+                this.plugin.log.info("DataCache > " + uuid + " loaded into memory.");
+            }
+
             return true;
         } else {
             return false;
@@ -277,6 +291,7 @@ public class UtilPlayer {
             f.set(KEYS.USER_LAST_SEEN.toString(), player.user.lastSeen);
             f.set(KEYS.USER_LAST_KNOWN_NAME.toString(), player.user.lastKnownName);
             f.set(KEYS.USER_NICKNAME.toString(), player.user.nickname);
+            f.set(KEYS.USER_TEAM.toString(), player.user.team);
             f.set(KEYS.USER_IP_ADDRESS.toString(), player.user.ipAddress);
             f.set(KEYS.USER_IGNORING_PLAYERS.toString(), player.user.ignoringPlayers);
             f.set(KEYS.USER_CONFIRM_CLEAR.toString(), player.user.confirmClear);
@@ -294,7 +309,10 @@ public class UtilPlayer {
             f.set(KEYS.LAST_SLEEP_Z.toString(), player.lastSleep.z);
             f.set(KEYS.LAST_SLEEP_YAW.toString(), player.lastSleep.yaw);
             f.set(KEYS.LAST_SLEEP_PITCH.toString(), player.lastSleep.pitch);
-            f.set(KEYS.USER_TEAM.toString(), player.user.team);
+
+            if (this.plugin.verbose) {
+                this.plugin.log.info("DataCache > " + uuid + " saved to file.");
+            }
 
             return f.save();
         } else {

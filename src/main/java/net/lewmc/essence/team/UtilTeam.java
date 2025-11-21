@@ -59,7 +59,9 @@ public class UtilTeam {
 
                 teamsFile.save();
 
-                new UtilPlayer(this.plugin).setPlayer(leader, UtilPlayer.KEYS.USER_TEAM, name);
+                UtilPlayer up = new UtilPlayer(this.plugin);
+                up.setPlayer(leader, UtilPlayer.KEYS.USER_TEAM, name);
+                up.savePlayer(leader);
 
                 message.send("team", "created", new String[] { name });
             } else {
@@ -210,15 +212,11 @@ public class UtilTeam {
      * @return boolean - If the operation is successful.
      */
     public boolean leave(String playerTeam, UUID uuid) {
+        UtilPlayer up = new UtilPlayer(this.plugin);
 
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(uuid));
-
-        if (playerData.get("team") != null) {
-            playerData.set("team", null);
+        if (up.getPlayer(uuid, UtilPlayer.KEYS.USER_TEAM) != null) {
+            up.setPlayer(uuid, UtilPlayer.KEYS.USER_TEAM, null);
         }
-
-        playerData.save();
 
         Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+playerTeam+".yml");
@@ -226,8 +224,6 @@ public class UtilTeam {
         List<String> defaultMembers = teamData.getStringList("members.default");
         defaultMembers.remove(String.valueOf(uuid));
         teamData.set("members.default", defaultMembers);
-
-        playerData.save();
 
         return true;
     }
@@ -400,7 +396,7 @@ public class UtilTeam {
     }
 
     /**
-     * Checks if players are in the same team..
+     * Checks if players are in the same team.
      * @param p1 Player - Player 1.
      * @param p2 Player - Player 2.
      * @return boolean - If the players are in the same team.
@@ -468,7 +464,7 @@ public class UtilTeam {
     /**
      * Fetches a team's prefix.
      * @param cs String - The command sender.
-     * @return String - The team's prefix (may be blank).
+     * @return String - The team's prefix (might be blank).
      */
     public String getTeamPrefix(CommandSender cs) {
         if (cs instanceof Player p) {
