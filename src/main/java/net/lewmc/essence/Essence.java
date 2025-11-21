@@ -71,7 +71,7 @@ public class Essence extends JavaPlugin {
     /**
      * Stores which players are flying.
      */
-    public List<UUID> flyingPlayers;
+    public List<UUID> flyingPlayers = new ArrayList<>();
 
     /**
      * Stores update status.
@@ -105,6 +105,7 @@ public class Essence extends JavaPlugin {
     @Override
     public void onEnable() {
         this.foundryConfig = new FoundryConfig(this);
+        this.foundryConfig.pluginId = "ES";
         this.log = new Logger(this.foundryConfig);
 
         this.log.info("");
@@ -149,9 +150,6 @@ public class Essence extends JavaPlugin {
         this.checkForPaper();
         this.initFileSystem();
         this.loadModules();
-        
-        // Initialize flyingPlayers list to prevent NullPointerException
-        this.flyingPlayers = new ArrayList<>();
 
         this.integrations = new EssenceIntegrations(this);
         if (!this.integrations.loadPlaceholderAPI() && verbose) { this.log.warn("PlaceholderAPI not found! Using local placeholders."); }
@@ -295,6 +293,7 @@ public class Essence extends JavaPlugin {
     public void startupConfig() {
         this.config = new EssenceConfiguration(this).startup();
         this.verbose = (boolean) this.config.get("advanced.verbose");
+        this.foundryConfig.verbose = this.verbose;
     }
 
     /**
@@ -314,5 +313,10 @@ public class Essence extends JavaPlugin {
                 log.severe("Please contact lewmc.net/help for help and to report the issue.");
             }
         }
+    }
+
+    @Override
+    public void onDisable() {
+        new FoliaLib(this).getScheduler().cancelAllTasks();
     }
 }
