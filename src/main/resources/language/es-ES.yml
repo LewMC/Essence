@@ -448,6 +448,11 @@ environment:
   playertime: "§6[Essence] §eYour player time is {{1}}."
   playertimeset: "§2[Essence] §aYour player time is set to {{1}}."
   playertimereset: "§2[Essence] §aYour player time now matches server time."
+world:
+  usage: "§4[Essence] §cUsage: /world <action/world>"
+  noname: "§4[Essence] §cPlease enter a world name."
+  created: "§2[Essence] §aCreated world {{1}}."
+  notcreated: "§4[Essence] §cUnable to create world {{1}}."
 sudo:
   usage: "§4[Essence] §cUsage: /sudo <player> <usage>"
   ran: "§2[Essence] §aForced {{1}} to run '{{2}}'"
