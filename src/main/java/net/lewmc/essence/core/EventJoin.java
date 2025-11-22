@@ -6,7 +6,6 @@ import net.lewmc.essence.teleportation.tp.UtilTeleport;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -122,8 +121,9 @@ public class EventJoin implements Listener {
         } else {
             UtilTeleport tp = new UtilTeleport(plugin);
             if (Bukkit.getServer().getWorld(spawnName) == null) {
-                WorldCreator creator = new WorldCreator(spawnName);
-                creator.createWorld();
+                message.send("generic", "exception");
+                log.warn("Player " + event.getPlayer() + " attempted to teleport to spawn " + spawnName + " but couldn't due to an error.");
+                log.warn("Error: world is null, please check configuration file.");
             }
             tp.doTeleport(
                     event.getPlayer(),

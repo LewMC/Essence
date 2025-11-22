@@ -1,7 +1,6 @@
 package net.lewmc.essence.environment;
 
 import com.tcoded.folialib.FoliaLib;
-import org.bukkit.Bukkit;
 import org.bukkit.WeatherType;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -172,9 +171,8 @@ public class UtilEnvironment {
      */
     public boolean setTime(World wo, long t) {
         if (wo != null) {
-            Plugin pluginInstance = getPlugin();
-            if (pluginInstance != null) {
-                FoliaLib flib = new FoliaLib(pluginInstance);
+            if (this.plugin != null) {
+                FoliaLib flib = new FoliaLib(this.plugin);
                 // Use FoliaLib to handle both Folia and non-Folia servers
                  if (flib.isFolia()) {
                      // Use FoliaLib's global region scheduler for world time changes on Folia
@@ -191,28 +189,6 @@ public class UtilEnvironment {
         } else {
             return false;
         }
-    }
-    
-
-    
-    /**
-     * Get the plugin instance
-     * @return Plugin - plugin instance
-     */
-    private Plugin getPlugin() {
-        if (this.plugin != null) {
-            return this.plugin;
-        }
-        
-        // Fallback: try to get Essence plugin from plugin manager
-        Plugin[] plugins = Bukkit.getPluginManager().getPlugins();
-        for (Plugin plugin : plugins) {
-            if (plugin.getName().equals("Essence")) {
-                return plugin;
-            }
-        }
-        // Last resort: return first available plugin
-        return plugins.length > 0 ? plugins[0] : null;
     }
 
     /**
