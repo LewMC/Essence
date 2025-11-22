@@ -135,8 +135,7 @@ public class EssenceIntegrations {
      * Sets up Essence to use bStats Metrics.
      */
     public void loadMetrics() {
-        int pluginId = 20768;
-        Metrics metrics = new Metrics(this.plugin, pluginId);
+        Metrics metrics = new Metrics(this.plugin, 20768);
         metrics.addCustomChart(new SimplePie("language", () -> (String) this.plugin.config.get("language")));
         if (this.economy == null) {
             metrics.addCustomChart(new SimplePie("economy_enabled", () -> "false"));

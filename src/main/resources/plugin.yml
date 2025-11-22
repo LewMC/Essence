@@ -61,10 +61,9 @@ permissions:
       essence.inventory.stonecutter: true
       essence.inventory.trash: true
       essence.inventory.give: true
-      essence.inventory.give.other: true
       essence.inventory.skull: true
       essence.inventory.clear: true
-      essence.inventory.clear.other: true
+      essence.inventory.recipe: true
   essence.inventory.anvil:
     description: Allows players to open an anvil when no anvil is present.
   essence.inventory.cartography:
@@ -93,8 +92,17 @@ permissions:
     description: Clear your own inventory.
   essence.inventory.clear.other:
     description: Clear a player's inventory.
-  essence.invsee:
+  essence.inventory.invsee:
     description: See a player's inventory.
+  essence.inventory.recipe:
+    description: View a recipe.
+  essence.inventory.other.*:
+    description: Allows players to access other player's inventory.
+    default: op
+    children:
+      essence.inventory.give.other: true
+      essence.inventory.clear.other: true
+      essence.inventory.invsee: true
   essence.teleport.*:
     description: Allows players to teleport.
     default: op
@@ -109,7 +117,7 @@ permissions:
       essence.teleport.ascend: true
       essence.teleport.descend: true
       essence.teleport.random: true
-      essence.teleport.direction: true
+      essence.orientation.*: true
       essence.teleport.other: true
       essence.teleport.request.*: true
   essence.teleport.coord:
@@ -226,6 +234,7 @@ permissions:
       essence.stats.speed.other: true
       essence.stats.extinguish.other: true
       essence.stats.god.other: true
+      essence.stats.burn.other: true
   essence.stats.heal.other:
     description: Allows you to heal other players.
   essence.stats.feed.other:
@@ -238,6 +247,8 @@ permissions:
     description: Allows you to extinguish another player
   essence.stats.god.other:
     description: Allows you to toggle another player's god mode
+  essence.stats.burn.other:
+    description: Allows you to burn other players
   essence.home.*:
     description: Allows players to use the home system.
     default: op
@@ -281,7 +292,7 @@ permissions:
   essence.chat.msg:
     description: Allows players to privately message.
   essence.chat.reply:
-    description: Allows players to change display names.
+    description: Allows players to reply to /msg messages.
   essence.chat.nick.*:
     default: op
     children:

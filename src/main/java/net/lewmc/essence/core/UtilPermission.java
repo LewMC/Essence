@@ -1,13 +1,11 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Permissions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -90,24 +88,5 @@ public class UtilPermission {
         }
 
         return -1;
-    }
-
-    /**
-     * Checks if an item is blacklisted.
-     * @param item String - The item name.
-     * @return boolean - true/false is blacklisted?
-     */
-    public boolean itemIsBlacklisted(String item) {
-        Files config = new Files(this.plugin.foundryConfig, this.plugin);
-        config.load("config.yml");
-        List<String> blacklist = config.getStringList("item-blacklist");
-
-        for (String s : blacklist) {
-            if (s.equalsIgnoreCase(item)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

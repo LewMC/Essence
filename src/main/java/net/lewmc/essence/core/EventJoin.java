@@ -161,7 +161,7 @@ public class EventJoin implements Listener {
      * @param event PlayerJoinEvent - The event
      */
     private void motd(PlayerJoinEvent event) {
-        if (plugin.config.get("chat.motd") != null) {
+        if (plugin.config.get("chat.motd") instanceof String) {
             String message = plugin.config.get("chat.motd").toString();
             if (message != null) {
                 UtilPlaceholder tag = new UtilPlaceholder(plugin, event.getPlayer());
@@ -177,9 +177,13 @@ public class EventJoin implements Listener {
     private void playerJoinMessage(PlayerJoinEvent event) {
         UtilPlaceholder tag = new UtilPlaceholder(this.plugin, event.getPlayer());
         if (event.getPlayer().hasPlayedBefore()) {
-            event.setJoinMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.join")));
+            if (this.plugin.config.get("chat.broadcasts.join") instanceof String) {
+                event.setJoinMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.join")));
+            }
         } else {
-            event.setJoinMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.first-join")));
+            if (this.plugin.config.get("chat.broadcasts.first-join") instanceof String) {
+                event.setJoinMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.first-join")));
+            }
         }
     }
 

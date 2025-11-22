@@ -6,9 +6,9 @@ import net.lewmc.foundry.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * The Essence Configuration handler.
@@ -22,7 +22,7 @@ public class EssenceConfiguration {
     /**
      * The configuration in HashMap format.
      */
-    public Map<String, Object> config = new HashMap<>();
+    public ConcurrentMap<String, Object> config = new ConcurrentHashMap<>();
 
     /**
      * The config file handler.
@@ -43,6 +43,7 @@ public class EssenceConfiguration {
      * Constructs the EssenceConfiguration class.
      *
      * @param plugin Reference to the main Essence class.
+     * @since 1.10.1
      */
     public EssenceConfiguration(Essence plugin) {
         this.plugin = plugin;
@@ -52,10 +53,10 @@ public class EssenceConfiguration {
 
     /**
      * Handles Essence's configuration during startup.
-     * @return Map (String, Object) - The new configuration.
+     * @return ConcurrentHashMap (String, Object) - The new configuration.
      * @since 1.10.1
      */
-    public Map<String, Object> startup() {
+    public ConcurrentMap<String, Object> startup() {
         File configFile = new File(this.plugin.getDataFolder(), "config.yml");
 
         try {
@@ -69,10 +70,10 @@ public class EssenceConfiguration {
 
     /**
      * Reload's Essence's configuration.
-     * @return Map (String, Object) - The new configuration.
+     * @return ConcurrentHashMap (String, Object) - The new configuration.
      * @since 1.10.1
      */
-    public Map<String, Object> reload() {
+    public ConcurrentMap<String, Object> reload() {
         if (!this.configFile.exists("config.yml")) {
             this.plugin.saveDefaultConfig();
             if (!this.configFile.exists("config.yml")) {
@@ -95,10 +96,10 @@ public class EssenceConfiguration {
         putBoolean("chat.enabled", (boolean) getValue("chat.enabled", true, Boolean.class));
         putString("chat.name-format", (String) getValue("chat.name-format", "%essence_combined_prefix% %essence_player%%essence_player_suffix%:", String.class));
         putBoolean("chat.allow-message-formatting", (boolean) getValue("chat.allow-message-formatting", true, Boolean.class));
-        putString("chat.broadcasts.first-join", (String) getValue("chat.broadcasts.first-join", "§a%essence_player% joined the server for the first time!", String.class));
-        putString("chat.broadcasts.join", (String) getValue("chat.broadcasts.join", "§e%essence_player% joined the server!", String.class));
-        putString("chat.broadcasts.leave", (String) getValue("chat.broadcasts.leave", "§c%essence_player% left the server!", String.class));
-        putString("chat.motd", (String) getValue("chat.motd", "§2§lWelcome to the server!", String.class));
+        putObject("chat.broadcasts.first-join", getValue("chat.broadcasts.first-join", "§a%essence_player% joined the server for the first time!", String.class, Boolean.class));
+        putObject("chat.broadcasts.join", getValue("chat.broadcasts.join", "§e%essence_player% joined the server!", String.class, Boolean.class));
+        putObject("chat.broadcasts.leave", getValue("chat.broadcasts.leave", "§c%essence_player% left the server!", String.class, Boolean.class));
+        putObject("chat.motd", getValue("chat.motd", "§2§lWelcome to the server!", String.class, Boolean.class));
         putBoolean("chat.manage-chat", (boolean) getValue("chat.manage-chat", true, Boolean.class));
 
         putBoolean("economy.enabled", (boolean) getValue("economy.enabled", true, Boolean.class));
@@ -160,10 +161,23 @@ public class EssenceConfiguration {
     }
 
     /**
+     * Updates the value of an object.
+     *
+     * @param key String - The key
+     * @param value Object - The value
+     * @since 1.11.0
+     */
+    private void putObject(String key, Object value) {
+        config.put(key, value);
+        verboseLog(key);
+    }
+
+    /**
      * Updates the value of a string.
      *
      * @param key String - The key
      * @param value String - The value
+     * @since 1.10.1
      */
     private void putString(String key, String value) {
         config.put(key, value);
@@ -175,6 +189,7 @@ public class EssenceConfiguration {
      *
      * @param key String - The key
      * @param value List of Strings - The string list value
+     * @since 1.10.1
      */
     private void putStringList(String key, List<String> value) {
         config.put(key, value);
@@ -186,6 +201,7 @@ public class EssenceConfiguration {
      *
      * @param key String - The key
      * @param value Integer - The integer value.
+     * @since 1.10.1
      */
     private void putInt(String key, Integer value) {
         config.put(key, value);
@@ -197,6 +213,7 @@ public class EssenceConfiguration {
      *
      * @param key String - The key
      * @param value Double - The double value.
+     * @since 1.10.1
      */
     private void putDouble(String key, Double value) {
         config.put(key, value);
@@ -208,6 +225,7 @@ public class EssenceConfiguration {
      *
      * @param key String - The key
      * @param value Boolean - The boolean value
+     * @since 1.10.1
      */
     private void putBoolean(String key, Boolean value) {
         config.put(key, value);
@@ -218,22 +236,25 @@ public class EssenceConfiguration {
      * Gets the current value of a configuration item and type checks it.
      * @param key String - The key
      * @param defaultValue Object - The default value if type checking fails.
-     * @param clazz Class(?) - The class it should be.
-     * @return Object - The value (will match type of clazz)
+     * @param classes Class<?>... - The classes it can be.
+     * @return Object - The value (will match one of the types in classes)
+     * @since 1.11.0
      */
-    private Object getValue(String key, Object defaultValue, Class<?> clazz) {
+    private Object getValue(String key, Object defaultValue, Class<?>... classes) {
         if (this.configFile.get(key) != null) {
             Object value = this.configFile.get(key);
-            if (clazz.isInstance(value)) {
-                return clazz.cast(value);
-            } else {
-                this.changesMade = true;
-                this.configFile.set(key, defaultValue);
-                this.log.warn("Config > Value '"+key+"' had invalid type.");
-                this.log.warn("Config > Value '"+key+"' was reset to '"+defaultValue+"'.");
-                this.log.warn("Config > Please double-check your configuration is correct.");
-                return clazz.cast(defaultValue);
+            for (Class<?> clazz : classes) {
+                if (clazz.isInstance(value)) {
+                    return value;
+                }
             }
+
+            this.changesMade = true;
+            this.configFile.set(key, defaultValue);
+            this.log.warn("Config > Value '" + key + "' had invalid type.");
+            this.log.warn("Config > Value '" + key + "' was reset to '" + defaultValue + "'.");
+            this.log.warn("Config > Please double-check your configuration is correct.");
+            return defaultValue;
         } else {
             this.changesMade = true;
             this.configFile.set(key, defaultValue);
@@ -247,6 +268,7 @@ public class EssenceConfiguration {
      * Logs the new config file to console if verbose mode is enabled.
      *
      * @param key String - The key
+     * @since 1.10.1
      */
     private void verboseLog(String key) {
         if ((boolean) config.get("advanced.verbose")) {
