@@ -100,6 +100,11 @@ public class Essence extends JavaPlugin {
     public boolean verbose;
 
     /**
+     * Stores the language file.
+     */
+    public Files messageStore;
+
+    /**
      * This function runs when Essence is enabled.
      */
     @Override
@@ -263,6 +268,9 @@ public class Essence extends JavaPlugin {
             this.log.severe("Please check the file and try again.");
             getServer().getPluginManager().disablePlugin(this);
         }
+
+        this.messageStore = new Files(this.foundryConfig, this);
+        this.messageStore.load("language/"+(String) this.config.get("language")+".yml");
     }
 
     /**
@@ -318,5 +326,6 @@ public class Essence extends JavaPlugin {
     @Override
     public void onDisable() {
         new FoliaLib(this).getScheduler().cancelAllTasks();
+        this.messageStore.close();
     }
 }
