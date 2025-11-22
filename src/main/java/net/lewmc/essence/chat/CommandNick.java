@@ -5,6 +5,7 @@ import net.lewmc.essence.core.UtilCommand;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.core.UtilPlayer;
+import net.lewmc.foundry.Security;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -48,19 +49,24 @@ public class CommandNick extends FoundryCommand {
 
         if (args.length == 1) {
             if (cmd.console(cs)) {
-                msg.send("nick","consoleusage");
+                msg.send("nick", "consoleusage");
+                return true;
+            }
+
+            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[0]))  {
+                msg.send("nick", "specialchars");
                 return true;
             }
 
             if (args[0].equalsIgnoreCase("off")) {
                 if (pu.removeDisplayname(cs)) {
-                    msg.send("nick","success", new String[]{cs.getName()});
+                    msg.send("nick", "success", new String[]{cs.getName()});
                 }
                 return true;
             }
 
             if (pu.setDisplayname(cs, args[0])) {
-                msg.send("nick","success", new String[]{args[0]});
+                msg.send("nick", "success", new String[]{args[0]});
             }
         } else if (args.length == 2) {
             UtilPermission perms = new UtilPermission(this.plugin, cs);
@@ -69,6 +75,11 @@ public class CommandNick extends FoundryCommand {
 
             if (player == null) {
                 msg.send("generic","playernotfound");
+                return true;
+            }
+
+            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[1]))  {
+                msg.send("nick", "specialchars");
                 return true;
             }
 
