@@ -53,7 +53,7 @@ public class ModuleTeleportation extends FoundryModule {
         if (!this.cmd.isDisabled("setwarp")) { reg.runtimeCommand("setwarp", new CommandSetwarp((Essence) plugin)); }
         if (!this.cmd.isDisabled("delwarp")) { reg.runtimeCommand("delwarp", new CommandDelwarp((Essence) plugin)); }
 
-        if (!this.cmd.isDisabled("spawn")) { reg.runtimeCommand("spawn", new CommandSpawn((Essence) plugin),"spawnpoint", "worldspawn"); }
+        if (!this.cmd.isDisabled("spawn")) { reg.runtimeCommand("spawn", new CommandSpawn((Essence) plugin),"spawnpoint", "world", "worldspawn"); }
         if (!this.cmd.isDisabled("setspawn")) { reg.runtimeCommand("setspawn", new CommandSetspawn((Essence) plugin), "spawnset", "setworldspawn"); }
 
         if (!this.cmd.isDisabled("back")) { reg.runtimeCommand("back", new CommandBack((Essence) plugin)); }
