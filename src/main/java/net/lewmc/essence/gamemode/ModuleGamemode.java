@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ModuleGamemode extends FoundryModule {
 
-    private final UtilCommand cmd;
+    private UtilCommand cmd;
 
     /**
      * Constructor for the module.
@@ -21,7 +21,6 @@ public class ModuleGamemode extends FoundryModule {
      */
     public ModuleGamemode(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
-        this.cmd = new UtilCommand((Essence) this.plugin);
     }
 
     /**
@@ -29,6 +28,7 @@ public class ModuleGamemode extends FoundryModule {
      */
     @Override
     public void registerCommands() {
+        this.cmd = new UtilCommand((Essence) this.plugin);
         if (!this.cmd.isDisabled("gamemode")) { reg.runtimeCommand("gamemode", new CommandGamemode((Essence) plugin), "gm"); }
         if (!this.cmd.isDisabled("gma")) { reg.runtimeCommand("gma", new CommandGma((Essence) plugin)); }
         if (!this.cmd.isDisabled("gmc")) { reg.runtimeCommand("gmc", new CommandGmc((Essence) plugin)); }

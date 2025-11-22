@@ -66,7 +66,7 @@ public class CommandGive extends FoundryCommand {
             }
         } else if (args.length == 2) {
             // Try to parse as /give <item> <amount> for self
-            if (cs instanceof Player player && Parser.isNumeric(args[1]) ) {
+            if (cs instanceof Player player && new Parser().isNumeric(args[1]) ) {
                 try {
                     int amount = this.parseItemAmount(args[1]);
 

@@ -5,7 +5,7 @@ import net.lewmc.essence.Essence;
 /**
  * Help command class.
  */
-public class CommandExtensionHelp {
+public class CommandExtHelp {
     private final UtilMessage message;
     private final String[] args;
     private final Essence plugin;
@@ -16,7 +16,7 @@ public class CommandExtensionHelp {
      * @param message MessageUtil - Instance of the MessageUtil class.
      * @param args String[] - Array of command arguments.
      */
-    public CommandExtensionHelp(Essence plugin, UtilMessage message, String[] args) {
+    public CommandExtHelp(Essence plugin, UtilMessage message, String[] args) {
         this.plugin = plugin;
         this.message = message;
         this.args = args;
@@ -186,6 +186,12 @@ public class CommandExtensionHelp {
                 if (!cu.isDisabled("kit")) { this.message.send("help", "kit"); } else { blank++; }
                 this.blank(blank);
                 this.message.send("help", "page", new String[] { "1", "1" });
+            } else if ("world".equalsIgnoreCase(args[1])) {
+                int blank = 7;
+                this.message.send("help", "world");
+                if (!cu.isDisabled("world")) { this.message.send("help", "worldcmd"); } else { blank++; }
+                this.blank(blank);
+                this.message.send("help", "page", new String[] { "1", "1" });
             } else if ("team".equalsIgnoreCase(args[1]) && !cu.isDisabled("team")) {
                 if (args.length < 3 || args[2].equals("1")) {
                     this.message.send("help", "team");
@@ -212,6 +218,7 @@ public class CommandExtensionHelp {
             } else if ("2".equalsIgnoreCase(args[1])) {
                 this.message.send("help", "help");
                 this.message.send("help", "helpadmin");
+                this.message.send("help", "helpworld");
                 this.message.send("help", "helpmisc");
                 this.blank(6);
                 this.message.send("help", "page", new String[] { "2", "2" });
@@ -219,7 +226,6 @@ public class CommandExtensionHelp {
                 this.message.send("help", "nochapter");
             }
         } else {
-            int blank = 0;
             this.message.send("help", "help");
             this.message.send("help", "helpchat");
             this.message.send("help", "helpinventory");
@@ -227,15 +233,9 @@ public class CommandExtensionHelp {
             this.message.send("help", "helpteleport");
             this.message.send("help", "helpstats");
             this.message.send("help", "helpeconomy");
-            if (!cu.isDisabled("team")) { this.message.send("help", "helpteam"); } else { blank++; }
+            this.message.send("help", "helpteam");
             this.message.send("help", "helpenvironment");
-            if (blank != 0) {
-                this.message.send("help", "helpadmin");
-                this.message.send("help", "helpmisc");
-                this.message.send("help", "page", new String[] { "1", "1" });
-            } else {
-                this.message.send("help", "page", new String[]{"1", "2"});
-            }
+            this.message.send("help", "page", new String[]{"1", "2"});
         }
         return true;
     }

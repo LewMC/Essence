@@ -425,8 +425,6 @@ permissions:
     children:
       essence.world: true
       essence.world.create: true
-  essence.world:
-    description: Allows access to the /world command.
   essence.world.teleport:
     description: Allows teleporting between worlds.
   essence.world.create:
