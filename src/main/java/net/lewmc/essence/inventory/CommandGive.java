@@ -1,6 +1,7 @@
 package net.lewmc.essence.inventory;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilItem;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.core.UtilPlayer;
@@ -48,10 +49,11 @@ public class CommandGive extends FoundryCommand {
         this.msg = new UtilMessage(this.plugin, cs);
         UtilPlayer up = new UtilPlayer(this.plugin);
         UtilPermission perm = new UtilPermission(this.plugin, cs);
+        UtilItem ui = new UtilItem(this.plugin);
 
         if (args.length == 1) {
             if (cs instanceof Player player) {
-                if (perm.itemIsBlacklisted(args[0])) { this.msg.send("give","blacklisted", new String[] {args[0]}); return true; }
+                if (ui.itemIsBlacklisted(args[0])) { this.msg.send("give","blacklisted", new String[] {args[0]}); return true; }
 
                 if (up.givePlayerItem(player, args[0], 1)) {
                     this.msg.send("give","gaveself", new String[] {"1", args[0]});
@@ -68,7 +70,7 @@ public class CommandGive extends FoundryCommand {
                 try {
                     int amount = this.parseItemAmount(args[1]);
 
-                    if (perm.itemIsBlacklisted(args[0])) {
+                    if (ui.itemIsBlacklisted(args[0])) {
                         this.msg.send("give", "blacklisted", new String[]{args[0]});
                         return true;
                     }
@@ -79,7 +81,8 @@ public class CommandGive extends FoundryCommand {
                     }
                     return true;
                 } catch (NumberFormatException e) {
-                    // Not a number, try as /give <player> <item>
+                    this.msg.send("generic", "exception");
+                    this.plugin.log.warn(e.getMessage());
                 }
             }
 
@@ -92,7 +95,7 @@ public class CommandGive extends FoundryCommand {
                 this.msg.send("generic", "playernotfound");
                 return true;
             }
-            if (perm.itemIsBlacklisted(args[1])) {
+            if (ui.itemIsBlacklisted(args[1])) {
                 this.msg.send("give", "blacklisted", new String[]{args[1]});
                 return true;
             }
@@ -113,7 +116,7 @@ public class CommandGive extends FoundryCommand {
             }
             try {
                 int amount = this.parseItemAmount(args[2]);
-                if (perm.itemIsBlacklisted(args[1])) {
+                if (ui.itemIsBlacklisted(args[1])) {
                     this.msg.send("give", "blacklisted", new String[]{args[1]});
                     return true;
                 }
