@@ -64,7 +64,7 @@ public class CommandSpawn extends FoundryPlayerCommand {
         String spawnName;
 
         if (args.length == 1) {
-            if (new UtilPermission(this.plugin, cs).has("essence.spawn.other")) {
+            if (new UtilPermission(this.plugin, cs).has("essence.world.teleport")) {
                 spawnName = args[0];
             } else {
                 msg.send("spawn", "worldnoperms");

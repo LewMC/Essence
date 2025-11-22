@@ -12,6 +12,7 @@ import net.lewmc.essence.kit.ModuleKit;
 import net.lewmc.essence.stats.ModuleStats;
 import net.lewmc.essence.team.ModuleTeam;
 import net.lewmc.essence.teleportation.ModuleTeleportation;
+import net.lewmc.essence.world.ModuleWorld;
 import net.lewmc.foundry.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -292,6 +293,7 @@ public class Essence extends JavaPlugin {
         if ((boolean) this.config.get("stats.enabled")) { new ModuleStats(this, reg); if (this.verbose) { this.log.info("Loaded module: STATS"); } } else { if (this.verbose) { this.log.warn("Disabled module: STATS"); } }
         if ((boolean) this.config.get("team.enabled")) { new ModuleTeam(this, reg); if (this.verbose) { this.log.info("Loaded module: TEAM"); } } else { if (this.verbose) { this.log.warn("Disabled module: TEAM"); } }
         if ((boolean) this.config.get("teleportation.enabled")) { new ModuleTeleportation(this, reg); if (this.verbose) { this.log.info("Loaded module: TELEPORTATION"); } } else { if (this.verbose) { this.log.warn("Disabled module: TELEPORTATION"); } }
+        if ((boolean) this.config.get("world.enabled")) { new ModuleWorld(this, reg); if (this.verbose) { this.log.info("Loaded module: WORLD"); } } else { if (this.verbose) { this.log.warn("Disabled module: WORLD"); } }
     }
 
     /**

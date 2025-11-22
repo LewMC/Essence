@@ -26,6 +26,7 @@ permissions:
       essence.spawn.*: true
       essence.kits.*: true
       essence.environment.*: true
+      essence.world.*: true
       essence.rules: true
   essence.gamemode.*:
     description: Allows players to switch to any gamemode.
@@ -342,14 +343,11 @@ permissions:
     children:
       essence.spawn: true
       essence.spawn.set: true
-      essence.spawn.other: true
   essence.spawn.set:
     description: Set the spawn.
   essence.spawn:
     default: not op
     description: Teleport to spawn.
-  essence.spawn.other:
-    description: Teleport to other world's spawns.
   essence.kits.*:
     description: Allows players to access all kit commands.
     default: op
@@ -421,3 +419,17 @@ permissions:
     description: Allows changing your player time.
   essence.environment.pweather:
     description: Allows changing your player weather.
+  essence.world.*:
+    description: Allows changing environmental variables.
+    default: op
+    children:
+      essence.world: true
+      essence.world.create: true
+  essence.world:
+    description: Allows access to the /world command.
+  essence.world.teleport:
+    description: Allows teleporting between worlds.
+  essence.world.create:
+    description: Allows creation of worlds.
+  essence.world.delete:
+    description: Allows deletion of worlds.
