@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -587,12 +586,11 @@ public class UtilPlayer {
      */
     public boolean givePlayerItem(Player p, String item, int amount) {
         try {
-            PlayerInventory inventory = p.getInventory();
-            Material mat = Material.matchMaterial(item);
+            Material mat = new UtilItem(this.plugin).getMaterial(item);
             if (mat == null) {
                 return false;
             } else {
-                inventory.addItem(new ItemStack(mat, amount));
+                p.getInventory().addItem(new ItemStack(mat, amount));
                 return true;
             }
         } catch (Exception e) {
