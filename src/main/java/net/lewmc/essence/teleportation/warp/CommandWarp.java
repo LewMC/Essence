@@ -8,7 +8,6 @@ import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -80,7 +79,9 @@ public class CommandWarp extends FoundryPlayerCommand {
             World world = Bukkit.getServer().getWorld(config.getString("warps." + args[0].toLowerCase() + ".world"));
             
             if (world == null) {
-                world = new WorldCreator(config.getString("warps." + args[0].toLowerCase() + ".world")).createWorld();
+                msg.send("generic", "exception");
+                this.log.warn("Player " + p + " attempted to warp to " + args[0].toLowerCase() + " but couldn't due to an error.");
+                log.warn("Error: world is null, please check configuration file.");
             }
 
             if (waitTime > 0) {

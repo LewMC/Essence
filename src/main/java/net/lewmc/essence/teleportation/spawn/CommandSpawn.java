@@ -9,7 +9,6 @@ import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -108,7 +107,9 @@ public class CommandSpawn extends FoundryPlayerCommand {
             }
 
             if (Bukkit.getServer().getWorld(spawnName) == null) {
-                new WorldCreator(spawnName).createWorld();
+                msg.send("generic", "exception");
+                log.warn("Player " + p + " attempted to teleport to spawn " + spawnName + " but couldn't due to an error.");
+                log.warn("Error: world is null, please check configuration file.");
             }
 
             teleportLocation = new Location(
