@@ -453,13 +453,15 @@ environment:
 world:
   usage: "§4[Essence] §cUsage: /world <action> <name>"
   noname: "§4[Essence] §cPlease enter a world name."
-  notcreated: "§4[Essence] §cUnable to create world '{{1}}'."
-  notfound: "§4[Essence] §cWorld '{{1}}' could not be found."
-  error: "§4[Essence] §cUnable to create world: {{1}}."
   created: "§2[Essence] §aWorld '{{1}}' created successfully."
+  notcreated: "§4[Essence] §cUnable to create world '{{1}}': {{2}}."
   alreadyexists: "§4[Essence] §cWorld '{{1}}' already exists."
   unloaded: "§2[Essence] §aWorld '{{1}}' unloaded successfully."
   loaded: "§2[Essence] §aWorld '{{1}}' loaded successfully."
+  notloaded: "§4[Essence] §cUnable to load world '{{1}}': {{2}}."
+  notfound: "§4[Essence] §cWorld '{{1}}' could not be found."
+  listloaded: "§6[Essence] §eLoaded: {{1}}"
+  listunloaded: "§6[Essence] §eUnloaded: {{1}}"
 sudo:
   usage: "§4[Essence] §cUsage: /sudo <player> <usage>"
   ran: "§2[Essence] §aForced {{1}} to run '{{2}}'"

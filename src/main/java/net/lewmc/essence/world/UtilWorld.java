@@ -1,7 +1,6 @@
 package net.lewmc.essence.world;
 
 import net.lewmc.essence.Essence;
-import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.Parser;
 import net.lewmc.foundry.Security;
@@ -10,7 +9,8 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
-import java.util.Map;
+import java.io.File;
+import java.util.*;
 
 /**
  * The UtilWorld class, used for world management.
@@ -89,7 +89,7 @@ public class UtilWorld {
             }
 
             if (flags.get("-s") != null) {
-                if (new Parser().isNumeric(flags.get("-s"))) {
+                if (Parser.isNumeric(flags.get("-s"))) {
                     try {
                         wc.seed(Long.parseLong(flags.get("-s")));
                     } catch (NumberFormatException e) {
@@ -162,34 +162,60 @@ public class UtilWorld {
         World world = Bukkit.getWorld(name);
 
         if (world == null) {
-            return WORLD_STATUS.NOT_FOUND;
-        } else {
-            if (this.plugin.getServer().getWorlds().add(world)) {
-                Files f = new Files(this.plugin.foundryConfig, this.plugin);
-                if (!f.exists("data/worlds.yml")) {
-                    f.create("data/worlds.yml");
-                }
-                f.load("data/worlds.yml");
-                if (f.get("world." + world.getUID()) == null) {
-                    f.set("world." + world.getUID() + ".name", world.getName());
-                    f.set("world." + world.getUID() + ".folder", world.getWorldFolder().toString());
-                    f.set("world." + world.getUID() + ".can-enter", true);
-                    f.set("world." + world.getUID() + ".spawn.x", world.getSpawnLocation().getX());
-                    f.set("world." + world.getUID() + ".spawn.y", world.getSpawnLocation().getY());
-                    f.set("world." + world.getUID() + ".spawn.z", world.getSpawnLocation().getZ());
-                    f.set("world." + world.getUID() + ".spawn.yaw", world.getSpawnLocation().getYaw());
-                    f.set("world." + world.getUID() + ".spawn.pitch", world.getSpawnLocation().getPitch());
-                    f.save();
-                } else {
-                    f.close();
-                }
+            File worldFolder = new File(Bukkit.getWorldContainer(), name);
 
+            if (worldFolder.exists()) {
+                WorldCreator.name(name).createWorld();
                 return WORLD_STATUS.LOADED;
             } else {
-                return WORLD_STATUS.OTHER_ERROR;
+                return WORLD_STATUS.NOT_FOUND;
             }
+        } else {
+            return WORLD_STATUS.LOADED;
         }
     }
+
+    /**
+     * Returns a list of worlds (loaded and unloaded).
+     * @return List(ESSENCE_WORLD)
+     */
+    public List<ESSENCE_WORLD> list() {
+        List<ESSENCE_WORLD> worlds = new ArrayList<>();
+
+        // Loaded worlds
+        List<World> loadedWorlds = Bukkit.getWorlds();
+
+        for (World w : loadedWorlds) {
+            ESSENCE_WORLD world = new ESSENCE_WORLD();
+            world.uuid = w.getUID();
+            world.name = w.getName();
+            world.status = WORLD_STATUS.LOADED;
+
+            worlds.add(world);
+        }
+
+        // Unloaded worlds
+        File worldContainer = Bukkit.getWorldContainer();
+        File[] folders = worldContainer.listFiles(File::isDirectory);
+
+        if (folders != null) {
+            for (File folder : folders) {
+
+                if (loadedWorlds.stream().anyMatch(w -> w.getName().equals(folder.getName()))) continue;
+                if (!new File(folder, "level.dat").exists()) continue;
+
+                ESSENCE_WORLD world = new ESSENCE_WORLD();
+                world.uuid = null;
+                world.name = folder.getName();
+                world.status = WORLD_STATUS.UNLOADED;
+
+                worlds.add(world);
+            }
+        }
+
+        return worlds;
+    }
+
 
     /**
      * Various status codes for transmitting data about worlds.
@@ -207,5 +233,14 @@ public class UtilWorld {
         OTHER_ERROR,
         INVALID_CHARS,
         NOT_FOUND
+    }
+
+    /**
+     * Essence's world data object.
+     */
+    public static class ESSENCE_WORLD {
+        UUID uuid;
+        String name;
+        WORLD_STATUS status;
     }
 }
