@@ -1,6 +1,8 @@
 package net.lewmc.essence.teleportation.tp;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilMessage;
+import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.Objects;
@@ -46,12 +48,14 @@ public class UtilTeleportRequest {
             return false;
         }
 
-        for (Map.Entry<String, String[]> entry : this.plugin.teleportRequests.entrySet()) {
+        // 使用Iterator来安全地遍历和删除元素，避免ConcurrentModificationException
+        java.util.Iterator<Map.Entry<String, String[]>> iterator = this.plugin.teleportRequests.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, String[]> entry = iterator.next();
             String[] values = entry.getValue();
-            String key = entry.getKey();
 
             if (values.length > 0 && values[0].equalsIgnoreCase(requester)) {
-                this.plugin.teleportRequests.remove(key);
+                iterator.remove(); // 使用Iterator的remove方法安全删除
                 found = true;
             }
         }
@@ -80,19 +84,29 @@ public class UtilTeleportRequest {
             return false;
         }
 
+        String requesterName = tpaRequest[0];
+        Player requesterPlayer = this.plugin.getServer().getPlayer(requesterName);
+        
         UtilTeleport tpu = new UtilTeleport(this.plugin);
         if (Objects.equals(tpaRequest[1], "true")) {
             tpu.doTeleport(
                     this.plugin.getServer().getPlayer(requested),
-                    this.plugin.getServer().getPlayer(tpaRequest[0]).getLocation(),
-                    0
+                    this.plugin.getServer().getPlayer(requesterName).getLocation(),
+                    0,
+                    true
             );
         } else {
             tpu.doTeleport(
-                    this.plugin.getServer().getPlayer(tpaRequest[0]),
+                    this.plugin.getServer().getPlayer(requesterName),
                     this.plugin.getServer().getPlayer(requested).getLocation(),
-                    0
+                    0,
+                    true
             );
+        }
+
+        // 通知请求发起者请求已被接受
+        if (requesterPlayer != null) {
+            new UtilMessage(this.plugin, requesterPlayer).send("teleport", "requestaccepted", new String[]{requested});
         }
 
         this.deleteFromRequested(requested);

@@ -2,7 +2,7 @@ package net.lewmc.essence.teleportation.tp;
 
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
-import net.lewmc.essence.core.UtilLocation;
+import net.lewmc.essence.teleportation.UtilLocation;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
@@ -98,8 +98,25 @@ public class CommandTprandom extends FoundryPlayerCommand {
             return true;
         }
 
-        this.flib.getScheduler().runAsync(wrappedTask -> {
-            Location teleportLocation = loc.GetRandomLocation(p, wb);
+        // Generate random coordinates (no world operations involved)
+        Location center = wb.getCenter();
+        double maxX = (center.getBlockX() + (wb.getSize() / 2));
+        double minX = (center.getBlockX() - (wb.getSize() / 2));
+        double maxZ = (center.getBlockZ() + (wb.getSize() / 2));
+        double minZ = (center.getBlockZ() - (wb.getSize() / 2));
+        int x = (int) (minX + (maxX - minX) * this.plugin.rand.nextDouble());
+        int z = (int) (minZ + (maxZ - minZ) * this.plugin.rand.nextDouble());
+        Location baseLoc = new Location(p.getWorld(), x, 0, z);
+        
+        // Execute world operations on the correct thread
+        this.flib.getScheduler().runAtLocation(baseLoc, wrappedTask -> {
+            int attempt = 1;
+            int y = loc.GetGroundY(p.getWorld(), x, z);
+            while (y == -64 && attempt != 3) {
+                y = loc.GetGroundY(p.getWorld(), x, z);
+                attempt++;
+            }
+            Location teleportLocation = new Location(p.getWorld(), x, y, z);
             this.checkChunkLoaded(p, teleportLocation);
         });
         return true;
@@ -120,9 +137,10 @@ public class CommandTprandom extends FoundryPlayerCommand {
             return;
         }
 
-        Chunk chunk = teleportLocation.getChunk();
         if (this.flib.isFolia()) {
+            // In Folia environment, chunk operations must be performed on the correct thread
             flib.getScheduler().runAtLocation(teleportLocation, wrappedTask -> {
+                Chunk chunk = teleportLocation.getChunk();
                 if (!chunk.isLoaded()) {
                     message.send("tprandom", "generating");
                     chunk.load(true);
@@ -130,6 +148,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
                 doTeleportation(player, teleportLocation);
             });
         } else {
+            Chunk chunk = teleportLocation.getChunk();
             if (!chunk.isLoaded()) {
                 message.send("tprandom", "generating");
                 chunk.load(true);
@@ -142,6 +161,7 @@ public class CommandTprandom extends FoundryPlayerCommand {
         this.teleUtil.setCooldown(player, "randomtp");
 
         UtilTeleport tp = new UtilTeleport(plugin);
-        tp.doTeleport(player, teleportLocation, 0);
+        // Use minimum delay of 1 tick to avoid FoliaLib warnings
+        tp.doTeleport(player, teleportLocation, 1, true);
     }
 }

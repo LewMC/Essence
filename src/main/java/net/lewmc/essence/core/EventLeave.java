@@ -1,6 +1,7 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.teleportation.UtilLocation;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -29,6 +30,16 @@ public class EventLeave implements Listener {
         locationUtil.UpdateLastLocation(event.getPlayer());
 
         UtilPlaceholder tag = new UtilPlaceholder(this.plugin, event.getPlayer());
-        event.setQuitMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.leave")));
+        if (this.plugin.config.get("chat.broadcasts.leave") instanceof String) {
+            event.setQuitMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.leave")));
+        }
+
+        UtilPlayer up = new UtilPlayer(this.plugin);
+        if (!up.savePlayer(event.getPlayer().getUniqueId())) {
+            this.plugin.log.severe("Unable to save player data.");
+            this.plugin.log.warn("It wasn't possible to save "+event.getPlayer().getName()+"'s player data.");
+            this.plugin.log.warn("The player data may be stale/outdated.");
+        }
+        up.unloadPlayer(event.getPlayer().getUniqueId());
     }
 }

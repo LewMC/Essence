@@ -3,9 +3,7 @@ package net.lewmc.essence;
 import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.admin.ModuleAdmin;
 import net.lewmc.essence.chat.ModuleChat;
-import net.lewmc.essence.core.ModuleCore;
-import net.lewmc.essence.core.UtilCommand;
-import net.lewmc.essence.core.UtilUpdate;
+import net.lewmc.essence.core.*;
 import net.lewmc.essence.economy.ModuleEconomy;
 import net.lewmc.essence.environment.ModuleEnvironment;
 import net.lewmc.essence.gamemode.ModuleGamemode;
@@ -14,6 +12,7 @@ import net.lewmc.essence.kit.ModuleKit;
 import net.lewmc.essence.stats.ModuleStats;
 import net.lewmc.essence.team.ModuleTeam;
 import net.lewmc.essence.teleportation.ModuleTeleportation;
+import net.lewmc.essence.world.ModuleWorld;
 import net.lewmc.foundry.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -21,6 +20,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * The main Essence class.
@@ -29,14 +30,21 @@ public class Essence extends JavaPlugin {
     /**
      * The logging system.
      */
-    private Logger log;
+    public Logger log;
 
     /**
      * Stores pending teleport requests.
      * String = The requested player's name.
      * String[] = The requester and if the requested player should teleport to them or not ("true" or "false")
      */
-    public Map<String, String[]> teleportRequests = new HashMap<>();
+    public ConcurrentMap<String, String[]> teleportRequests = new ConcurrentHashMap<>();
+
+    /**
+     * Stores pending player clears.
+     * UUID = The requested player's UUID.
+     * TypePendingRequests.TypePendingClears = Data
+     */
+    public ConcurrentMap<UUID, TypePendingRequests.TypePendingClears> pendingClears = new ConcurrentHashMap<>();
 
     /**
      * Stores pending teleports.
@@ -49,17 +57,22 @@ public class Essence extends JavaPlugin {
      * CommandSender = The receiver.
      * CommandSender = The sender.
      */
-    public Map<CommandSender, CommandSender> msgHistory = new HashMap<>();
+    public ConcurrentMap<CommandSender, CommandSender> msgHistory = new ConcurrentHashMap<>();
+
+    /**
+     * Stores a cache of player data.
+     */
+    public ConcurrentMap<UUID, TypePlayer> players = new ConcurrentHashMap<>();
 
     /**
      * Store's Essence's configuration.
      */
-    public Map<String, Object> config;
+    public ConcurrentMap<String, Object> config;
 
     /**
      * Stores which players are flying.
      */
-    public List<UUID> flyingPlayers;
+    public List<UUID> flyingPlayers = new ArrayList<>();
 
     /**
      * Stores update status.
@@ -88,11 +101,17 @@ public class Essence extends JavaPlugin {
     public boolean verbose;
 
     /**
+     * Stores the language file.
+     */
+    public Files messageStore;
+
+    /**
      * This function runs when Essence is enabled.
      */
     @Override
     public void onEnable() {
         this.foundryConfig = new FoundryConfig(this);
+        this.foundryConfig.pluginId = "ES";
         this.log = new Logger(this.foundryConfig);
 
         this.log.info("");
@@ -250,6 +269,9 @@ public class Essence extends JavaPlugin {
             this.log.severe("Please check the file and try again.");
             getServer().getPluginManager().disablePlugin(this);
         }
+
+        this.messageStore = new Files(this.foundryConfig, this);
+        this.messageStore.load("language/"+(String) this.config.get("language")+".yml");
     }
 
     /**
@@ -271,6 +293,7 @@ public class Essence extends JavaPlugin {
         if ((boolean) this.config.get("stats.enabled")) { new ModuleStats(this, reg); if (this.verbose) { this.log.info("Loaded module: STATS"); } } else { if (this.verbose) { this.log.warn("Disabled module: STATS"); } }
         if ((boolean) this.config.get("team.enabled")) { new ModuleTeam(this, reg); if (this.verbose) { this.log.info("Loaded module: TEAM"); } } else { if (this.verbose) { this.log.warn("Disabled module: TEAM"); } }
         if ((boolean) this.config.get("teleportation.enabled")) { new ModuleTeleportation(this, reg); if (this.verbose) { this.log.info("Loaded module: TELEPORTATION"); } } else { if (this.verbose) { this.log.warn("Disabled module: TELEPORTATION"); } }
+        if ((boolean) this.config.get("world.enabled")) { new ModuleWorld(this, reg); if (this.verbose) { this.log.info("Loaded module: WORLD"); } } else { if (this.verbose) { this.log.warn("Disabled module: WORLD"); } }
     }
 
     /**
@@ -280,6 +303,7 @@ public class Essence extends JavaPlugin {
     public void startupConfig() {
         this.config = new EssenceConfiguration(this).startup();
         this.verbose = (boolean) this.config.get("advanced.verbose");
+        this.foundryConfig.verbose = this.verbose;
     }
 
     /**
@@ -299,5 +323,11 @@ public class Essence extends JavaPlugin {
                 log.severe("Please contact lewmc.net/help for help and to report the issue.");
             }
         }
+    }
+
+    @Override
+    public void onDisable() {
+        new FoliaLib(this).getScheduler().cancelAllTasks();
+        this.messageStore.close();
     }
 }

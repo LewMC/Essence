@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ModuleGamemode extends FoundryModule {
 
+    private final UtilCommand cmd;
+
     /**
      * Constructor for the module.
      * @param plugin    JavaPlugin - Reference to the main Essence class.
@@ -19,6 +21,7 @@ public class ModuleGamemode extends FoundryModule {
      */
     public ModuleGamemode(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
+        this.cmd = new UtilCommand((Essence) this.plugin);
     }
 
     /**
@@ -26,12 +29,11 @@ public class ModuleGamemode extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
-        if (!cmd.isDisabled("gamemode")) { reg.runtimeCommand("gamemode", new CommandGamemode((Essence) plugin), "gm"); }
-        if (!cmd.isDisabled("gma")) { reg.runtimeCommand("gma", new CommandGma((Essence) plugin)); }
-        if (!cmd.isDisabled("gmc")) { reg.runtimeCommand("gmc", new CommandGmc((Essence) plugin)); }
-        if (!cmd.isDisabled("gms")) { reg.runtimeCommand("gms", new CommandGms((Essence) plugin)); }
-        if (!cmd.isDisabled("gmsp")) { reg.runtimeCommand("gmsp", new CommandGmsp((Essence) plugin)); }
+        if (!this.cmd.isDisabled("gamemode")) { reg.runtimeCommand("gamemode", new CommandGamemode((Essence) plugin), "gm"); }
+        if (!this.cmd.isDisabled("gma")) { reg.runtimeCommand("gma", new CommandGma((Essence) plugin)); }
+        if (!this.cmd.isDisabled("gmc")) { reg.runtimeCommand("gmc", new CommandGmc((Essence) plugin)); }
+        if (!this.cmd.isDisabled("gms")) { reg.runtimeCommand("gms", new CommandGms((Essence) plugin)); }
+        if (!this.cmd.isDisabled("gmsp")) { reg.runtimeCommand("gmsp", new CommandGmsp((Essence) plugin)); }
     }
 
     /**
@@ -39,7 +41,7 @@ public class ModuleGamemode extends FoundryModule {
      */
     @Override
     public void registerTabCompleters() {
-        reg.tabCompleter("gamemode", new TabCompleterGamemode());
+        if (!cmd.isDisabled("gamemode")) { reg.tabCompleter("gamemode", new TabCompleterGamemode()); }
     }
 
     /**

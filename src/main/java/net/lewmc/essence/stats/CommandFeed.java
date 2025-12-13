@@ -84,6 +84,8 @@ public class CommandFeed extends FoundryCommand {
                     msg.sendTo(p, "feed", "fedby", new String[] { cs.getName() });
                 }
                 p.setFoodLevel(20);
+                p.setSaturation(10);
+                p.setExhaustion(0F);
             } else {
                 msg.send("generic", "playernotfound");
             }

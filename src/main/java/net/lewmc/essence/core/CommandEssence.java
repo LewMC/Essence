@@ -43,7 +43,7 @@ public class CommandEssence extends FoundryCommand {
 
         if (args.length > 0) {
             if ("help".equals(args[0])) {
-                CommandExtensionHelp helpCommand = new CommandExtensionHelp(this.plugin, msg, args, cs);
+                CommandExtensionHelp helpCommand = new CommandExtensionHelp(this.plugin, msg, args);
                 return helpCommand.runHelpCommand();
             } else if ("reload".equals(args[0])) {
                 return this.reloadCommand(cs, msg);
@@ -100,8 +100,14 @@ public class CommandEssence extends FoundryCommand {
     private boolean reloadCommand(CommandSender cs, UtilMessage message) {
         UtilPermission perms = new UtilPermission(this.plugin, cs);
         if (perms.has("essence.admin.reload")) {
+            // Reload config
             this.plugin.config = new EssenceConfiguration(this.plugin).reload();
             this.plugin.verbose = (boolean) this.plugin.config.get("advanced.verbose");
+            // Reload messages
+            this.plugin.messageStore.close();
+            this.plugin.messageStore = new Files(this.plugin.foundryConfig, this.plugin);
+            this.plugin.messageStore.load("language/"+this.plugin.config.get("language")+".yml");
+            // Done
             message.send("generic", "reload");
             return true;
         } else {

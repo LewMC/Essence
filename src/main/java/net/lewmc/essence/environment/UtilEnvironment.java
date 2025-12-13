@@ -1,13 +1,25 @@
 package net.lewmc.essence.environment;
 
+import com.tcoded.folialib.FoliaLib;
 import org.bukkit.WeatherType;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 /**
  * The environment utility.
  */
 public class UtilEnvironment {
+    private final Plugin plugin;
+    
+    /**
+     * Constructor for UtilEnvironment with plugin instance
+     * @param plugin The plugin instance
+     */
+    public UtilEnvironment(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
     /**
      * Stores preset weather.
      */
@@ -159,7 +171,20 @@ public class UtilEnvironment {
      */
     public boolean setTime(World wo, long t) {
         if (wo != null) {
-            wo.setTime(t);
+            if (this.plugin != null) {
+                FoliaLib flib = new FoliaLib(this.plugin);
+                // Use FoliaLib to handle both Folia and non-Folia servers
+                 if (flib.isFolia()) {
+                     // Use FoliaLib's global region scheduler for world time changes on Folia
+                     flib.getImpl().runNextTick(task -> wo.setTime(t));
+                } else {
+                    // Direct call for non-Folia servers
+                    wo.setTime(t);
+                }
+            } else {
+                // Fallback to direct call if plugin instance is null
+                wo.setTime(t);
+            }
             return true;
         } else {
             return false;

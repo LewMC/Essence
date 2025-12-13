@@ -9,12 +9,10 @@ import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.Permissions;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
-import org.bukkit.WorldCreator;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Objects;
 
 public class CommandThome extends FoundryPlayerCommand {
     private final Essence plugin;
@@ -47,6 +45,7 @@ public class CommandThome extends FoundryPlayerCommand {
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         Player p = (Player) cs;
+        Logger log = new Logger(this.plugin.foundryConfig);
 
         UtilMessage message = new UtilMessage(this.plugin, cs);
         UtilTeleport teleUtil = new UtilTeleport(this.plugin);
@@ -110,7 +109,6 @@ public class CommandThome extends FoundryPlayerCommand {
         if (dataUtil.get(homeName) == null) {
             dataUtil.close();
             message.send("generic", "exception");
-            Logger log = new Logger(this.plugin.foundryConfig);
             log.warn("Player " + p + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
             log.warn("Error: Unable to load from configuration file, please check configuration file.");
             return true;
@@ -119,7 +117,6 @@ public class CommandThome extends FoundryPlayerCommand {
         if (dataUtil.getString(homeName + ".world") == null) {
             dataUtil.close();
             message.send("generic", "exception");
-            Logger log = new Logger(this.plugin.foundryConfig);
             log.warn("Player " + p + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
             log.warn("Error: world is null, please check configuration file.");
             return true;
@@ -127,20 +124,24 @@ public class CommandThome extends FoundryPlayerCommand {
 
         teleUtil.setCooldown(p, "home");
 
-        if (Bukkit.getServer().getWorld(dataUtil.getString(homeName + ".world")) == null) {
-            WorldCreator creator = new WorldCreator(dataUtil.getString(homeName + ".world"));
-            creator.createWorld();
+        World world = Bukkit.getServer().getWorld(dataUtil.getString(homeName + ".world"));
+        
+        if (world == null) {
+            message.send("generic", "exception");
+            log.warn("Player " + p + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
+            log.warn("Error: world is null, please check configuration file.");
         }
 
         teleUtil.doTeleport(
                 p,
-                Bukkit.getServer().getWorld(Objects.requireNonNull(dataUtil.getString(homeName + ".world"))),
+                world,
                 dataUtil.getDouble(homeName + ".X"),
                 dataUtil.getDouble(homeName + ".Y"),
                 dataUtil.getDouble(homeName + ".Z"),
                 (float) dataUtil.getDouble(homeName + ".yaw"),
                 (float) dataUtil.getDouble(homeName + ".pitch"),
-                waitTime
+                waitTime,
+                true
         );
         dataUtil.close();
 
