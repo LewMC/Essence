@@ -127,9 +127,37 @@ public class UtilWorld {
                 wc.generatorSettings(flags.get("-gs"));
             }
 
+            if (
+                !flags.get("-a").equalsIgnoreCase("true") &&
+                !flags.get("-a").equalsIgnoreCase("yes") &&
+                !flags.get("-a").equalsIgnoreCase("y") &&
+                !flags.get("-a").equalsIgnoreCase("false") &&
+                !flags.get("-a").equalsIgnoreCase("no") &&
+                !flags.get("-a").equalsIgnoreCase("n"))
+            {
+                return WORLD_STATUS.INVALID_A;
+            }
+
             World newWorld = wc.createWorld();
 
             if (newWorld != null) {
+                Files worldData = new Files(this.plugin.foundryConfig, this.plugin);
+                worldData.load("data/worlds.yml");
+                if (worldData.get("world."+newWorld.getUID()) == null) {
+                    worldData.set("world."+newWorld.getUID()+".name", name);
+                    worldData.set("world."+newWorld.getUID()+".can-enter", true);
+
+                    if (flags.get("-a") != null) {
+                        if (flags.get("-a").equalsIgnoreCase("true") || flags.get("-a").equalsIgnoreCase("yes") || flags.get("-a").equalsIgnoreCase("y")) {
+                            worldData.set("world."+newWorld.getUID()+".autoload", true);
+                        } else if (flags.get("-a").equalsIgnoreCase("false") || flags.get("-a").equalsIgnoreCase("no") || flags.get("-a").equalsIgnoreCase("n")) {
+                            worldData.set("world."+newWorld.getUID()+".autoload", false);
+                        }
+                    }
+
+                    worldData.save();
+                }
+
                 return this.load(name);
             } else {
                 new Logger(this.plugin.foundryConfig).warn("Unable to create world: tried to create world but it was null when checked, something went wrong.");
@@ -154,13 +182,22 @@ public class UtilWorld {
                 if (w.status == WORLD_STATUS.LOADED) {
                     return WORLD_STATUS.LOADED;
                 } else {
-                    String path = this.plugin.getDataFolder().getPath()+"/"+name;
+                    String path = new File(Bukkit.getWorldContainer(), w.name).getPath();
                     if (!new Files(this.plugin.foundryConfig, this.plugin).exists(path)) return WORLD_STATUS.NOT_FOUND;
 
                     try {
                         new Files(this.plugin.foundryConfig, this.plugin).deleteDirectory(Path.of(path));
                     } catch (IOException e) {
                         return WORLD_STATUS.OTHER_ERROR;
+                    }
+
+                    Files worldData = new Files(this.plugin.foundryConfig, this.plugin);
+                    worldData.load("data/worlds.yml");
+                    if (worldData.get("world."+w.uuid) != null) {
+                        worldData.remove("world."+w.uuid);
+                        worldData.save();
+                    } else {
+                        worldData.close();
                     }
 
                     return WORLD_STATUS.UNLOADED;
@@ -199,15 +236,19 @@ public class UtilWorld {
         World world = Bukkit.getWorld(name);
 
         if (world == null) {
-            File worldFolder = new File(Bukkit.getWorldContainer(), name);
-
-            if (worldFolder.exists()) {
-                WorldCreator.name(name).createWorld();
-                return WORLD_STATUS.LOADED;
+            if (new File(Bukkit.getWorldContainer(), name).exists()) {
+                World loadedWorld = WorldCreator.name(name).createWorld();
+                if (loadedWorld != null) {
+                    this.saveToEssenceFile(loadedWorld, name, true, true);
+                    return WORLD_STATUS.LOADED;
+                } else {
+                    return WORLD_STATUS.OTHER_ERROR;
+                }
             } else {
                 return WORLD_STATUS.NOT_FOUND;
             }
         } else {
+            this.saveToEssenceFile(world, name, true, true);
             return WORLD_STATUS.LOADED;
         }
     }
@@ -220,35 +261,32 @@ public class UtilWorld {
         List<ESSENCE_WORLD> worlds = new ArrayList<>();
 
         // Loaded worlds
-        List<World> loadedWorlds = Bukkit.getWorlds();
+        Files worldData = new Files(this.plugin.foundryConfig, this.plugin);
+        worldData.load("data/worlds.yml");
+        Set<String> worldList = worldData.getKeys("world", false);
 
-        for (World w : loadedWorlds) {
+        for (String w : worldList) {
             ESSENCE_WORLD world = new ESSENCE_WORLD();
-            world.uuid = w.getUID();
-            world.name = w.getName();
-            world.status = WORLD_STATUS.LOADED;
+
+            world.uuid = UUID.fromString(w);
+            world.name = worldData.getString("world."+w+".name");
+            world.autoload = worldData.getBoolean("world."+w+".autoload");
+
+            if (Bukkit.getWorld(UUID.fromString(w)) != null) {
+                world.status = WORLD_STATUS.LOADED;
+            } else {
+                File[] folders = Bukkit.getWorldContainer().listFiles(File::isDirectory);
+                if (Arrays.stream(folders).anyMatch(f -> f.getName().equals(world.name))) {
+                    world.status = WORLD_STATUS.UNLOADED;
+                } else {
+                    world.status = WORLD_STATUS.DELETED;
+                }
+            }
 
             worlds.add(world);
         }
 
-        // Unloaded worlds
-        File worldContainer = Bukkit.getWorldContainer();
-        File[] folders = worldContainer.listFiles(File::isDirectory);
-
-        if (folders != null) {
-            for (File folder : folders) {
-
-                if (loadedWorlds.stream().anyMatch(w -> w.getName().equals(folder.getName()))) continue;
-                if (!new File(folder, "level.dat").exists()) continue;
-
-                ESSENCE_WORLD world = new ESSENCE_WORLD();
-                world.uuid = null;
-                world.name = folder.getName();
-                world.status = WORLD_STATUS.UNLOADED;
-
-                worlds.add(world);
-            }
-        }
+        worldData.close();
 
         return worlds;
     }
@@ -267,6 +305,7 @@ public class UtilWorld {
         INVALID_N,
         INVALID_H,
         INVALID_L,
+        INVALID_A,
         OTHER_ERROR,
         INVALID_CHARS,
         NOT_FOUND,
@@ -280,5 +319,55 @@ public class UtilWorld {
         public UUID uuid;
         public String name;
         public WORLD_STATUS status;
+        public Boolean autoload;
+
+        public String getName() {
+            return this.name;
+        }
+    }
+
+    /**
+     * Autoloads worlds on startup.
+     */
+    public void autoloadWorlds() {
+        List<World> loadedWorlds = this.plugin.getServer().getWorlds();
+        if (!loadedWorlds.isEmpty()) {
+            this.load(loadedWorlds.getFirst().getName());
+        }
+        if (loadedWorlds.size() >= 2 && loadedWorlds.get(1).getName().contains("nether")) {
+            this.load(loadedWorlds.get(1).getName());
+        }
+        if (loadedWorlds.size() >= 3 && loadedWorlds.get(2).getName().contains("the_end")) {
+            this.load(loadedWorlds.get(2).getName());
+        }
+
+        List<ESSENCE_WORLD> list = this.list();
+        if (list != null) {
+            for (ESSENCE_WORLD w : list) {
+                if (w.autoload && new File(Bukkit.getWorldContainer(), w.name).exists()) {
+                    this.load(w.name);
+                }
+            }
+        }
+    }
+
+    /**
+     * Saves a world to Essence's data file.
+     * @param world World - The world
+     * @param name String - World name
+     * @param canEnter boolean - Can players enter the world?
+     * @param autoload boolean - Autoload on startup?
+     */
+    private void saveToEssenceFile(World world, String name, boolean canEnter, boolean autoload) {
+        Files worldData = new Files(this.plugin.foundryConfig, this.plugin);
+        worldData.load("data/worlds.yml");
+        if (worldData.get("world."+world.getUID()) == null) {
+            worldData.set("world."+world.getUID()+".name", name);
+            worldData.set("world."+world.getUID()+".can-enter", canEnter);
+            worldData.set("world."+world.getUID()+".autoload", autoload);
+            worldData.save();
+        } else {
+            worldData.close();
+        }
     }
 }

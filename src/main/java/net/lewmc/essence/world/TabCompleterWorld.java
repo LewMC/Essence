@@ -41,7 +41,7 @@ public class TabCompleterWorld implements TabCompleter {
         if (args.length == 1) {
             keys = new String[]{"create","delete","load","list","tp","unload"};
         } else if (args.length == 2 && !args[0].equalsIgnoreCase("create")) {
-            keys = (String[]) new UtilWorld(this.plugin).list().stream().toArray();
+            keys = new UtilWorld(this.plugin).list().stream().map(UtilWorld.ESSENCE_WORLD::getName).toArray(String[]::new);
         } else {
             keys = new String[]{};
         }

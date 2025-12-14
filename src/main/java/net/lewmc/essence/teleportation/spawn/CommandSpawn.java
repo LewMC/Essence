@@ -116,9 +116,9 @@ public class CommandSpawn extends FoundryPlayerCommand {
 
             teleportLocation = new Location(
                     Bukkit.getServer().getWorld(spawnName),
-                    spawnData.getDouble("world." + uid + ".spawn.X"),
-                    spawnData.getDouble("world." + uid + ".spawn.Y"),
-                    spawnData.getDouble("world." + uid + ".spawn.Z"),
+                    spawnData.getDouble("world." + uid + ".spawn.x"),
+                    spawnData.getDouble("world." + uid + ".spawn.y"),
+                    spawnData.getDouble("world." + uid + ".spawn.z"),
                     (float) spawnData.getDouble("world." + uid + ".spawn.yaw"),
                     (float) spawnData.getDouble("world." + uid + ".spawn.pitch")
             );

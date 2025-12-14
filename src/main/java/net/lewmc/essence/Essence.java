@@ -106,6 +106,11 @@ public class Essence extends JavaPlugin {
     public Files messageStore;
 
     /**
+     * Checks if deferred tasks have been run (in Core/EventWorldLoad)
+     */
+    public boolean deferredTasksRun = false;
+
+    /**
      * This function runs when Essence is enabled.
      */
     @Override
@@ -168,23 +173,7 @@ public class Essence extends JavaPlugin {
         this.log.info("");
         this.log.info("Startup completed.");
 
-        if (Objects.equals(System.getProperty("ESSENCE_LOADED", ""), "TRUE")) {
-            this.log.severe("");
-            this.log.severe("WARNING: RELOAD DETECTED!");
-            this.log.severe("");
-            this.log.severe("This may cause issues with Essence, other plugins, and your server overall.");
-            this.log.severe("These issues include breaking permissions and other crashing exceptions.");
-            this.log.severe("If you are reloading datapacks use /minecraft:reload instead.");
-            this.log.severe("");
-            this.log.severe("WE HIGHLY RECOMMEND RESTARTING YOUR SERVER.");
-            this.log.severe("");
-            this.log.severe("We will not provide support for any issues when plugin reloaders are used.");
-            this.log.severe("");
-            this.log.severe("More info: https://madelinemiller.dev/blog/problem-with-reload");
-            this.log.severe("");
-        }
-
-        System.setProperty("ESSENCE_LOADED", "TRUE");
+        new Security(this.foundryConfig).startWatchdog();
     }
 
     /**
@@ -243,9 +232,9 @@ public class Essence extends JavaPlugin {
             saveResource("data/warps.yml", false);
         }
 
-        File spawnsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "spawns.yml");
+        File spawnsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "worlds.yml");
         if (!spawnsFile.exists()) {
-            saveResource("data/spawns.yml", false);
+            saveResource("data/worlds.yml", false);
         }
 
         File kitsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "kits.yml");
@@ -271,7 +260,7 @@ public class Essence extends JavaPlugin {
         }
 
         this.messageStore = new Files(this.foundryConfig, this);
-        this.messageStore.load("language/"+(String) this.config.get("language")+".yml");
+        this.messageStore.load("language/"+this.config.get("language")+".yml");
     }
 
     /**
@@ -328,6 +317,8 @@ public class Essence extends JavaPlugin {
     @Override
     public void onDisable() {
         new FoliaLib(this).getScheduler().cancelAllTasks();
-        this.messageStore.close();
+        if (this.messageStore != null) {
+            this.messageStore.close();
+        }
     }
 }

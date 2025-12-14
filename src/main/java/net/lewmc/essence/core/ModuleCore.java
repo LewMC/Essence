@@ -51,5 +51,6 @@ public class ModuleCore extends FoundryModule {
         reg.event(new EventPlayerBedEnter((Essence) plugin));
         reg.event(new EventLeave((Essence) plugin));
         reg.event(new EventPlayerMove((Essence) plugin));
+        reg.event(new EventWorldLoad((Essence) plugin));
     }
 }

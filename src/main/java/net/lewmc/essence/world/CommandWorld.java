@@ -69,10 +69,12 @@ public class CommandWorld extends FoundryCommand {
                 msg.send("generic", "customerror", new String[]{"World names cannot be empty."});
             } else if (args[0].equalsIgnoreCase("create")) {
                 return this.createCommand(args, name);
-            } else if (args[0].equalsIgnoreCase("unload")) {
-                return this.unloadCommand(name);
+            } else if (args[0].equalsIgnoreCase("delete")) {
+                return this.deleteCommand(name);
             } else if (args[0].equalsIgnoreCase("load")) {
                 return this.loadCommand(name);
+            } else if (args[0].equalsIgnoreCase("unload")) {
+                return this.unloadCommand(name);
             } else if (args[0].equalsIgnoreCase("tp")) {
                 return new CommandSpawn(this.plugin).onCommand(cs, command, s, args);
             } else {
@@ -107,6 +109,8 @@ public class CommandWorld extends FoundryCommand {
             msg.send("world", "notcreated", new String[]{name, "World Type '" + flags.get("-t") + "' is invalid."});
         } else if (ws == UtilWorld.WORLD_STATUS.INVALID_N) {
             msg.send("world", "notcreated", new String[]{name, "Generate Structures '" + flags.get("-n") + "' is invalid."});
+        } else if (ws == UtilWorld.WORLD_STATUS.INVALID_A) {
+            msg.send("world", "notcreated", new String[]{name, "Autoload '" + flags.get("-n") + "' is invalid."});
         } else if (ws == UtilWorld.WORLD_STATUS.OTHER_ERROR) {
             msg.send("world", "notcreated", new String[]{name, "An unknown error occurred."});
         } else if (ws == UtilWorld.WORLD_STATUS.EXISTS) {
@@ -151,11 +155,11 @@ public class CommandWorld extends FoundryCommand {
         } else if (ws == UtilWorld.WORLD_STATUS.NOT_FOUND) {
             msg.send("world", "notfound", new String[]{name});
         } else if (ws == UtilWorld.WORLD_STATUS.OTHER_ERROR) {
-            msg.send("generic", "customerror", new String[]{"Unable to unload world '"+name+"'."});
+            msg.send("generic", "customerror", new String[]{"Unable to delete world '"+name+"'."});
         } else if (ws == UtilWorld.WORLD_STATUS.DELETED) {
             msg.send("world", "deleted", new String[]{name});
         } else {
-            msg.send("generic", "customerror", new String[]{"World unloading resulted in an unhandled outcome."});
+            msg.send("generic", "customerror", new String[]{"World deletion resulted in an unhandled outcome."});
         }
         return true;
     }

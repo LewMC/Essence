@@ -49,9 +49,9 @@ public class CommandSetspawn extends FoundryPlayerCommand {
 
         spawnFile.load("data/worlds.yml");
 
-        spawnFile.set("world." + world + ".spawn.X", loc.getX());
-        spawnFile.set("world." + world + ".spawn.Y", loc.getY());
-        spawnFile.set("world." + world + ".spawn.Z", loc.getZ());
+        spawnFile.set("world." + world + ".spawn.x", loc.getX());
+        spawnFile.set("world." + world + ".spawn.y", loc.getY());
+        spawnFile.set("world." + world + ".spawn.z", loc.getZ());
         spawnFile.set("world." + world + ".spawn.yaw", loc.getYaw());
         spawnFile.set("world." + world + ".spawn.pitch", loc.getPitch());
 
