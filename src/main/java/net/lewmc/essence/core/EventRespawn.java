@@ -5,6 +5,7 @@ import net.lewmc.essence.teleportation.tp.UtilTeleport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.data.type.Bed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -41,15 +42,17 @@ public class EventRespawn implements Listener {
             String worldName = up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_WORLD).toString();
             World world = Bukkit.getWorld(worldName);
 
-            if (world != null) {
-                event.setRespawnLocation(new Location(
-                        world,
-                        (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_X),
-                        (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_Y),
-                        (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_Z),
-                        ((Float) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_YAW)),
-                        ((Float) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_PITCH))
-                ));
+            Location bed = new Location(
+                    world,
+                    (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_X),
+                    (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_Y),
+                    (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_Z),
+                    ((Float) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_YAW)),
+                    ((Float) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_PITCH))
+            );
+
+            if (world != null && bed.getBlock().getBlockData() instanceof Bed) {
+                event.setRespawnLocation(bed);
                 return;
             }
         }
