@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.PlayerInventory;
 
 /**
  * /invsee command.
@@ -46,10 +47,25 @@ public class CommandInvsee extends FoundryPlayerCommand {
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
             if (target != null && target.getPlayer() != null) {
                 try {
-                    Inventory readOnlyInv = Bukkit.createInventory(new TypeReadOnlyInventory(),
-                            target.getPlayer().getInventory().getSize(), target.getPlayer().getName() + "'s Inventory");
-                    readOnlyInv.setContents(target.getPlayer().getInventory().getContents());
+                    Player targetPlayer = target.getPlayer();
+                    PlayerInventory targetInv = targetPlayer.getInventory();
+
+                    Inventory readOnlyInv = Bukkit.createInventory(
+                            new TypeReadOnlyInventory(),
+                            45,
+                            targetPlayer.getName() + "'s Inventory"
+                    );
+
+                    readOnlyInv.setContents(targetInv.getContents());
+
+                    readOnlyInv.setItem(36, targetInv.getHelmet());
+                    readOnlyInv.setItem(37, targetInv.getChestplate());
+                    readOnlyInv.setItem(38, targetInv.getLeggings());
+                    readOnlyInv.setItem(39, targetInv.getBoots());
+                    readOnlyInv.setItem(40, targetInv.getItemInOffHand());
+
                     p.openInventory(readOnlyInv);
+
                 } catch (Exception e) {
                     msg.send("generic", "exception");
                     this.plugin.log.warn(e.getMessage());
@@ -62,5 +78,4 @@ public class CommandInvsee extends FoundryPlayerCommand {
         }
         return true;
     }
-
 }
