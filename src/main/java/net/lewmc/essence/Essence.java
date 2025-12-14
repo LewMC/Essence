@@ -120,17 +120,22 @@ public class Essence extends JavaPlugin {
         this.log = new Logger(this.foundryConfig);
 
         this.log.info("");
-        this.log.info("███████╗░██████╗░██████╗███████╗███╗░░██╗░█████╗░███████╗");
-        this.log.info("██╔════╝██╔════╝██╔════╝██╔════╝████╗░██║██╔══██╗██╔════╝");
-        this.log.info("█████╗░░╚█████╗░╚█████╗░█████╗░░██╔██╗██║██║░░╚═╝█████╗░░");
-        this.log.info("██╔══╝░░░╚═══██╗░╚═══██╗██╔══╝░░██║╚████║██║░░██╗██╔══╝░░");
-        this.log.info("███████╗██████╔╝██████╔╝███████╗██║░╚███║╚█████╔╝███████╗");
-        this.log.info("╚══════╝╚═════╝░╚═════╝░╚══════╝╚═╝░░╚══╝░╚════╝░╚══════╝");
-        this.log.info("");
-        this.log.info("Running Essence version " + this.getDescription().getVersion() + ".");
-        this.log.info("Please report any issues with Essence to our GitHub repository: https://github.com/lewmc/essence/issues");
-        this.log.info("");
-        this.log.info("Please consider leaving us a review at https://lewmc.net/support/review");
+        this.log.info("███████████████████████████████⟍");
+        this.log.info("███████████████████████████████  ⟍    ┌─────── Essence by LewMC ────────");
+        this.log.info("██           █████         ████   │   │ Stress-free server utilities.");
+        this.log.info("██           ████           ███   │   └ Version "+ this.getDescription().getVersion());
+        this.log.info("██    ██████████    █████    ██   │");
+        this.log.info("██    ██████████     ██████████   │");
+        this.log.info("██          █████          ████   │   ┌── ‼ ── Found a problem?  ── ‼ ──");
+        this.log.info("██          ███████         ███   │   │ Please report any problems to");
+        this.log.info("██    ██████████████████     ██   │   │ our GitHub issues page at");
+        this.log.info("██    ██████████    █████    ██   │   └ github.com/lewmc/essence");
+        this.log.info("██           ████           ███   │");
+        this.log.info("██           █████         ████   │");
+        this.log.info("███████████████████████████████   │   ┌── ✓ ── Enjoying Essence? ── ✓ ──");
+        this.log.info("███████████████████████████████   │   │ Support LewMC and Essence by");
+        this.log.info("⟍                                 │   └ visiting lewmc.net/support");
+        this.log.info("  ⟍ ──────────────────────────────┘");
         this.log.info("");
         this.log.info("Beginning startup...");
         this.log.info("");
@@ -152,8 +157,8 @@ public class Essence extends JavaPlugin {
 
         if (!Bukkit.getOnlineMode()) {
             this.log.severe(">> Your server is running in offline mode.");
-            this.log.warn(">> Homes set in offline mode may not save properly if you switch back to online mode.");
-            this.log.warn(">> Homes set in online mode may not work properly in offline mode.");
+            this.log.warn(">> Player data saved in offline mode may not work properly if you switch back to online mode.");
+            this.log.warn(">> Player data saved in online mode may not work properly in offline mode.");
             this.log.info("");
         }
 

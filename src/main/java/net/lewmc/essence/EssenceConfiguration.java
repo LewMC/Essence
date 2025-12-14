@@ -87,7 +87,7 @@ public class EssenceConfiguration {
 
         this.configFile.load("config.yml");
 
-        putBoolean("advanced.verbose", (boolean) getValue("advanced.verbose", true, Boolean.class));
+        putBoolean("advanced.verbose", (boolean) getValue("advanced.verbose", false, Boolean.class));
         putBoolean("advanced.playerdata.store-ip-address", (boolean) getValue("advanced.playerdata.store-ip-address", true, Boolean.class));
         putBoolean("advanced.update-check", (boolean) getValue("advanced.update-check", true, Boolean.class));
 
