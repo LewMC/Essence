@@ -147,19 +147,18 @@ public class UtilImport {
                     if (file.getString("spawns." + esxName) != null) {
                         Files spawnFile = new Files(this.plugin.foundryConfig, this.plugin);
 
-
-                        spawnFile.load("data/spawns.yml");
+                        spawnFile.load("data/worlds.yml");
 
                         World world = this.plugin.getServer().getWorld(file.getString("spawns." + esxName + ".world-name"));
 
                         if (world != null) {
-                            String essName = world.getName();
-                            if (spawnFile.get("spawn." + essName) == null) {
-                                spawnFile.set("spawn." + essName + ".X", file.getDouble("spawns." + esxName + ".x"));
-                                spawnFile.set("spawn." + essName + ".Y", file.getDouble("spawns." + esxName + ".y"));
-                                spawnFile.set("spawn." + essName + ".Z", file.getDouble("spawns." + esxName + ".z"));
-                                spawnFile.set("spawn." + essName + ".yaw", file.getDouble("spawns." + esxName + ".yaw"));
-                                spawnFile.set("spawn." + essName + ".pitch", file.getDouble("spawns." + esxName + ".pitch"));
+                            UUID wUID = world.getUID();
+                            if (spawnFile.get("worlds." + wUID) == null) {
+                                spawnFile.set("worlds." + wUID + ".spawn.x", file.getDouble("spawns." + esxName + ".x"));
+                                spawnFile.set("worlds." + wUID + ".spawn.y", file.getDouble("spawns." + esxName + ".y"));
+                                spawnFile.set("worlds." + wUID + ".spawn.z", file.getDouble("spawns." + esxName + ".z"));
+                                spawnFile.set("worlds." + wUID + ".spawn.yaw", file.getDouble("spawns." + esxName + ".yaw"));
+                                spawnFile.set("worlds." + wUID + ".spawn.pitch", file.getDouble("spawns." + esxName + ".pitch"));
                             }
                         }
 
