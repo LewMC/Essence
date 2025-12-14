@@ -11,6 +11,8 @@ net.lewmc.essence.stats
 net.lewmc.essence.team
 net.lewmc.essence.teleportation
 net.lewmc.essence.teleportation.home
+net.lewmc.essence.teleportation.orientation
 net.lewmc.essence.teleportation.spawn
 net.lewmc.essence.teleportation.tp
 net.lewmc.essence.teleportation.warp
+net.lewmc.essence.world
