@@ -389,11 +389,11 @@ public class UtilUpdate {
                 World world = Bukkit.getWorld(spawnName);
                 if (world != null) {
                     UUID uid = world.getUID();
-                    worldsFile.set("world."+uid+".spawn.x", spawnsFile.getString("spawn."+spawnName+".X"));
-                    worldsFile.set("world."+uid+".spawn.y", spawnsFile.getString("spawn."+spawnName+".Y"));
-                    worldsFile.set("world."+uid+".spawn.z", spawnsFile.getString("spawn."+spawnName+".Z"));
-                    worldsFile.set("world."+uid+".spawn.yaw", spawnsFile.getString("spawn."+spawnName+".yaw"));
-                    worldsFile.set("world."+uid+".spawn.pitch", spawnsFile.getString("spawn."+spawnName+".pitch"));
+                    worldsFile.set("world."+uid+".spawn.x", spawnsFile.getInt("spawn."+spawnName+".X"));
+                    worldsFile.set("world."+uid+".spawn.y", spawnsFile.getInt("spawn."+spawnName+".Y"));
+                    worldsFile.set("world."+uid+".spawn.z", spawnsFile.getInt("spawn."+spawnName+".Z"));
+                    worldsFile.set("world."+uid+".spawn.yaw", spawnsFile.getDouble("spawn."+spawnName+".yaw"));
+                    worldsFile.set("world."+uid+".spawn.pitch", spawnsFile.getDouble("spawn."+spawnName+".pitch"));
                 }
             }
 
