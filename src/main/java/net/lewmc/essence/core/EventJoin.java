@@ -3,11 +3,7 @@ package net.lewmc.essence.core;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.kit.UtilKit;
 import net.lewmc.essence.teleportation.tp.UtilTeleport;
-import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -37,43 +33,27 @@ public class EventJoin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Logger log = new Logger(this.plugin.foundryConfig);
 
-        Files playerFile = new Files(plugin.foundryConfig, this.plugin);
-        String playerDataFile = playerFile.playerDataFile(event.getPlayer());
+        UtilPlayer up = new UtilPlayer(this.plugin);
 
-        UtilPlayer pu = new UtilPlayer(this.plugin, event.getPlayer());
-
-        if (!playerFile.exists(playerDataFile)) {
-            if (pu.createPlayerData()) {
-                if (plugin.verbose) {
-                    log.info("Player data file created.");
-                }
-            } else {
-                log.severe("Unable to create player data.");
-            }
+        boolean firstJoin = false;
+        if (up.createPlayer(event.getPlayer().getUniqueId())) {
+            log.info("Player data file created.");
+            firstJoin = true;
         } else {
-            if (pu.updatePlayerData()) {
-                if (plugin.verbose) {
-                    log.info("Player data file saved.");
-                }
-            } else {
-                log.severe("Unable to create player data.");
+            if (plugin.verbose) {
+                log.info("Player data file already exists.");
             }
         }
-
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(event.getPlayer().getName());
-        boolean firstJoin = !offlinePlayer.hasPlayedBefore();
 
         if (firstJoin) { this.firstJoin(event, log); }
 
-        if ((boolean) this.plugin.config.get("advanced.playerdata.store-ip-address")) {
-            playerFile.load(playerDataFile);
-            playerFile.set("user.ip-address", Objects.requireNonNull(event.getPlayer().getAddress()).getAddress().getHostAddress()+"");
-            playerFile.save();
+        if(!up.loadPlayer(event.getPlayer().getUniqueId())) {
+            this.plugin.log.severe("Unable to load player data.");
+            this.plugin.log.warn("It wasn't possible to load "+event.getPlayer().getName()+"'s player data.");
+            this.plugin.log.warn("The player data may be stale/outdated, Essence may have issues.");
         }
 
         this.playerJoinMessage(event);
-
-        plugin.reloadConfig();
 
         if (!Objects.equals(plugin.config.get("motd"), "false") && !Objects.equals(plugin.config.get("motd"), false)) { this.motd(event); }
 
@@ -96,64 +76,15 @@ public class EventJoin implements Listener {
      * @param log Logger - Logging system.
      */
     private void spawn(PlayerJoinEvent event, Logger log) {
-        UtilMessage message = new UtilMessage(this.plugin, event.getPlayer());
-
-        Files essenceConfiguration = new Files(this.plugin.foundryConfig, this.plugin);
-        if (!essenceConfiguration.load("config.yml")) {
-            log.severe("Unable to load configuration file 'config.yml'. Essence may be unable to set some player data");
+        Object spawnConfig = this.plugin.config.get("teleportation.spawn.main-spawn-world");
+        if (spawnConfig == null) {
+            if (plugin.verbose) {
+                log.severe("Config key 'teleportation.spawn.main-spawn-world' is not set; skipping join spawn teleport.");
+            }
             return;
         }
 
-        String spawnName = essenceConfiguration.get("teleportation.spawn.main-spawn-world").toString();
-        essenceConfiguration.close();
-
-        Files spawnConfiguration = new Files(this.plugin.foundryConfig, this.plugin);
-        if (!spawnConfiguration.load("data/spawns.yml")) {
-            log.severe("Unable to load configuration file 'data/spawns.yml'. Essence may be unable to teleport players to the correct spawn");
-            return;
-        }
-
-        if (spawnConfiguration.get("spawn") == null) {
-            if (Bukkit.getServer().getWorld(spawnName) == null) {
-                message.send("spawn", "notexist");
-                log.severe("The spawn world does not exist. Please check your Essence configuration.");
-                return;
-            }
-            if (Bukkit.getServer().getWorld(spawnName) != null && Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null) {
-                UtilTeleport tp = new UtilTeleport(plugin);
-                tp.doTeleport(
-                        event.getPlayer(),
-                        Bukkit.getServer().getWorld(spawnName),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getX(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getZ(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getYaw(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch(),
-                        0
-                );
-            } else {
-                message.send("spawn", "notexist");
-                log.info("Failed to respawn player - world '"+Bukkit.getServer().getWorld(spawnName)+"' does not exist.");
-            }
-        } else {
-            UtilTeleport tp = new UtilTeleport(plugin);
-            if (Bukkit.getServer().getWorld(spawnName) == null) {
-                WorldCreator creator = new WorldCreator(spawnName);
-                creator.createWorld();
-            }
-            tp.doTeleport(
-                    event.getPlayer(),
-                    Bukkit.getServer().getWorld(spawnName),
-                    spawnConfiguration.getDouble("spawn."+spawnName+".X"),
-                    spawnConfiguration.getDouble("spawn."+spawnName+".Y"),
-                    spawnConfiguration.getDouble("spawn."+spawnName+".Z"),
-                    (float) spawnConfiguration.getDouble("spawn."+spawnName+".yaw"),
-                    (float) spawnConfiguration.getDouble("spawn."+spawnName+".pitch"),
-                    0
-            );
-        }
-
-        spawnConfiguration.close();
+        new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), spawnConfig.toString());
     }
 
     /**
@@ -176,7 +107,7 @@ public class EventJoin implements Listener {
      * @param event PlayerJoinEvent - The event
      */
     private void motd(PlayerJoinEvent event) {
-        if (plugin.config.get("chat.motd") != null) {
+        if (plugin.config.get("chat.motd") instanceof String) {
             String message = plugin.config.get("chat.motd").toString();
             if (message != null) {
                 UtilPlaceholder tag = new UtilPlaceholder(plugin, event.getPlayer());
@@ -192,9 +123,13 @@ public class EventJoin implements Listener {
     private void playerJoinMessage(PlayerJoinEvent event) {
         UtilPlaceholder tag = new UtilPlaceholder(this.plugin, event.getPlayer());
         if (event.getPlayer().hasPlayedBefore()) {
-            event.setJoinMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.join")));
+            if (this.plugin.config.get("chat.broadcasts.join") instanceof String) {
+                event.setJoinMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.join")));
+            }
         } else {
-            event.setJoinMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.first-join")));
+            if (this.plugin.config.get("chat.broadcasts.first-join") instanceof String) {
+                event.setJoinMessage(tag.replaceAll((String) this.plugin.config.get("chat.broadcasts.first-join")));
+            }
         }
     }
 

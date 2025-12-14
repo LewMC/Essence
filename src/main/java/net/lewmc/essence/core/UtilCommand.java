@@ -32,8 +32,8 @@ public class UtilCommand {
         if (command.equalsIgnoreCase("balance") && Objects.equals(this.plugin.config.get("economy.mode").toString(), "OFF")) { return true; }
         if (command.equalsIgnoreCase("pay") && Objects.equals(this.plugin.config.get("economy.mode").toString(), "OFF")) { return true; }
 
-        if (this.plugin.config.get("disabled-commands.list") != null) {
-            for (String key : (List<String>) this.plugin.config.get("disabled-commands.list")) {
+        if (this.plugin.config.get("disabled-commands") != null) {
+            for (String key : (List<String>) this.plugin.config.get("disabled-commands")) {
                 if (Objects.equals(key, command)) {
                     return true;
                 }

@@ -2,7 +2,6 @@ package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.team.UtilTeam;
-import net.lewmc.foundry.Files;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -81,7 +80,7 @@ public class UtilPlaceholder {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         } else if (placeholder.equalsIgnoreCase("player")) {
             if ((boolean) this.plugin.config.get("chat.manage-chat")) {
-                return new UtilPlayer(this.plugin, this.cs).getPlayerDisplayname(this.cs);
+                return new UtilPlayer(this.plugin).getDisplayname(this.cs);
             } else {
                 return cs.getName();
             }
@@ -102,16 +101,14 @@ public class UtilPlaceholder {
         } else if (placeholder.equalsIgnoreCase("team_prefix")) {
             return tu.getTeamPrefix(this.cs);
         } else if (placeholder.equalsIgnoreCase("combined_prefix")) {
-            return new UtilPlayer(this.plugin, cs).getPlayerPrefix() + tu.getTeamPrefix(this.cs);
+            return new UtilPlayer(this.plugin).getPlayerPrefix(cs) + tu.getTeamPrefix(this.cs);
         } else if (placeholder.equalsIgnoreCase("player_prefix")) {
-            return new UtilPlayer(this.plugin, cs).getPlayerPrefix();
+            return new UtilPlayer(this.plugin).getPlayerPrefix(cs);
         } else if (placeholder.equalsIgnoreCase("player_suffix")) {
-            return new UtilPlayer(this.plugin, cs).getPlayerSuffix();
+            return new UtilPlayer(this.plugin).getPlayerSuffix(cs);
         } else if (placeholder.equalsIgnoreCase("balance")) {
             if (cs instanceof Player p) {
-                Files pf = new Files(this.plugin.foundryConfig, this.plugin);
-                pf.load(pf.playerDataFile(p));
-                return this.plugin.config.get("economy.symbol").toString() + pf.getDouble("economy.balance");
+                return this.plugin.config.get("economy.symbol").toString() + new UtilPlayer(this.plugin).getPlayer(p.getUniqueId(), UtilPlayer.KEYS.ECONOMY_BALANCE);
             } else {
                 return this.plugin.config.get("economy.symbol").toString() + "Infinity";
             }

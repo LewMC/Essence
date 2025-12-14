@@ -27,11 +27,15 @@ public class ModuleStats extends FoundryModule {
     @Override
     public void registerCommands() {
         UtilCommand cmd = new UtilCommand((Essence) this.plugin);
-        if (!cmd.isDisabled("feed")) { reg.runtimeCommand("feed", new CommandFeed((Essence) plugin)); }
+        if (!cmd.isDisabled("feed")) { reg.runtimeCommand("feed", new CommandFeed((Essence) plugin), "eat"); }
         if (!cmd.isDisabled("fly")) { reg.runtimeCommand("fly", new CommandFly((Essence) plugin)); }
         if (!cmd.isDisabled("heal")) { reg.runtimeCommand("heal", new CommandHeal((Essence) plugin)); }
         if (!cmd.isDisabled("repair")) { reg.runtimeCommand("repair", new CommandRepair((Essence) plugin), "fix"); }
         if (!cmd.isDisabled("speed")) { reg.runtimeCommand("speed", new CommandSpeed((Essence) plugin)); }
+        if (!cmd.isDisabled("burn")) { reg.runtimeCommand("burn", new CommandBurn((Essence) plugin)); }
+        if (!cmd.isDisabled("extinguish")) { reg.runtimeCommand("extinguish", new CommandExtinguish((Essence) plugin), "ext"); }
+        if (!cmd.isDisabled("god")) { reg.runtimeCommand("god", new CommandGod((Essence) plugin)); }
+        if (!cmd.isDisabled("enchant")) { reg.runtimeCommand("enchant", new CommandEnchant((Essence) plugin)); }
     }
 
     /**

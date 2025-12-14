@@ -7,12 +7,10 @@ import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
-import org.bukkit.WorldCreator;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Objects;
 
 public class CommandWarp extends FoundryPlayerCommand {
     private final Essence plugin;
@@ -78,9 +76,12 @@ public class CommandWarp extends FoundryPlayerCommand {
 
             teleUtil.setCooldown(p, "warp");
 
-            if (Bukkit.getServer().getWorld(config.getString("warps." + args[0].toLowerCase() + ".world")) == null) {
-                WorldCreator creator = new WorldCreator(config.getString("warps." + args[0].toLowerCase() + ".world"));
-                creator.createWorld();
+            World world = Bukkit.getServer().getWorld(config.getString("warps." + args[0].toLowerCase() + ".world"));
+            
+            if (world == null) {
+                msg.send("generic", "exception");
+                this.log.warn("Player " + p + " attempted to warp to " + args[0].toLowerCase() + " but couldn't due to an error.");
+                log.warn("Error: world is null, please check configuration file.");
             }
 
             if (waitTime > 0) {
@@ -91,13 +92,14 @@ public class CommandWarp extends FoundryPlayerCommand {
 
             teleUtil.doTeleport(
                     p,
-                    Bukkit.getServer().getWorld(Objects.requireNonNull(config.getString("warps." + args[0].toLowerCase() + ".world"))),
+                    world,
                     config.getDouble("warps." + args[0].toLowerCase() + ".X"),
                     config.getDouble("warps." + args[0].toLowerCase() + ".Y"),
                     config.getDouble("warps." + args[0].toLowerCase() + ".Z"),
                     (float) config.getDouble("warps." + args[0].toLowerCase() + ".yaw"),
                     (float) config.getDouble("warps." + args[0].toLowerCase() + ".pitch"),
-                    waitTime
+                    waitTime,
+                    true
             );
 
             config.close();

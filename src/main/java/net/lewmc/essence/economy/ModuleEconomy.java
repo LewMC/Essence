@@ -29,13 +29,17 @@ public class ModuleEconomy extends FoundryModule {
         UtilCommand cmd = new UtilCommand((Essence) this.plugin);
         if (!cmd.isDisabled("balance")) { reg.runtimeCommand("balance", new CommandBalance((Essence) plugin), "bal"); }
         if (!cmd.isDisabled("pay")) { reg.runtimeCommand("pay", new CommandPay((Essence) plugin)); }
+        if (!cmd.isDisabled("eco")) { reg.runtimeCommand("eco", new CommandEco((Essence) plugin)); }
     }
 
     /**
      * Registers Tab Completers
      */
     @Override
-    public void registerTabCompleters() {}
+    public void registerTabCompleters() {
+        reg.tabCompleter("eco", new TabCompleterEco());
+        reg.tabCompleter("pay", new TabCompleterPay());
+    }
 
     /**
      * Registers Events

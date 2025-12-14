@@ -69,7 +69,6 @@ public class UtilKit {
         playerData.set("kits." + kit + ".claims", playerData.getInt("kits." + kit + ".claims") + 1);
 
         playerData.save();
-        playerData.close();
 
         List<String> items = kitData.getStringList("kits."+kit+".items");
 

@@ -42,7 +42,7 @@ public class CommandWeather extends FoundryCommand {
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
-        UtilEnvironment env = new UtilEnvironment();
+        UtilEnvironment env = new UtilEnvironment(this.plugin);
         UtilMessage msg = new UtilMessage(plugin, cs);
 
         if (args.length == 0) {

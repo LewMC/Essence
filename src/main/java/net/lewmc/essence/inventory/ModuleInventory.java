@@ -36,6 +36,12 @@ public class ModuleInventory extends FoundryModule {
         if (!cmd.isDisabled("smithing")) { reg.runtimeCommand("smithing", new CommandSmithing()); }
         if (!cmd.isDisabled("stonecutter")) { reg.runtimeCommand("stonecutter", new CommandStonecutter()); }
         if (!cmd.isDisabled("trash")) { reg.runtimeCommand("trash", new CommandTrash(), "disposal", "garbage"); }
+        if (!cmd.isDisabled("give")) { reg.runtimeCommand("give", new CommandGive((Essence) this.plugin), "item", "i"); }
+        if (!cmd.isDisabled("skull")) { reg.runtimeCommand("skull", new CommandSkull((Essence) this.plugin), "head"); }
+        if (!cmd.isDisabled("invsee")) { reg.runtimeCommand("invsee", new CommandInvsee((Essence) this.plugin)); }
+        if (!cmd.isDisabled("clear")) { reg.runtimeCommand("clear", new CommandClear((Essence) this.plugin), "clearinventory", "ci"); }
+        if (!cmd.isDisabled("confirmclear")) { reg.runtimeCommand("confirmclear", new CommandConfirmClear((Essence) this.plugin), "cclear"); }
+        if (!cmd.isDisabled("recipe")) { reg.runtimeCommand("recipe", new CommandRecipe((Essence) this.plugin), "formula", "recipes"); }
     }
 
     /**
@@ -48,5 +54,8 @@ public class ModuleInventory extends FoundryModule {
      * Registers Events
      */
     @Override
-    public void registerEvents() {}
+    public void registerEvents() {
+        reg.event(new EventInventoryClick());
+        reg.event(new EventInventoryDrag());
+    }
 }

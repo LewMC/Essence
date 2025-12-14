@@ -45,28 +45,28 @@ public class CommandNick extends FoundryCommand {
         UtilCommand cmd = new UtilCommand(this.plugin);
 
         UtilMessage msg = new UtilMessage(this.plugin, cs);
-        UtilPlayer pu = new UtilPlayer(this.plugin, cs);
+        UtilPlayer pu = new UtilPlayer(this.plugin);
 
         if (args.length == 1) {
             if (cmd.console(cs)) {
-                msg.send("nick","consoleusage");
+                msg.send("nick", "consoleusage");
                 return true;
             }
 
-            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[0])) {
-                msg.send("nick","specialchars");
+            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[0]))  {
+                msg.send("nick", "specialchars");
                 return true;
             }
 
             if (args[0].equalsIgnoreCase("off")) {
-                if (pu.removePlayerDisplayname(cs)) {
-                    msg.send("nick","success", new String[]{cs.getName()});
+                if (pu.removeDisplayname(cs)) {
+                    msg.send("nick", "success", new String[]{cs.getName()});
                 }
                 return true;
             }
 
-            if (pu.setPlayerDisplayname(cs, args[0])) {
-                msg.send("nick","success", new String[]{args[0]});
+            if (pu.setDisplayname(cs, args[0])) {
+                msg.send("nick", "success", new String[]{args[0]});
             }
         } else if (args.length == 2) {
             UtilPermission perms = new UtilPermission(this.plugin, cs);
@@ -78,20 +78,20 @@ public class CommandNick extends FoundryCommand {
                 return true;
             }
 
-            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[1])) {
-                msg.send("nick","specialchars");
+            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(args[1]))  {
+                msg.send("nick", "specialchars");
                 return true;
             }
 
             if (args[1].equalsIgnoreCase("off")) {
-                if (pu.removePlayerDisplayname(player)) {
+                if (pu.removeDisplayname(player)) {
                     msg.send("nick","successother", new String[]{args[0], player.getName()});
                     msg.sendTo(player, "nick","changedby", new String[]{cs.getName(), player.getName()});
                 }
                 return true;
             }
 
-            if (pu.setPlayerDisplayname(player, args[1])) {
+            if (pu.setDisplayname(player, args[1])) {
                 msg.send("nick","successother", new String[]{args[0], args[1]});
                 msg.sendTo(player, "nick","changedby", new String[]{cs.getName(), args[1]});
             }

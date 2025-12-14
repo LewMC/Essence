@@ -43,7 +43,7 @@ public class CommandPWeather extends FoundryPlayerCommand {
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
         Player p = (Player) cs;
 
-        UtilEnvironment env = new UtilEnvironment();
+        UtilEnvironment env = new UtilEnvironment(this.plugin);
         UtilMessage msg = new UtilMessage(plugin, cs);
 
         if (args.length == 0) {

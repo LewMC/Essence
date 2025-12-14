@@ -2,8 +2,11 @@ package net.lewmc.essence.core;
 
 import com.tchristofferson.configupdater.ConfigUpdater;
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.world.UtilWorld;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +15,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.UUID;
 
 /**
  * Essence's update utility.
@@ -27,6 +31,42 @@ public class UtilUpdate {
     public UtilUpdate(Essence plugin) {
         this.plugin = plugin;
         this.log = new Logger(plugin.foundryConfig);
+    }
+
+    /**
+     * Compares two version strings to determine if the first version is newer than the second.
+     * Supports semantic versioning format (major.minor.patch).
+     * 
+     * @param version1 The first version string (potential newer version)
+     * @param version2 The second version string (current version)
+     * @return true if version1 is newer than version2, false otherwise
+     */
+    private boolean isNewerVersion(String version1, String version2) {
+        if (version1 == null || version2 == null) {
+            return false;
+        }
+        
+        // Remove any non-numeric suffixes (like -SNAPSHOT)
+        String cleanVersion1 = version1.split("-")[0];
+        String cleanVersion2 = version2.split("-")[0];
+        
+        String[] parts1 = cleanVersion1.split("\\.");
+        String[] parts2 = cleanVersion2.split("\\.");
+        
+        // Compare each part of the version number
+        int maxLength = Math.max(parts1.length, parts2.length);
+        for (int i = 0; i < maxLength; i++) {
+            int part1 = i < parts1.length ? Integer.parseInt(parts1[i]) : 0;
+            int part2 = i < parts2.length ? Integer.parseInt(parts2[i]) : 0;
+            
+            if (part1 > part2) {
+                return true;
+            } else if (part1 < part2) {
+                return false;
+            }
+        }
+        
+        return false; // Versions are equal
     }
 
     /**
@@ -54,12 +94,17 @@ public class UtilUpdate {
                     } else if (response.equals(this.plugin.getDescription().getVersion())) {
                         log.info("You are running the latest version of Essence.");
                         this.log.info("");
-                    } else {
+                    } else if (isNewerVersion(response, this.plugin.getDescription().getVersion())) {
                         log.warn("UPDATE > There's a new version of Essence available.");
                         log.warn("UPDATE > Your version: "+this.plugin.getDescription().getVersion()+" - latest version: "+response);
                         log.warn("UPDATE > You can download the latest version from lewmc.net/essence");
                         this.log.info("");
                         this.plugin.hasPendingUpdate = true;
+                    } else {
+                        log.warn("DEVELOPMENT > You are running a development version ahead of the official release.");
+                        log.warn("DEVELOPMENT > Your version: "+this.plugin.getDescription().getVersion()+" - latest stable: "+response);
+                        log.warn("DEVELOPMENT > Please be aware of potential stability risks and report any issues.");
+                        this.log.info("");
                     }
                 } else {
                     log.severe("Unable to perform update check: There was no response from the server.");
@@ -255,7 +300,7 @@ public class UtilUpdate {
 
             log.info("[1/4] Migrating kit module...");
             f.set("kit.spawn-kits", f.getStringList("spawn-kits"));
-            f.delete("spawn-kits");
+            f.remove("spawn-kits");
             log.info("[1/4] Done.");
 
             log.info("[2/4] Migrating chat module...");
@@ -265,36 +310,36 @@ public class UtilUpdate {
             f.set("chat.broadcasts.first-join", f.getString("broadcasts.first-join"));
             f.set("chat.broadcasts.join", f.getString("broadcasts.join"));
             f.set("chat.broadcasts.leave", f.getString("broadcasts.leave"));
-            f.delete("broadcasts.first-join");
-            f.delete("broadcasts.join");
-            f.delete("broadcasts.leave");
+            f.remove("broadcasts.first-join");
+            f.remove("broadcasts.join");
+            f.remove("broadcasts.leave");
 
             if (f.getBoolean("motd.enabled")) {
                 f.set("chat.motd", f.getString("motd.message"));
             } else {
                 f.set("chat.motd", "false");
             }
-            f.delete("motd.enabled");
-            f.delete("motd.message");
-            f.delete("motd");
+            f.remove("motd.enabled");
+            f.remove("motd.message");
+            f.remove("motd");
             log.info("[2/4] Done.");
 
             log.info("[3/4] Migrating advanced settings...");
             f.set("advanced.update-check", f.getBoolean("update-check"));
             f.set("advanced.verbose", f.getBoolean("verbose"));
             f.set("advanced.playerdata.store-ip-address", f.getBoolean("playerdata.store-ip-address"));
-            f.delete("update-check");
-            f.delete("verbose");
-            f.delete("playerdata.store-ip-address");
+            f.remove("update-check");
+            f.remove("verbose");
+            f.remove("playerdata.store-ip-address");
             log.info("[3/4] Done.");
 
             log.info("[4/4] Migrating disabled commands...");
             List<String> dc = f.getStringList("disabled-commands");
-            f.delete("disabled-commands");
+            f.remove("disabled-commands");
 
             f.set("disabled-commands.list", dc);
             f.set("disabled-commands.feedback", f.getBoolean("disabled-commands-feedback"));
-            f.delete("disabled-commands-feedback");
+            f.remove("disabled-commands-feedback");
             log.info("[4/4] Done.");
 
             f.set("config-version", 3);
@@ -303,6 +348,59 @@ public class UtilUpdate {
             log.info("");
         }
 
+        if (f.getInt("config-version") == 3) {
+            log.info("Essence is updating your configuration file, please wait...");
+
+            log.info("[1/1] Migrating disabled commands list...");
+            List<String> dcl = f.getStringList("disabled-commands.list");
+            f.remove("disabled-commands.list");
+            f.set("disabled-commands", dcl);
+            log.info("[1/1] Done.");
+
+            f.set("config-version", 4);
+
+            log.info("Done.");
+            log.info("");
+        }
+
         f.save();
+    }
+
+    /**
+     * Migrates spawns.
+     */
+    public void migrateSpawns() {
+        // SPAWNS.yml -> WORLDS.yml
+        Files spawnsFile = new Files(this.plugin.foundryConfig, this.plugin);
+        if (spawnsFile.exists("data/spawns.yml")) {
+            log.info("Essence is updating your worlds file, please wait...");
+
+            log.info("[1/1] Migrating spawns...");
+            spawnsFile.load("data/spawns.yml");
+
+            Files worldsFile = new Files(this.plugin.foundryConfig, this.plugin);
+            if (!worldsFile.exists("data/worlds.yml")) {
+                worldsFile.create("data/worlds.yml");
+            }
+            worldsFile.load("data/worlds.yml");
+
+            for (String spawnName : spawnsFile.getKeys("spawn", false)) {
+                new UtilWorld(this.plugin).load(spawnName);
+                World world = Bukkit.getWorld(spawnName);
+                if (world != null) {
+                    UUID uid = world.getUID();
+                    worldsFile.set("world."+uid+".spawn.x", spawnsFile.getString("spawn."+spawnName+".X"));
+                    worldsFile.set("world."+uid+".spawn.y", spawnsFile.getString("spawn."+spawnName+".Y"));
+                    worldsFile.set("world."+uid+".spawn.z", spawnsFile.getString("spawn."+spawnName+".Z"));
+                    worldsFile.set("world."+uid+".spawn.yaw", spawnsFile.getString("spawn."+spawnName+".yaw"));
+                    worldsFile.set("world."+uid+".spawn.pitch", spawnsFile.getString("spawn."+spawnName+".pitch"));
+                }
+            }
+
+            worldsFile.save();
+            spawnsFile.close();
+            spawnsFile.delete("data/spawns.yml");
+            log.info("[1/1] Done.");
+        }
     }
 }

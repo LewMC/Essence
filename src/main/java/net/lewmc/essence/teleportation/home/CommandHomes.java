@@ -24,7 +24,7 @@ public class CommandHomes extends FoundryPlayerCommand {
      */
     @Override
     protected String requiredPermission() {
-        return "";
+        return "essence.home.list";
     }
 
     /**

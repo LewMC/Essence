@@ -9,12 +9,12 @@ import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class CommandSpawn extends FoundryPlayerCommand {
     private final Essence plugin;
@@ -40,11 +40,11 @@ public class CommandSpawn extends FoundryPlayerCommand {
     }
 
     /**
-     * @param cs        Information about who sent the command - player or console.
-     * @param command   Information about what command was sent.
-     * @param s         Command label - not used here.
-     * @param args      The command's arguments.
-     * @return boolean  true/false - was the command accepted and processed or not?
+     * @param cs       Information about who sent the command - player or console.
+     * @param command  Information about what command was sent.
+     * @param s        Command label - not used here.
+     * @param args     The command's arguments.
+     * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
@@ -60,13 +60,26 @@ public class CommandSpawn extends FoundryPlayerCommand {
             return true;
         }
 
+        if ((boolean) plugin.config.get("teleportation.spawn.always-spawn")) {
+            new UtilTeleport(this.plugin).sendToSpawn(p, plugin.config.get("teleportation.spawn.main-spawn-world").toString());
+            return true;
+        }
+
         Location loc = p.getLocation();
 
         String spawnName;
 
-        if (args.length == 1) {
-            if (new UtilPermission(this.plugin, cs).has("essence.spawn.other")) {
-                spawnName = args[0];
+        if (args.length != 0) {
+            if (new UtilPermission(this.plugin, cs).has("essence.world.teleport")) {
+                if (Objects.equals(args[0], "tp")) {
+                    if (args.length >= 2) {
+                        spawnName = args[1];
+                    } else {
+                        spawnName = loc.getWorld().getName();
+                    }
+                } else {
+                    spawnName = args[0];
+                }
             } else {
                 msg.send("spawn", "worldnoperms");
                 return true;
@@ -76,7 +89,8 @@ public class CommandSpawn extends FoundryPlayerCommand {
         }
 
         Files spawnData = new Files(this.plugin.foundryConfig, this.plugin);
-        spawnData.load("data/spawns.yml");
+        spawnData.load("data/worlds.yml");
+        UUID uid = Objects.requireNonNull(Bukkit.getServer().getWorld(spawnName)).getUID();
 
         Location teleportLocation;
 
@@ -85,7 +99,7 @@ public class CommandSpawn extends FoundryPlayerCommand {
             this.log.severe("Details: {\"error\": \"WORLD_IS_NULL\", \"caught\": \"SpawnCommand.java\", \"submitted\": \"" + spawnName + "\", \"found\": \"null\"}.");
         }
 
-        if (spawnData.get("spawn." + spawnName) == null) {
+        if (spawnData.get("world." + uid + ".spawn") == null) {
             if (this.plugin.verbose) {
                 this.log.warn("Spawn not implicitly set for world '" + spawnName + "', grabbing vanilla spawnpoint.");
             }
@@ -108,16 +122,18 @@ public class CommandSpawn extends FoundryPlayerCommand {
             }
 
             if (Bukkit.getServer().getWorld(spawnName) == null) {
-                new WorldCreator(spawnName).createWorld();
+                msg.send("generic", "exception");
+                log.warn("Player " + p + " attempted to teleport to spawn " + spawnName + " but couldn't due to an error.");
+                log.warn("Error: world is null, please check configuration file.");
             }
 
             teleportLocation = new Location(
                     Bukkit.getServer().getWorld(spawnName),
-                    spawnData.getDouble("spawn." + spawnName + ".X"),
-                    spawnData.getDouble("spawn." + spawnName + ".Y"),
-                    spawnData.getDouble("spawn." + spawnName + ".Z"),
-                    (float) spawnData.getDouble("spawn." + spawnName + ".yaw"),
-                    (float) spawnData.getDouble("spawn." + spawnName + ".pitch")
+                    spawnData.getDouble("world." + uid + ".spawn.x"),
+                    spawnData.getDouble("world." + uid + ".spawn.y"),
+                    spawnData.getDouble("world." + uid + ".spawn.z"),
+                    (float) spawnData.getDouble("world." + uid + ".spawn.yaw"),
+                    (float) spawnData.getDouble("world." + uid + ".spawn.pitch")
             );
         }
 
@@ -129,7 +145,7 @@ public class CommandSpawn extends FoundryPlayerCommand {
             msg.send("spawn", "teleportingnow");
         }
 
-        teleUtil.doTeleport(p, teleportLocation, waitTime);
+        teleUtil.doTeleport(p, teleportLocation, waitTime, true);
 
         spawnData.close();
 

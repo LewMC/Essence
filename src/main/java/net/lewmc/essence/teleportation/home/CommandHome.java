@@ -8,12 +8,11 @@ import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
-import org.bukkit.WorldCreator;
+import org.bukkit.World;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Objects;
 
 public class CommandHome extends FoundryPlayerCommand {
     private final Essence plugin;
@@ -112,8 +111,15 @@ public class CommandHome extends FoundryPlayerCommand {
 
         teleUtil.setCooldown((Player) cs, "home");
 
-        if (Bukkit.getServer().getWorld(playerData.getString(homeName + ".world")) == null) {
-            new WorldCreator(playerData.getString(homeName + ".world")).createWorld();
+        World world = Bukkit.getServer().getWorld(playerData.getString(homeName + ".world"));
+
+        if (world == null) {
+            playerData.close();
+            msg.send("generic", "exception");
+            Logger log = new Logger(this.plugin.foundryConfig);
+            log.warn("Player " + cs + " attempted to teleport home to " + chatHomeName + " but couldn't due to an error.");
+            log.warn("Error: world '" + playerData.getString(homeName + ".world") + "' does not exist.");
+            return true;
         }
 
         if (waitTime > 0) {
@@ -124,13 +130,14 @@ public class CommandHome extends FoundryPlayerCommand {
 
         teleUtil.doTeleport(
                 (Player) cs,
-                Bukkit.getServer().getWorld(Objects.requireNonNull(playerData.getString(homeName + ".world"))),
+                world,
                 playerData.getDouble(homeName + ".X"),
                 playerData.getDouble(homeName + ".Y"),
                 playerData.getDouble(homeName + ".Z"),
                 (float) playerData.getDouble(homeName + ".yaw"),
                 (float) playerData.getDouble(homeName + ".pitch"),
-                waitTime
+                waitTime,
+                true
         );
         playerData.close();
 

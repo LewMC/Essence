@@ -2,8 +2,8 @@ package net.lewmc.essence.team;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
+import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.Files;
-import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.Security;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -59,16 +59,14 @@ public class UtilTeam {
 
                 teamsFile.save();
 
-                Files playerDataFile = new Files(this.plugin.foundryConfig, this.plugin);
-                playerDataFile.load(playerDataFile.playerDataFile(leader));
-
-                playerDataFile.set("user.team", name);
-                playerDataFile.save();
+                UtilPlayer up = new UtilPlayer(this.plugin);
+                up.setPlayer(leader, UtilPlayer.KEYS.USER_TEAM, name);
+                up.savePlayer(leader);
 
                 message.send("team", "created", new String[] { name });
             } else {
                 message.send("generic", "exception");
-                new Logger(this.plugin.foundryConfig).warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
+                this.plugin.log.warn("Unable to create new team file at 'data/teams/"+name+".yml' - is this file writeable?");
             }
         } else {
             message.send("team", "exists");
@@ -153,15 +151,11 @@ public class UtilTeam {
      * @return String - Name of the player's team.
      */
     public @Nullable String getPlayerTeam(UUID player) {
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(player));
-        if (playerData.getString("user.team") == null) {
-            playerData.close();
+        Object team = new UtilPlayer(this.plugin).getPlayer(player, UtilPlayer.KEYS.USER_TEAM);
+        if (team == null) {
             return null;
         } else {
-            String team = playerData.getString("user.team");
-            playerData.close();
-            return team;
+            return team.toString();
         }
     }
 
@@ -174,11 +168,7 @@ public class UtilTeam {
     public boolean acceptRequest(String team, String player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player);
 
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(op.getUniqueId()));
-
-        playerData.set("user.team", team);
-        playerData.save();
+        new UtilPlayer(this.plugin).setPlayer(op.getUniqueId(), UtilPlayer.KEYS.USER_TEAM, team);
 
         Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+team+".yml");
@@ -222,15 +212,11 @@ public class UtilTeam {
      * @return boolean - If the operation is successful.
      */
     public boolean leave(String playerTeam, UUID uuid) {
+        UtilPlayer up = new UtilPlayer(this.plugin);
 
-        Files playerData = new Files(this.plugin.foundryConfig, this.plugin);
-        playerData.load(playerData.playerDataFile(uuid));
-
-        if (playerData.get("team") != null) {
-            playerData.set("team", null);
+        if (up.getPlayer(uuid, UtilPlayer.KEYS.USER_TEAM) != null) {
+            up.setPlayer(uuid, UtilPlayer.KEYS.USER_TEAM, null);
         }
-
-        playerData.save();
 
         Files teamData = new Files(this.plugin.foundryConfig, this.plugin);
         teamData.load("data/teams/"+playerTeam+".yml");
@@ -238,8 +224,6 @@ public class UtilTeam {
         List<String> defaultMembers = teamData.getStringList("members.default");
         defaultMembers.remove(String.valueOf(uuid));
         teamData.set("members.default", defaultMembers);
-
-        playerData.save();
 
         return true;
     }
@@ -408,11 +392,11 @@ public class UtilTeam {
         playerData.set("user.team", null);
         playerData.save();
 
-        return teamData.delete("teams/" + team + ".yml");
+        return teamData.delete("data/teams/" + team + ".yml");
     }
 
     /**
-     * Checks if players are in the same team..
+     * Checks if players are in the same team.
      * @param p1 Player - Player 1.
      * @param p2 Player - Player 2.
      * @return boolean - If the players are in the same team.
@@ -480,7 +464,7 @@ public class UtilTeam {
     /**
      * Fetches a team's prefix.
      * @param cs String - The command sender.
-     * @return String - The team's prefix (may be blank).
+     * @return String - The team's prefix (might be blank).
      */
     public String getTeamPrefix(CommandSender cs) {
         if (cs instanceof Player p) {

@@ -26,6 +26,7 @@ permissions:
       essence.spawn.*: true
       essence.kits.*: true
       essence.environment.*: true
+      essence.world.*: true
       essence.rules: true
   essence.gamemode.*:
     description: Allows players to switch to any gamemode.
@@ -59,6 +60,10 @@ permissions:
       essence.inventory.smithing: true
       essence.inventory.stonecutter: true
       essence.inventory.trash: true
+      essence.inventory.give: true
+      essence.inventory.skull: true
+      essence.inventory.clear: true
+      essence.inventory.recipe: true
   essence.inventory.anvil:
     description: Allows players to open an anvil when no anvil is present.
   essence.inventory.cartography:
@@ -77,6 +82,27 @@ permissions:
     description: Allows players to open a stonecutter when no stonecutter is present.
   essence.inventory.trash:
     description: Allows players to open the disposal menu.
+  essence.inventory.give:
+    description: Gives you an item.
+  essence.inventory.give.other:
+    description: Gives other players items.
+  essence.inventory.skull:
+    description: Get a player's skull.
+  essence.inventory.clear:
+    description: Clear your own inventory.
+  essence.inventory.clear.other:
+    description: Clear a player's inventory.
+  essence.inventory.invsee:
+    description: See a player's inventory.
+  essence.inventory.recipe:
+    description: View a recipe.
+  essence.inventory.other.*:
+    description: Allows players to access other player's inventory.
+    default: op
+    children:
+      essence.inventory.give.other: true
+      essence.inventory.clear.other: true
+      essence.inventory.invsee: true
   essence.teleport.*:
     description: Allows players to teleport.
     default: op
@@ -85,7 +111,13 @@ permissions:
       essence.teleport.player: true
       essence.teleport.offline: true
       essence.teleport.back: true
+      essence.teleport.back.other: true
+      essence.teleport.top: true
+      essence.teleport.bottom: true
+      essence.teleport.ascend: true
+      essence.teleport.descend: true
       essence.teleport.random: true
+      essence.orientation.*: true
       essence.teleport.other: true
       essence.teleport.request.*: true
   essence.teleport.coord:
@@ -96,6 +128,16 @@ permissions:
     description: Allows players to teleport to an offline player.
   essence.teleport.back:
     description: Go back to your last location before teleporting.
+  essence.teleport.back.other:
+    description: Teleport another player back to their last location.
+  essence.teleport.top:
+    description: Go to the highest safe location.
+  essence.teleport.bottom:
+    description: Go to the lowest safe location.
+  essence.teleport.ascend:
+    description: Ascend to a specified level.
+  essence.teleport.descend:
+    description: Descend to a specified level.
   essence.teleport.random:
     description: Teleport to a random location.
   essence.teleport.other:
@@ -122,6 +164,16 @@ permissions:
     description: Toggle receiving teleport requests.
   essence.teleport.request.cancel:
     description: Cancel a teleport request.
+  essence.orientation.*:
+    description: Allows players to use orientation commands.
+    default: op
+    children:
+      essence.orientation.direction: true
+      essence.orientation.near: true
+  essence.orientation.direction:
+    description: Determine your current direction.
+  essence.orientation.near:
+    description: Lists nearby players within the default or specified radius.
   essence.warp.*:
     description: Allows players to use and manage warps.
     default: op
@@ -130,6 +182,7 @@ permissions:
       essence.warp.list: true
       essence.warp.create: true
       essence.warp.delete: true
+      essence.warp.delete.other: true
   essence.warp.use:
     description: Allows players to warp.
   essence.warp.list:
@@ -137,7 +190,9 @@ permissions:
   essence.warp.create:
     description: Allows players to create warps.
   essence.warp.delete:
-    description: Allows players to delete warps.
+    description: Allows players to delete their warps.
+  essence.warp.delete.other:
+    description: Allows players to delete other players warps.
   essence.stats.*:
     description: Allows players to manage their stats such as health and hunger.
     default: op
@@ -147,6 +202,10 @@ permissions:
       essence.stats.repair: true
       essence.stats.fly: true
       essence.stats.speed: true
+      essence.stats.burn: true
+      essence.stats.extinguish: true
+      essence.stats.god: true
+      essence.stats.enchant: true
   essence.stats.heal:
     description: Allows you to heal yourself.
   essence.stats.feed:
@@ -157,6 +216,14 @@ permissions:
     description: Allows you to fly.
   essence.stats.speed:
     description: Allows you to set your speed.
+  essence.stats.burn:
+    description: Allows you to burn a player for the specified time
+  essence.stats.extinguish:
+    description: Allows you to extinguish a player
+  essence.stats.god:
+    description: Allows you to toggle god mode
+  essence.stats.enchant:
+    description: Allows you to enchant an item
   essence.stats.other.*:
     description: Allows players to manage other player's stats such as health and hunger.
     default: op
@@ -165,6 +232,9 @@ permissions:
       essence.stats.feed.other: true
       essence.stats.fly.other: true
       essence.stats.speed.other: true
+      essence.stats.extinguish.other: true
+      essence.stats.god.other: true
+      essence.stats.burn.other: true
   essence.stats.heal.other:
     description: Allows you to heal other players.
   essence.stats.feed.other:
@@ -173,6 +243,12 @@ permissions:
     description: Allows you to let other players fly.
   essence.stats.speed.other:
     description: Allows you to set other player's speed.
+  essence.stats.extinguish.other:
+    description: Allows you to extinguish another player
+  essence.stats.god.other:
+    description: Allows you to toggle another player's god mode
+  essence.stats.burn.other:
+    description: Allows you to burn other players
   essence.home.*:
     description: Allows players to use the home system.
     default: op
@@ -210,12 +286,13 @@ permissions:
       essence.chat.reply: true
       essence.chat.nick: true
       essence.chat.nick.*: true
+      essence.chat.list: true
   essence.chat.broadcast:
     description: Allows players to broadcast a message to chat.
   essence.chat.msg:
     description: Allows players to privately message.
   essence.chat.reply:
-    description: Allows players to change display names.
+    description: Allows players to reply to /msg messages.
   essence.chat.nick.*:
     default: op
     children:
@@ -225,16 +302,25 @@ permissions:
     description: Allows players to change their display names.
   essence.chat.nick.other:
     description: Allows players to change other player's display names.
+  essence.chat.list:
+    description: See who else is online.
+  essence.chat.list.invisible:
+    description: See online invisible players.
+  essence.chat.ignore:
+    description: Ignore other players in chat.
   essence.economy.*:
     description: Allows players to access all economy commands.
     default: op
     children:
       essence.economy.pay: true
       essence.economy.balance: true
+      essence.economy.admin: true
   essence.economy.pay:
     description: Use /pay command.
   essence.economy.balance:
     description: Use /balance command.
+  essence.economy.admin:
+    description: Use /eco command.
   essence.team.*:
     description: Allows players to access all teams commands.
     default: op
@@ -257,14 +343,11 @@ permissions:
     children:
       essence.spawn: true
       essence.spawn.set: true
-      essence.spawn.other: true
   essence.spawn.set:
     description: Set the spawn.
   essence.spawn:
     default: not op
     description: Teleport to spawn.
-  essence.spawn.other:
-    description: Teleport to other world's spawns.
   essence.kits.*:
     description: Allows players to access all kit commands.
     default: op
@@ -284,6 +367,7 @@ permissions:
       essence.admin.import: true
       essence.admin.invisible: true
       essence.admin.updates: true
+      essence.admin.sudo: true
   essence.admin.seen:
     description: Allows players to see when the player was last online.
   essence.admin.info:
@@ -299,7 +383,9 @@ permissions:
   essence.admin.invisible:
     description: Toggles invisibility.
   essence.admin.updates:
-    description: Toggles invisibility.
+    description: Shows update checks.
+  essence.admin.sudo:
+    description: Forces another user to run a command.
   essence.bypass.*:
     description: Allows bypassing of various limits.
     default: false
@@ -333,3 +419,31 @@ permissions:
     description: Allows changing your player time.
   essence.environment.pweather:
     description: Allows changing your player weather.
+  essence.world.*:
+    description: Allows changing environmental variables.
+    default: op
+    children:
+      essence.world: true
+      essence.world.create: true
+      essence.world.load: true
+      essence.world.unload: true
+      essence.world.teleport: true
+      essence.world.list: true
+      essence.world.delete: true
+  essence.world:
+    description: Allows access to /world, other operations may require more permissions.
+  essence.world.teleport:
+    description: Allows teleporting between worlds.
+    default: op
+    children:
+      essence.spawn: true
+  essence.world.create:
+    description: Allows creation of worlds.
+  essence.world.delete:
+    description: Allows deletion of worlds.
+  essence.world.load:
+    description: Allows loading of worlds.
+  essence.world.unload:
+    description: Allows unloading of worlds.
+  essence.world.list:
+    description: Allows listing of worlds.
