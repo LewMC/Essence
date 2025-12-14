@@ -21,11 +21,11 @@ public class EventWorldLoad implements Listener {
     }
 
     /**
-     * Event handler for when a player joins.
+     * Event handler for when a world loads.
      * @param event WorldLoadEvent - Server thrown event.
      */
     @EventHandler
-    public void onPlayerJoin(WorldLoadEvent event) {
+    public void onWorldLoad(WorldLoadEvent event) {
         // Deferred tasks.
         if (!this.plugin.deferredTasksRun) {
             this.plugin.log.info("Running deferred tasks...");
