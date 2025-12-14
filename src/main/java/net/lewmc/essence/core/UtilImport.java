@@ -153,12 +153,12 @@ public class UtilImport {
 
                         if (world != null) {
                             UUID wUID = world.getUID();
-                            if (spawnFile.get("worlds." + wUID) == null) {
-                                spawnFile.set("worlds." + wUID + ".spawn.x", file.getDouble("spawns." + esxName + ".x"));
-                                spawnFile.set("worlds." + wUID + ".spawn.y", file.getDouble("spawns." + esxName + ".y"));
-                                spawnFile.set("worlds." + wUID + ".spawn.z", file.getDouble("spawns." + esxName + ".z"));
-                                spawnFile.set("worlds." + wUID + ".spawn.yaw", file.getDouble("spawns." + esxName + ".yaw"));
-                                spawnFile.set("worlds." + wUID + ".spawn.pitch", file.getDouble("spawns." + esxName + ".pitch"));
+                            if (spawnFile.get("world." + wUID) == null) {
+                                spawnFile.set("world." + wUID + ".spawn.x", file.getDouble("spawns." + esxName + ".x"));
+                                spawnFile.set("world." + wUID + ".spawn.y", file.getDouble("spawns." + esxName + ".y"));
+                                spawnFile.set("world." + wUID + ".spawn.z", file.getDouble("spawns." + esxName + ".z"));
+                                spawnFile.set("world." + wUID + ".spawn.yaw", file.getDouble("spawns." + esxName + ".yaw"));
+                                spawnFile.set("world." + wUID + ".spawn.pitch", file.getDouble("spawns." + esxName + ".pitch"));
                             }
                         }
 
