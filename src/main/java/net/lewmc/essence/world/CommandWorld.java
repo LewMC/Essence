@@ -3,11 +3,11 @@ package net.lewmc.essence.world;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
+import net.lewmc.essence.teleportation.spawn.CommandSpawn;
 import net.lewmc.foundry.Parser;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Map;
@@ -54,14 +54,14 @@ public class CommandWorld extends FoundryCommand {
         this.perms = new UtilPermission(this.plugin, cs);
 
         if (args.length == 0) {
-            if (!(cs instanceof Player)) {
-                msg.send("world", "usage");
-            }
+            msg.send("world", "usage");
+            msg.send("world", "usageactions");
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("list")) {
                 return this.listCommand();
             } else {
                 msg.send("world", "usage");
+                msg.send("world", "usageactions");
             }
         } else {
             String name = args[1];
@@ -73,8 +73,11 @@ public class CommandWorld extends FoundryCommand {
                 return this.unloadCommand(name);
             } else if (args[0].equalsIgnoreCase("load")) {
                 return this.loadCommand(name);
+            } else if (args[0].equalsIgnoreCase("tp")) {
+                return new CommandSpawn(this.plugin).onCommand(cs, command, s, args);
             } else {
                 msg.send("world", "usage");
+                msg.send("world", "usageactions");
             }
         }
         return true;
@@ -130,6 +133,27 @@ public class CommandWorld extends FoundryCommand {
             msg.send("world", "notfound", new String[]{name});
         } else if (ws == UtilWorld.WORLD_STATUS.OTHER_ERROR) {
             msg.send("generic", "customerror", new String[]{"Unable to unload world '"+name+"'."});
+        } else {
+            msg.send("generic", "customerror", new String[]{"World unloading resulted in an unhandled outcome."});
+        }
+        return true;
+    }
+    /**
+     * Processes the unload command.
+     * @param name String - The world name
+     * @return boolean - always true
+     */
+    private boolean deleteCommand(String name) {
+        if (!perms.has("essence.world.delete")) { return perms.not(); }
+        UtilWorld.WORLD_STATUS ws = new UtilWorld(this.plugin).delete(name);
+        if (ws == UtilWorld.WORLD_STATUS.LOADED) {
+            msg.send("world", "deleteunloaded", new String[]{name});
+        } else if (ws == UtilWorld.WORLD_STATUS.NOT_FOUND) {
+            msg.send("world", "notfound", new String[]{name});
+        } else if (ws == UtilWorld.WORLD_STATUS.OTHER_ERROR) {
+            msg.send("generic", "customerror", new String[]{"Unable to unload world '"+name+"'."});
+        } else if (ws == UtilWorld.WORLD_STATUS.DELETED) {
+            msg.send("world", "deleted", new String[]{name});
         } else {
             msg.send("generic", "customerror", new String[]{"World unloading resulted in an unhandled outcome."});
         }

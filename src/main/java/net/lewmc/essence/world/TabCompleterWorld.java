@@ -12,6 +12,16 @@ import java.util.*;
  * Tab completer for the /world command.
  */
 public class TabCompleterWorld implements TabCompleter {
+    private final Essence plugin;
+
+    /**
+     * Constructor for the TabCompleterWorld class.
+     * @param plugin Essence - Reference to the main plugin class.
+     */
+    public TabCompleterWorld(Essence plugin) {
+        this.plugin = plugin;
+    }
+
     /**
      * Tab completer for the /world command.
      * @param sender CommandSender - The command executor.
@@ -29,7 +39,9 @@ public class TabCompleterWorld implements TabCompleter {
     ) {
         String[] keys;
         if (args.length == 1) {
-            keys = new String[]{"create","load","unload","delete"};
+            keys = new String[]{"create","delete","load","list","tp","unload"};
+        } else if (args.length == 2 && !args[0].equalsIgnoreCase("create")) {
+            keys = (String[]) new UtilWorld(this.plugin).list().stream().toArray();
         } else {
             keys = new String[]{};
         }

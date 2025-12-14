@@ -452,6 +452,7 @@ environment:
   playertimereset: "§2[Essence] §aYour player time now matches server time."
 world:
   usage: "§4[Essence] §cUsage: /world <action> <name>"
+  usageactions: "§4[Essence] §cActions: create, delete, load, list, tp, unload"
   noname: "§4[Essence] §cPlease enter a world name."
   created: "§2[Essence] §aWorld '{{1}}' created successfully."
   notcreated: "§4[Essence] §cUnable to create world '{{1}}': {{2}}."
@@ -462,6 +463,8 @@ world:
   notfound: "§4[Essence] §cWorld '{{1}}' could not be found."
   listloaded: "§6[Essence] §eLoaded: {{1}}"
   listunloaded: "§6[Essence] §eUnloaded: {{1}}"
+  deleteunloaded: "§4[Essence] §cCannot delete world: '{{1}}', world is loaded."
+  deleted: "§2[Essence] §aWorld '{{1}}' deleted successfully."
 sudo:
   usage: "§4[Essence] §cUsage: /sudo <player> <usage>"
   ran: "§2[Essence] §aForced {{1}} to run '{{2}}'"

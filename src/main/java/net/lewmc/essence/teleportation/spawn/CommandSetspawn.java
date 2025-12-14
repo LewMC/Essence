@@ -9,6 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class CommandSetspawn extends FoundryPlayerCommand {
     private final Essence plugin;
 
@@ -31,11 +33,11 @@ public class CommandSetspawn extends FoundryPlayerCommand {
     }
 
     /**
-     * @param cs        Information about who sent the command - player or console.
-     * @param command   Information about what command was sent.
-     * @param s         Command label - not used here.
-     * @param args      The command's arguments.
-     * @return boolean  true/false - was the command accepted and processed or not?
+     * @param cs       Information about who sent the command - player or console.
+     * @param command  Information about what command was sent.
+     * @param s        Command label - not used here.
+     * @param args     The command's arguments.
+     * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
@@ -43,15 +45,15 @@ public class CommandSetspawn extends FoundryPlayerCommand {
         Location loc = p.getLocation();
         Files spawnFile = new Files(this.plugin.foundryConfig, this.plugin);
 
-        String spawnName = loc.getWorld().getName();
+        UUID world = loc.getWorld().getUID();
 
-        spawnFile.load("data/spawns.yml");
+        spawnFile.load("data/worlds.yml");
 
-        spawnFile.set("spawn." + spawnName + ".X", loc.getX());
-        spawnFile.set("spawn." + spawnName + ".Y", loc.getY());
-        spawnFile.set("spawn." + spawnName + ".Z", loc.getZ());
-        spawnFile.set("spawn." + spawnName + ".yaw", loc.getYaw());
-        spawnFile.set("spawn." + spawnName + ".pitch", loc.getPitch());
+        spawnFile.set("world." + world + ".spawn.X", loc.getX());
+        spawnFile.set("world." + world + ".spawn.Y", loc.getY());
+        spawnFile.set("world." + world + ".spawn.Z", loc.getZ());
+        spawnFile.set("world." + world + ".spawn.yaw", loc.getYaw());
+        spawnFile.set("world." + world + ".spawn.pitch", loc.getPitch());
 
         // Save the configuration to the file
         spawnFile.save();

@@ -1,6 +1,7 @@
 package net.lewmc.essence.world;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.Parser;
 import net.lewmc.foundry.Security;
@@ -10,6 +11,8 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -35,6 +38,10 @@ public class UtilWorld {
     public WORLD_STATUS create(String name, Map<String, String> flags) {
         try {
             if (this.plugin.getServer().getWorld(name) != null) {
+                return WORLD_STATUS.EXISTS;
+            }
+
+            if (new Files(this.plugin.foundryConfig, this.plugin).exists(this.plugin.getDataFolder().getPath()+"/"+name)) {
                 return WORLD_STATUS.EXISTS;
             }
 
@@ -89,7 +96,7 @@ public class UtilWorld {
             }
 
             if (flags.get("-s") != null) {
-                if (Parser.isNumeric(flags.get("-s"))) {
+                if (new Parser().isNumeric(flags.get("-s"))) {
                     try {
                         wc.seed(Long.parseLong(flags.get("-s")));
                     } catch (NumberFormatException e) {
@@ -132,6 +139,36 @@ public class UtilWorld {
             new Logger(this.plugin.foundryConfig).warn("Unable to create world: " + e.getMessage());
             return WORLD_STATUS.OTHER_ERROR;
         }
+    }
+
+    /**
+     * Deletes a world
+     * @param name String - the world name
+     * @return WORLD_STATUS - the status
+     */
+    public WORLD_STATUS delete(String name) {
+        List<ESSENCE_WORLD> worlds = this.list();
+
+        for (ESSENCE_WORLD w : worlds) {
+            if (Objects.equals(name, w.name)) {
+                if (w.status == WORLD_STATUS.LOADED) {
+                    return WORLD_STATUS.LOADED;
+                } else {
+                    String path = this.plugin.getDataFolder().getPath()+"/"+name;
+                    if (!new Files(this.plugin.foundryConfig, this.plugin).exists(path)) return WORLD_STATUS.NOT_FOUND;
+
+                    try {
+                        new Files(this.plugin.foundryConfig, this.plugin).deleteDirectory(Path.of(path));
+                    } catch (IOException e) {
+                        return WORLD_STATUS.OTHER_ERROR;
+                    }
+
+                    return WORLD_STATUS.UNLOADED;
+                }
+            }
+        }
+
+        return WORLD_STATUS.NOT_FOUND;
     }
 
     /**
@@ -232,15 +269,16 @@ public class UtilWorld {
         INVALID_L,
         OTHER_ERROR,
         INVALID_CHARS,
-        NOT_FOUND
+        NOT_FOUND,
+        DELETED
     }
 
     /**
      * Essence's world data object.
      */
     public static class ESSENCE_WORLD {
-        UUID uuid;
-        String name;
-        WORLD_STATUS status;
+        public UUID uuid;
+        public String name;
+        public WORLD_STATUS status;
     }
 }

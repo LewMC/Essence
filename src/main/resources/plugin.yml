@@ -434,6 +434,9 @@ permissions:
     description: Allows access to /world, other operations may require more permissions.
   essence.world.teleport:
     description: Allows teleporting between worlds.
+    default: op
+    children:
+      essence.spawn: true
   essence.world.create:
     description: Allows creation of worlds.
   essence.world.delete:

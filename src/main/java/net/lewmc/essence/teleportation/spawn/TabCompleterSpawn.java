@@ -1,8 +1,7 @@
 package net.lewmc.essence.teleportation.spawn;
 
 import net.lewmc.essence.Essence;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
+import net.lewmc.essence.world.UtilWorld;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 /**
- * Tab completer for the /home command.
+ * Tab completer for the /spawn command.
  */
 public class TabCompleterSpawn implements TabCompleter {
 
@@ -40,11 +39,13 @@ public class TabCompleterSpawn implements TabCompleter {
             @NotNull String arg,
             String[] args
     ) {
-        List<World> worlds = Bukkit.getWorlds();
+        List<UtilWorld.ESSENCE_WORLD> worlds = new UtilWorld(plugin).list();
 
         Set<String> keys = new HashSet<>();
-        for (World world : worlds) {
-            keys.add(world.getName());
+        for (UtilWorld.ESSENCE_WORLD world : worlds) {
+            if (world.status == UtilWorld.WORLD_STATUS.LOADED) {
+                keys.add(world.name);
+            }
         }
 
         return new ArrayList<>(Objects.requireNonNullElseGet(keys, () -> List.of("")));

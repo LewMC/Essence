@@ -29,7 +29,7 @@ public class ModuleWorld extends FoundryModule {
     @Override
     public void registerCommands() {
         this.cmd = new UtilCommand((Essence) this.plugin);
-        if (!this.cmd.isDisabled("world")) { reg.runtimeCommand("world", new CommandWorld((Essence) plugin), "world"); }
+        if (!this.cmd.isDisabled("world")) { reg.runtimeCommand("world", new CommandWorld((Essence) this.plugin), "world"); }
     }
 
     /**
@@ -37,7 +37,7 @@ public class ModuleWorld extends FoundryModule {
      */
     @Override
     public void registerTabCompleters() {
-        if (!this.cmd.isDisabled("world")) { reg.tabCompleter(new String[] { "world" }, new TabCompleterWorld()); }
+        if (!this.cmd.isDisabled("world")) { reg.tabCompleter(new String[] { "world" }, new TabCompleterWorld((Essence) this.plugin)); }
     }
 
     /**

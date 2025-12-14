@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class CommandSpawn extends FoundryPlayerCommand {
     private final Essence plugin;
@@ -39,11 +40,11 @@ public class CommandSpawn extends FoundryPlayerCommand {
     }
 
     /**
-     * @param cs        Information about who sent the command - player or console.
-     * @param command   Information about what command was sent.
-     * @param s         Command label - not used here.
-     * @param args      The command's arguments.
-     * @return boolean  true/false - was the command accepted and processed or not?
+     * @param cs       Information about who sent the command - player or console.
+     * @param command  Information about what command was sent.
+     * @param s        Command label - not used here.
+     * @param args     The command's arguments.
+     * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
@@ -75,7 +76,8 @@ public class CommandSpawn extends FoundryPlayerCommand {
         }
 
         Files spawnData = new Files(this.plugin.foundryConfig, this.plugin);
-        spawnData.load("data/spawns.yml");
+        spawnData.load("data/worlds.yml");
+        UUID uid = Objects.requireNonNull(Bukkit.getServer().getWorld(spawnName)).getUID();
 
         Location teleportLocation;
 
@@ -84,7 +86,7 @@ public class CommandSpawn extends FoundryPlayerCommand {
             this.log.severe("Details: {\"error\": \"WORLD_IS_NULL\", \"caught\": \"SpawnCommand.java\", \"submitted\": \"" + spawnName + "\", \"found\": \"null\"}.");
         }
 
-        if (spawnData.get("spawn." + spawnName) == null) {
+        if (spawnData.get("world." + uid + ".spawn") == null) {
             if (this.plugin.verbose) {
                 this.log.warn("Spawn not implicitly set for world '" + spawnName + "', grabbing vanilla spawnpoint.");
             }
@@ -114,11 +116,11 @@ public class CommandSpawn extends FoundryPlayerCommand {
 
             teleportLocation = new Location(
                     Bukkit.getServer().getWorld(spawnName),
-                    spawnData.getDouble("spawn." + spawnName + ".X"),
-                    spawnData.getDouble("spawn." + spawnName + ".Y"),
-                    spawnData.getDouble("spawn." + spawnName + ".Z"),
-                    (float) spawnData.getDouble("spawn." + spawnName + ".yaw"),
-                    (float) spawnData.getDouble("spawn." + spawnName + ".pitch")
+                    spawnData.getDouble("world." + uid + ".spawn.X"),
+                    spawnData.getDouble("world." + uid + ".spawn.Y"),
+                    spawnData.getDouble("world." + uid + ".spawn.Z"),
+                    (float) spawnData.getDouble("world." + uid + ".spawn.yaw"),
+                    (float) spawnData.getDouble("world." + uid + ".spawn.pitch")
             );
         }
 
