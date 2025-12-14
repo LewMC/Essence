@@ -2,6 +2,7 @@ package net.lewmc.essence.admin;
 
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
+import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -49,8 +50,17 @@ public class CommandSudo extends FoundryCommand {
                     cmd.append(args[i]).append(" ");
                 }
 
-                p.performCommand(cmd.toString().trim());
-                message.send("sudo", "ran", new String[]{ p.getName(), cmd.toString() });
+                String fullCommand = cmd.toString().trim();
+
+                if (fullCommand.toLowerCase().startsWith("sudo ")) {
+                    message.send("sudo", "recursion");
+                    return true;
+                }
+
+                new Logger(this.plugin.foundryConfig).info("SUDO: " + cs.getName() + " executed /" + fullCommand + " as " + p.getName());
+
+                p.performCommand(fullCommand);
+                message.send("sudo", "ran", new String[]{p.getName(), fullCommand});
             } else {
                 message.send("generic", "playernotfound");
             }

@@ -81,7 +81,7 @@ public class CommandGod extends FoundryCommand {
      * @param permission PermissionHandler - The permission system
      * @param sender CommandSender - The user to god.
      * @param message MessageUtil - The messaging system.
-     * @param args Sting[] - List of command arguments.
+     * @param args String[] - List of command arguments.
      * @return boolean - If the operation was successful
      */
     private boolean godOther(UtilPermission permission, CommandSender sender, UtilMessage message, String[] args) {

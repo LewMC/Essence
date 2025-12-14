@@ -467,6 +467,7 @@ world:
   deleted: "§2[Essence] §aWorld '{{1}}' deleted successfully."
 sudo:
   usage: "§4[Essence] §cUsage: /sudo <player> <usage>"
+  recursion: "§4[Essence] §cThat command may cause your server to lag and has been blocked."
   ran: "§2[Essence] §aForced {{1}} to run '{{2}}'"
 give:
   usage: "§4[Essence] §cUsage: /give <player> <item> [amount] or /give <item> [amount]"
