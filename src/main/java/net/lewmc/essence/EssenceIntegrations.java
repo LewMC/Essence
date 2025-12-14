@@ -72,6 +72,7 @@ public class EssenceIntegrations {
             switch ((String) this.plugin.config.get("economy.mode")) {
                 case "VAULT", "true", "default" -> {
                     if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
+                        this.log.warn("Economy mode is VAULT, but Vault is not installed/enabled.");
                         return false;
                     }
 
