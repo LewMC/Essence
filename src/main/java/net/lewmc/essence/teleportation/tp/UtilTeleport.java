@@ -435,7 +435,7 @@ public class UtilTeleport {
             return;
         }
 
-        if (spawnConfiguration.get("world"+spawnWorld.getUID()+".spawn") == null) {
+        if (spawnConfiguration.get("world."+spawnWorld.getUID()+".spawn") == null) {
             if (Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null) {
                 UtilTeleport tp = new UtilTeleport(plugin);
                 tp.doTeleport(
@@ -457,7 +457,7 @@ public class UtilTeleport {
             tp.doTeleport(
                     player,
                     spawnWorld,
-                    spawnConfiguration.getDouble("world"+spawnWorld.getUID()+".spawn.x"),
+                    spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.x"),
                     spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.y"),
                     spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.z"),
                     (float) spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.yaw"),
