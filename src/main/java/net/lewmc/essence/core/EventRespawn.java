@@ -1,9 +1,11 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.teleportation.tp.UtilTeleport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.data.type.Bed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -40,30 +42,21 @@ public class EventRespawn implements Listener {
             String worldName = up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_WORLD).toString();
             World world = Bukkit.getWorld(worldName);
 
-            if (world != null) {
-                event.setRespawnLocation(new Location(
-                        world,
-                        (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_X),
-                        (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_Y),
-                        (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_Z),
-                        ((Float) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_YAW)),
-                        ((Float) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_PITCH))
-                ));
+            Location bed = new Location(
+                    world,
+                    (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_X),
+                    (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_Y),
+                    (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_Z),
+                    ((Float) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_YAW)),
+                    ((Float) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_PITCH))
+            );
+
+            if (world != null && bed.getBlock().getBlockData() instanceof Bed) {
+                event.setRespawnLocation(bed);
                 return;
             }
         }
 
-        String spawnName = plugin.config.get("teleportation.spawn.main-spawn-world").toString();
-        if (spawnName == null) {
-            plugin.getLogger().warning("Spawn world " + spawnName + " not found!");
-            return;
-        }
-        World world = Bukkit.getWorld(spawnName);
-
-        if (world != null) {
-            event.setRespawnLocation(world.getSpawnLocation());
-        } else {
-            plugin.getLogger().warning("Spawn world " + spawnName + " not found!");
-        }
+        new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), plugin.config.get("teleportation.spawn.main-spawn-world").toString());
     }
 }

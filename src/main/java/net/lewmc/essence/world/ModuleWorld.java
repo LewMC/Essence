@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ModuleWorld extends FoundryModule {
 
-    private final UtilCommand cmd;
+    private UtilCommand cmd;
 
     /**
      * Constructor for the module.
@@ -21,7 +21,6 @@ public class ModuleWorld extends FoundryModule {
      */
     public ModuleWorld(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
-        this.cmd = new UtilCommand((Essence) this.plugin);
     }
 
     /**
@@ -29,7 +28,8 @@ public class ModuleWorld extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        if (!this.cmd.isDisabled("world")) { reg.runtimeCommand("world", new CommandWorld((Essence) plugin), "worlds"); }
+        this.cmd = new UtilCommand((Essence) this.plugin);
+        if (!this.cmd.isDisabled("world")) { reg.runtimeCommand("world", new CommandWorld((Essence) this.plugin), "world"); }
     }
 
     /**
@@ -37,7 +37,7 @@ public class ModuleWorld extends FoundryModule {
      */
     @Override
     public void registerTabCompleters() {
-        if (!this.cmd.isDisabled("world")) { reg.tabCompleter(new String[] { "world" }, new TabCompleterWorld((Essence) plugin)); }
+        if (!this.cmd.isDisabled("world")) { reg.tabCompleter(new String[] { "world" }, new TabCompleterWorld((Essence) this.plugin)); }
     }
 
     /**

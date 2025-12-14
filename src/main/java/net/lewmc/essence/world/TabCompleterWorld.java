@@ -12,12 +12,11 @@ import java.util.*;
  * Tab completer for the /world command.
  */
 public class TabCompleterWorld implements TabCompleter {
-
     private final Essence plugin;
 
     /**
      * Constructor for the TabCompleterWorld class.
-     * @param plugin Essence - Reference to the main Essence class.
+     * @param plugin Essence - Reference to the main plugin class.
      */
     public TabCompleterWorld(Essence plugin) {
         this.plugin = plugin;
@@ -40,10 +39,9 @@ public class TabCompleterWorld implements TabCompleter {
     ) {
         String[] keys;
         if (args.length == 1) {
-            keys = new String[]{"teleport", "create", "delete"};
-        } else if (args.length == 2 && args[1].equalsIgnoreCase("teleport")) {
-            // todo: implement
-            keys = new String[]{"TODO"};
+            keys = new String[]{"create","delete","load","list","tp","unload"};
+        } else if (args.length == 2 && !args[0].equalsIgnoreCase("create")) {
+            keys = new UtilWorld(this.plugin).list().stream().map(UtilWorld.ESSENCE_WORLD::getName).toArray(String[]::new);
         } else {
             keys = new String[]{};
         }

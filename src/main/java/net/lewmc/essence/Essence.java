@@ -106,6 +106,11 @@ public class Essence extends JavaPlugin {
     public Files messageStore;
 
     /**
+     * Checks if deferred tasks have been run (in Core/EventWorldLoad)
+     */
+    public boolean deferredTasksRun = false;
+
+    /**
      * This function runs when Essence is enabled.
      */
     @Override
@@ -115,17 +120,22 @@ public class Essence extends JavaPlugin {
         this.log = new Logger(this.foundryConfig);
 
         this.log.info("");
-        this.log.info("███████╗░██████╗░██████╗███████╗███╗░░██╗░█████╗░███████╗");
-        this.log.info("██╔════╝██╔════╝██╔════╝██╔════╝████╗░██║██╔══██╗██╔════╝");
-        this.log.info("█████╗░░╚█████╗░╚█████╗░█████╗░░██╔██╗██║██║░░╚═╝█████╗░░");
-        this.log.info("██╔══╝░░░╚═══██╗░╚═══██╗██╔══╝░░██║╚████║██║░░██╗██╔══╝░░");
-        this.log.info("███████╗██████╔╝██████╔╝███████╗██║░╚███║╚█████╔╝███████╗");
-        this.log.info("╚══════╝╚═════╝░╚═════╝░╚══════╝╚═╝░░╚══╝░╚════╝░╚══════╝");
-        this.log.info("");
-        this.log.info("Running Essence version " + this.getDescription().getVersion() + ".");
-        this.log.info("Please report any issues with Essence to our GitHub repository: https://github.com/lewmc/essence/issues");
-        this.log.info("");
-        this.log.info("Please consider leaving us a review at https://lewmc.net/support/review");
+        this.log.info("███████████████████████████████⟍");
+        this.log.info("███████████████████████████████  ⟍    ┌─────── Essence by LewMC ────────");
+        this.log.info("██           █████         ████   │   │ Stress-free server utilities.");
+        this.log.info("██           ████           ███   │   └ Version "+ this.getDescription().getVersion());
+        this.log.info("██    ██████████    █████    ██   │");
+        this.log.info("██    ██████████     ██████████   │");
+        this.log.info("██          █████          ████   │   ┌── ‼ ── Found a problem?  ── ‼ ──");
+        this.log.info("██          ███████         ███   │   │ Please report any problems to");
+        this.log.info("██    ██████████████████     ██   │   │ our GitHub issues page at");
+        this.log.info("██    ██████████    █████    ██   │   └ github.com/lewmc/essence");
+        this.log.info("██           ████           ███   │");
+        this.log.info("██           █████         ████   │");
+        this.log.info("███████████████████████████████   │   ┌── ✓ ── Enjoying Essence? ── ✓ ──");
+        this.log.info("███████████████████████████████   │   │ Support LewMC and Essence by");
+        this.log.info("⟍                                 │   └ visiting lewmc.net/support");
+        this.log.info("  ⟍ ──────────────────────────────┘");
         this.log.info("");
         this.log.info("Beginning startup...");
         this.log.info("");
@@ -147,8 +157,8 @@ public class Essence extends JavaPlugin {
 
         if (!Bukkit.getOnlineMode()) {
             this.log.severe(">> Your server is running in offline mode.");
-            this.log.warn(">> Homes set in offline mode may not save properly if you switch back to online mode.");
-            this.log.warn(">> Homes set in online mode may not work properly in offline mode.");
+            this.log.warn(">> Player data saved in offline mode may not work properly if you switch back to online mode.");
+            this.log.warn(">> Player data saved in online mode may not work properly in offline mode.");
             this.log.info("");
         }
 
@@ -168,23 +178,7 @@ public class Essence extends JavaPlugin {
         this.log.info("");
         this.log.info("Startup completed.");
 
-        if (Objects.equals(System.getProperty("ESSENCE_LOADED", ""), "TRUE")) {
-            this.log.severe("");
-            this.log.severe("WARNING: RELOAD DETECTED!");
-            this.log.severe("");
-            this.log.severe("This may cause issues with Essence, other plugins, and your server overall.");
-            this.log.severe("These issues include breaking permissions and other crashing exceptions.");
-            this.log.severe("If you are reloading datapacks use /minecraft:reload instead.");
-            this.log.severe("");
-            this.log.severe("WE HIGHLY RECOMMEND RESTARTING YOUR SERVER.");
-            this.log.severe("");
-            this.log.severe("We will not provide support for any issues when plugin reloaders are used.");
-            this.log.severe("");
-            this.log.severe("More info: https://madelinemiller.dev/blog/problem-with-reload");
-            this.log.severe("");
-        }
-
-        System.setProperty("ESSENCE_LOADED", "TRUE");
+        new Security(this.foundryConfig).startWatchdog();
     }
 
     /**
@@ -243,9 +237,9 @@ public class Essence extends JavaPlugin {
             saveResource("data/warps.yml", false);
         }
 
-        File spawnsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "spawns.yml");
+        File spawnsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "worlds.yml");
         if (!spawnsFile.exists()) {
-            saveResource("data/spawns.yml", false);
+            saveResource("data/worlds.yml", false);
         }
 
         File kitsFile = new File(getDataFolder() + File.separator + "data" + File.separator + "kits.yml");
@@ -271,7 +265,7 @@ public class Essence extends JavaPlugin {
         }
 
         this.messageStore = new Files(this.foundryConfig, this);
-        this.messageStore.load("language/"+(String) this.config.get("language")+".yml");
+        this.messageStore.load("language/"+this.config.get("language")+".yml");
     }
 
     /**
@@ -328,6 +322,8 @@ public class Essence extends JavaPlugin {
     @Override
     public void onDisable() {
         new FoliaLib(this).getScheduler().cancelAllTasks();
-        this.messageStore.close();
+        if (this.messageStore != null) {
+            this.messageStore.close();
+        }
     }
 }

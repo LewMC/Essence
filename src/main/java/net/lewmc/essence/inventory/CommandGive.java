@@ -5,7 +5,7 @@ import net.lewmc.essence.core.UtilItem;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.core.UtilPlayer;
-import net.lewmc.foundry.Validation;
+import net.lewmc.foundry.Parser;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -66,7 +66,7 @@ public class CommandGive extends FoundryCommand {
             }
         } else if (args.length == 2) {
             // Try to parse as /give <item> <amount> for self
-            if (cs instanceof Player player && Validation.isNumeric(args[1]) ) {
+            if (cs instanceof Player player && new Parser().isNumeric(args[1]) ) {
                 try {
                     int amount = this.parseItemAmount(args[1]);
 

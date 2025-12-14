@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ModuleTeam extends FoundryModule {
 
-    private final UtilCommand cmd;
+    private UtilCommand cmd;
 
     /**
      * Constructor for the module.
@@ -21,7 +21,6 @@ public class ModuleTeam extends FoundryModule {
      */
     public ModuleTeam(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
-        this.cmd = new UtilCommand((Essence) this.plugin);
     }
 
     /**
@@ -29,6 +28,7 @@ public class ModuleTeam extends FoundryModule {
      */
     @Override
     public void registerCommands() {
+        this.cmd = new UtilCommand((Essence) this.plugin);
         if (!this.cmd.isDisabled("team")) { reg.runtimeCommand("team", new CommandTeam((Essence) plugin), "group"); }
         if (!this.cmd.isDisabled("thome")) { reg.runtimeCommand("thome", new CommandThome((Essence) plugin), "teamhome","ghome","grouphome"); }
         if (!this.cmd.isDisabled("thomes")) { reg.runtimeCommand("thomes", new CommandThomes((Essence) plugin), "teamhomes","ghomes","grouphomes"); }

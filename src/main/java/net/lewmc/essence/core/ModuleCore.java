@@ -10,8 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * The Core Module
  */
 public class ModuleCore extends FoundryModule {
-
-    private final UtilCommand cmd;
+    private UtilCommand cmd;
 
     /**
      * Constructor for the module.
@@ -20,7 +19,6 @@ public class ModuleCore extends FoundryModule {
      */
     public ModuleCore(@NotNull JavaPlugin plugin, @NotNull Registry reg) {
         super(plugin, reg);
-        this.cmd = new UtilCommand((Essence) this.plugin);
     }
 
     /**
@@ -28,6 +26,7 @@ public class ModuleCore extends FoundryModule {
      */
     @Override
     public void registerCommands() {
+        this.cmd = new UtilCommand((Essence) this.plugin);
         if (!this.cmd.isDisabled("essence")) { reg.runtimeCommand("essence", new CommandEssence((Essence) plugin), "es", "ess"); }
         if (!this.cmd.isDisabled("rules")) { reg.runtimeCommand("rules", new CommandRules((Essence) plugin)); }
     }
@@ -52,5 +51,6 @@ public class ModuleCore extends FoundryModule {
         reg.event(new EventPlayerBedEnter((Essence) plugin));
         reg.event(new EventLeave((Essence) plugin));
         reg.event(new EventPlayerMove((Essence) plugin));
+        reg.event(new EventWorldLoad((Essence) plugin));
     }
 }

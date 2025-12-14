@@ -2,8 +2,11 @@ package net.lewmc.essence.core;
 
 import com.tchristofferson.configupdater.ConfigUpdater;
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.world.UtilWorld;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +15,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.UUID;
 
 /**
  * Essence's update utility.
@@ -360,5 +364,43 @@ public class UtilUpdate {
         }
 
         f.save();
+    }
+
+    /**
+     * Migrates spawns.
+     */
+    public void migrateSpawns() {
+        // SPAWNS.yml -> WORLDS.yml
+        Files spawnsFile = new Files(this.plugin.foundryConfig, this.plugin);
+        if (spawnsFile.exists("data/spawns.yml")) {
+            log.info("Essence is updating your worlds file, please wait...");
+
+            log.info("[1/1] Migrating spawns...");
+            spawnsFile.load("data/spawns.yml");
+
+            Files worldsFile = new Files(this.plugin.foundryConfig, this.plugin);
+            if (!worldsFile.exists("data/worlds.yml")) {
+                worldsFile.create("data/worlds.yml");
+            }
+            worldsFile.load("data/worlds.yml");
+
+            for (String spawnName : spawnsFile.getKeys("spawn", false)) {
+                new UtilWorld(this.plugin).load(spawnName);
+                World world = Bukkit.getWorld(spawnName);
+                if (world != null) {
+                    UUID uid = world.getUID();
+                    worldsFile.set("world."+uid+".spawn.x", spawnsFile.getString("spawn."+spawnName+".X"));
+                    worldsFile.set("world."+uid+".spawn.y", spawnsFile.getString("spawn."+spawnName+".Y"));
+                    worldsFile.set("world."+uid+".spawn.z", spawnsFile.getString("spawn."+spawnName+".Z"));
+                    worldsFile.set("world."+uid+".spawn.yaw", spawnsFile.getString("spawn."+spawnName+".yaw"));
+                    worldsFile.set("world."+uid+".spawn.pitch", spawnsFile.getString("spawn."+spawnName+".pitch"));
+                }
+            }
+
+            worldsFile.save();
+            spawnsFile.close();
+            spawnsFile.delete("data/spawns.yml");
+            log.info("[1/1] Done.");
+        }
     }
 }
