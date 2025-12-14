@@ -3,9 +3,7 @@ package net.lewmc.essence.core;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.kit.UtilKit;
 import net.lewmc.essence.teleportation.tp.UtilTeleport;
-import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -78,8 +76,6 @@ public class EventJoin implements Listener {
      * @param log Logger - Logging system.
      */
     private void spawn(PlayerJoinEvent event, Logger log) {
-        UtilMessage message = new UtilMessage(this.plugin, event.getPlayer());
-
         Object spawnConfig = this.plugin.config.get("teleportation.spawn.main-spawn-world");
         if (spawnConfig == null) {
             if (plugin.verbose) {
@@ -87,58 +83,8 @@ public class EventJoin implements Listener {
             }
             return;
         }
-        String spawnName = spawnConfig.toString();
 
-        Files spawnConfiguration = new Files(this.plugin.foundryConfig, this.plugin);
-        if (!spawnConfiguration.load("data/spawns.yml")) {
-            log.severe("Unable to load configuration file 'data/spawns.yml'. Essence may be unable to teleport players to the correct spawn");
-            return;
-        }
-
-        if (spawnConfiguration.get("spawn") == null) {
-            if (Bukkit.getServer().getWorld(spawnName) == null) {
-                message.send("spawn", "notexist");
-                log.severe("The spawn world does not exist. Please check your Essence configuration.");
-                return;
-            }
-            if (Bukkit.getServer().getWorld(spawnName) != null && Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null) {
-                UtilTeleport tp = new UtilTeleport(plugin);
-                tp.doTeleport(
-                        event.getPlayer(),
-                        Bukkit.getServer().getWorld(spawnName),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getX(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getY(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getZ(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getYaw(),
-                        Bukkit.getServer().getWorld(spawnName).getSpawnLocation().getPitch(),
-                        0,
-                        true
-                );
-            } else {
-                message.send("spawn", "notexist");
-                log.info("Failed to respawn player - world '"+Bukkit.getServer().getWorld(spawnName)+"' does not exist.");
-            }
-        } else {
-            UtilTeleport tp = new UtilTeleport(plugin);
-            if (Bukkit.getServer().getWorld(spawnName) == null) {
-                message.send("generic", "exception");
-                log.warn("Player " + event.getPlayer() + " attempted to teleport to spawn " + spawnName + " but couldn't due to an error.");
-                log.warn("Error: world is null, please check configuration file.");
-            }
-            tp.doTeleport(
-                    event.getPlayer(),
-                    Bukkit.getServer().getWorld(spawnName),
-                    spawnConfiguration.getDouble("spawn."+spawnName+".X"),
-                    spawnConfiguration.getDouble("spawn."+spawnName+".Y"),
-                    spawnConfiguration.getDouble("spawn."+spawnName+".Z"),
-                    (float) spawnConfiguration.getDouble("spawn."+spawnName+".yaw"),
-                    (float) spawnConfiguration.getDouble("spawn."+spawnName+".pitch"),
-                    0,
-                    true
-            );
-        }
-
-        spawnConfiguration.close();
+        new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), spawnConfig.toString());
     }
 
     /**

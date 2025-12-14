@@ -7,6 +7,7 @@ import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.Files;
 import net.lewmc.foundry.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -413,5 +414,58 @@ public class UtilTeleport {
                 (!feet.isLiquid() || player.isInvulnerable()) && feet.isPassable() &&
                 below != null &&
                 !below.getType().isAir() && below.getType().isSolid();
+    }
+
+    /**
+     * Sends a player back to spawn.
+     * @param player Player - The player.
+     * @param spawnName String - the spawn's name
+     */
+    public void sendToSpawn(Player player, String spawnName) {
+        Files spawnConfiguration = new Files(this.plugin.foundryConfig, this.plugin);
+        if (!spawnConfiguration.load("data/worlds.yml")) {
+            this.plugin.log.severe("Unable to load configuration file 'data/spawns.yml'. Essence may be unable to teleport players to the correct spawn");
+            return;
+        }
+
+        World spawnWorld = Bukkit.getServer().getWorld(spawnName);
+
+        if (spawnWorld == null) {
+            this.plugin.log.severe("The spawn world does not exist. Please check your Essence configuration.");
+            return;
+        }
+
+        if (spawnConfiguration.get("world"+spawnWorld.getUID()+".spawn") == null) {
+            if (Bukkit.getServer().getWorld(spawnName).getSpawnLocation() != null) {
+                UtilTeleport tp = new UtilTeleport(plugin);
+                tp.doTeleport(
+                        player,
+                        spawnWorld,
+                        spawnWorld.getSpawnLocation().getX(),
+                        spawnWorld.getSpawnLocation().getY(),
+                        spawnWorld.getSpawnLocation().getZ(),
+                        spawnWorld.getSpawnLocation().getYaw(),
+                        spawnWorld.getSpawnLocation().getPitch(),
+                        0,
+                        true
+                );
+            } else {
+                this.plugin.log.info("Failed to respawn player - world spawn for '"+spawnWorld+"' does not exist.");
+            }
+        } else {
+            UtilTeleport tp = new UtilTeleport(plugin);
+            tp.doTeleport(
+                    player,
+                    spawnWorld,
+                    spawnConfiguration.getDouble("world"+spawnWorld.getUID()+".spawn.x"),
+                    spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.y"),
+                    spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.z"),
+                    (float) spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.yaw"),
+                    (float) spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.pitch"),
+                    0,
+                    true
+            );
+        }
+        spawnConfiguration.close();
     }
 }

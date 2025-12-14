@@ -60,13 +60,26 @@ public class CommandSpawn extends FoundryPlayerCommand {
             return true;
         }
 
+        if ((boolean) plugin.config.get("teleportation.spawn.always-spawn")) {
+            new UtilTeleport(this.plugin).sendToSpawn(p, plugin.config.get("teleportation.spawn.main-spawn-world").toString());
+            return true;
+        }
+
         Location loc = p.getLocation();
 
         String spawnName;
 
-        if (args.length == 1) {
+        if (args.length != 0) {
             if (new UtilPermission(this.plugin, cs).has("essence.world.teleport")) {
-                spawnName = args[0];
+                if (Objects.equals(args[0], "tp")) {
+                    if (args.length >= 2) {
+                        spawnName = args[1];
+                    } else {
+                        spawnName = loc.getWorld().getName();
+                    }
+                } else {
+                    spawnName = args[0];
+                }
             } else {
                 msg.send("spawn", "worldnoperms");
                 return true;

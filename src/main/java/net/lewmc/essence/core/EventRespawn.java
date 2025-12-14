@@ -1,6 +1,7 @@
 package net.lewmc.essence.core;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.teleportation.tp.UtilTeleport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -53,17 +54,6 @@ public class EventRespawn implements Listener {
             }
         }
 
-        String spawnName = plugin.config.get("teleportation.spawn.main-spawn-world").toString();
-        if (spawnName == null) {
-            plugin.getLogger().warning("Spawn world " + spawnName + " not found!");
-            return;
-        }
-        World world = Bukkit.getWorld(spawnName);
-
-        if (world != null) {
-            event.setRespawnLocation(world.getSpawnLocation());
-        } else {
-            plugin.getLogger().warning("Spawn world " + spawnName + " not found!");
-        }
+        new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), plugin.config.get("teleportation.spawn.main-spawn-world").toString());
     }
 }

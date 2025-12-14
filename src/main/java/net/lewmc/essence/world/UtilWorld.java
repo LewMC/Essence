@@ -47,7 +47,7 @@ public class UtilWorld {
 
             WorldCreator wc = new WorldCreator(name);
 
-            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(name)) {
+            if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(name) || name.equalsIgnoreCase("tp")) {
                 return WORLD_STATUS.INVALID_CHARS;
             }
 
@@ -127,15 +127,17 @@ public class UtilWorld {
                 wc.generatorSettings(flags.get("-gs"));
             }
 
-            if (
-                !flags.get("-a").equalsIgnoreCase("true") &&
-                !flags.get("-a").equalsIgnoreCase("yes") &&
-                !flags.get("-a").equalsIgnoreCase("y") &&
-                !flags.get("-a").equalsIgnoreCase("false") &&
-                !flags.get("-a").equalsIgnoreCase("no") &&
-                !flags.get("-a").equalsIgnoreCase("n"))
-            {
-                return WORLD_STATUS.INVALID_A;
+            if (flags.get("-a") != null) {
+                if (
+                        !flags.get("-a").equalsIgnoreCase("true") &&
+                        !flags.get("-a").equalsIgnoreCase("yes") &&
+                        !flags.get("-a").equalsIgnoreCase("y") &&
+                        !flags.get("-a").equalsIgnoreCase("false") &&
+                        !flags.get("-a").equalsIgnoreCase("no") &&
+                        !flags.get("-a").equalsIgnoreCase("n"))
+                {
+                    return WORLD_STATUS.INVALID_A;
+                }
             }
 
             World newWorld = wc.createWorld();
@@ -153,6 +155,8 @@ public class UtilWorld {
                         } else if (flags.get("-a").equalsIgnoreCase("false") || flags.get("-a").equalsIgnoreCase("no") || flags.get("-a").equalsIgnoreCase("n")) {
                             worldData.set("world."+newWorld.getUID()+".autoload", false);
                         }
+                    } else {
+                        worldData.set("world."+newWorld.getUID()+".autoload", true);
                     }
 
                     worldData.save();
@@ -165,6 +169,7 @@ public class UtilWorld {
             }
         } catch (Exception e) {
             new Logger(this.plugin.foundryConfig).warn("Unable to create world: " + e.getMessage());
+            e.printStackTrace();
             return WORLD_STATUS.OTHER_ERROR;
         }
     }
@@ -182,16 +187,22 @@ public class UtilWorld {
                 if (w.status == WORLD_STATUS.LOADED) {
                     return WORLD_STATUS.LOADED;
                 } else {
-                    String path = new File(Bukkit.getWorldContainer(), w.name).getPath();
-                    if (!new Files(this.plugin.foundryConfig, this.plugin).exists(path)) return WORLD_STATUS.NOT_FOUND;
+                    Files worldData = new Files(this.plugin.foundryConfig, this.plugin);
+
+                    String path = new File(Bukkit.getWorldContainer(), name).getPath();
+                    this.plugin.log.info("Path: "+new File(Bukkit.getWorldContainer(), name));
+                    this.plugin.log.info("Stored path: "+path);
+                    this.plugin.log.info("Exists: "+new File(Bukkit.getWorldContainer(), name).exists());
+
+                    if (!new File(Bukkit.getWorldContainer(), name).exists()) return WORLD_STATUS.NOT_FOUND;
 
                     try {
-                        new Files(this.plugin.foundryConfig, this.plugin).deleteDirectory(Path.of(path));
+                        worldData.deleteDirectory(Path.of(path));
                     } catch (IOException e) {
+                        this.plugin.log.warn("Exception deleting world: "+e);
                         return WORLD_STATUS.OTHER_ERROR;
                     }
 
-                    Files worldData = new Files(this.plugin.foundryConfig, this.plugin);
                     worldData.load("data/worlds.yml");
                     if (worldData.get("world."+w.uuid) != null) {
                         worldData.remove("world."+w.uuid);
