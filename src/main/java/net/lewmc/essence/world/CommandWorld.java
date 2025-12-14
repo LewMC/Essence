@@ -86,7 +86,7 @@ public class CommandWorld extends FoundryCommand {
     }
 
     /**
-     * Processes the unload command.
+     * Processes the create command.
      * @param args String[] - Command arguments
      * @param name String - The world name
      * @return boolean - always true
@@ -143,7 +143,7 @@ public class CommandWorld extends FoundryCommand {
         return true;
     }
     /**
-     * Processes the unload command.
+     * Processes the delete command.
      * @param name String - The world name
      * @return boolean - always true
      */
@@ -185,7 +185,7 @@ public class CommandWorld extends FoundryCommand {
     }
 
     /**
-     * Processes the load command.
+     * Processes the list command.
      * @return boolean - always true
      */
     private boolean listCommand() {
