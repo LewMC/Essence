@@ -65,44 +65,48 @@ public class EssenceIntegrations {
      * @return boolean - If it could be setup correctly.
      */
     public boolean loadVaultEconomy() {
-        if (this.plugin.verbose) {
-            this.log.info("Config economy mode set to '" + this.plugin.config.get("economy.mode") + "'");
-        }
-        switch ((String) this.plugin.config.get("economy.mode")) {
-            case "VAULT", "true", "default" -> {
-                if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
+        if ((boolean) this.plugin.config.get("economy.enabled")) {
+            if (this.plugin.verbose) {
+                this.log.info("Config economy mode set to '" + this.plugin.config.get("economy.mode") + "'");
+            }
+            switch ((String) this.plugin.config.get("economy.mode")) {
+                case "VAULT", "true", "default" -> {
+                    if (this.plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
+                        return false;
+                    }
+
+                    this.plugin.getServer().getServicesManager().register(Economy.class, new UtilVaultEconomy(this.plugin), this.plugin, ServicePriority.Highest);
+
+                    RegisteredServiceProvider<Economy> ersp = this.plugin.getServer().getServicesManager().getRegistration(Economy.class);
+                    if (ersp == null) {
+                        this.log.severe("Something went wrong whilst setting up economy service.");
+                        this.log.severe("Essence will fallback to internal-only economy mode.");
+                        return false;
+                    }
+
+                    this.economy = ersp.getProvider();
+
+                    this.log.info("Setup economy in Vault mode.");
+
+                    return this.economy != null;
+                }
+                case "ESSENCE", "INTERNAL", "NOVAULT" -> {
+                    this.log.warn("Setup economy in Essence-only mode.");
+                    this.log.warn("Vault economy is disabled, but Essence commands will still use internal economy.");
                     return false;
                 }
-
-                this.plugin.getServer().getServicesManager().register(Economy.class, new UtilVaultEconomy(this.plugin), this.plugin, ServicePriority.Highest);
-
-                RegisteredServiceProvider<Economy> ersp = this.plugin.getServer().getServicesManager().getRegistration(Economy.class);
-                if (ersp == null) {
-                    this.log.severe("Something went wrong whilst setting up economy service.");
-                    this.log.severe("Essence will fallback to internal-only economy mode.");
+                case "OFF", "DISABLED", "DISABLE", "false" -> {
+                    this.log.warn("Economy is disabled, not attaching to Vault.");
                     return false;
                 }
-
-                this.economy = ersp.getProvider();
-
-                this.log.info("Setup economy in Vault mode.");
-
-                return this.economy != null;
-            }
-            case "ESSENCE", "INTERNAL", "NOVAULT" -> {
-                this.log.warn("Setup economy in Essence-only mode.");
-                this.log.warn("Vault economy is disabled, but Essence commands will still use internal economy.");
-                return false;
-            }
-            case "OFF", "DISABLED", "DISABLE", "false" -> {
-                this.log.warn("Economy is disabled.");
-                return false;
-            }
-            case null, default -> {
-                this.log.warn("Unknown economy mode, economy is disabled. Please set mode to 'VAULT', 'ESSENCE' or 'OFF'");
-                return false;
+                case null, default -> {
+                    this.log.warn("Unknown economy mode, not attaching to Vault. Please set mode to 'VAULT', 'ESSENCE' or 'OFF'");
+                    return false;
+                }
             }
         }
+        this.log.warn("Economy is disabled, not attaching to Vault.");
+        return false;
     }
 
     /**
