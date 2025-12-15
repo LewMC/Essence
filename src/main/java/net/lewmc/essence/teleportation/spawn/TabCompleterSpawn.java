@@ -39,15 +39,6 @@ public class TabCompleterSpawn implements TabCompleter {
             @NotNull String arg,
             String[] args
     ) {
-        List<UtilWorld.ESSENCE_WORLD> worlds = new UtilWorld(plugin).list();
-
-        Set<String> keys = new HashSet<>();
-        for (UtilWorld.ESSENCE_WORLD world : worlds) {
-            if (world.status == UtilWorld.WORLD_STATUS.LOADED) {
-                keys.add(world.name);
-            }
-        }
-
-        return new ArrayList<>(Objects.requireNonNullElseGet(keys, () -> List.of("")));
+        return List.of(new UtilWorld(this.plugin).list().stream().map(UtilWorld.ESSENCE_WORLD::getName).filter(Objects::nonNull).toArray(String[]::new));
     }
 }

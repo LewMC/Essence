@@ -333,7 +333,7 @@ public class UtilWorld {
         public Boolean autoload;
 
         public String getName() {
-            return this.name;
+            return name;
         }
     }
 
