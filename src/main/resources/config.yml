@@ -77,8 +77,12 @@ teleportation:
   spawn:
     wait: 3
     cooldown: 10
-    main-spawn-world: world
-    always-spawn: false
+    global-spawn:
+      enabled: false
+      world: world
+    force-spawn:
+      on-join: false
+      on-death: false
   near:
     default-radius: 200
     max-radius: 50000

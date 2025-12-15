@@ -74,6 +74,7 @@ public class ModuleTeleportation extends FoundryModule {
         if (!this.cmd.isDisabled("warp") || !this.cmd.isDisabled("delwarp")) { reg.tabCompleter(new String[] { "warp", "delwarp" }, new TabCompleterWarp((Essence) plugin)); }
         if (!this.cmd.isDisabled("home") || !this.cmd.isDisabled("delhome")) { reg.tabCompleter(new String[] { "home", "delhome" }, new TabCompleterHome((Essence) plugin)); }
         if (!this.cmd.isDisabled("tp")) { reg.tabCompleter(new String[] { "tp" }, new TabCompleterTp()); }
+
         if (!this.cmd.isDisabled("spawn")) { reg.tabCompleter(new String[] { "spawn" }, new TabCompleterSpawn((Essence) this.plugin)); }
     }
 

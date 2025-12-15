@@ -57,9 +57,9 @@ public class EventJoin implements Listener {
 
         if (!Objects.equals(plugin.config.get("motd"), "false") && !Objects.equals(plugin.config.get("motd"), false)) { this.motd(event); }
 
-        if ((boolean) plugin.config.get("teleportation.spawn.always-spawn") || firstJoin) {
+        if ((boolean) plugin.config.get("teleportation.spawn.force-spawn.on-join") || firstJoin) {
             try {
-                this.spawn(event, log);
+                this.spawn(event);
             } catch (Exception e) {
                 log.severe("Unknown exception: " + e.getMessage());
             }
@@ -73,18 +73,13 @@ public class EventJoin implements Listener {
     /**
      * Spawns the player.
      * @param event PlayerJoinEvent - The event
-     * @param log Logger - Logging system.
      */
-    private void spawn(PlayerJoinEvent event, Logger log) {
-        Object spawnConfig = this.plugin.config.get("teleportation.spawn.main-spawn-world");
-        if (spawnConfig == null) {
-            if (plugin.verbose) {
-                log.severe("Config key 'teleportation.spawn.main-spawn-world' is not set; skipping join spawn teleport.");
-            }
-            return;
+    private void spawn(PlayerJoinEvent event) {
+        if ((boolean) this.plugin.config.get("teleportation.spawn.global-spawn.enabled")) {
+            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), (String) this.plugin.config.get("teleportation.spawn.global-spawn.world"));
+        } else {
+            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), event.getPlayer().getLocation().getWorld().getName());
         }
-
-        new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), spawnConfig.toString());
     }
 
     /**

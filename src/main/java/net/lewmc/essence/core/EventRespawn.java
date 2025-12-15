@@ -36,7 +36,7 @@ public class EventRespawn implements Listener {
         UUID uuid = event.getPlayer().getUniqueId();
 
         UtilPlayer up = new UtilPlayer(plugin);
-        boolean alwaysSpawn = (boolean) plugin.config.get("teleportation.spawn.always-spawn");
+        boolean alwaysSpawn = (boolean) plugin.config.get("teleportation.spawn.force-spawn.on-death");
 
         if (!alwaysSpawn && up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_WORLD) != null) {
             String worldName = up.getPlayer(uuid, UtilPlayer.KEYS.LAST_SLEEP_WORLD).toString();
@@ -57,6 +57,10 @@ public class EventRespawn implements Listener {
             }
         }
 
-        new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), plugin.config.get("teleportation.spawn.main-spawn-world").toString());
+        if ((boolean) plugin.config.get("teleportation.spawn.global-spawn.enabled")) {
+            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), plugin.config.get("teleportation.spawn.global-spawn.world").toString());
+        } else {
+            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), event.getPlayer().getLocation().getWorld().getName());
+        }
     }
 }

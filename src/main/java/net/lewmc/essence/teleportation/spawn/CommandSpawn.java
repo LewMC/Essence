@@ -60,8 +60,8 @@ public class CommandSpawn extends FoundryPlayerCommand {
             return true;
         }
 
-        if ((boolean) plugin.config.get("teleportation.spawn.always-spawn")) {
-            new UtilTeleport(this.plugin).sendToSpawn(p, plugin.config.get("teleportation.spawn.main-spawn-world").toString());
+        if (args.length == 0 && (boolean) plugin.config.get("teleportation.spawn.global-spawn.enabled")) {
+            new UtilTeleport(this.plugin).sendToSpawn(p, plugin.config.get("teleportation.spawn.global-spawn.world").toString());
             return true;
         }
 

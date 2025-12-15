@@ -133,8 +133,10 @@ public class EssenceConfiguration {
         putInt("teleportation.randomtp.cooldown", (Integer) getValue("teleportation.randomtp.cooldown", 60, Integer.class));
         putInt("teleportation.spawn.wait", (Integer) getValue("teleportation.spawn.wait", 3, Integer.class));
         putInt("teleportation.spawn.cooldown", (Integer) getValue("teleportation.spawn.cooldown", 10, Integer.class));
-        putString("teleportation.spawn.main-spawn-world", (String) getValue("teleportation.spawn.main-spawn-world", "world", String.class));
-        putBoolean("teleportation.spawn.always-spawn", (boolean) getValue("teleportation.spawn.always-spawn", false, Boolean.class));
+        putString("teleportation.spawn.global-spawn.world", (String) getValue("teleportation.spawn.global-spawn.world", "world", String.class));
+        putBoolean("teleportation.spawn.global-spawn.enabled", (boolean) getValue("teleportation.spawn.global-spawn.enabled", false, Boolean.class));
+        putBoolean("teleportation.spawn.force-spawn.on-death", (boolean) getValue("teleportation.spawn.force-spawn.on-death", false, Boolean.class));
+        putBoolean("teleportation.spawn.force-spawn.on-join", (boolean) getValue("teleportation.spawn.force-spawn.on-join", false, Boolean.class));
         putInt("teleportation.near.default-radius", (Integer) getValue("teleportation.near.default-radius", 200, Integer.class));
         putInt("teleportation.near.max-radius", (Integer) getValue("teleportation.near.max-radius", 50000, Integer.class));
         putInt("teleportation.requests.cooldown", (Integer) getValue("teleportation.requests.cooldown", 10, Integer.class));
