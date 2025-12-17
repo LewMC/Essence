@@ -102,7 +102,7 @@ public class CommandGive extends FoundryCommand {
             if (up.givePlayerItem(target, args[1], 1)) {
                 this.msg.send("give", "gaveother", new String[]{"1", args[1], target.getName()});
             } else {
-                this.msg.send("give", "itemnotfound", new String[]{args[1]});
+                this.msg.send("generic", "itemnotfound", new String[]{args[1]});
             }
         } else if (args.length == 3) {
             // /give <player> <item> <amount>
@@ -123,7 +123,7 @@ public class CommandGive extends FoundryCommand {
                 if (up.givePlayerItem(target, args[1], amount)) {
                     this.msg.send("give", "gaveother", new String[]{String.valueOf(amount), args[1], target.getName()});
                 } else {
-                    this.msg.send("give", "itemnotfound", new String[]{args[1]});
+                    this.msg.send("generic", "itemnotfound", new String[]{args[1]});
                 }
             } catch (NumberFormatException e) {
                 this.msg.send("give", "usage");
