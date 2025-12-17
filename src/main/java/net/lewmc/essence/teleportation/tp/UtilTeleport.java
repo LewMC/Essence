@@ -421,7 +421,7 @@ public class UtilTeleport {
      * @param player Player - The player.
      * @param spawnName String - the spawn's name
      */
-    public void sendToSpawn(Player player, String spawnName) {
+    public void sendToSpawn(Player player, String spawnName, boolean doLastLocUpdate) {
         Files spawnConfiguration = new Files(this.plugin.foundryConfig, this.plugin);
         if (!spawnConfiguration.load("data/worlds.yml")) {
             this.plugin.log.severe("Unable to load configuration file 'data/spawns.yml'. Essence may be unable to teleport players to the correct spawn");
@@ -447,7 +447,7 @@ public class UtilTeleport {
                         spawnWorld.getSpawnLocation().getYaw(),
                         spawnWorld.getSpawnLocation().getPitch(),
                         0,
-                        true
+                        doLastLocUpdate
                 );
             } else {
                 this.plugin.log.info("Failed to respawn player - world spawn for '"+spawnWorld+"' does not exist.");
@@ -463,7 +463,7 @@ public class UtilTeleport {
                     (float) spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.yaw"),
                     (float) spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.pitch"),
                     0,
-                    true
+                    doLastLocUpdate
             );
         }
         spawnConfiguration.close();

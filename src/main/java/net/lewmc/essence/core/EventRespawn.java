@@ -58,9 +58,9 @@ public class EventRespawn implements Listener {
         }
 
         if ((boolean) plugin.config.get("teleportation.spawn.global-spawn.enabled")) {
-            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), plugin.config.get("teleportation.spawn.global-spawn.world").toString());
+            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), plugin.config.get("teleportation.spawn.global-spawn.world").toString(), false);
         } else {
-            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), event.getPlayer().getLocation().getWorld().getName());
+            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), event.getPlayer().getLocation().getWorld().getName(), false);
         }
     }
 }
