@@ -71,7 +71,7 @@ public class CommandSpeed extends FoundryCommand {
      */
     private boolean speedSelf(Player p, UtilMessage msg, String[] args) {
         try {
-            if (Objects.equals(args[0], "off") || Objects.equals(args[0], "reset")) {
+            if (Objects.equals(args[0], "off") || Objects.equals(args[0], "reset") || Objects.equals(args[0], "default")) {
                 p.setWalkSpeed(0.2F);
                 p.setFlySpeed(0.1F);
                 msg.send("speed", "reset");
