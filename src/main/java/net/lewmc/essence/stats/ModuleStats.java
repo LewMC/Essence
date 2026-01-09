@@ -44,7 +44,9 @@ public class ModuleStats extends FoundryModule {
      * Registers Tab Completers
      */
     @Override
-    public void registerTabCompleters() {}
+    public void registerTabCompleters() {
+        if (!this.cmd.isDisabled("speed")) { reg.tabCompleter(new String[] { "speed" }, new TabCompleterSpeed((Essence) plugin)); }
+    }
 
     /**
      * Registers Events
