@@ -304,6 +304,7 @@ speed:
   reset: "§2[Essence] §aYour speed has been reset."
   resetother: "§2[Essence] §aReset {{1}}'s speed."
   resetbyother: "§2[Essence] §a{{1}} reset your speed."
+  usage: "§4[Essence] §cUsage: /speed <amount> [user]"
 feed:
   fed: "§2[Essence] §aYou fed {{1}}."
   serverfed: "§2[Essence] §aYou've been fed by a magical force."
