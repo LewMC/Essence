@@ -388,7 +388,7 @@ spawn:
   set: "§2[Essence] §aSpawn set."
   teleportingin: "§2[Essence] §aTeleporting in {{1}} seconds..."
   teleportingnow: "§2[Essence] §aTeleporting..."
-  notexist: "§4[Essence] §cThe world requested either does not exist or could not be loaded."
+  notexist: "§4[Essence] §cThe requested world \"{{1}}\" either does not exist or could not be loaded."
   worldnoperms: "§4[Essence] §cYou do not have permission to change worlds."
 repair:
   done: "§2[Essence] §aItem repaired."
