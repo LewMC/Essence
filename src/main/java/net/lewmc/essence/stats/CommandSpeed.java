@@ -65,7 +65,7 @@ public class CommandSpeed extends FoundryCommand {
 
     /**
      * Set your own speed.
-     * @param p Player - The user to adjust's speed.
+     * @param p Player - The user to adjusts speed.
      * @param msg MessageUtil - The messaging system.
      * @return boolean - If the operation was successful
      */
@@ -99,7 +99,7 @@ public class CommandSpeed extends FoundryCommand {
     /**
      * Set another user's speed.
      * @param perms PermisionHandler - The permission system.
-     * @param cs CommandSender - The user to adjust's speed.
+     * @param cs CommandSender - The user to adjusts speed.
      * @param msg MessageUtil - The messaging system.
      * @param args String[] - List of command arguments.
      * @return boolean - If the operation was successful
@@ -112,8 +112,8 @@ public class CommandSpeed extends FoundryCommand {
                     if (Objects.equals(args[0], "off") || Objects.equals(args[0], "reset")) {
                         p.setWalkSpeed(0.2F);
                         p.setFlySpeed(0.1F);
-                        msg.send("speed", "resetbyother", new String[]{cs.getName()});
-                        msg.sendTo(cs, "speed", "resetother");
+                        msg.send("speed", "resetbyother", new String[]{ cs.getName() });
+                        msg.sendTo(cs, "speed", "resetother", new String[]{ p.getName() });
                     } else {
                         float speed = Float.parseFloat(args[0]);
 
