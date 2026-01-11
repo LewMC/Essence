@@ -1,5 +1,6 @@
 package net.lewmc.essence.teleportation.tp;
 
+import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.Essence;
@@ -180,32 +181,43 @@ public class CommandTeleport extends FoundryCommand {
             }
 
             if (!permission.has("essence.teleport.offline")) {
-                OfflinePlayer offline = getOfflinePlayer(args[0]);
-                if (offline != null && offline.hasPlayedBefore()) {
-                    Files opf = new Files(this.plugin.foundryConfig, this.plugin);
-                    if (opf.exists(opf.playerDataFile(offline.getUniqueId()))) {
-                        opf.load(opf.playerDataFile(offline.getUniqueId()));
-                        double x = opf.getDouble("location.last-known.x");
-                        double y = opf.getDouble("location.last-known.y");
-                        double z = opf.getDouble("location.last-known.z");
-                        World world = Bukkit.getWorld(opf.getString("location.last-known.world"));
-                        opf.close();
+                FoliaLib flib = new FoliaLib(this.plugin);
 
+                flib.getScheduler().runAsync(task -> {
+                    OfflinePlayer offline = getOfflinePlayer(args[0]);
+
+                    if (offline == null || !offline.hasPlayedBefore()) {
+                        flib.getScheduler().runAtEntity((Player) cs, t -> message.send("teleport", "offlineplayernodata"));
+                        return;
+                    }
+
+                    Files opf = new Files(this.plugin.foundryConfig, this.plugin);
+                    if (!opf.exists(opf.playerDataFile(offline.getUniqueId()))) {
+                        flib.getScheduler().runAtEntity((Player) cs, t -> message.send("teleport", "offlineplayernodata"));
+                        return;
+                    }
+
+                    opf.load(opf.playerDataFile(offline.getUniqueId()));
+                    double x = opf.getDouble("location.last-known.x");
+                    double y = opf.getDouble("location.last-known.y");
+                    double z = opf.getDouble("location.last-known.z");
+                    String worldName = opf.getString("location.last-known.world");
+                    opf.close();
+
+                    flib.getScheduler().runAtEntity((Player) cs, t -> {
+                        World world = Bukkit.getWorld(worldName);
                         if (world == null) {
                             message.send("teleport", "offlinenoworld");
-                            return true;
+                            return;
                         }
 
                         Location offlineLoc = new Location(world, x, y, z);
-                        tp.doTeleport(player, offlineLoc, 0, true);
-                        message.send("teleport", "to", new String[]{offline.getName()});
+                        tp.doTeleport((Player) cs, offlineLoc, 0, true);
+
+                        message.send("teleport", "to", new String[]{offline.getName() != null ? offline.getName() : offline.getUniqueId().toString()});
                         message.send("teleport", "tooffline");
-                        return true;
-                    } else {
-                        message.send("teleport", "offlineplayernodata");
-                        return true;
-                    }
-                }
+                    });
+                });
             }
 
             message.send("generic", "playernotfound");
