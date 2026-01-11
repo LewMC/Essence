@@ -304,6 +304,7 @@ speed:
   reset: "§2[Essence] §aYour speed has been reset."
   resetother: "§2[Essence] §aReset {{1}}'s speed."
   resetbyother: "§2[Essence] §a{{1}} reset your speed."
+  usage: "§4[Essence] §cUsage: /speed <amount> [user]"
 feed:
   fed: "§2[Essence] §a你将 {{1}} 喂饱了."
   serverfed: "§2[Essence] §a你被一种神奇的力量喂饱了."
@@ -387,7 +388,7 @@ spawn:
   set: "§2[Essence] §a出生点设置."
   teleportingin: "§2[Essence] §aTeleporting in {{1}} seconds..."
   teleportingnow: "§2[Essence] §aTeleporting..."
-  notexist: "§4[Essence] §c所请求的世界要么不存在，要么未加载."
+  notexist: "§4[Essence] §cThe requested world \"{{1}}\" either does not exist or could not be loaded."
   worldnoperms: "§4[Essence] §c你没有改变世界的权限."
 repair:
   done: "§2[Essence] §a物品修复."

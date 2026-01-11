@@ -304,6 +304,7 @@ speed:
   reset: "§2[Essence] §aYour speed has been reset."
   resetother: "§2[Essence] §aReset {{1}}'s speed."
   resetbyother: "§2[Essence] §a{{1}} reset your speed."
+  usage: "§4[Essence] §cUsage: /speed <amount> [user]"
 feed:
   fed: "§2[Essence] §aHas alimentado a {{1}}."
   serverfed: "§2[Essence] §aHas sido alimentado por una fuerza mágica."
@@ -387,7 +388,7 @@ spawn:
   set: "§2[Essence] §aSpawn establecido."
   teleportingin: "§2[Essence] §aTeleporting in {{1}} seconds..."
   teleportingnow: "§2[Essence] §aTeleporting..."
-  notexist: "§4[Essence] §cEl mundo solicitado no existe o no pudo ser cargado."
+  notexist: "§4[Essence] §cThe requested world \"{{1}}\" either does not exist or could not be loaded."
   worldnoperms: "§4[Essence] §cNo tienes permiso para cambiar de mundos."
 repair:
   done: "§2[Essence] §aObjeto reparado."
