@@ -9,6 +9,7 @@ import net.lewmc.foundry.Logger;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -88,16 +89,20 @@ public class CommandSpawn extends FoundryPlayerCommand {
             spawnName = loc.getWorld().getName();
         }
 
-        Files spawnData = new Files(this.plugin.foundryConfig, this.plugin);
-        spawnData.load("data/worlds.yml");
-        UUID uid = Objects.requireNonNull(Bukkit.getServer().getWorld(spawnName)).getUID();
-
-        Location teleportLocation;
-
-        if (Bukkit.getServer().getWorld(spawnName) == null) {
+        World world = Bukkit.getServer().getWorld(spawnName);
+        if (world == null) {
             this.log.severe("Unable to locate world in universe.");
             this.log.severe("Details: {\"error\": \"WORLD_IS_NULL\", \"caught\": \"SpawnCommand.java\", \"submitted\": \"" + spawnName + "\", \"found\": \"null\"}.");
+            msg.send("spawn", "notexist", new String[]{ spawnName });
+            return true;
         }
+
+        Files spawnData = new Files(this.plugin.foundryConfig, this.plugin);
+        spawnData.load("data/worlds.yml");
+        UUID uid = world.getUID();
+
+
+        Location teleportLocation;
 
         if (spawnData.get("world." + uid + ".spawn") == null) {
             if (this.plugin.verbose) {

@@ -65,13 +65,13 @@ public class CommandSpeed extends FoundryCommand {
 
     /**
      * Set your own speed.
-     * @param p Player - The user to adjust's speed.
+     * @param p Player - The user whose speed to adjust.
      * @param msg MessageUtil - The messaging system.
      * @return boolean - If the operation was successful
      */
     private boolean speedSelf(Player p, UtilMessage msg, String[] args) {
         try {
-            if (Objects.equals(args[0], "off") || Objects.equals(args[0], "reset")) {
+            if (Objects.equals(args[0], "off") || Objects.equals(args[0], "reset") || Objects.equals(args[0], "default")) {
                 p.setWalkSpeed(0.2F);
                 p.setFlySpeed(0.1F);
                 msg.send("speed", "reset");
@@ -99,7 +99,7 @@ public class CommandSpeed extends FoundryCommand {
     /**
      * Set another user's speed.
      * @param perms PermisionHandler - The permission system.
-     * @param cs CommandSender - The user to adjust's speed.
+     * @param cs CommandSender - Who sent the command.
      * @param msg MessageUtil - The messaging system.
      * @param args String[] - List of command arguments.
      * @return boolean - If the operation was successful
@@ -109,11 +109,11 @@ public class CommandSpeed extends FoundryCommand {
             Player p = Bukkit.getPlayer(args[1]);
             if (p != null) {
                 try {
-                    if (Objects.equals(args[0], "off") || Objects.equals(args[0], "reset")) {
+                    if (Objects.equals(args[0], "off") || Objects.equals(args[0], "reset") || Objects.equals(args[0], "default")) {
                         p.setWalkSpeed(0.2F);
                         p.setFlySpeed(0.1F);
-                        msg.send("speed", "resetbyother", new String[]{cs.getName()});
-                        msg.sendTo(cs, "speed", "resetother");
+                        msg.send("speed", "resetbyother", new String[]{ cs.getName() });
+                        msg.sendTo(cs, "speed", "resetother", new String[]{ p.getName() });
                     } else {
                         float speed = Float.parseFloat(args[0]);
 
