@@ -1,10 +1,12 @@
 package net.lewmc.essence.core;
 
+import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
 import net.lewmc.foundry.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -128,18 +130,35 @@ public class UtilPlayer {
     }
 
     /**
-     * Loads a player into memory.
+     * Loads a player into memory. Done automatically on load.
      * @param uuid UUID - The player's UUID.
      * @return boolean - Success?
      * @since 1.11.0
      */
     public boolean loadPlayer(UUID uuid) {
+        TypePlayer player = this.getPlayerFile(uuid);
+
+        if (player != null) {
+            this.plugin.players.put(uuid, player);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Retrieves a player from file asynchronously. You should avoid using this unless interacting with offline players.
+     * @param uuid UUID - The player's UUID.
+     * @return boolean - Success?
+     * @since 1.12.0
+     */
+    public TypePlayer getPlayerFile(UUID uuid) {
         Files f = new Files(this.plugin.foundryConfig, this.plugin);
 
         if (f.exists(f.playerDataFile(uuid))) {
             Player p = Bukkit.getPlayer(uuid);
             if (p == null || p.getPlayer() == null) {
-                return false;
+                return null;
             }
 
             f.load(f.playerDataFile(uuid));
@@ -257,15 +276,13 @@ public class UtilPlayer {
                 player.lastSleep.pitch = 0F;
             }
 
-            this.plugin.players.put(uuid,player);
-
             if (this.plugin.verbose) {
-                this.plugin.log.info("DataCache > " + uuid + " loaded into memory.");
+                this.plugin.log.info("DataCache > Player " + uuid + " loaded but not saved into memory.");
             }
 
-            return true;
+            return player;
         } else {
-            return false;
+            return null;
         }
     }
 
@@ -537,7 +554,16 @@ public class UtilPlayer {
             if (player != null && player.user.nickname != null) {
                 return player.user.nickname;
             }
+        } else if (cs instanceof OfflinePlayer op) {
+            Files f = new Files(this.plugin.foundryConfig, this.plugin);
+            f.load(f.playerDataFile(op));
+            String name = f.get(KEYS.USER_NICKNAME.toString()).toString();
+            f.close();
+            if (name != null) {
+                return name;
+            }
         }
+
         return cs.getName();
     }
 
