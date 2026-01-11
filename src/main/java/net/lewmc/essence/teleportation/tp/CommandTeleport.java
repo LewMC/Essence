@@ -285,7 +285,7 @@ public class CommandTeleport extends FoundryCommand {
 
     /**
      * Retrieves offline player information
-     * @param name Strin - The player's name.
+     * @param name String - The player's name.
      * @return OfflinePlayer - The player.
      */
     private OfflinePlayer getOfflinePlayer(String name) {
