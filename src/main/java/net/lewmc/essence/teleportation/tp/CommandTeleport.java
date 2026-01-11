@@ -185,10 +185,10 @@ public class CommandTeleport extends FoundryCommand {
                     Files opf = new Files(this.plugin.foundryConfig, this.plugin);
                     if (opf.exists(opf.playerDataFile(offline.getUniqueId()))) {
                         opf.load(opf.playerDataFile(offline.getUniqueId()));
-                        double x = opf.getDouble("last-location.X");
-                        double y = opf.getDouble("last-location.Y");
-                        double z = opf.getDouble("last-location.Z");
-                        World world = Bukkit.getWorld(opf.getString("last-location.world"));
+                        double x = opf.getDouble("location.last-known.x");
+                        double y = opf.getDouble("location.last-known.y");
+                        double z = opf.getDouble("location.last-known.z");
+                        World world = Bukkit.getWorld(opf.getString("location.last-known.world"));
                         opf.close();
 
                         if (world == null) {
