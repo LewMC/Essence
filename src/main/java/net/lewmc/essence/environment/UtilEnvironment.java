@@ -173,16 +173,12 @@ public class UtilEnvironment {
         if (wo != null) {
             if (this.plugin != null) {
                 FoliaLib flib = new FoliaLib(this.plugin);
-                // Use FoliaLib to handle both Folia and non-Folia servers
-                 if (flib.isFolia()) {
-                     // Use FoliaLib's global region scheduler for world time changes on Folia
-                     flib.getImpl().runNextTick(task -> wo.setTime(t));
+                if (flib.isFolia()) {
+                     flib.getScheduler().runNextTick(task -> wo.setTime(t));
                 } else {
-                    // Direct call for non-Folia servers
                     wo.setTime(t);
                 }
             } else {
-                // Fallback to direct call if plugin instance is null
                 wo.setTime(t);
             }
             return true;
