@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.net.InetSocketAddress;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -176,9 +177,13 @@ public class UtilPlayer {
 
             if ((boolean) this.plugin.config.get("advanced.playerdata.store-ip-address")) {
                 if (p != null) {
-                    String ip = p.getAddress().getAddress().getHostAddress();
-                    f.set(KEYS.USER_IP_ADDRESS.toString(), ip);
-                    player.user.ipAddress = ip;
+                    InetSocketAddress ip = p.getAddress();
+                    if (ip != null) {
+                        f.set(KEYS.USER_IP_ADDRESS.toString(), ip);
+                        player.user.ipAddress = ip.getAddress().getHostAddress();
+                    } else {
+                        player.user.ipAddress = "Unknown";
+                    }
                 } else {
                     player.user.ipAddress = f.getString(KEYS.USER_IP_ADDRESS.toString());
                 }
