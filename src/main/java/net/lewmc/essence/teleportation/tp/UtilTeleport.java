@@ -220,7 +220,7 @@ public class UtilTeleport {
         if (flib.isFolia()) {
             // Ensure minimum delay of 1 tick to avoid FoliaLib warnings
             long delayTicks = Math.max(1L, delay * 20L);
-            flib.getImpl().runAtEntityLater(player, () -> {
+            flib.getScheduler().runAtEntityLater(player, () -> {
                 if (teleportIsValid(player)) {
                     if (doLastLocUpdate) { new UtilLocation(plugin).UpdateLastLocation(player); }
                     // Use teleportAsync directly in Folia environment, let Bukkit handle chunk loading
