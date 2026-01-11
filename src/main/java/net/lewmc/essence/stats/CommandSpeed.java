@@ -65,7 +65,7 @@ public class CommandSpeed extends FoundryCommand {
 
     /**
      * Set your own speed.
-     * @param p Player - The user to adjusts speed.
+     * @param p Player - The user whose speed to adjust.
      * @param msg MessageUtil - The messaging system.
      * @return boolean - If the operation was successful
      */
@@ -99,7 +99,7 @@ public class CommandSpeed extends FoundryCommand {
     /**
      * Set another user's speed.
      * @param perms PermisionHandler - The permission system.
-     * @param cs CommandSender - The user to adjusts speed.
+     * @param cs CommandSender - Who sent the command.
      * @param msg MessageUtil - The messaging system.
      * @param args String[] - List of command arguments.
      * @return boolean - If the operation was successful
