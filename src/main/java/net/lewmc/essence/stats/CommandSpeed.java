@@ -109,7 +109,7 @@ public class CommandSpeed extends FoundryCommand {
             Player p = Bukkit.getPlayer(args[1]);
             if (p != null) {
                 try {
-                    if (Objects.equals(args[0], "off") || Objects.equals(args[0], "reset")) {
+                    if (Objects.equals(args[0], "off") || Objects.equals(args[0], "reset") || Objects.equals(args[0], "default")) {
                         p.setWalkSpeed(0.2F);
                         p.setFlySpeed(0.1F);
                         msg.send("speed", "resetbyother", new String[]{ cs.getName() });
