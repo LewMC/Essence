@@ -139,11 +139,11 @@ public class UtilPlayer {
 
         if (f.exists(f.playerDataFile(uuid))) {
             Player p = null;
-            Player op = Bukkit.getPlayer(uuid);
-            if (op == null) {
+            if (Bukkit.getOfflinePlayer(uuid).getName() == null) {
                 return false;
             }
 
+            OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
             if (op.getPlayer() != null) {
                 p = op.getPlayer();
             }
