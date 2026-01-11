@@ -1,6 +1,5 @@
 package net.lewmc.essence.core;
 
-import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
 import net.lewmc.foundry.Files;
 import org.bukkit.Bukkit;
@@ -130,35 +129,23 @@ public class UtilPlayer {
     }
 
     /**
-     * Loads a player into memory. Done automatically on load.
+     * Loads a player into memory.
      * @param uuid UUID - The player's UUID.
      * @return boolean - Success?
      * @since 1.11.0
      */
     public boolean loadPlayer(UUID uuid) {
-        TypePlayer player = this.getPlayerFile(uuid);
-
-        if (player != null) {
-            this.plugin.players.put(uuid, player);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Retrieves a player from file asynchronously. You should avoid using this unless interacting with offline players.
-     * @param uuid UUID - The player's UUID.
-     * @return boolean - Success?
-     * @since 1.12.0
-     */
-    public TypePlayer getPlayerFile(UUID uuid) {
         Files f = new Files(this.plugin.foundryConfig, this.plugin);
 
         if (f.exists(f.playerDataFile(uuid))) {
-            Player p = Bukkit.getPlayer(uuid);
-            if (p == null || p.getPlayer() == null) {
-                return null;
+            Player p = null;
+            Player op = Bukkit.getPlayer(uuid);
+            if (op == null) {
+                return false;
+            }
+
+            if (op.getPlayer() != null) {
+                p = op.getPlayer();
             }
 
             f.load(f.playerDataFile(uuid));
@@ -175,16 +162,25 @@ public class UtilPlayer {
 
             player.user.lastSeen = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-            player.user.lastKnownName = p.getName();
+            if (p != null) {
+                String lkn = p.getName();
+                f.set(KEYS.USER_LAST_KNOWN_NAME.toString(), lkn);
+                player.user.lastKnownName = lkn;
+            } else {
+                player.user.lastKnownName = f.getString(KEYS.USER_LAST_KNOWN_NAME.toString());
+            }
 
             player.user.nickname = f.getString(KEYS.USER_NICKNAME.toString());
 
             player.user.team = f.getString(KEYS.USER_TEAM.toString());
 
             if ((boolean) this.plugin.config.get("advanced.playerdata.store-ip-address")) {
-                Player onlinePlayer = p.getPlayer();
-                if (onlinePlayer != null && onlinePlayer.getAddress() != null) {
-                    f.set(KEYS.USER_IP_ADDRESS.toString(), onlinePlayer.getAddress().getAddress().getHostAddress());
+                if (p != null) {
+                    String ip = p.getAddress().getAddress().getHostAddress();
+                    f.set(KEYS.USER_IP_ADDRESS.toString(), ip);
+                    player.user.ipAddress = ip;
+                } else {
+                    player.user.ipAddress = f.getString(KEYS.USER_IP_ADDRESS.toString());
                 }
             } else {
                 f.set(KEYS.USER_IP_ADDRESS.toString(), null);
@@ -276,13 +272,15 @@ public class UtilPlayer {
                 player.lastSleep.pitch = 0F;
             }
 
+            this.plugin.players.put(uuid,player);
+
             if (this.plugin.verbose) {
-                this.plugin.log.info("DataCache > Player " + uuid + " loaded but not saved into memory.");
+                this.plugin.log.info("DataCache > " + uuid + " loaded into memory.");
             }
 
-            return player;
+            return true;
         } else {
-            return null;
+            return false;
         }
     }
 
