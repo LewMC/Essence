@@ -171,46 +171,47 @@ public class CommandTeleport extends FoundryCommand {
                 Player to = toList.getFirst();
 
                 if (!tp.teleportToggleCheck(player, to)) {
-                    message.send("teleport", "requestsdisabled", new String[] { to.getName() });
+                    message.send("teleport", "requestsdisabled", new String[]{to.getName()});
                     return true;
                 }
 
                 tp.doTeleport(player, to.getLocation(), 0, true);
-                message.send("teleport", "to", new String[] { to.getName() });
+                message.send("teleport", "to", new String[]{to.getName()});
                 return true;
             }
 
-            if (!permission.has("essence.teleport.offline")) {
-                FoliaLib flib = new FoliaLib(this.plugin);
+            if (permission.has("essence.teleport.offline")) {
+                return permission.not();
+            }
+            FoliaLib flib = new FoliaLib(this.plugin);
 
-                flib.getScheduler().runAsync(task -> {
-                    UtilPlayer up = new UtilPlayer(this.plugin);
-                    UUID uuid = Bukkit.getOfflinePlayer(args[0]).getUniqueId();
-                    if (!up.loadPlayer(uuid)) {
-                        flib.getScheduler().runAtEntity((Player) cs, t -> message.send("teleport", "offlineplayernodata"));
+            flib.getScheduler().runAsync(task -> {
+                UtilPlayer up = new UtilPlayer(this.plugin);
+                UUID uuid = Bukkit.getOfflinePlayer(args[0]).getUniqueId();
+                if (!up.loadPlayer(uuid)) {
+                    flib.getScheduler().runAtEntity((Player) cs, t -> message.send("teleport", "offlineplayernodata"));
+                    return;
+                }
+
+                double x = (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_X);
+                double y = (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_Y);
+                double z = (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_Z);
+                String worldName = (String) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_WORLD);
+
+                flib.getScheduler().runAtEntity((Player) cs, t -> {
+                    World world = Bukkit.getWorld(worldName);
+                    if (world == null) {
+                        message.send("teleport", "offlinenoworld");
                         return;
                     }
 
-                    double x = (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_X);
-                    double y = (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_Y);
-                    double z = (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_Z);
-                    String worldName = (String) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_WORLD);
+                    Location offlineLoc = new Location(world, x, y, z);
+                    tp.doTeleport((Player) cs, offlineLoc, 0, true);
 
-                    flib.getScheduler().runAtEntity((Player) cs, t -> {
-                        World world = Bukkit.getWorld(worldName);
-                        if (world == null) {
-                            message.send("teleport", "offlinenoworld");
-                            return;
-                        }
-
-                        Location offlineLoc = new Location(world, x, y, z);
-                        tp.doTeleport((Player) cs, offlineLoc, 0, true);
-
-                        message.send("teleport", "to", new String[]{up.getPlayer(uuid, UtilPlayer.KEYS.USER_NICKNAME) != null ? up.getPlayer(uuid, UtilPlayer.KEYS.USER_NICKNAME).toString() : uuid.toString()});
-                        message.send("teleport", "tooffline");
-                    });
+                    message.send("teleport", "to", new String[]{up.getPlayer(uuid, UtilPlayer.KEYS.USER_NICKNAME) != null ? up.getPlayer(uuid, UtilPlayer.KEYS.USER_NICKNAME).toString() : uuid.toString()});
+                    message.send("teleport", "tooffline");
                 });
-            }
+            });
 
             message.send("generic", "playernotfound");
             return true;
