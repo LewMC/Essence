@@ -186,7 +186,7 @@ public class CommandTeleport extends FoundryCommand {
                 flib.getScheduler().runAsync(task -> {
                     UtilPlayer up = new UtilPlayer(this.plugin);
                     if (!Bukkit.getOfflinePlayer(args[0]).hasPlayedBefore()) {
-                        flib.getScheduler().runAtEntity((Player) cs, t -> message.send("teleport", "playernotfound"));
+                        flib.getScheduler().runAtEntity((Player) cs, t -> message.send("generic", "playernotfound"));
                         return;
                     }
 
