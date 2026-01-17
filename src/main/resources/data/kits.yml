@@ -1,8 +1,30 @@
 kits:
   wooden-tools:
-    items: ["WOODEN_AXE","WOODEN_PICKAXE","WOODEN_SHOVEL","WOODEN_SWORD"]
-    maxclaims: 1
+    name: Wooden Tools
+    description: Some basic wooden tools.
+    items:
+      WOODEN_AXE:
+        amount: 1
+      WOODEN_PICKAXE:
+        amount: 1
+      WOODEN_SHOVEL:
+        amount: 1
+      WOODEN_SWORD:
+        amount: 1
   god-tools:
-    items: ["DIAMOND_AXE","DIAMOND_PICKAXE","DIAMOND_SHOVEL","DIAMOND_SWORD"]
+    name: God Tools
+    description: Some amazing tools! Can only claim once!
+    permission: essence.kits.god
     maxclaims: 1
-    permission: "essence.kits.god"
+    items:
+      DIAMOND_AXE:
+        amount: 1
+      DIAMOND_PICKAXE:
+        amount: 1
+        enchantments:
+          - EFFICIENCY:2
+          - UNBREAKING:2
+      DIAMOND_SHOVEL:
+        amount: 1
+      DIAMOND_SWORD:
+        amount: 1

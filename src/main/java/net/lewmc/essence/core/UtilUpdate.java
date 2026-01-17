@@ -363,9 +363,8 @@ public class UtilUpdate {
         if (f.getInt("config-version") == 4) {
             log.info("Essence is updating your configuration file, please wait...");
 
-            log.info("[1/1] Migrating player files...");
+            log.info("[1/2] Migrating player files...");
 
-            //Files playersFile = new Files(this.plugin.foundryConfig, this.plugin);
             File folder = new File(this.plugin.getDataFolder() + File.separator + "data" + File.separator + "players");
             File[] players = folder.listFiles();
             if (players != null) {
@@ -392,7 +391,7 @@ public class UtilUpdate {
                             pf.set("location.last-sleep.pitch", pf.get("user.last-sleep-location.pitch"));
                         }
 
-                        log.info("[1/1] Migrated " + player.getName());
+                        log.info("> Migrated " + player.getName());
 
                         pf.remove("last-location");
                         pf.remove("user.last-sleep-location");
@@ -401,10 +400,31 @@ public class UtilUpdate {
                     }
                 }
             } else {
-                this.plugin.log.info("No players found");
+                this.plugin.log.info("> No players found");
             }
 
-            log.info("[1/1] Done.");
+            log.info("[1/2] Done.");
+            log.info("[2/2] Migrating kits...");
+            Files kf = new Files(this.plugin.foundryConfig, this.plugin);
+
+            kf.load("data/kits.yml");
+            Set<String> keys = kf.getKeys("kits", false);
+            log.info(keys.toString());
+            for (String key : keys) {
+                kf.set("kits." + key + ".name", "Kit");
+                kf.set("kits." + key + ".description", "A cool kit!");
+
+                List<String> items = kf.getStringList("kits." + key + ".items");
+                kf.set("kits." + key + ".items",null);
+
+                for (String item : items) {
+                    kf.set("kits." + key + ".items."+item+".amount", 1);
+                }
+                log.info("> Migrated kit "+key);
+            }
+            kf.save();
+
+            log.info("[2/2] Done.");
 
             f.set("config-version", 5);
 

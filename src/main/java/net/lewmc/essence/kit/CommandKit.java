@@ -88,6 +88,8 @@ public class CommandKit extends FoundryPlayerCommand {
                 msg.send("kit", "notexist");
             } else if (kit.giveKit(args[0]) == 3) {
                 msg.send("kit", "max");
+            } else if (kit.giveKit(args[0]) == 4) {
+                msg.send("generic", "exception");
             }
         }
         return true;
