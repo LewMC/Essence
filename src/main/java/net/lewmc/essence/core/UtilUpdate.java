@@ -12,10 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Essence's update utility.
@@ -363,6 +360,58 @@ public class UtilUpdate {
             log.info("");
         }
 
+        if (f.getInt("config-version") == 4) {
+            log.info("Essence is updating your configuration file, please wait...");
+
+            log.info("[1/1] Migrating player files...");
+
+            //Files playersFile = new Files(this.plugin.foundryConfig, this.plugin);
+            File folder = new File(this.plugin.getDataFolder() + File.separator + "data" + File.separator + "players");
+            File[] players = folder.listFiles();
+            if (players != null) {
+                Files pf = new Files(this.plugin.foundryConfig, this.plugin);
+                for (File player : players) {
+                    if (player.isFile()) {
+                        pf.load(pf.playerDataFile(UUID.fromString(player.getName().replace(".yml",""))));
+
+                        if (pf.get("last-location.world") != null) {
+                            pf.set("location.last-known.world", pf.get("last-location.world"));
+                            pf.set("location.last-known.x", pf.get("last-location.X"));
+                            pf.set("location.last-known.y", pf.get("last-location.Y"));
+                            pf.set("location.last-known.z", pf.get("last-location.Z"));
+                            pf.set("location.last-known.yaw", pf.get("last-location.yaw"));
+                            pf.set("location.last-known.pitch", pf.get("last-location.pitch"));
+                        }
+
+                        if (pf.get("user.last-sleep-location") != null) {
+                            pf.set("location.last-sleep.world", pf.get("user.last-sleep-location.world"));
+                            pf.set("location.last-sleep.x", pf.get("user.last-sleep-location.X"));
+                            pf.set("location.last-sleep.y", pf.get("user.last-sleep-location.Y"));
+                            pf.set("location.last-sleep.z", pf.get("user.last-sleep-location.Z"));
+                            pf.set("location.last-sleep.yaw", pf.get("user.last-sleep-location.yaw"));
+                            pf.set("location.last-sleep.pitch", pf.get("user.last-sleep-location.pitch"));
+                        }
+
+                        log.info("[1/1] Migrated " + player.getName());
+
+                        pf.remove("last-location");
+                        pf.remove("user.last-sleep-location");
+
+                        pf.save();
+                    }
+                }
+            } else {
+                this.plugin.log.info("No players found");
+            }
+
+            log.info("[1/1] Done.");
+
+            f.set("config-version", 5);
+
+            log.info("Done.");
+            log.info("");
+        }
+
         f.save();
     }
 
@@ -384,16 +433,20 @@ public class UtilUpdate {
             }
             worldsFile.load("data/worlds.yml");
 
-            for (String spawnName : spawnsFile.getKeys("spawn", false)) {
-                new UtilWorld(this.plugin).load(spawnName);
-                World world = Bukkit.getWorld(spawnName);
-                if (world != null) {
-                    UUID uid = world.getUID();
-                    worldsFile.set("world."+uid+".spawn.x", spawnsFile.getInt("spawn."+spawnName+".X"));
-                    worldsFile.set("world."+uid+".spawn.y", spawnsFile.getInt("spawn."+spawnName+".Y"));
-                    worldsFile.set("world."+uid+".spawn.z", spawnsFile.getInt("spawn."+spawnName+".Z"));
-                    worldsFile.set("world."+uid+".spawn.yaw", spawnsFile.getDouble("spawn."+spawnName+".yaw"));
-                    worldsFile.set("world."+uid+".spawn.pitch", spawnsFile.getDouble("spawn."+spawnName+".pitch"));
+            Set<String> spawnKeys = spawnsFile.getKeys("spawn", false);
+
+            if (spawnKeys != null) {
+                for (String spawnName : spawnKeys) {
+                    new UtilWorld(this.plugin).load(spawnName);
+                    World world = Bukkit.getWorld(spawnName);
+                    if (world != null) {
+                        UUID uid = world.getUID();
+                        worldsFile.set("world." + uid + ".spawn.x", spawnsFile.getInt("spawn." + spawnName + ".X"));
+                        worldsFile.set("world." + uid + ".spawn.y", spawnsFile.getInt("spawn." + spawnName + ".Y"));
+                        worldsFile.set("world." + uid + ".spawn.z", spawnsFile.getInt("spawn." + spawnName + ".Z"));
+                        worldsFile.set("world." + uid + ".spawn.yaw", spawnsFile.getDouble("spawn." + spawnName + ".yaw"));
+                        worldsFile.set("world." + uid + ".spawn.pitch", spawnsFile.getDouble("spawn." + spawnName + ".pitch"));
+                    }
                 }
             }
 
