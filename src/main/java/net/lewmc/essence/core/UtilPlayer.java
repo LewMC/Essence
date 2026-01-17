@@ -151,8 +151,6 @@ public class UtilPlayer {
 
             f.load(f.playerDataFile(uuid));
 
-            this.migratePlayerFile(f);
-
             TypePlayer player = new TypePlayer();
 
             if (f.get(KEYS.USER_ACCEPTING_TELEPORT_REQUESTS.toString()) != null) {
@@ -625,33 +623,5 @@ public class UtilPlayer {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    /**
-     * Migrates a pre-1.11.0 player file to 1.11.0 format.
-     * @param f Files - The user file loaded in.
-     * @since 1.11.0
-     */
-    private void migratePlayerFile(Files f) {
-        if (f.get("last-location.world") != null) {
-            f.set("location.last-known.world", f.get("last-location.world"));
-            f.set("location.last-known.x", f.get("last-location.x"));
-            f.set("location.last-known.y", f.get("last-location.y"));
-            f.set("location.last-known.z", f.get("last-location.z"));
-            f.set("location.last-known.yaw", f.get("last-location.yaw"));
-            f.set("location.last-known.pitch", f.get("last-location.pitch"));
-        }
-
-        if (f.get("user.last-sleep-location") != null) {
-            f.set("location.last-sleep.world", f.get("user.last-sleep-location.world"));
-            f.set("location.last-sleep.x", f.get("user.last-sleep-location.x"));
-            f.set("location.last-sleep.y", f.get("user.last-sleep-location.y"));
-            f.set("location.last-sleep.z", f.get("user.last-sleep-location.z"));
-            f.set("location.last-sleep.yaw", f.get("user.last-sleep-location.yaw"));
-            f.set("location.last-sleep.pitch", f.get("user.last-sleep-location.pitch"));
-        }
-
-        f.remove("last-location");
-        f.remove("user.last-sleep-location");
     }
 }
