@@ -140,6 +140,8 @@ public class Essence extends JavaPlugin {
         this.log.info("Beginning startup...");
         this.log.info("");
 
+        this.checkForPaper();
+
         // Load order is sensitive - TEST IF CHANGING!
         this.checkConfigExists();
         UtilUpdate update = new UtilUpdate(this);
@@ -163,7 +165,6 @@ public class Essence extends JavaPlugin {
         }
 
         this.checkForEssentials();
-        this.checkForPaper();
         this.initFileSystem();
         this.loadModules();
 
