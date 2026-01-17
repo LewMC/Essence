@@ -1,10 +1,10 @@
 package net.lewmc.essence.core;
 
+import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,17 +41,6 @@ public class UtilCommand {
         }
 
         return false;
-    }
-
-    /**
-     * Checks if the server is compatible with PaperMC.
-     * @return boolean - If the server is paper compatible.
-     */
-    public boolean isPaperCompatible() {
-        File pwd = new File("config/paper-world-defaults.yml");
-        File g = new File("config/paper-global.yml");
-
-        return pwd.exists() && g.exists();
     }
 
     /**

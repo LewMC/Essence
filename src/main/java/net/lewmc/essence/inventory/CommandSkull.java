@@ -1,13 +1,15 @@
 package net.lewmc.essence.inventory;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.foundry.command.FoundryPlayerCommand;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -35,11 +37,11 @@ public class CommandSkull extends FoundryPlayerCommand {
     }
 
     /**
-     * @param cs        Information about who sent the command - player or console.
-     * @param command   Information about what command was sent.
-     * @param s         Command label - not used here.
-     * @param args      The command's arguments.
-     * @return boolean  true/false - was the command accepted and processed or not?
+     * @param cs       Information about who sent the command - player or console.
+     * @param command  Information about what command was sent.
+     * @param s        Command label - not used here.
+     * @param args     The command's arguments.
+     * @return boolean true/false - was the command accepted and processed or not?
      */
     @Override
     protected boolean onRun(CommandSender cs, Command command, String s, String[] args) {
@@ -56,17 +58,18 @@ public class CommandSkull extends FoundryPlayerCommand {
         }
 
         String targetName = args[0];
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
 
-        if (meta != null) {
-            meta.setOwningPlayer(Bukkit.getOfflinePlayer(targetName));
-            meta.setDisplayName(ChatColor.GOLD + targetName + "'s Head");
+        new FoliaLib(this.plugin).getScheduler().runAtEntity(player, wrappedTask -> {
+            ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+            SkullMeta meta = (SkullMeta) skull.getItemMeta();
+            PlayerProfile profile = Bukkit.createProfile(targetName);
+            profile.complete(true);
+            meta.setPlayerProfile(profile);
             skull.setItemMeta(meta);
-        }
+            player.getInventory().addItem(skull);
+            msg.send("skull","given", new String[]{targetName});
+        });
 
-        player.getInventory().addItem(skull);
-        msg.send("skull","given", new String[]{targetName});
         return true;
     }
 }
