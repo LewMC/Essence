@@ -59,15 +59,17 @@ public class CommandSkull extends FoundryPlayerCommand {
 
         String targetName = args[0];
 
-        new FoliaLib(this.plugin).getScheduler().runAtEntity(player, wrappedTask -> {
+        new FoliaLib(this.plugin).getScheduler().runAsync(wrappedTask -> {
             ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) skull.getItemMeta();
             PlayerProfile profile = Bukkit.createProfile(targetName);
             profile.complete(true);
             meta.setPlayerProfile(profile);
             skull.setItemMeta(meta);
-            player.getInventory().addItem(skull);
-            msg.send("skull","given", new String[]{targetName});
+            new FoliaLib(this.plugin).getScheduler().runAtEntity(player, wrappedTask2 -> {
+                player.getInventory().addItem(skull);
+                msg.send("skull", "given", new String[]{targetName});
+            });
         });
 
         return true;
