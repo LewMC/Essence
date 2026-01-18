@@ -558,10 +558,10 @@ public class UtilPlayer {
         } else if (cs instanceof OfflinePlayer op) {
             Files f = new Files(this.plugin.foundryConfig, this.plugin);
             f.load(f.playerDataFile(op));
-            String name = f.get(KEYS.USER_NICKNAME.toString()).toString();
+            Object name = f.get(KEYS.USER_NICKNAME.toString());
             f.close();
             if (name != null) {
-                return name;
+                return name.toString();
             }
         }
 
