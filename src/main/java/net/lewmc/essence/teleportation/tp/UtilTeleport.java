@@ -191,7 +191,7 @@ public class UtilTeleport {
     public void doTeleport(Player player, Location location, int delay, boolean doLastLocUpdate) {
         FoliaLib flib = new FoliaLib(this.plugin);
         UtilMessage message = new UtilMessage(this.plugin, player);
-        if (location.getWorld() == null) {
+        if (location == null || location.getWorld() == null) {
             message.send("teleport","exception");
             this.log.severe("Unable to locate world in universe.");
             this.log.severe("Details: {\"error\": \"WORLD_IS_NULL\", \"caught\": \"TeleportUtil.java\", \"submitted\": \"null\", \"found\": \"null\"}.");

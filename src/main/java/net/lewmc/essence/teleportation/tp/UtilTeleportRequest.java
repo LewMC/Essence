@@ -100,6 +100,7 @@ public class UtilTeleportRequest {
 
         if (elapsed.getSeconds() > (int) this.plugin.config.get("teleportation.requests.expiry")) {
             new UtilMessage(this.plugin, this.plugin.getServer().getPlayer(requested)).send("teleport", "requestexpired");
+            this.deleteFromRequested(requested);
             return true;
         }
 
