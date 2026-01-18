@@ -230,6 +230,7 @@ home:
   created: "§2[Essence] §aHogar creado '{{1}}'."
   cantcreate: "§4[Essence] §cNo se puedo crear el hogar '{{1}}'."
   hitlimit: "§4[Essence] §cNo puedes crear más hogares."
+  exists: "§4[Essence] §cA home with the name '{{1}}' already exists."
 teamhome:
   notfound: "§4[Essence] §cEl hogar del equipo {{1}} no existe. Usa /homes para una lista de hogares."
   deleted: "§2[Essence] §aEl hogar del equipo {{1}} ha sido eliminado."
@@ -241,6 +242,7 @@ teamhome:
   alreadyexists: "§4[Essence] §cYa existe un hogar del equipo con este nombre."
   created: "§2[Essence] §aHogar de equipo creado: '{{1}}'."
   hitlimit: "§4[Essence] §cNo puedes crear más hogares de equipo."
+  exists: "§4[Essence] §cA team home with the name '{{1}}' already exists."
 warp:
   notfound: "§4[Essence] §cEl warp {{1}} no existe. Usa /warps para una lista de warps."
   deleted: "§2[Essence] §aEl warp {{1}} ha sido eliminado."
@@ -278,6 +280,7 @@ teleport:
   denyhover: "Click to deny the teleport request"
   acceptnone: "§4[Essence] §cNo tienes solicitudes de teletransporte pendientes para aceptar."
   requestaccepted: "§2[Essence] §a{{1}} has accepted your teleport request."
+  requestexpired: "§4[Essence] §cThe teleport request has expired."
   requestdenied: "§4[Essence] §c{{1}} has denied your teleport request."
   requestsent: "§2[Essence] §aSolicitud de Teletransporte enviada."
   canceldone: "§2[Essence] §aCancelado solicitudes de teletransporte pendientes."
