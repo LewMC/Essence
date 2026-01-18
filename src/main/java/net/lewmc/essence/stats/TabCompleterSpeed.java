@@ -1,6 +1,7 @@
 package net.lewmc.essence.stats;
 
 import net.lewmc.essence.Essence;
+import net.lewmc.essence.core.UtilPermission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -44,13 +45,20 @@ public class TabCompleterSpeed implements TabCompleter {
         if (args.length == 1) {
             keys = new String[]{"reset", "off", "default", "1", "5", "10"};
         } else if (args.length == 2) {
-            List<String> players = new ArrayList<>(List.of());
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                players.add(p.getName());
+            if (new UtilPermission(this.plugin, sender).has("essence.stats.speed.other")) {
+                List<String> players = new ArrayList<>(List.of());
+                players.add("fly");
+                players.add("walk");
+                players.add("both");
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    players.add(p.getName());
+                }
+                keys = players.toArray(new String[0]);
+            } else {
+                keys = new String[]{"fly","walk","both"};
             }
-            keys = players.toArray(new String[0]);
         } else {
-            keys = new String[]{};
+            keys = new String[]{"fly","walk","both"};
         }
         return new ArrayList<>(Arrays.asList(keys));
     }
