@@ -230,6 +230,7 @@ home:
   created: "§2[Essence] §a已创建 '{{1}}'."
   cantcreate: "§4[Essence] §c不能创建家 '{{1}}'."
   hitlimit: "§4[Essence] §c你不能再创建更多的家了."
+  exists: "§4[Essence] §cA home with the name '{{1}}' already exists."
 teamhome:
   notfound: "§4[Essence] §c团队基地 {{1}} 已不存在. 使用 /homes 查看更多的家."
   deleted: "§2[Essence] §a团队基地 {{1}} 已被删除."
@@ -241,6 +242,7 @@ teamhome:
   alreadyexists: "§4[Essence] §c一个团队基地已经存在."
   created: "§2[Essence] §a已创建 '{{1}}'."
   hitlimit: "§4[Essence] §c你不能再创建更多的团队基地了."
+  exists: "§4[Essence] §cA team home with the name '{{1}}' already exists."
 warp:
   notfound: "§4[Essence] §c传送点 {{1}} 不存在. 使用 /warps 查看传送点列表."
   deleted: "§2[Essence] §a传送点 {{1}} 已被删除."
@@ -278,6 +280,7 @@ teleport:
   denyhover: "Click to deny the teleport request"
   acceptnone: "§4[Essence] §c你没有待处理的传送请求需要接受."
   requestaccepted: "§2[Essence] §a{{1}} has accepted your teleport request."
+  requestexpired: "§4[Essence] §cThe teleport request has expired."
   requestdenied: "§4[Essence] §c{{1}} has denied your teleport request."
   requestsent: "§2[Essence] §a已发送请求."
   canceldone: "§2[Essence] §a取消了待处理的传送请求."
