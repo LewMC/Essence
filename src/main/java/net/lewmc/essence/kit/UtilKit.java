@@ -3,7 +3,10 @@ package net.lewmc.essence.kit;
 import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.Files;
+import org.bukkit.Keyed;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -87,12 +90,18 @@ public class UtilKit {
             }
 
             ItemStack itemStack = new ItemStack(item);
-            itemStack.setAmount(kitData.getInt("kits."+kit+".items."+object+".amount"));
+            int amount = kitData.getInt("kits."+kit+".items."+object+".amount");
+            if (amount > 0 && amount < 65) {
+                itemStack.setAmount(amount);
+            } else {
+                itemStack.setAmount(1);
+                this.plugin.log.warn("Item '"+object+"' in kit '"+kit+"', has an invalid amount '"+amount+"'. Must be between 1 and 64.");
+            }
 
             List<String> enchantments = kitData.getStringList("kits."+kit+".items."+object+".enchantments");
             for (String enchantment : enchantments) {
                 String[] e = enchantment.split(":");
-                Enchantment parsedEnchantment = Enchantment.getByName(e[0]);
+                Enchantment parsedEnchantment = Enchantment.getByKey(NamespacedKey.fromString(e[0]));
 
                 if (parsedEnchantment != null) {
                     itemStack.addEnchantment(parsedEnchantment, Integer.parseInt(e[1]));
