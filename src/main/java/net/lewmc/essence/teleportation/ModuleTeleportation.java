@@ -57,13 +57,13 @@ public class ModuleTeleportation extends FoundryModule {
         if (!this.cmd.isDisabled("setspawn")) { reg.runtimeCommand("setspawn", new CommandSetspawn((Essence) plugin), "spawnset", "setworldspawn"); }
 
         if (!this.cmd.isDisabled("back")) { reg.runtimeCommand("back", new CommandBack((Essence) plugin)); }
-        if (!cmd.isDisabled("top")) { reg.runtimeCommand("top", new CommandTop((Essence) plugin)); }
-        if (!cmd.isDisabled("bottom")) { reg.runtimeCommand("bottom", new CommandBottom((Essence) plugin)); }
-        if (!cmd.isDisabled("ascend")) { reg.runtimeCommand("ascend", new CommandAscend((Essence) plugin), "asc"); }
-        if (!cmd.isDisabled("descend")) { reg.runtimeCommand("descend", new CommandDescend((Essence) plugin), "desc"); }
+        if (!this.cmd.isDisabled("top")) { reg.runtimeCommand("top", new CommandTop((Essence) plugin)); }
+        if (!this.cmd.isDisabled("bottom")) { reg.runtimeCommand("bottom", new CommandBottom((Essence) plugin)); }
+        if (!this.cmd.isDisabled("ascend")) { reg.runtimeCommand("ascend", new CommandAscend((Essence) plugin), "asc"); }
+        if (!this.cmd.isDisabled("descend")) { reg.runtimeCommand("descend", new CommandDescend((Essence) plugin), "desc"); }
 
-        if (!cmd.isDisabled("direction")) { reg.runtimeCommand("direction", new CommandDirection((Essence) plugin), "compass"); }
-        if (!cmd.isDisabled("near")) { reg.runtimeCommand("near", new CommandNear((Essence) plugin)); }
+        if (!this.cmd.isDisabled("direction")) { reg.runtimeCommand("direction", new CommandDirection((Essence) plugin), "compass"); }
+        if (!this.cmd.isDisabled("near")) { reg.runtimeCommand("near", new CommandNear((Essence) plugin)); }
     }
 
     /**

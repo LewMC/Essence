@@ -139,7 +139,9 @@ public class EssenceConfiguration {
         putBoolean("teleportation.spawn.force-spawn.on-join", (boolean) getValue("teleportation.spawn.force-spawn.on-join", false, Boolean.class));
         putInt("teleportation.near.default-radius", (Integer) getValue("teleportation.near.default-radius", 200, Integer.class));
         putInt("teleportation.near.max-radius", (Integer) getValue("teleportation.near.max-radius", 50000, Integer.class));
+        putInt("teleportation.requests.wait", (Integer) getValue("teleportation.requests.wait", 3, Integer.class));
         putInt("teleportation.requests.cooldown", (Integer) getValue("teleportation.requests.cooldown", 10, Integer.class));
+        putInt("teleportation.requests.expiry", (Integer) getValue("teleportation.requests.expiry", 120, Integer.class));
         putBoolean("teleportation.requests.default-enabled", (boolean) getValue("teleportation.requests.default-enabled", true, Boolean.class));
         putBoolean("teleportation.extended-toggle", (boolean) getValue("teleportation.extended-toggle", false, Boolean.class));
         putBoolean("teleportation.move-to-cancel", (boolean) getValue("teleportation.move-to-cancel", true, Boolean.class));

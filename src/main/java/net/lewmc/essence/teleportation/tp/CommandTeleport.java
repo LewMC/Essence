@@ -1,13 +1,13 @@
 package net.lewmc.essence.teleportation.tp;
 
+import com.tcoded.folialib.FoliaLib;
 import net.lewmc.essence.core.UtilMessage;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.essence.Essence;
-import net.lewmc.foundry.Files;
+import net.lewmc.essence.core.UtilPlayer;
 import net.lewmc.foundry.command.FoundryCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CommandTeleport extends FoundryCommand {
@@ -170,45 +171,53 @@ public class CommandTeleport extends FoundryCommand {
                 Player to = toList.getFirst();
 
                 if (!tp.teleportToggleCheck(player, to)) {
-                    message.send("teleport", "requestsdisabled", new String[] { to.getName() });
+                    message.send("teleport", "requestsdisabled", new String[]{to.getName()});
                     return true;
                 }
 
                 tp.doTeleport(player, to.getLocation(), 0, true);
-                message.send("teleport", "to", new String[] { to.getName() });
+                message.send("teleport", "to", new String[]{to.getName()});
                 return true;
             }
 
-            if (!permission.has("essence.teleport.offline")) {
-                OfflinePlayer offline = getOfflinePlayer(args[0]);
-                if (offline != null && offline.hasPlayedBefore()) {
-                    Files opf = new Files(this.plugin.foundryConfig, this.plugin);
-                    if (opf.exists(opf.playerDataFile(offline.getUniqueId()))) {
-                        opf.load(opf.playerDataFile(offline.getUniqueId()));
-                        double x = opf.getDouble("last-location.X");
-                        double y = opf.getDouble("last-location.Y");
-                        double z = opf.getDouble("last-location.Z");
-                        World world = Bukkit.getWorld(opf.getString("last-location.world"));
-                        opf.close();
+            FoliaLib flib = new FoliaLib(this.plugin);
 
+            if (permission.has("essence.teleport.offline")) {
+                flib.getScheduler().runAsync(task -> {
+                    UtilPlayer up = new UtilPlayer(this.plugin);
+                    if (!Bukkit.getOfflinePlayer(args[0]).hasPlayedBefore()) {
+                        flib.getScheduler().runAtEntity((Player) cs, t -> message.send("generic", "playernotfound"));
+                        return;
+                    }
+
+                    UUID uuid = Bukkit.getOfflinePlayer(args[0]).getUniqueId();
+                    if (!up.loadPlayer(uuid)) {
+                        flib.getScheduler().runAtEntity((Player) cs, t -> message.send("teleport", "offlineplayernodata"));
+                        return;
+                    }
+
+                    double x = (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_X);
+                    double y = (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_Y);
+                    double z = (double) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_Z);
+                    String worldName = (String) up.getPlayer(uuid, UtilPlayer.KEYS.LAST_LOCATION_WORLD);
+
+                    flib.getScheduler().runAtEntity((Player) cs, t -> {
+                        World world = Bukkit.getWorld(worldName);
                         if (world == null) {
                             message.send("teleport", "offlinenoworld");
-                            return true;
+                            return;
                         }
 
                         Location offlineLoc = new Location(world, x, y, z);
-                        tp.doTeleport(player, offlineLoc, 0, true);
-                        message.send("teleport", "to", new String[]{offline.getName()});
-                        message.send("teleport", "tooffline");
-                        return true;
-                    } else {
-                        message.send("teleport", "offlineplayernodata");
-                        return true;
-                    }
-                }
-            }
+                        tp.doTeleport((Player) cs, offlineLoc, 0, true);
 
-            message.send("generic", "playernotfound");
+                        message.send("teleport", "to", new String[]{up.getPlayer(uuid, UtilPlayer.KEYS.USER_NICKNAME) != null ? up.getPlayer(uuid, UtilPlayer.KEYS.USER_NICKNAME).toString() : args[0]});
+                        message.send("teleport", "tooffline");
+                    });
+                });
+            } else {
+                message.send("generic", "playernotfound");
+            }
             return true;
         }
 
@@ -270,19 +279,4 @@ public class CommandTeleport extends FoundryCommand {
             return new ArrayList<>();
         }
     }
-
-    /**
-     * Retrieves offline player information
-     * @param name Strin - The player's name.
-     * @return OfflinePlayer - The player.
-     */
-    private OfflinePlayer getOfflinePlayer(String name) {
-        for (OfflinePlayer op : Bukkit.getOfflinePlayers()) {
-            if (op.getName() != null && op.getName().equalsIgnoreCase(name)) {
-                return op;
-            }
-        }
-        return null;
-    }
-
 }

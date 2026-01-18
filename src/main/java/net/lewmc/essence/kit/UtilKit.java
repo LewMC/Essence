@@ -4,11 +4,13 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilPermission;
 import net.lewmc.foundry.Files;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 /**
  * The Essence Kit utility.
@@ -70,10 +72,43 @@ public class UtilKit {
 
         playerData.save();
 
-        List<String> items = kitData.getStringList("kits."+kit+".items");
+        Set<String> items = kitData.getKeys("kits."+kit+".items", false);
+
+        if (items == null) {
+            this.plugin.log.warn("Unable to parse items in kit '"+kit+"', kit has no items. Please check the item's spelling and try again, no reload/restart required.");
+            return 4;
+        }
 
         for (String object : items) {
-            this.player.getInventory().addItem(new ItemStack(Objects.requireNonNull(Material.getMaterial(object))));
+            Material item = Material.getMaterial(object);
+
+            if (item == null) {
+                this.plugin.log.warn("Unable to parse item '"+object+"' in kit '"+kit+"', Material not found. Please check the item's spelling and try again, no reload/restart required.");
+                continue;
+            }
+
+            ItemStack itemStack = new ItemStack(item);
+            int amount = kitData.getInt("kits."+kit+".items."+object+".amount");
+            if (amount > 0 && amount < 65) {
+                itemStack.setAmount(amount);
+            } else {
+                itemStack.setAmount(1);
+                this.plugin.log.warn("Item '"+object+"' in kit '"+kit+"', has an invalid amount '"+amount+"'. Must be between 1 and 64.");
+            }
+
+            List<String> enchantments = kitData.getStringList("kits."+kit+".items."+object+".enchantments");
+            for (String enchantment : enchantments) {
+                String[] e = enchantment.split(":");
+                Enchantment parsedEnchantment = Enchantment.getByKey(NamespacedKey.fromString(e[0]));
+
+                if (parsedEnchantment != null) {
+                    itemStack.addEnchantment(parsedEnchantment, Integer.parseInt(e[1]));
+                } else {
+                    this.plugin.log.warn("Unable to parse enchantment '"+enchantment+"' in kit '"+kit+"'");
+                }
+            }
+
+            this.player.getInventory().addItem(itemStack);
         }
 
         kitData.close();

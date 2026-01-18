@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ModuleStats extends FoundryModule {
 
+    private UtilCommand cmd;
+
     /**
      * Constructor for the module.
      * @param plugin    JavaPlugin - Reference to the main Essence class.
@@ -26,23 +28,25 @@ public class ModuleStats extends FoundryModule {
      */
     @Override
     public void registerCommands() {
-        UtilCommand cmd = new UtilCommand((Essence) this.plugin);
-        if (!cmd.isDisabled("feed")) { reg.runtimeCommand("feed", new CommandFeed((Essence) plugin), "eat"); }
-        if (!cmd.isDisabled("fly")) { reg.runtimeCommand("fly", new CommandFly((Essence) plugin)); }
-        if (!cmd.isDisabled("heal")) { reg.runtimeCommand("heal", new CommandHeal((Essence) plugin)); }
-        if (!cmd.isDisabled("repair")) { reg.runtimeCommand("repair", new CommandRepair((Essence) plugin), "fix"); }
-        if (!cmd.isDisabled("speed")) { reg.runtimeCommand("speed", new CommandSpeed((Essence) plugin)); }
-        if (!cmd.isDisabled("burn")) { reg.runtimeCommand("burn", new CommandBurn((Essence) plugin)); }
-        if (!cmd.isDisabled("extinguish")) { reg.runtimeCommand("extinguish", new CommandExtinguish((Essence) plugin), "ext"); }
-        if (!cmd.isDisabled("god")) { reg.runtimeCommand("god", new CommandGod((Essence) plugin)); }
-        if (!cmd.isDisabled("enchant")) { reg.runtimeCommand("enchant", new CommandEnchant((Essence) plugin)); }
+        this.cmd = new UtilCommand((Essence) this.plugin);
+        if (!this.cmd.isDisabled("feed")) { reg.runtimeCommand("feed", new CommandFeed((Essence) plugin), "eat"); }
+        if (!this.cmd.isDisabled("fly")) { reg.runtimeCommand("fly", new CommandFly((Essence) plugin)); }
+        if (!this.cmd.isDisabled("heal")) { reg.runtimeCommand("heal", new CommandHeal((Essence) plugin)); }
+        if (!this.cmd.isDisabled("repair")) { reg.runtimeCommand("repair", new CommandRepair((Essence) plugin), "fix"); }
+        if (!this.cmd.isDisabled("speed")) { reg.runtimeCommand("speed", new CommandSpeed((Essence) plugin)); }
+        if (!this.cmd.isDisabled("burn")) { reg.runtimeCommand("burn", new CommandBurn((Essence) plugin)); }
+        if (!this.cmd.isDisabled("extinguish")) { reg.runtimeCommand("extinguish", new CommandExtinguish((Essence) plugin), "ext"); }
+        if (!this.cmd.isDisabled("god")) { reg.runtimeCommand("god", new CommandGod((Essence) plugin)); }
+        if (!this.cmd.isDisabled("enchant")) { reg.runtimeCommand("enchant", new CommandEnchant((Essence) plugin)); }
     }
 
     /**
      * Registers Tab Completers
      */
     @Override
-    public void registerTabCompleters() {}
+    public void registerTabCompleters() {
+        if (!this.cmd.isDisabled("speed")) { reg.tabCompleter(new String[] { "speed" }, new TabCompleterSpeed((Essence) plugin)); }
+    }
 
     /**
      * Registers Events

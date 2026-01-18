@@ -140,6 +140,8 @@ public class Essence extends JavaPlugin {
         this.log.info("Beginning startup...");
         this.log.info("");
 
+        this.checkForPaper();
+
         // Load order is sensitive - TEST IF CHANGING!
         this.checkConfigExists();
         UtilUpdate update = new UtilUpdate(this);
@@ -163,7 +165,6 @@ public class Essence extends JavaPlugin {
         }
 
         this.checkForEssentials();
-        this.checkForPaper();
         this.initFileSystem();
         this.loadModules();
 
@@ -185,12 +186,10 @@ public class Essence extends JavaPlugin {
      * Checks if the server is running Paper, and informs the user that they should upgrade if not.
      */
     private void checkForPaper() {
-        UtilCommand cmd = new UtilCommand(this);
-        if (!cmd.isPaperCompatible()) {
-            this.log.severe("You are running " + this.getServer().getName());
-            this.log.severe("Some commands have been disabled, please see https://bit.ly/essencepaper for help.");
-            this.log.severe("To get full plugin support please consider using Paper instead.");
-            this.log.severe("You can download it from https://papermc.io");
+        if (!new FoliaLib(this).isPaper() && !new FoliaLib(this).isFolia()) {
+            this.log.severe("Essence no longer supports CraftBukkit or Spigot servers.");
+            this.log.severe("Please upgrade to Paper to continue using Essence.");
+            getServer().getPluginManager().disablePlugin(this);
         } else {
             this.log.info("Running server jar: " + this.getServer().getName());
             if (this.verbose) {

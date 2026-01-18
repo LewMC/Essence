@@ -76,9 +76,9 @@ public class EventJoin implements Listener {
      */
     private void spawn(PlayerJoinEvent event) {
         if ((boolean) this.plugin.config.get("teleportation.spawn.global-spawn.enabled")) {
-            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), (String) this.plugin.config.get("teleportation.spawn.global-spawn.world"));
+            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), (String) this.plugin.config.get("teleportation.spawn.global-spawn.world"), true);
         } else {
-            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), event.getPlayer().getLocation().getWorld().getName());
+            new UtilTeleport(this.plugin).sendToSpawn(event.getPlayer(), event.getPlayer().getLocation().getWorld().getName(), true);
         }
     }
 

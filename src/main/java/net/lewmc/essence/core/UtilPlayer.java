@@ -5,10 +5,12 @@ import net.lewmc.foundry.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.net.InetSocketAddress;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -137,14 +139,17 @@ public class UtilPlayer {
         Files f = new Files(this.plugin.foundryConfig, this.plugin);
 
         if (f.exists(f.playerDataFile(uuid))) {
-            Player p = Bukkit.getPlayer(uuid);
-            if (p == null || p.getPlayer() == null) {
+            Player p = null;
+            if (Bukkit.getOfflinePlayer(uuid).getName() == null) {
                 return false;
             }
 
-            f.load(f.playerDataFile(uuid));
+            OfflinePlayer op = Bukkit.getOfflinePlayer(uuid);
+            if (op.getPlayer() != null) {
+                p = op.getPlayer();
+            }
 
-            this.migratePlayerFile(f);
+            f.load(f.playerDataFile(uuid));
 
             TypePlayer player = new TypePlayer();
 
@@ -156,16 +161,29 @@ public class UtilPlayer {
 
             player.user.lastSeen = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-            player.user.lastKnownName = p.getName();
+            if (p != null) {
+                String lkn = p.getName();
+                f.set(KEYS.USER_LAST_KNOWN_NAME.toString(), lkn);
+                player.user.lastKnownName = lkn;
+            } else {
+                player.user.lastKnownName = f.getString(KEYS.USER_LAST_KNOWN_NAME.toString());
+            }
 
             player.user.nickname = f.getString(KEYS.USER_NICKNAME.toString());
 
             player.user.team = f.getString(KEYS.USER_TEAM.toString());
 
             if ((boolean) this.plugin.config.get("advanced.playerdata.store-ip-address")) {
-                Player onlinePlayer = p.getPlayer();
-                if (onlinePlayer != null && onlinePlayer.getAddress() != null) {
-                    f.set(KEYS.USER_IP_ADDRESS.toString(), onlinePlayer.getAddress().getAddress().getHostAddress());
+                if (p != null) {
+                    InetSocketAddress ip = p.getAddress();
+                    if (ip != null) {
+                        f.set(KEYS.USER_IP_ADDRESS.toString(), ip);
+                        player.user.ipAddress = ip.getAddress().getHostAddress();
+                    } else {
+                        player.user.ipAddress = "Unknown";
+                    }
+                } else {
+                    player.user.ipAddress = f.getString(KEYS.USER_IP_ADDRESS.toString());
                 }
             } else {
                 f.set(KEYS.USER_IP_ADDRESS.toString(), null);
@@ -537,7 +555,16 @@ public class UtilPlayer {
             if (player != null && player.user.nickname != null) {
                 return player.user.nickname;
             }
+        } else if (cs instanceof OfflinePlayer op) {
+            Files f = new Files(this.plugin.foundryConfig, this.plugin);
+            f.load(f.playerDataFile(op));
+            Object name = f.get(KEYS.USER_NICKNAME.toString());
+            f.close();
+            if (name != null) {
+                return name.toString();
+            }
         }
+
         return cs.getName();
     }
 
@@ -596,33 +623,5 @@ public class UtilPlayer {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    /**
-     * Migrates a pre-1.11.0 player file to 1.11.0 format.
-     * @param f Files - The user file loaded in.
-     * @since 1.11.0
-     */
-    private void migratePlayerFile(Files f) {
-        if (f.get("last-location.world") != null) {
-            f.set("location.last-known.world", f.get("last-location.world"));
-            f.set("location.last-known.x", f.get("last-location.x"));
-            f.set("location.last-known.y", f.get("last-location.y"));
-            f.set("location.last-known.z", f.get("last-location.z"));
-            f.set("location.last-known.yaw", f.get("last-location.yaw"));
-            f.set("location.last-known.pitch", f.get("last-location.pitch"));
-        }
-
-        if (f.get("user.last-sleep-location") != null) {
-            f.set("location.last-sleep.world", f.get("user.last-sleep-location.world"));
-            f.set("location.last-sleep.x", f.get("user.last-sleep-location.x"));
-            f.set("location.last-sleep.y", f.get("user.last-sleep-location.y"));
-            f.set("location.last-sleep.z", f.get("user.last-sleep-location.z"));
-            f.set("location.last-sleep.yaw", f.get("user.last-sleep-location.yaw"));
-            f.set("location.last-sleep.pitch", f.get("user.last-sleep-location.pitch"));
-        }
-
-        f.remove("last-location");
-        f.remove("user.last-sleep-location");
     }
 }

@@ -411,6 +411,8 @@ permissions:
       essence.environment.weather: true
       essence.environment.ptime: true
       essence.environment.pweather: true
+      essence.environment.lightning: true
+      essence.environment.lightning.other: true
   essence.environment.time:
     description: Allows changing the time.
   essence.environment.weather:
@@ -419,6 +421,10 @@ permissions:
     description: Allows changing your player time.
   essence.environment.pweather:
     description: Allows changing your player weather.
+  essence.environment.lightning:
+    description: Allows spawning lightning.
+  essence.environment.lightning.other:
+    description: Allows spawning lightning upon other players.
   essence.world.*:
     description: Allows changing environmental variables.
     default: op

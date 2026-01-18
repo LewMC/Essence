@@ -98,7 +98,6 @@ public class UtilTeleport {
         data.set("cooldown."+type, currentTime.toString());
 
         data.save();
-
     }
 
     /**
@@ -192,7 +191,7 @@ public class UtilTeleport {
     public void doTeleport(Player player, Location location, int delay, boolean doLastLocUpdate) {
         FoliaLib flib = new FoliaLib(this.plugin);
         UtilMessage message = new UtilMessage(this.plugin, player);
-        if (location.getWorld() == null) {
+        if (location == null || location.getWorld() == null) {
             message.send("teleport","exception");
             this.log.severe("Unable to locate world in universe.");
             this.log.severe("Details: {\"error\": \"WORLD_IS_NULL\", \"caught\": \"TeleportUtil.java\", \"submitted\": \"null\", \"found\": \"null\"}.");
@@ -220,7 +219,7 @@ public class UtilTeleport {
         if (flib.isFolia()) {
             // Ensure minimum delay of 1 tick to avoid FoliaLib warnings
             long delayTicks = Math.max(1L, delay * 20L);
-            flib.getImpl().runAtEntityLater(player, () -> {
+            flib.getScheduler().runAtEntityLater(player, () -> {
                 if (teleportIsValid(player)) {
                     if (doLastLocUpdate) { new UtilLocation(plugin).UpdateLastLocation(player); }
                     // Use teleportAsync directly in Folia environment, let Bukkit handle chunk loading
@@ -421,7 +420,7 @@ public class UtilTeleport {
      * @param player Player - The player.
      * @param spawnName String - the spawn's name
      */
-    public void sendToSpawn(Player player, String spawnName) {
+    public void sendToSpawn(Player player, String spawnName, boolean doLastLocUpdate) {
         Files spawnConfiguration = new Files(this.plugin.foundryConfig, this.plugin);
         if (!spawnConfiguration.load("data/worlds.yml")) {
             this.plugin.log.severe("Unable to load configuration file 'data/spawns.yml'. Essence may be unable to teleport players to the correct spawn");
@@ -447,7 +446,7 @@ public class UtilTeleport {
                         spawnWorld.getSpawnLocation().getYaw(),
                         spawnWorld.getSpawnLocation().getPitch(),
                         0,
-                        true
+                        doLastLocUpdate
                 );
             } else {
                 this.plugin.log.info("Failed to respawn player - world spawn for '"+spawnWorld+"' does not exist.");
@@ -463,7 +462,7 @@ public class UtilTeleport {
                     (float) spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.yaw"),
                     (float) spawnConfiguration.getDouble("world."+spawnWorld.getUID()+".spawn.pitch"),
                     0,
-                    true
+                    doLastLocUpdate
             );
         }
         spawnConfiguration.close();

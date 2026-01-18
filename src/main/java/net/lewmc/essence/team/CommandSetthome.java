@@ -64,16 +64,17 @@ public class CommandSetthome extends FoundryPlayerCommand {
         } else {
             name = args[0];
         }
+        name = name.toLowerCase();
 
         Location loc = p.getLocation();
-        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
-        dataUtil.load("data/teams/" + team + ".yml");
 
         if (new Security(this.plugin.foundryConfig).hasSpecialCharacters(name.toLowerCase())) {
-            dataUtil.close();
             msg.send("teamhome", "specialchars");
             return true;
         }
+
+        Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
+        dataUtil.load("data/teams/" + team + ".yml");
 
         String homeName = "homes." + name.toLowerCase();
 
@@ -87,6 +88,13 @@ public class CommandSetthome extends FoundryPlayerCommand {
         int homeLimit = new UtilPermission(this.plugin, cs).getTeamHomesLimit(p);
         if (hu.getTeamHomeCount(p) >= homeLimit && homeLimit != -1) {
             msg.send("teamhome", "hitlimit");
+            dataUtil.close();
+            return true;
+        }
+
+        if (hu.getTeamHomesList(team).indexOf(name) != -1) {
+            msg.send("teamhome", "exists", new String[]{name});
+            dataUtil.close();
             return true;
         }
 

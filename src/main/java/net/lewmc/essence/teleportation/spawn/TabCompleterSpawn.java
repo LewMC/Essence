@@ -17,7 +17,7 @@ public class TabCompleterSpawn implements TabCompleter {
     private final Essence plugin;
 
     /**
-     * Constructor for the HomeTabCompleter command.
+     * Constructor for the SpawnTabCompleter command.
      * @param plugin Essence - Reference to the main Essence class.
      */
     public TabCompleterSpawn(Essence plugin) {
@@ -25,7 +25,7 @@ public class TabCompleterSpawn implements TabCompleter {
     }
 
     /**
-     * Tab completer for the /home command.
+     * Tab completer for the /spawn command.
      * @param sender CommandSender - The command executor.
      * @param cde Command - The command.
      * @param arg String - Command argument.
