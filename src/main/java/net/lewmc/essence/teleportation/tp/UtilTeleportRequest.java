@@ -4,6 +4,9 @@ import net.lewmc.essence.Essence;
 import net.lewmc.essence.core.UtilMessage;
 import org.bukkit.entity.Player;
 
+import java.time.DateTimeException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,9 +34,9 @@ public class UtilTeleportRequest {
         this.deleteFromRequester(requester);
 
         if (teleportToRequester) {
-            this.plugin.teleportRequests.put(requested, new String[]{requester, "true"});
+            this.plugin.teleportRequests.put(requested, new String[]{requester, "true", LocalDateTime.now().toString()});
         } else {
-            this.plugin.teleportRequests.put(requested, new String[]{requester, "false"});
+            this.plugin.teleportRequests.put(requested, new String[]{requester, "false", LocalDateTime.now().toString()});
         }
     }
 
@@ -48,14 +51,13 @@ public class UtilTeleportRequest {
             return false;
         }
 
-        // 使用Iterator来安全地遍历和删除元素，避免ConcurrentModificationException
         java.util.Iterator<Map.Entry<String, String[]>> iterator = this.plugin.teleportRequests.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, String[]> entry = iterator.next();
             String[] values = entry.getValue();
 
             if (values.length > 0 && values[0].equalsIgnoreCase(requester)) {
-                iterator.remove(); // 使用Iterator的remove方法安全删除
+                iterator.remove();
                 found = true;
             }
         }
@@ -84,6 +86,23 @@ public class UtilTeleportRequest {
             return false;
         }
 
+        LocalDateTime rTime;
+        try {
+            rTime = LocalDateTime.parse(Objects.requireNonNull(tpaRequest[2]));
+        } catch (DateTimeException e) {
+            this.plugin.log.warn("DateTimeException: "+e);
+            this.plugin.log.warn("Unable to calculate cooldown, the field may be missing or corrupted.");
+            return false;
+        }
+
+        LocalDateTime cTime = LocalDateTime.now();
+        Duration elapsed = Duration.between(rTime, cTime);
+
+        if (elapsed.getSeconds() > (int) this.plugin.config.get("teleportation.requests.expiry")) {
+            new UtilMessage(this.plugin, this.plugin.getServer().getPlayer(requested)).send("teleport", "requestexpired");
+            return true;
+        }
+
         String requesterName = tpaRequest[0];
         Player requesterPlayer = this.plugin.getServer().getPlayer(requesterName);
         
@@ -92,19 +111,18 @@ public class UtilTeleportRequest {
             tpu.doTeleport(
                     this.plugin.getServer().getPlayer(requested),
                     this.plugin.getServer().getPlayer(requesterName).getLocation(),
-                    0,
+                    (int) this.plugin.config.get("teleportation.requests.delay"),
                     true
             );
         } else {
             tpu.doTeleport(
                     this.plugin.getServer().getPlayer(requesterName),
                     this.plugin.getServer().getPlayer(requested).getLocation(),
-                    0,
+                    (int) this.plugin.config.get("teleportation.requests.delay"),
                     true
             );
         }
 
-        // 通知请求发起者请求已被接受
         if (requesterPlayer != null) {
             new UtilMessage(this.plugin, requesterPlayer).send("teleport", "requestaccepted", new String[]{requested});
         }

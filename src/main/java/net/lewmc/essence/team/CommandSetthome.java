@@ -64,6 +64,7 @@ public class CommandSetthome extends FoundryPlayerCommand {
         } else {
             name = args[0];
         }
+        name = name.toLowerCase();
 
         Location loc = p.getLocation();
         Files dataUtil = new Files(this.plugin.foundryConfig, this.plugin);
@@ -87,6 +88,11 @@ public class CommandSetthome extends FoundryPlayerCommand {
         int homeLimit = new UtilPermission(this.plugin, cs).getTeamHomesLimit(p);
         if (hu.getTeamHomeCount(p) >= homeLimit && homeLimit != -1) {
             msg.send("teamhome", "hitlimit");
+            return true;
+        }
+
+        if (hu.getTeamHomesList(team).indexOf(name) != -1) {
+            msg.send("teamhome", "exists", new String[]{name});
             return true;
         }
 

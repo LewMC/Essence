@@ -98,7 +98,6 @@ public class UtilTeleport {
         data.set("cooldown."+type, currentTime.toString());
 
         data.save();
-
     }
 
     /**

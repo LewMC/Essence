@@ -87,7 +87,9 @@ teleportation:
     default-radius: 200
     max-radius: 50000
   requests:
+    wait: 3
     cooldown: 10
+    expiry: 120
     default-enabled: true
   extended-toggle: false
   move-to-cancel: true
@@ -118,4 +120,4 @@ advanced:
   verbose: false
 
 # Do not change this!
-config-version: 4
+config-version: 5
