@@ -80,15 +80,16 @@ public class CommandKit extends FoundryPlayerCommand {
         } else {
             UtilKit kit = new UtilKit(this.plugin, p);
             UtilMessage msg = new UtilMessage(this.plugin, cs);
-            if (kit.giveKit(args[0]) == 0) {
+            int result = kit.giveKit(args[0]);
+            if (result == 0) {
                 msg.send("kit", "done", new String[] { args[0] });
-            } else if (kit.giveKit(args[0]) == 1) {
+            } else if (result == 1) {
                 msg.send("kit", "nopermission");
-            } else if (kit.giveKit(args[0]) == 2) {
+            } else if (result == 2) {
                 msg.send("kit", "notexist");
-            } else if (kit.giveKit(args[0]) == 3) {
+            } else if (result == 3) {
                 msg.send("kit", "max");
-            } else if (kit.giveKit(args[0]) == 4) {
+            } else if (result == 4) {
                 msg.send("generic", "exception");
             }
         }

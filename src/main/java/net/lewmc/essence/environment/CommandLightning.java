@@ -15,7 +15,7 @@ public class CommandLightning extends FoundryCommand {
     private final Essence plugin;
 
     /**
-     * Constructor for the CommandWeather class.
+     * Constructor for the CommandLightning class.
      * @param plugin References to the main plugin class.
      */
     public CommandLightning(Essence plugin) {
@@ -32,7 +32,7 @@ public class CommandLightning extends FoundryCommand {
     }
 
     /**
-     * /bal command handler.
+     * /lightning command handler.
      * @param cs        Information about who sent the command - player or console.
      * @param command   Information about what command was sent.
      * @param s         Command label - not used here.

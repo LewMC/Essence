@@ -84,7 +84,7 @@ public class UtilKit {
 
             if (item == null) {
                 this.plugin.log.warn("Unable to parse item '"+object+"' in kit '"+kit+"', Material not found. Please check the item's spelling and try again, no reload/restart required.");
-                return 4;
+                continue;
             }
 
             ItemStack itemStack = new ItemStack(item);

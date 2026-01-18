@@ -409,7 +409,6 @@ public class UtilUpdate {
 
             kf.load("data/kits.yml");
             Set<String> keys = kf.getKeys("kits", false);
-            log.info(keys.toString());
             for (String key : keys) {
                 kf.set("kits." + key + ".name", "Kit");
                 kf.set("kits." + key + ".description", "A cool kit!");

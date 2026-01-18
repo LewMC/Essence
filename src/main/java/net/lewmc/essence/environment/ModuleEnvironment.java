@@ -31,7 +31,7 @@ public class ModuleEnvironment extends FoundryModule {
         if (!cmd.isDisabled("weather")) { reg.runtimeCommand("weather", new CommandWeather((Essence) plugin)); }
         if (!cmd.isDisabled("ptime")) { reg.runtimeCommand("ptime", new CommandPTime((Essence) plugin)); }
         if (!cmd.isDisabled("pweather")) { reg.runtimeCommand("pweather", new CommandPWeather((Essence) plugin)); }
-        if (!cmd.isDisabled("lightning")) { reg.runtimeCommand("lightning", new CommandPWeather((Essence) plugin), "smite"); }
+        if (!cmd.isDisabled("lightning")) { reg.runtimeCommand("lightning", new CommandLightning((Essence) plugin), "smite"); }
     }
 
     /**
